@@ -1,0 +1,84 @@
+.vesp-table {
+  .b-table {
+    th, td {
+      vertical-align: middle;
+    }
+
+    tr {
+      &.inactive {
+        td:not(.actions) {
+          opacity: 0.5;
+        }
+      }
+
+      &.blocked {
+        td:not(.actions) {
+          color: $danger;
+        }
+      }
+
+      td.actions {
+        white-space: nowrap;
+        text-align: right;
+        padding-right: 0;
+
+        .btn {
+          svg {
+            width: 1rem;
+          }
+
+          &:not(:first-child) {
+            margin-left: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.vesp-combo {
+  position: relative;
+
+  &-list {
+    width: 100%;
+    max-height: 50vh;
+    overflow-x: auto;
+
+    .alert {
+      border: none;
+      border-radius: $dropdown-border-radius;
+    }
+  }
+}
+
+
+.vesp-input-password {
+  display: flex;
+  align-items: center;
+
+  .btn {
+    margin-left: $btn-padding-x * -2.5;
+    padding: 0;
+    opacity: 0.5;
+
+    &:focus,
+    &:active {
+      box-shadow: none;
+    }
+  }
+
+  .form-control {
+    &[type='text'] + .btn {
+      opacity: 1;
+    }
+
+    &:not(:disabled),
+    &:not(:read-only) {
+      + .btn {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

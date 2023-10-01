@@ -1,0 +1,73 @@
+version: '3.9'
+services:
+
+  mariadb:
+    image: mariadb:${MARIADB_VERSION}
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USERNAME}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    volumes:
+      - ./docker/mariadb:/var/lib/mysql
+    ports:
+      - ${MARIADB_PORT}:3306
+    working_dir: /vesp
+
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - NODE_PORT=${NODE_PORT}
+    volumes:
+      - ./docker/nginx:/etc/nginx/templates
+      - ./frontend:/vesp/frontend
+      - ./www:/vesp/www
+    ports:
+      - ${NGINX_PORT}:80
+      - ${NODE_PORT_WS}:3001
+    depends_on:
+      - php-fpm
+      - mariadb
+    working_dir: /vesp
+
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      dockerfile: dev.dockerfile
+      args:
+        - PHP_VERSION
+    volumes:
+      - ./.env:/vesp/.env
+      - ./core:/vesp/core
+      - ./www:/vesp/www
+      - ./upload:/vesp/upload
+      - ./tmp:/vesp/tmp
+      - ./log:/vesp/log
+      - ./frontend:/vesp/frontend
+    cap_add:
+      - SYS_PTRACE
+    depends_on:
+      - mariadb
+    environment:
+      - PHP_IDE_CONFIG=serverName=VespDocker
+      - COMPOSER_ALLOW_SUPERUSER=1
+    working_dir: /vesp/core
+    command: sh -c 'composer install && php-fpm'
+
+  node:
+    image: node:${NODE_VERSION}
+    volumes:
+      - ./.env:/vesp/.env
+      - ./frontend:/vesp/frontend
+    depends_on:
+      - nginx
+    network_mode: 'service:nginx'
+    working_dir: /vesp/frontend
+#    command: sh -c 'rm -rf /tmp/* && yarn && yarn analyze'
+    command: sh -c 'rm -rf /tmp/* && yarn && yarn dev'
+
+  mailhog:
+    image: teawithfruit/mailhog
+    ports:
+      - ${MAILHOG_PORT:-8090}:8025

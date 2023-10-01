@@ -1,0 +1,42 @@
+{
+  "name": "bezumkin/orbita",
+  "license": "MIT",
+  "description": "The Orbita project",
+  "authors": [
+    {
+      "name": "Vasily Naumkin",
+      "email": "bezumkin@yandex.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "require": {
+    "ext-json": "*",
+    "akrabat/ip-address-middleware": "^2.1",
+    "fenom/fenom": "^3.0",
+    "monolog/monolog": "^3.4.0",
+    "pelago/emogrifier": "^7.0",
+    "peppeocchi/php-cron-scheduler": "^4.0",
+    "phpmailer/phpmailer": "^6.8",
+    "ramsey/uuid": "^4.7",
+    "vesp/core": "^3.x-dev"
+  },
+  "require-dev": {
+    "itsgoingd/clockwork": "^5.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "vendor-dir": "vendor"
+  },
+  "scripts": {
+    "db:create": "phinx create",
+    "db:migrate": "phinx migrate",
+    "db:rollback": "phinx rollback",
+    "db:rollback-all": "phinx rollback -t0",
+    "db:seed": "phinx seed:run",
+    "db:seed-one": "phinx seed:run -s"
+  }
+}

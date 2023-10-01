@@ -1,0 +1,37 @@
+$vt-namespace: "Vue-Toastification";
+$vt-color-info: rgba($info, 0.9);
+$vt-color-success: rgba($success, 0.9);
+$vt-color-error: rgba($danger, 0.9);
+$vt-font-family: $font-family-base;
+$vt-mobile: "only screen and (max-width : 575px)" !default;
+$vt-not-mobile: "only screen and (min-width : 576px)" !default;
+$vt-toast-min-width: 200px;
+
+// @import "vue-toastification/src/scss/index";
+@import "vue-toastification/src/scss/variables";
+@import "vue-toastification/src/scss/toastContainer";
+@import "vue-toastification/src/scss/toast";
+@import "vue-toastification/src/scss/closeButton";
+@import "vue-toastification/src/scss/progressBar";
+@import "vue-toastification/src/scss/icon";
+
+// @import "vue-toastification/src/scss/animations/bounce";
+// @import "vue-toastification/src/scss/animations/fade";
+@import "vue-toastification/src/scss/animations/slideBlurred";
+
+.#{$vt-namespace} {
+    &__container {
+        padding: 0 !important;
+    }
+
+    &__icon {
+        margin: auto 0 auto 18px !important;
+        order: 2;
+    }
+
+    &__toast {
+        @include media-breakpoint-up(sm) {
+            max-width: calc(576px - 2em) !important;
+        }
+    }
+}

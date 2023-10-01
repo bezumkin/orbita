@@ -1,0 +1,13 @@
+/.idea
+/.local
+/core/vendor
+/docker/mariadb
+/frontend/.nuxt
+/frontend/.eslintcache
+/frontend/.stylelintcache
+/frontend/.output
+/frontend/node_modules
+/tmp/
+/upload/
+/log/
+/.env
