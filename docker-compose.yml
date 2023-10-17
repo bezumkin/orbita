@@ -53,7 +53,7 @@ services:
       - PHP_IDE_CONFIG=serverName=VespDocker
       - COMPOSER_ALLOW_SUPERUSER=1
     working_dir: /vesp/core
-    command: sh -c 'composer install && php-fpm'
+    command: sh -c 'composer install && cron && php-fpm'
 
   node:
     image: node:${NODE_VERSION}
@@ -66,6 +66,11 @@ services:
     working_dir: /vesp/frontend
 #    command: sh -c 'rm -rf /tmp/* && yarn && yarn analyze'
     command: sh -c 'rm -rf /tmp/* && yarn && yarn dev'
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    ports:
+      - ${REDIS_PORT:-6379}:6379
 
   mailhog:
     image: teawithfruit/mailhog

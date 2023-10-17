@@ -11,14 +11,14 @@ class Log
     protected const format = "[%datetime%] %message% %context% %extra%\n";
     protected const dateFormat = 'Y-m-d H:i:s';
 
-    protected static function getLogger(string $level): ?Logger
+    public static function getLogger(string $level, ?string $name = 'default'): ?Logger
     {
         if (!getenv('LOG_ENABLED')) {
             return null;
         }
 
         $dir = rtrim(getenv('LOG_DIR') ?: '/tmp', '/') . '/';
-        $logger = new Logger('default');
+        $logger = new Logger($name);
         $handler = new RotatingFileHandler($dir . $level . '.log', 10, Logger::toMonologLevel($level), false, 0664);
         $handler->setFilenameFormat('{date}-{filename}', 'Y-m-d');
         $formatter = new LineFormatter(self::format, self::dateFormat, false, true);

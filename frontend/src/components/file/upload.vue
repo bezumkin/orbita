@@ -17,7 +17,7 @@
         <b-button v-if="record && record.file" variant="link" class="text-danger" @click="onCancel">
           {{ titleCancel }}
         </b-button>
-        <b-button v-else-if="placeholder && record !== false" variant="link" class="text-danger" @click="onRemove">
+        <b-button v-else-if="canRemove" variant="link" class="text-danger" @click="onRemove">
           {{ titleRemove }}
         </b-button>
       </div>
@@ -53,13 +53,17 @@ const props = defineProps({
       return null
     },
   },
+  allowRemoving: {
+    type: Boolean,
+    default: true,
+  },
   accept: {
     type: String,
     default: 'image/*',
   },
   wrapperClass: {
     type: [String, Array],
-    default: '',
+    default: 'upload-avatar',
   },
   titleCancel: {
     type: String,
@@ -86,7 +90,7 @@ const record = computed({
 
 const dragCount = ref(0)
 const classes = computed(() => {
-  const cls: [string] = ['wrapper']
+  const cls = ['upload-box']
   if (dragCount.value > 0) {
     cls.push('drag-over')
   }
@@ -94,7 +98,7 @@ const classes = computed(() => {
     if (typeof props.wrapperClass === 'string') {
       cls.push(props.wrapperClass)
     } else {
-      cls.concat(props.wrapperClass as [string])
+      cls.concat(props.wrapperClass)
     }
   }
   return cls
@@ -119,6 +123,10 @@ const placeholderUrl = computed(() => {
     params.h = props.height
   }
   return getImageLink(props.placeholder, params)
+})
+
+const canRemove = computed(() => {
+  return props.placeholder && props.allowRemoving && record.value !== false
 })
 
 function onSelect() {
@@ -147,7 +155,6 @@ function onAddFile(files: DragEvent | FileList) {
   }
   const file = Array.from(files).shift() as File
   dragCount.value = 0
-  // const file = Array.from(dataTransfer.files).shift() as File
   if (verifyAccept(file.type)) {
     const reader = new FileReader()
     reader.onload = () => {
@@ -170,51 +177,3 @@ function verifyAccept(type: string) {
   return allowed.includes(type) || allowed.includes(type.split('/')[0] + '/*')
 }
 </script>
-
-<style scoped lang="scss">
-@use 'sass:color';
-
-$transition: 0.25s;
-
-.wrapper {
-  overflow: hidden;
-  position: relative;
-  background-color: $light;
-  border: 1px solid color.adjust($light, $blackness: 10%);
-  transition: background-color $transition;
-  cursor: pointer;
-
-  &:hover {
-    background-color: color.adjust($light, $blackness: 10%);
-    border-color: 1px solid $secondary;
-  }
-
-  img,
-  &::after {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-
-  img {
-    object-fit: cover;
-    object-position: center;
-  }
-
-  &::after {
-    content: '';
-    background: rgba($success, 0.25);
-    opacity: 0;
-    transition: opacity $transition;
-    pointer-events: none;
-  }
-
-  &.drag-over {
-    background-color: transparent;
-
-    &::after {
-      opacity: 1;
-    }
-  }
-}
-</style>

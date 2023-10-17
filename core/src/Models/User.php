@@ -28,6 +28,7 @@ use Vesp\Helpers\Jwt;
  *
  * @property-read ?File $avatar
  * @property-read UserToken[] $tokens
+ * @property-read VideoUser[] $userVideos
  */
 class User extends \Vesp\Models\User
 {
@@ -57,6 +58,11 @@ class User extends \Vesp\Models\User
     public function tokens(): HasMany
     {
         return $this->hasMany(UserToken::class);
+    }
+
+    public function userVideos(): HasMany
+    {
+        return $this->hasMany(VideoUser::class);
     }
 
     public function setAttribute($key, $value)

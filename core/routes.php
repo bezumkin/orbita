@@ -8,6 +8,8 @@ $group = $app->group(
     '/api',
     function (RouteCollectorProxy $group) {
         $group->get('/image/{uuid}', App\Controllers\Image::class);
+        $group->map(['GET', 'POST'], '/video/{uuid}[/{quality}]', App\Controllers\Video::class);
+        $group->get('/poster/{uuid}', App\Controllers\Poster::class);
 
         $group->group('/security', static function (RouteCollectorProxy $group) {
             $group->any('/login', App\Controllers\Security\Login::class);
@@ -28,6 +30,8 @@ $group = $app->group(
         $group->group('/admin', static function (RouteCollectorProxy $group) {
             $group->any('/users[/{id}]', App\Controllers\Admin\Users::class);
             $group->any('/user-roles[/{id}]', App\Controllers\Admin\UserRoles::class);
+            $group->any('/videos/upload[/{uuid}]', App\Controllers\Admin\Videos\Upload::class);
+            $group->any('/videos[/{id}]', App\Controllers\Admin\Videos::class);
         });
 
         $group->group(

@@ -11,7 +11,7 @@ export function useApi(endpoint: string | Ref, options: FetchOptions<any> = {}) 
       const {token} = useAuth()
       if (token.value) {
         const headers = new Headers(options.headers || {})
-        headers.set('authorization', token.value)
+        headers.set('Authorization', token.value)
         options.headers = headers
       }
     },

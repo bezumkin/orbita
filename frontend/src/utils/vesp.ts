@@ -2,12 +2,13 @@ export function getApiUrl(): string {
   const {public: config} = useRuntimeConfig()
   const SITE_URL = String(config.SITE_URL)
   const API_URL = String(config.API_URL)
-  return /:\/\//.test(API_URL)
+  const url = /:\/\//.test(API_URL)
     ? API_URL
     : [
         SITE_URL.endsWith('/') ? SITE_URL.slice(0, -1) : SITE_URL,
         API_URL.startsWith('/') ? API_URL.substring(1) : API_URL,
       ].join('/')
+  return url.endsWith('/') ? url : url + '/'
 }
 
 export function getImageLink(file: VespFile, options?: VespFileOptions, prefix?: string): string {

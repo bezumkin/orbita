@@ -16,11 +16,14 @@
   "require": {
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
+    "aminyazdanpanah/php-ffmpeg-video-streaming": "^1.2",
     "fenom/fenom": "^3.0",
+    "league/flysystem-aws-s3-v3": "^3.16",
     "monolog/monolog": "^3.4.0",
     "pelago/emogrifier": "^7.0",
     "peppeocchi/php-cron-scheduler": "^4.0",
     "phpmailer/phpmailer": "^6.8",
+    "predis/predis": "^2.2",
     "ramsey/uuid": "^4.7",
     "vesp/core": "^3.x-dev"
   },

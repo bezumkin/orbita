@@ -61,4 +61,14 @@ class Users extends ModelController
 
         return $c;
     }
+
+    protected function beforeDelete(Model $record): ?ResponseInterface
+    {
+        /** @var User $record */
+        if ($this->user->id === $record->id) {
+            return $this->failure('errors.user.delete_own');
+        }
+
+        return null;
+    }
 }

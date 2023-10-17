@@ -31,8 +31,8 @@
 @import "bootstrap-scss/badge";
 @import "bootstrap-scss/alert";
 
-// @import "bootstrap-scss/progress";
 // @import "bootstrap-scss/list-group";
+@import "bootstrap-scss/progress";
 @import "bootstrap-scss/close";
 
 // @import "bootstrap-scss/toasts";
@@ -54,6 +54,7 @@
 
 // App
 @import "@fortawesome/fontawesome-svg-core/styles.css";
+@import "plyr/dist/plyr.css";
 @import "transitions";
 @import "toast";
 @import "vesp";

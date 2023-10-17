@@ -14,9 +14,29 @@ import {
   faPlus,
   faEdit,
   faCaretDown,
+  faPause,
+  faPlay,
+  faUpload,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUser, faPowerOff, faGlobe, faEye, faEyeSlash, faFilter, faTimes, faRepeat, faPlus, faEdit, faCaretDown)
+library.add(
+  faUser,
+  faPowerOff,
+  faGlobe,
+  faEye,
+  faEyeSlash,
+  faFilter,
+  faTimes,
+  faRepeat,
+  faPlus,
+  faEdit,
+  faCaretDown,
+  faPause,
+  faPlay,
+  faUpload,
+  faCheck,
+)
 
 config.autoAddCss = false
 

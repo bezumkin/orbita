@@ -12,8 +12,9 @@ server {
     listen ${NGINX_PORT};
     charset utf-8;
     root /vesp/www/;
-    client_max_body_size 100M;
-    client_body_buffer_size 100M;
+    client_max_body_size 0;
+    fastcgi_buffering off;
+    fastcgi_request_buffering off;
 
     location ~ ^/(api|__clockwork)/ {
         rewrite ^/(api|__clockwork)/(.*)$ /api.php;

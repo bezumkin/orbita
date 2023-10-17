@@ -81,14 +81,11 @@ const formLogin = ref({username: '', password: ''})
 const formRegister = ref({username: '', password: '', fullname: '', email: ''})
 const formReset = ref({username: ''})
 
-const cookie = useCookie('auth._token.local', {maxAge: Number(useRuntimeConfig().public.JWT_EXPIRE), sameSite: true})
-
 async function onLogin() {
   loading.value = true
   try {
     const {token} = await usePost('security/login', formLogin.value)
     useAuthState().rawToken.value = token
-    cookie.value = token
     await getSession()
     showModal.value = false
     formLogin.value = {username: '', password: ''}
@@ -101,7 +98,6 @@ async function onLogin() {
 async function onLogout() {
   try {
     await signOut({redirect: false})
-    cookie.value = null
   } catch (e) {
     console.error(e)
   }

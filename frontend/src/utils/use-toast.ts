@@ -1,19 +1,18 @@
-import {useToast, PluginOptions} from 'vue-toastification'
+import * as pkg from 'vue-toastification'
+const {useToast} = pkg
 
-const toast = useToast()
-
-export function useToastInfo(message: string, options: PluginOptions = {}) {
-  toast.info(message, options)
+export function useToastInfo(message: string, options = {}) {
+  useToast().info(message, options)
 }
 
-export function useToastSuccess(message: string, options: PluginOptions = {}) {
-  toast.success(message, options)
+export function useToastSuccess(message: string, options = {}) {
+  useToast().success(message, options)
 }
 
-export function useToastError(message: string, options: PluginOptions = {}) {
-  toast.error(message, options)
+export function useToastError(message: string, options = {}) {
+  useToast().error(message, options)
 }
 
 export function useToastsClear() {
-  toast.clear()
+  useToast().clear()
 }

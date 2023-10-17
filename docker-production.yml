@@ -50,7 +50,7 @@ services:
       - COMPOSER_ALLOW_SUPERUSER=1
     restart: unless-stopped
     working_dir: /vesp/core
-    command: sh -c 'composer install --no-dev && composer db:migrate && php-fpm'
+    command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'
 
   node:
     image: node:${NODE_VERSION}
@@ -62,4 +62,7 @@ services:
     network_mode: 'service:nginx'
     restart: unless-stopped
     working_dir: /vesp/frontend
-    command: sh -c 'rm -rf /tmp/* && yarn && yarn start'
+    command: sh -c 'rm -rf /tmp/* && yarn && yarn build && node ./.output/server/index.mjs'
+
+  redis:
+    image: redis:${REDIS_VERSION}

@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io-client'
+
 declare global {
   type VespUserRole = {
     id: number
@@ -28,6 +30,13 @@ declare global {
     [key: string]: any
   }
 
+  type VespVideo = {
+    id: string
+    title?: string
+    description?: string
+    [key: string]: any
+  }
+
   type VespFileOptions = {
     w?: string | number
     h?: string | number
@@ -41,6 +50,7 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     $image: typeof getImageLink
     $scope: typeof hasScope
+    $socket: typeof Socket
   }
 }
 
@@ -48,6 +58,7 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $image: typeof getImageLink
     $scope: typeof hasScope
+    $socket: typeof Socket
   }
 }
 

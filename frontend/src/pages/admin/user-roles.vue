@@ -16,7 +16,7 @@ const table = ref()
 const url = 'admin/user-roles'
 const filters = ref({query: ''})
 const sort = 'id'
-const dir = 'desc'
+const dir = 'asc'
 const fields = computed(() => [
   {key: 'id', label: t('models.user_role.id'), sortable: true},
   {key: 'title', label: t('models.user_role.title'), sortable: true},

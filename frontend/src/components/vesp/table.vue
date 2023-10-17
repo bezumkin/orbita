@@ -55,18 +55,20 @@
       @sorted="onSort"
     >
       <template #cell(actions)="{item}">
-        <b-button
-          v-for="(action, idx) in getTableActions(tableActions, item)"
-          :key="idx"
-          :size="action.size || 'sm'"
-          :variant="action.variant"
-          :class="action.class"
-          :to="mapRouteParams(action, item)"
-          @click="onClick(action, item)"
-        >
-          <fa v-if="action.icon" :icon="action.icon" />
-          <template v-else>{{ action.title }}</template>
-        </b-button>
+        <template v-for="(action, idx) in tableActions">
+          <b-button
+            v-if="typeof action.isActive !== 'function' || action.isActive(item) === true"
+            :key="idx"
+            :size="action.size || 'sm'"
+            :variant="action.variant"
+            :class="action.class"
+            :to="mapRouteParams(action, item)"
+            @click="onClick(action, item)"
+          >
+            <fa v-if="action.icon" :icon="action.icon" />
+            <template v-else>{{ action.title }}</template>
+          </b-button>
+        </template>
       </template>
 
       <template v-for="slotName in Object.keys($slots)" #[slotName]="slotProps">
@@ -138,6 +140,7 @@ export type VespTableAction = {
   title?: String
   map?: Record<string, string>
   key?: string
+  isActive?: Function
 }
 
 export type VespTableOnLoad = (data: {total: number; rows: any[]; [key: string]: any}) => {
@@ -146,7 +149,7 @@ export type VespTableOnLoad = (data: {total: number; rows: any[]; [key: string]:
   [key: string]: any
 }
 
-export type VespTableGetActions = (actions: VespTableAction[], item: Record<string, any>) => VespTableAction[]
+// export type VespTableGetActions = (actions: VespTableAction[], item: Record<string, any>) => VespTableAction[]
 
 const emit = defineEmits(['update:modelValue', 'update:sort', 'update:dir', 'update:limit', 'update:filters', 'delete'])
 const props = defineProps({
@@ -234,12 +237,12 @@ const props = defineProps({
       return data
     },
   },
-  getTableActions: {
+  /* getTableActions: {
     type: Function as PropType<VespTableGetActions>,
     default(data: any) {
       return data
     },
-  },
+  }, */
   emptyText: {
     type: String,
     default: 'components.table.no_data',
@@ -398,7 +401,7 @@ async function deleteItem() {
   }
 }
 
-defineExpose({getParams, page: tPage, sort: tSort, dir: tDir, loading, delete: onDelete})
+defineExpose({getParams, page: tPage, sort: tSort, dir: tDir, loading, delete: onDelete, refresh: loadTable, items})
 
 provide('refreshVespTable', (key: string) => {
   if (key.startsWith(updateKey)) {
@@ -417,5 +420,8 @@ watch(
   },
   {deep: true},
 )
-await loadTable()
+
+onMounted(() => {
+  loadTable()
+})
 </script>

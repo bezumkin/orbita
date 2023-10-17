@@ -39,6 +39,23 @@ export default {
       scope: 'Scope',
       users: 'Users',
     },
+    video: {
+      title_one: 'Video',
+      title_many: 'Videos',
+      id: 'Uuid',
+      title: 'Title',
+      description: 'Description',
+      image: 'Preview',
+      progress: 'Processed',
+      size: 'Size',
+      width: 'Width',
+      height: 'Height',
+      active: 'Active',
+      streams: 'Streams',
+      dimension: 'Dimension',
+      created_at: 'Created at',
+      qualities: 'Versions',
+    },
   },
   components: {
     table: {
@@ -51,6 +68,10 @@ export default {
         confirm: 'Are you sure you want to delete this entry?',
       },
     },
+    upload: {
+      status_loading: 'Uploaded {uploaded} from {size}. There are {remaining} left at a speed of {speed}.',
+      status_finished: 'Successfully uploaded {size} in {duration} at a speed of {speed}.',
+    },
   },
   pages: {
     index: 'Main',
@@ -58,6 +79,7 @@ export default {
       title: 'Admin',
       users: 'Users',
       user_roles: 'Roles',
+      videos: 'Videos',
     },
     user: {
       title: 'Account',
@@ -76,6 +98,10 @@ export default {
       email_exists: 'This email is already exists',
       inactive: 'This account is not active',
       blocked: 'This account is blocked',
+      delete_own: 'You can not delete yourself',
+    },
+    user_role: {
+      delete_own: 'You cannot delete your own group',
     },
     login: {
       wrong: 'Wrong username or password',

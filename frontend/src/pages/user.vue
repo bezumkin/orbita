@@ -11,10 +11,22 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const {data: user} = useAuth()
 if (!user.value) {
   showError({statusCode: 401, statusMessage: 'Unauthorized'})
-} else if (useRoute().name === 'user') {
+}
+
+if (route.name === 'user') {
   navigateTo({name: 'user-profile'})
 }
+
+watch(
+  () => route.name,
+  (newValue) => {
+    if (newValue === 'user') {
+      navigateTo({name: 'user-profile'})
+    }
+  },
+)
 </script>

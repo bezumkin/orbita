@@ -8,7 +8,11 @@ $scheduler = new Scheduler();
 
 $scheduler->php(__DIR__ . '/clear-tokens.php', null, [], 'clear_tokens')
     ->daily()
-    ->inForeground()
+    // ->inForeground()
+    ->onlyOne();
+
+$scheduler->php(__DIR__ . '/prepare-videos.php', null, [], 'prepare_videos')
+    ->everyMinute()
     ->onlyOne();
 
 $executed = $scheduler->run();

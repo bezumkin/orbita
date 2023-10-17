@@ -39,6 +39,23 @@ export default {
       scope: 'Разрешения',
       users: 'Пользователи',
     },
+    video: {
+      title_one: 'Видео',
+      title_many: 'Видео',
+      id: 'Uuid',
+      title: 'Название',
+      description: 'Описание',
+      image: 'Превью',
+      progress: 'Обработано',
+      size: 'Размер',
+      width: 'Ширина',
+      height: 'Высота',
+      active: 'Активно',
+      streams: 'Версии',
+      dimension: 'Разрешение',
+      created_at: 'Загружено',
+      qualities: 'Версии',
+    },
   },
   components: {
     table: {
@@ -51,6 +68,10 @@ export default {
         confirm: 'Вы уверены, что хотите удалить эту запись?',
       },
     },
+    upload: {
+      status_loading: 'Загружено {uploaded} из {size}. Осталось {remaining} на скорости {speed}.',
+      status_finished: 'Успешно загружено {size} за {duration} на скорости {speed}.',
+    },
   },
   pages: {
     index: 'Главная',
@@ -58,6 +79,7 @@ export default {
       title: 'Админка',
       users: 'Пользователи',
       user_roles: 'Группы',
+      videos: 'Видео',
     },
     user: {
       title: 'Аккаунт',
@@ -76,6 +98,10 @@ export default {
       email_exists: 'Такой email уже используется',
       inactive: 'Учётная запись не была активирована',
       blocked: 'Учётная запись заблокирована',
+      delete_own: 'Вы не можете удалить себя',
+    },
+    user_role: {
+      delete_own: 'Вы не можете удалить собственную группу',
     },
     login: {
       wrong: 'Неправильное имя или пароль',

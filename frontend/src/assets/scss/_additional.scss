@@ -1,3 +1,61 @@
+@use 'sass:color';
+@import 'variables';
+
 fieldset {
   margin-bottom: 1rem;
+}
+
+.upload-box {
+  overflow: hidden;
+  position: relative;
+  background: $light url('~/assets/icons/upload.svg') no-repeat center;
+  background-size: 1.5rem;
+  border: 1px solid color.adjust($light, $blackness: 10%);
+  transition: background $transition;
+  cursor: pointer;
+  min-height: 6rem;
+  border-radius: $border-radius;
+
+  & > img {
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.uploading {
+    background-image: none;
+  }
+
+  &:hover {
+    background-color: color.adjust($light, $blackness: 10%);
+    border-color: 1px solid $secondary;
+    background-size: 2rem;
+  }
+
+  &::after {
+    outline: 1px solid red;
+    content: '';
+    background-color: rgba($success, 0.25);
+    opacity: 0;
+    transition: opacity $transition;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  &.drag-over {
+    background-color: transparent;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  .upload-items {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+  }
 }

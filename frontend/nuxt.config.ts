@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    REDIS_SECRET: process.env.REDIS_SECRET,
     public: {
       SITE_NAME: process.env.SITE_NAME || 'Orbita',
       SITE_URL: process.env.SITE_URL || '127.0.0.1',
@@ -51,7 +52,7 @@ export default defineNuxtConfig({
     },
   },
   auth: {
-    baseURL: process.env.API_URL,
+    baseURL: process.env.API_URL || '/api/',
     provider: {
       type: 'local',
       // @ts-ignore
@@ -87,8 +88,8 @@ export default defineNuxtConfig({
     defaultLocale: 'ru',
     langDir: 'lexicons',
     locales: [
-      {code: 'ru', name: 'Русский', file: 'ru.ts'},
-      {code: 'en', name: 'English', file: 'en.ts'},
+      {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru_RU'},
+      {code: 'en', name: 'English', file: 'en.ts', iso: 'en_US'},
     ],
   },
 })
