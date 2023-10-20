@@ -117,10 +117,10 @@ const placeholderUrl = computed(() => {
   }
   const params: {[key: string]: string | number} = {fit: 'crop'}
   if (props.width) {
-    params.w = props.width
+    params.w = props.width * 2
   }
   if (props.height) {
-    params.h = props.height
+    params.h = props.height * 2
   }
   return getImageLink(props.placeholder, params)
 })

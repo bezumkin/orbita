@@ -17,7 +17,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     REDIS_SECRET: process.env.REDIS_SECRET,
     public: {
-      SITE_NAME: process.env.SITE_NAME || 'Orbita',
       SITE_URL: process.env.SITE_URL || '127.0.0.1',
       API_URL: process.env.API_URL || '/api/',
       JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
@@ -34,6 +33,7 @@ export default defineNuxtConfig({
   ],
   app: {
     pageTransition: {name: 'page', mode: 'out-in'},
+    layoutTransition: {name: 'page', mode: 'out-in'},
     head: {
       title: process.env.SITE_NAME,
       meta: [

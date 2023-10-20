@@ -37,6 +37,7 @@ services:
       dockerfile: dev.dockerfile
       args:
         - PHP_VERSION
+        - TIME_ZONE
     volumes:
       - ./.env:/vesp/.env
       - ./core:/vesp/core

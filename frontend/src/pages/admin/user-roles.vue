@@ -7,11 +7,8 @@
 <script setup lang="ts">
 import {VespTableAction} from '~/components/vesp/table.vue'
 
-if (!hasScope('users/get')) {
-  showError({statusCode: 403, statusMessage: 'Access Denied'})
-}
-
 const {t} = useI18n()
+const {$setting} = useNuxtApp()
 const table = ref()
 const url = 'admin/user-roles'
 const filters = ref({query: ''})
@@ -36,6 +33,6 @@ function formatTags(value?: any) {
 }
 
 useHead({
-  title: () => [t('pages.admin.user_roles'), t('pages.admin.title'), t('project')].join(' / '),
+  title: () => [t('pages.admin.user_roles'), t('pages.admin.title'), $setting('title')].join(' / '),
 })
 </script>

@@ -1,15 +1,7 @@
 <template>
-  <div class="d-flex flex-column min-vh-100">
-    <app-navbar />
-
-    <b-container class="pt-4 flex-grow-1">
-      <slot name="default">
-        <nuxt-page />
-      </slot>
-    </b-container>
-
-    <app-footer />
-  </div>
+  <nuxt-layout>
+    <nuxt-page />
+  </nuxt-layout>
 </template>
 
 <script setup lang="ts">

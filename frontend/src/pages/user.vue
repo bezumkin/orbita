@@ -1,12 +1,16 @@
 <template>
   <div>
-    <b-nav tabs class="mt-4">
-      <!--<b-nav-item :to="{name: 'user-orders'}">{{ $t('models.order.title_many') }}</b-nav-item>-->
-      <b-nav-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-nav-item>
-    </b-nav>
-    <div class="mt-4">
-      <nuxt-page />
-    </div>
+    <b-row class="mt-4">
+      <b-col md="3">
+        <b-nav pills vertical>
+          <b-nav-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-nav-item>
+          <b-nav-item>{{ $t('pages.user.payments') }}</b-nav-item>
+        </b-nav>
+      </b-col>
+      <b-col md="9">
+        <nuxt-page />
+      </b-col>
+    </b-row>
   </div>
 </template>
 

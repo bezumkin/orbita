@@ -59,3 +59,84 @@ fieldset {
     gap: 0.5rem;
   }
 }
+
+#three-column {
+  .main-background {
+    position: relative;
+    transition: height $transition-speed;
+    height: 0;
+    overflow: hidden;
+
+    img {
+      height: 240px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    &::after {
+      background-color: rgb(0 0 0 / 20%);
+      content: "";
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  .main-cols {
+    position: relative;
+    top: 0;
+    transition: top $transition-speed;
+
+    .col-start,
+    .col-center,
+    .col-end {
+      background: $white;
+      height: 100%;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+    }
+
+    .col-start,
+    .col-end {
+      padding: 1rem;
+    }
+
+    .col-start {
+      position: relative;
+      top: 0;
+      transition: top $transition-speed;
+
+      .main-poster {
+        max-width: 225px;
+        margin: auto;
+
+        img {
+          border-radius: $border-radius;
+        }
+      }
+    }
+  }
+
+  &.main-page {
+    .main-background {
+      height: 240px;
+    }
+
+    .main-cols {
+      position: relative;
+      top: -200px;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    &.main-page {
+      .main-cols {
+        top: 0;
+
+        .col-start {
+          top: -200px;
+        }
+      }
+    }
+  }
+}

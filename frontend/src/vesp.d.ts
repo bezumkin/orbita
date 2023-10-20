@@ -1,4 +1,5 @@
-import { Socket } from 'socket.io-client'
+import {Socket} from 'socket.io-client'
+import i18n from "@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs";
 
 declare global {
   type VespUserRole = {
@@ -20,7 +21,7 @@ declare global {
     role?: VespUserRole
     avatar_id?: number
     avatar?: VespFile
-    new_avatar?: {file: string, metadata: {[key: string]: any}} | Boolean
+    new_avatar?: {file: string; metadata: {[key: string]: any}} | Boolean
   }
 
   type VespFile = {
@@ -44,21 +45,34 @@ declare global {
     fm?: string
     t?: string | number
   }
-}
 
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $image: typeof getImageLink
-    $scope: typeof hasScope
-    $socket: typeof Socket
+  type VespSetting = {
+    key: string
+    value: string
+    type: string
+    required: boolean
   }
 }
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $image: typeof getImageLink
-    $scope: typeof hasScope
-    $socket: typeof Socket
+    $i18n: i18n
+    $image: getImageLink
+    $scope: hasScope
+    $socket: Socket
+    $settings: Record<string, string | string[]>
+    $setting: (key: string) => string | string[]
+  }
+}
+
+declare module '#app' {
+  interface NuxtApp {
+    $i18n: i18n
+    $image: getImageLink
+    $scope: hasScope
+    $socket: Socket
+    $settings: Record<string, string | string[]>
+    $setting: (key: string) => string | string[]
   }
 }
 

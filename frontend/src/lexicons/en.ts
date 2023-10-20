@@ -56,6 +56,22 @@ export default {
       created_at: 'Created at',
       qualities: 'Versions',
     },
+    setting: {
+      title: 'Title',
+      title_desc: 'Project title, used on all pages',
+      description: 'Description',
+      description_desc: 'Brief description of the project',
+      about: 'About project',
+      about_desc: 'A detailed note with a story about the project, pinned to the main page',
+      poster: 'Main poster',
+      poster_desc: 'Project avatar, displayed on the main page',
+      background: 'Poster background',
+      background_desc: 'Background image for the main page',
+      copyright: 'Project owner',
+      copyright_desc: 'Displayed in the copyright line in the footer',
+      started: 'Project start date',
+      started_desc: 'The project start date is used to form the copyright line in the footer',
+    },
   },
   components: {
     table: {
@@ -80,6 +96,7 @@ export default {
       users: 'Users',
       user_roles: 'Roles',
       videos: 'Videos',
+      settings: 'Settings',
     },
     user: {
       title: 'Account',
@@ -110,6 +127,12 @@ export default {
       no_user: 'The user does not exist or did not reset the password',
       ttl: 'The link has expired',
       wrong: 'Incorrect temporary password',
+    },
+    video: {
+      no_image: 'You forgot to upload an image for the video',
+    },
+    setting: {
+      required: 'This setting is required',
     },
   },
 }

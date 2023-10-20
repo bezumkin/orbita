@@ -1,22 +1,15 @@
 $transition: 0.25s;
 $grid-breakpoints: (
     xs: 0,
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px,
-    2xl: 1400px,
-    3xl: 1700px,
+    md: 728px,
+    lg: 1100px,
 );
 $container-max-widths: (
-    sm: 540px,
-    md: 720px,
-    lg: 960px,
-    xl: 1140px,
-    2xl: 1340px,
-    3xl: 1620px,
+    // md: 768px,
+    lg: 1140px,
 );
 $modal-header-border-width: 0;
+$transition-speed: 0.25s;
 
 @import "bootstrap-scss/functions";
 @import "bootstrap-scss/variables";

@@ -18,11 +18,8 @@
 <script setup lang="ts">
 import {VespTableAction} from '~/components/vesp/table.vue'
 
-if (!hasScope('users/get')) {
-  showError({statusCode: 403, statusMessage: 'Access Denied'})
-}
-
 const {t} = useI18n()
+const {$setting} = useNuxtApp()
 const table = ref()
 const url = 'admin/users'
 const filters = ref({query: ''})
@@ -57,6 +54,6 @@ function rowClass(item: any) {
 }
 
 useHead({
-  title: () => [t('pages.admin.users'), t('pages.admin.title'), t('project')].join(' / '),
+  title: () => [t('pages.admin.users'), t('pages.admin.title'), $setting('title')].join(' / '),
 })
 </script>

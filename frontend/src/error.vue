@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import MainPage from './app.vue'
+import MainPage from './layouts/default.vue'
 const isDev = process.dev
 
 const props = defineProps({

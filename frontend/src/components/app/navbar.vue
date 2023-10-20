@@ -27,7 +27,7 @@
 
       <app-login>
         <template #user-menu>
-          <b-dropdown-item v-if="$scope('users/get')" :to="{name: 'admin'}">
+          <b-dropdown-item v-if="adminSections.length" :to="{name: 'admin'}">
             {{ $t('pages.admin.title') }}
           </b-dropdown-item>
           <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import logo from '~/assets/images/logo-orbita.svg'
+const adminSections = computed(() => getAdminSections())
 // import ru from '~/assets/icons/ru.svg'
 // import en from '~/assets/icons/gb.svg'
 </script>

@@ -11,7 +11,7 @@ export function getApiUrl(): string {
   return url.endsWith('/') ? url : url + '/'
 }
 
-export function getImageLink(file: VespFile, options?: VespFileOptions, prefix?: string): string {
+export function getImageLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
   const params = [getApiUrl().slice(0, -1), prefix || 'image', file.uuid]
   if (file.updated_at) {
     if (!options) {
@@ -47,4 +47,15 @@ export function hasScope(scopes: string | string[]): boolean {
   }
 
   return check(scopes)
+}
+
+export function getAdminSections() {
+  const items = [
+    {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
+    {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
+    {scope: 'users/get', title: 'users', route: 'admin-users'},
+    {scope: 'users/get', title: 'user_roles', route: 'admin-user-roles'},
+  ]
+
+  return items.filter((i) => hasScope(i.scope))
 }

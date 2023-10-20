@@ -4,6 +4,9 @@ declare(strict_types=1);
 use Illuminate\Database\Schema\Blueprint;
 use Vesp\Services\Migration;
 
+require_once __DIR__ . '/../seeds/SeedUserRoles.php';
+require_once __DIR__ . '/../seeds/SeedUsers.php';
+
 final class Users extends Migration
 {
     public function up(): void
@@ -57,6 +60,12 @@ final class Users extends Migration
             }
         );
 
+        if ($adapter = $this->getAdapter()) {
+            $input = $this->getInput();
+            $output = $this->getOutput();
+            (new SeedUserRoles())->setAdapter($adapter)->setInput($input)->setOutput($output)->run();
+            (new SeedUsers())->setAdapter($adapter)->setInput($input)->setOutput($output)->run();
+        }
     }
 
     public function down(): void
