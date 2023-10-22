@@ -1,17 +1,18 @@
 <template>
-  <div class="p-4">
+  <div>
     <div>Здесь будет лента постов</div>
     <div class="mt-4">
       <b-link :to="{name: 'posts-uuid', params: {uuid: '4edc4d74-fdb9-40cd-b61d-6598ba524a00'}}">
         Тестовая ссылка &rarr;
       </b-link>
+      <br /><br /><br /><br /><br /><br /><br /><br /><br />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const {t} = useI18n()
-const {$socket, $setting} = useNuxtApp()
+const {$socket, $settings} = useNuxtApp()
 
 onMounted(() => {
   $socket.on('test', (data: any) => {
@@ -24,6 +25,6 @@ definePageMeta({
 })
 
 useHead({
-  title: () => [t('pages.index'), $setting('title')].join(' / '),
+  title: () => [t('pages.index'), $settings.value.title].join(' / '),
 })
 </script>

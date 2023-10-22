@@ -26,6 +26,7 @@
           v-model="record"
           v-bind="imageProps"
           :placeholder="typeof record === 'object' ? {...record} : null"
+          :placeholder-params="typeof record === 'object' ? imageParams : null"
         />
         <b-form-input v-else-if="type === 'date' && typeof record === 'string'" v-model="record" type="date" />
       </b-form>
@@ -103,7 +104,7 @@ const imageParams = computed(() => {
   if (key.value === 'poster') {
     return {w: 450, h: 560, fit: 'crop'}
   }
-  return {h: 480, fit: 'crop'}
+  return {h: 480, fit: 'crop-center'}
 })
 
 function onLang(code: string) {
@@ -136,6 +137,8 @@ function formatDate(date: string) {
   &.image-background {
     img {
       height: 240px;
+      width: 100%;
+      object-fit: cover;
     }
   }
 }

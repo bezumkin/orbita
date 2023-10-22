@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 
 export const useSettingsStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
+  const isMobile = ref(false)
 
   async function load() {
     try {
@@ -14,5 +15,5 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  return {settings, load}
+  return {settings, load, isMobile}
 })

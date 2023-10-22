@@ -1,5 +1,5 @@
-import {ofetch, FetchOptions} from 'ofetch'
-import {Ref} from 'vue'
+import {ofetch} from 'ofetch'
+import type {FetchOptions} from 'ofetch'
 
 export function useApi(endpoint: string | Ref, options: FetchOptions<any> = {}) {
   return ofetch(typeof endpoint === 'object' ? endpoint.value : endpoint, {

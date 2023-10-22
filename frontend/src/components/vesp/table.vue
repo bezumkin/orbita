@@ -126,9 +126,9 @@
 </template>
 
 <script setup lang="ts">
-import {BaseSize, Breakpoint, TableFieldObject, BaseButtonVariant} from 'bootstrap-vue-next/src/types'
-import {RouteLocationNamedRaw} from 'vue-router'
-import {TableItem} from 'bootstrap-vue-next'
+import type {BaseSize, Breakpoint, TableFieldObject, BaseButtonVariant} from 'bootstrap-vue-next/src/types'
+import type {RouteLocationNamedRaw} from 'vue-router'
+import type {TableItem} from 'bootstrap-vue-next'
 
 export type VespTableAction = {
   size?: keyof BaseSize

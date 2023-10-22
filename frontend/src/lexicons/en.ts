@@ -91,6 +91,8 @@ export default {
   },
   pages: {
     index: 'Main',
+    about: 'About',
+    posts: 'Posts',
     admin: {
       title: 'Admin',
       users: 'Users',

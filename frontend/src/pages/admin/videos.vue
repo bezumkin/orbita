@@ -22,10 +22,10 @@
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
 import {format, parseISO} from 'date-fns'
-import {VespTableAction} from '~/components/vesp/table.vue'
+import type {VespTableAction} from '~/components/vesp/table.vue'
 
 const {t} = useI18n()
-const {$socket, $setting} = useNuxtApp()
+const {$socket, $settings} = useNuxtApp()
 const url = 'admin/videos'
 const sort = 'created_at'
 const dir = 'desc'
@@ -107,6 +107,6 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: () => [t('pages.admin.videos'), t('pages.admin.title'), $setting('title')].join(' / '),
+  title: () => [t('pages.admin.videos'), t('pages.admin.title'), $settings.value.title].join(' / '),
 })
 </script>

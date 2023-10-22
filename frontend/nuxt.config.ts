@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   telemetry: false,
   srcDir: 'src/',
   css: ['~/assets/scss/index.scss'],
+  devtools: {enabled: false},
   vite: {
     server: {
       hmr: {port: 3001},

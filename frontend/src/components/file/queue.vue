@@ -54,8 +54,8 @@
 import prettyBytes from 'pretty-bytes'
 import {formatDistanceToNow, formatDuration, fromUnixTime, intervalToDuration} from 'date-fns'
 import ru from 'date-fns/locale/ru/index.js'
-// eslint-disable-next-line import/named
-import {HttpRequest, Upload, UploadOptions} from 'tus-js-client'
+import {Upload} from 'tus-js-client'
+import type {HttpRequest, UploadOptions} from 'tus-js-client'
 
 if (!hasScope('videos/get')) {
   showError({statusCode: 403, statusMessage: 'Access Denied'})

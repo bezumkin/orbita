@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import {LocaleObject} from 'vue-i18n-routing'
+import type {LocaleObject} from 'vue-i18n-routing'
 
 defineProps({
   selectClass: {

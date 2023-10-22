@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 const {data: user} = useAuth()
+const {$isMobile} = useNuxtApp()
 
 watch(user, () => {
   if (user.value) {
@@ -19,5 +20,19 @@ watch(user, () => {
       navigateTo('/')
     }
   }
+})
+
+function handleResize() {
+  const width = process.client ? window.innerWidth : 768
+  $isMobile.value = width < 768
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>

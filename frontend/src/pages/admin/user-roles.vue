@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import {VespTableAction} from '~/components/vesp/table.vue'
+import type {VespTableAction} from '~/components/vesp/table.vue'
 
 const {t} = useI18n()
-const {$setting} = useNuxtApp()
+const {$settings} = useNuxtApp()
 const table = ref()
 const url = 'admin/user-roles'
 const filters = ref({query: ''})
@@ -33,6 +33,6 @@ function formatTags(value?: any) {
 }
 
 useHead({
-  title: () => [t('pages.admin.user_roles'), t('pages.admin.title'), $setting('title')].join(' / '),
+  title: () => [t('pages.admin.user_roles'), t('pages.admin.title'), $settings.value.title].join(' / '),
 })
 </script>

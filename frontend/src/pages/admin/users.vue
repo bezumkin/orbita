@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import {VespTableAction} from '~/components/vesp/table.vue'
+import type {VespTableAction} from '~/components/vesp/table.vue'
 
 const {t} = useI18n()
-const {$setting} = useNuxtApp()
+const {$settings} = useNuxtApp()
 const table = ref()
 const url = 'admin/users'
 const filters = ref({query: ''})
@@ -54,6 +54,6 @@ function rowClass(item: any) {
 }
 
 useHead({
-  title: () => [t('pages.admin.users'), t('pages.admin.title'), $setting('title')].join(' / '),
+  title: () => [t('pages.admin.users'), t('pages.admin.title'), $settings.value.title].join(' / '),
 })
 </script>

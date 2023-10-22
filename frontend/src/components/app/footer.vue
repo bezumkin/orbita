@@ -20,11 +20,11 @@
 
 <script setup lang="ts">
 const {locale} = useI18n()
-const {$setting} = useNuxtApp()
+const {$settings} = useNuxtApp()
 
 const date = computed(() => {
-  const started = $setting('started')
   const year = new Date().getFullYear()
+  const started = $settings.value.started as string
   if (started) {
     const tmp = new Date(started).getFullYear()
     if (tmp !== year) {
@@ -34,7 +34,7 @@ const date = computed(() => {
   return year
 })
 const owner = computed(() => {
-  const owner = $setting('owner')
+  const owner = $settings.value.owner
   if (owner) {
     return owner
   }

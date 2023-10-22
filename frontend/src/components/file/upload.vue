@@ -53,6 +53,12 @@ const props = defineProps({
       return null
     },
   },
+  placeholderParams: {
+    type: Object as PropType<Record<string, string>>,
+    default() {
+      return null
+    },
+  },
   allowRemoving: {
     type: Boolean,
     default: true,
@@ -121,6 +127,11 @@ const placeholderUrl = computed(() => {
   }
   if (props.height) {
     params.h = props.height * 2
+  }
+  if (props.placeholderParams) {
+    Object.keys(props.placeholderParams).forEach((key: string) => {
+      params[key] = props.placeholderParams[key]
+    })
   }
   return getImageLink(props.placeholder, params)
 })

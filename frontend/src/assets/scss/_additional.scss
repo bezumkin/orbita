@@ -73,7 +73,7 @@ fieldset {
       object-fit: cover;
     }
 
-    &::after {
+    &::before {
       background-color: rgb(0 0 0 / 20%);
       content: "";
       height: 100%;
@@ -82,10 +82,40 @@ fieldset {
     }
   }
 
-  .main-cols {
+  .main-poster {
+    max-width: 225px;
+    margin: auto;
+
+    img {
+      border-radius: $border-radius;
+    }
+  }
+
+  .main-tabs {
     position: relative;
     top: 0;
     transition: top $transition-speed;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    .nav {
+      padding: 1rem;
+
+      &-link {
+        &:not(.active) {
+          background: $light;
+        }
+      }
+    }
+
+    .tab-pane {
+      padding: 0 1rem 1rem;
+    }
+  }
+
+  .main-cols {
+    position: relative;
 
     .col-start,
     .col-center,
@@ -94,10 +124,6 @@ fieldset {
       height: 100%;
       border: 1px solid $border-color;
       border-radius: $border-radius;
-    }
-
-    .col-start,
-    .col-end {
       padding: 1rem;
     }
 
@@ -105,15 +131,6 @@ fieldset {
       position: relative;
       top: 0;
       transition: top $transition-speed;
-
-      .main-poster {
-        max-width: 225px;
-        margin: auto;
-
-        img {
-          border-radius: $border-radius;
-        }
-      }
     }
   }
 
@@ -122,17 +139,15 @@ fieldset {
       height: 240px;
     }
 
-    .main-cols {
+    .main-tabs {
       position: relative;
-      top: -200px;
+      top: -100px;
     }
   }
 
-  @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up(md) {
     &.main-page {
       .main-cols {
-        top: 0;
-
         .col-start {
           top: -200px;
         }

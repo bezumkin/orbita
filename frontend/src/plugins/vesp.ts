@@ -1,18 +1,33 @@
 import {Socket} from 'socket.io-client'
-import {Composer} from 'vue-i18n'
+import type {Composer} from 'vue-i18n'
 import {useSettingsStore} from '~/stores/settings'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const $i18n = nuxtApp.$i18n as Composer
   const $socket = nuxtApp.$socket as Socket
-  const {settings, load} = useSettingsStore()
-  await load()
+  const store = useSettingsStore()
+  await store.load()
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
-  nuxtApp.provide('settings', settings)
+  // nuxtApp.provide('settings', store.settings)
+  nuxtApp.provide(
+    'settings',
+    computed(() => {
+      const settings: Record<string, any> = {}
+      Object.keys(store.settings).forEach((key: string) => {
+        let value: string | Record<string, any> = store.settings[key]
+        if (value && typeof value === 'object' && value[$i18n.locale.value]) {
+          value = value[$i18n.locale.value]
+        }
+        settings[key] = value
+      })
+      return settings
+    }),
+  )
+  nuxtApp.provide('isMobile', ref(store.isMobile))
   nuxtApp.provide('setting', (key: string): string | Record<string, any> => {
-    let value: string | Record<string, any> = settings[key]
+    let value: string | Record<string, any> = store.settings[key]
     if (value && typeof value === 'object' && value[$i18n.locale.value]) {
       value = value[$i18n.locale.value]
     }
@@ -20,10 +35,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   })
 
   // Listen for settings update
-
   if ($socket) {
     $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
-      settings[key] = value
+      store.settings[key] = value
     })
   }
 })

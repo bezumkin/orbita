@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 const {t} = useI18n()
-const {$setting} = useNuxtApp()
+const {$settings} = useNuxtApp()
 
 const editing = ref('')
 const saving = ref('')
@@ -76,6 +76,6 @@ async function saveSetting(setting: VespSetting) {
 }
 
 useHead({
-  title: () => [t('pages.admin.settings'), t('pages.admin.title'), $setting('title')].join(' / '),
+  title: () => [t('pages.admin.settings'), t('pages.admin.title'), $settings.value.title].join(' / '),
 })
 </script>

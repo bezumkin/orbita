@@ -60,8 +60,8 @@ declare module '@vue/runtime-core' {
     $image: getImageLink
     $scope: hasScope
     $socket: Socket
-    $settings: Record<string, string | string[]>
-    $setting: (key: string) => string | string[]
+    $settings: Ref<Record<string, string | string[]>>
+    $isMobile: Ref<boolean>
   }
 }
 
@@ -71,8 +71,8 @@ declare module '#app' {
     $image: getImageLink
     $scope: hasScope
     $socket: Socket
-    $settings: Record<string, string | string[]>
-    $setting: (key: string) => string | string[]
+    $settings: Ref<Record<string, string | string[]>>
+    $isMobile: Ref<boolean>
   }
 }
 

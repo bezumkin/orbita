@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 const {t} = useI18n()
-const {$setting} = useNuxtApp()
+const {$settings} = useNuxtApp()
 const {getSession} = useAuth()
 const loading = ref(false)
 const form = ref()
@@ -30,6 +30,6 @@ async function onSubmit() {
 }
 
 useHead({
-  title: () => [t('pages.user.profile'), t('pages.user.title'), $setting('title')].join(' / '),
+  title: () => [t('pages.user.profile'), t('pages.user.title'), $settings.value.title].join(' / '),
 })
 </script>

@@ -91,6 +91,8 @@ export default {
   },
   pages: {
     index: 'Главная',
+    about: 'Об авторе',
+    posts: 'Посты',
     admin: {
       title: 'Админка',
       users: 'Пользователи',
