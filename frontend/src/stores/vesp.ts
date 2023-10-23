@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 
-export const useSettingsStore = defineStore('settings', () => {
+export const useVespStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
   const isMobile = ref(false)
 
@@ -11,7 +11,7 @@ export const useSettingsStore = defineStore('settings', () => {
         settings.value[i.key] = i.value
       })
     } catch (e) {
-      // console.error(e)
+      console.error(e)
     }
   }
 

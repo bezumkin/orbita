@@ -54,7 +54,11 @@ class Video extends Controller
         $this->response->getBody()
             ->write($manifest);
 
-        return $this->response;
+        return $this->response
+            ->withHeader(
+                'Access-Control-Allow-Origin',
+                getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
+            );
     }
 
     public function getQuality(string $quality): ?ResponseInterface
@@ -66,7 +70,11 @@ class Video extends Controller
         $this->response->getBody()->write($videoQuality->manifest);
 
         return $this->response
-            ->withHeader('Accept-Ranges', 'bytes');
+            ->withHeader('Accept-Ranges', 'bytes')
+            ->withHeader(
+                'Access-Control-Allow-Origin',
+                getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
+            );
     }
 
     public function getRange(string $quality, int $start, int $end): ?ResponseInterface
@@ -89,7 +97,11 @@ class Video extends Controller
                 ->withStatus(206, 'Partial Content')
                 ->withHeader('Content-Type', $file->type)
                 ->withHeader('Content-Range', "bytes $start-$end/$file->size")
-                ->withHeader('Content-Length', $length);
+                ->withHeader('Content-Length', $length)
+                ->withHeader(
+                    'Access-Control-Allow-Origin',
+                    getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
+                );
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
         }

@@ -2,6 +2,16 @@ import {Socket} from 'socket.io-client'
 import i18n from "@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs";
 
 declare global {
+  interface AuthStore {
+    user: Ref<VespUser | undefined>
+    token: Ref<string | undefined>
+    loggedIn: Ref<boolean>
+    loadUser: Function
+    login: Function
+    logout: Function
+    setToken: Function
+  }
+
   type VespUserRole = {
     id: number
     title: string

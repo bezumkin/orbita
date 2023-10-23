@@ -9,6 +9,7 @@ export default {
     create: 'Create',
     edit: 'Edit',
     add: 'Add',
+    view: 'View',
   },
   security: {
     login: 'Login',

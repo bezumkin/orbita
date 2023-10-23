@@ -63,6 +63,8 @@ services:
       - ./frontend:/vesp/frontend
     depends_on:
       - nginx
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     network_mode: 'service:nginx'
     working_dir: /vesp/frontend
 #    command: sh -c 'rm -rf /tmp/* && yarn && yarn analyze'

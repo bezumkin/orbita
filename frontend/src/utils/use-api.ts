@@ -16,7 +16,7 @@ export function useApi(endpoint: string | Ref, options: FetchOptions<any> = {}) 
       }
     },
     onResponseError({response}) {
-      if (response._data) {
+      if (process.client && response._data) {
         const {t} = useNuxtApp().$i18n
         useToastError(t ? t(response._data) : response._data)
       }

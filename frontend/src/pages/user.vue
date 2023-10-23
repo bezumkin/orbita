@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const {data: user} = useAuth()
+const {user} = useAuth()
 if (!user.value) {
   showError({statusCode: 401, statusMessage: 'Unauthorized'})
 }

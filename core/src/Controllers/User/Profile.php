@@ -19,7 +19,7 @@ class Profile extends \Vesp\Controllers\User\Profile
             $data['avatar'] = $this->user->avatar?->only('uuid', 'updated_at');
             $data['role'] = $this->user->role->only('id', 'title', 'scope');
 
-            return $this->success($data);
+            return $this->success(['user' => $data]);
         }
 
         return $this->failure('Authentication required', 401);

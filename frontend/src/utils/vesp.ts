@@ -23,7 +23,7 @@ export function getImageLink(file: VespFile | Record<string, any>, options?: Ves
 }
 
 export function hasScope(scopes: string | string[]): boolean {
-  const {data} = useAuth()
+  const {user: data} = useAuth()
   const user: VespUser = {id: 0, username: '', ...data.value}
   if (!user || !user.role || !user.role.scope) {
     return false

@@ -8,7 +8,7 @@ $group = $app->group(
     '/api',
     function (RouteCollectorProxy $group) {
         $group->get('/image/{uuid}', App\Controllers\Image::class);
-        $group->map(['GET', 'POST'], '/video/{uuid}[/{quality}]', App\Controllers\Video::class);
+        $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}[/{quality}]', App\Controllers\Video::class);
         $group->get('/poster/{uuid}', App\Controllers\Poster::class);
 
         $group->group('/security', static function (RouteCollectorProxy $group) {

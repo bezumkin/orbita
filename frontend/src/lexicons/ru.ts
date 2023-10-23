@@ -9,6 +9,7 @@ export default {
     create: 'Создать',
     edit: 'Изменить',
     add: 'Добавить',
+    view: 'Просмотреть',
   },
   security: {
     login: 'Вход',

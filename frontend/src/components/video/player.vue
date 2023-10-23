@@ -8,7 +8,7 @@
 import Hls from 'hls.js'
 import Plyr from 'plyr'
 
-const {data: user} = useAuth()
+const {user} = useAuth()
 const props = defineProps({
   uuid: {
     type: String,

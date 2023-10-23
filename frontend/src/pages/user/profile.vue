@@ -12,17 +12,17 @@
 <script setup lang="ts">
 const {t} = useI18n()
 const {$settings} = useNuxtApp()
-const {getSession} = useAuth()
+const {loadUser} = useAuth()
 const loading = ref(false)
 const form = ref()
-form.value = {id: 0, username: '', ...useAuth().data.value}
+form.value = {id: 0, username: '', ...useAuth().user.value}
 
 async function onSubmit() {
   loading.value = true
   try {
     form.value = await usePatch('user/profile', form.value)
     useToastSuccess(t('success.profile'))
-    await getSession()
+    await loadUser()
   } catch (e) {
   } finally {
     loading.value = false

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-const {data: user} = useAuth()
+const {user} = useAuth()
 const {$isMobile} = useNuxtApp()
 
 watch(user, () => {

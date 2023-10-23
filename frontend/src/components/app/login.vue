@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-const {data: user, signOut, getSession} = useAuth()
+const {user, login, logout} = useAuth()
 const showModal = ref(false)
 const loading = ref(false)
 const form = ref()
@@ -84,9 +84,7 @@ const formReset = ref({username: ''})
 async function onLogin() {
   loading.value = true
   try {
-    const {token} = await usePost('security/login', formLogin.value)
-    useAuthState().rawToken.value = token
-    await getSession()
+    await login(formLogin.value.username, formLogin.value.password)
     showModal.value = false
     formLogin.value = {username: '', password: ''}
   } catch (e) {
@@ -97,7 +95,7 @@ async function onLogin() {
 
 async function onLogout() {
   try {
-    await signOut({redirect: false})
+    await logout()
   } catch (e) {
     console.error(e)
   }

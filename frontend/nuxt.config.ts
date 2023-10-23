@@ -30,7 +30,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@bootstrap-vue-next/nuxt',
     '@nuxtjs/i18n',
-    '@sidebase/nuxt-auth',
   ],
   app: {
     pageTransition: {name: 'page', mode: 'out-in'},
@@ -50,32 +49,6 @@ export default defineNuxtConfig({
         {rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg'},
         {rel: 'shortcut icon', href: '/favicons/favicon.ico'},
       ],
-    },
-  },
-  auth: {
-    baseURL: process.env.API_URL || '/api/',
-    provider: {
-      type: 'local',
-      // @ts-ignore
-      enableSessionRefreshOnWindowFocus: false,
-      endpoints: {
-        signIn: {path: 'security/login', method: 'post'},
-        signOut: {path: 'security/logout', method: 'post'},
-        signUp: {path: 'security/register', method: 'post'},
-        getSession: {path: 'user/profile', method: 'get'},
-      },
-      token: {
-        maxAgeInSeconds: Number(process.env.JWT_EXPIRE),
-      },
-      sessionDataType: {
-        id: 'number',
-        username: 'string',
-        fullname: 'string | undefined',
-        phone: 'string | undefined',
-        email: 'string | undefined',
-        role: 'VespUserRole | undefined',
-        avatar: 'VespFile | undefined',
-      },
     },
   },
   eslint: {

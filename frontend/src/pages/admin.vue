@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const {data: user} = useAuth()
+const {user} = useAuth()
 const sections = computed(() => getAdminSections())
 
 function checkAccess() {

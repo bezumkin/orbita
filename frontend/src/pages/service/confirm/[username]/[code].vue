@@ -13,10 +13,12 @@ if (!params.username || !params.code) {
 }
 
 try {
-  const data = await usePost('security/activate', params)
-  if (data.token) {
-    useAuthState().rawToken.value = data.token
-    navigateTo({name: 'user-profile'}, options)
+  const {token} = await usePost('security/activate', params)
+  if (token) {
+    await useAuth().setToken(token)
+    nextTick(() => {
+      navigateTo({name: 'user-profile'}, options)
+    })
   }
 } catch (e: any) {
   if (e instanceof FetchError) {
