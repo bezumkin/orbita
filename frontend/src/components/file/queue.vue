@@ -13,9 +13,9 @@
           <div class="fw-bold">{{ item.filename }}</div>
           <div class="d-flex align-items-center gap-2">
             <b-progress class="w-100">
-              <b-progress-bar v-if="item.finished" :value="item.progress" variant="success" />
-              <b-progress-bar v-else-if="item.error" :value="100" variant="danger" />
-              <b-progress-bar v-else :value="item.progress" striped> {{ item.progress }}%</b-progress-bar>
+              <b-progress-bar :value="item.progress" v-bind="getProgressParams(item)">
+                {{ item.progress }}%
+              </b-progress-bar>
             </b-progress>
             <div class="d-flex gap-2">
               <template v-if="!item.finished && !item.error">
@@ -31,17 +31,15 @@
                   </b-button>
                 </template>
               </template>
-              <template v-if="item.finished">
-                <b-button v-if="!item.error" variant="outline-secondary" @click.stop="removeUpload(item)">
-                  <fa icon="check" />
-                </b-button>
-                <b-button v-else variant="danger" @click.stop="cancelUpload(item)">
-                  <fa icon="times" />
-                </b-button>
-              </template>
+              <b-button v-else-if="item.finished" variant="outline-secondary" @click.stop="removeUpload(item)">
+                <fa icon="check" />
+              </b-button>
+              <b-button v-else-if="item.error" variant="danger" @click.stop="cancelUpload(item)">
+                <fa icon="times" />
+              </b-button>
             </div>
           </div>
-          <div v-if="!item.paused" class="small">
+          <div class="small">
             {{ getStatus(item) }}
           </div>
         </div>
@@ -54,8 +52,9 @@
 import prettyBytes from 'pretty-bytes'
 import {formatDistanceToNow, formatDuration, fromUnixTime, intervalToDuration} from 'date-fns'
 import ru from 'date-fns/locale/ru/index.js'
-import {Upload} from 'tus-js-client'
+import {DetailedError, Upload} from 'tus-js-client'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
+import type {BaseColorVariant} from 'bootstrap-vue-next/src/types'
 
 if (!hasScope('videos/get')) {
   showError({statusCode: 403, statusMessage: 'Access Denied'})
@@ -171,13 +170,13 @@ function createUpload(file: File) {
         onProgress(item, bytesUploaded, bytesTotal)
       }
     },
-    onError(e: Error) {
+    onError(e: Error | DetailedError) {
       const item = uploading.value.find((i) => i.id === id)
       if (item) {
         item.error = e
         emit('error', item)
       }
-      useToastError(e.message)
+      // useToastError(e.message)
     },
     onSuccess() {
       const item = uploading.value.find((i) => i.id === id)
@@ -187,9 +186,6 @@ function createUpload(file: File) {
         item.paused = false
         item.finished = true
         emit('success', item)
-        setTimeout(() => {
-          removeUpload(item)
-        }, 5000)
       }
     },
   }
@@ -250,6 +246,13 @@ function onProgress(item: UploadItem, bytesUploaded: number, bytesTotal: number)
 
 function getStatus(item: UploadItem) {
   if (item.error) {
+    if (item.error instanceof DetailedError) {
+      const status = item.error.originalResponse?.getStatus() || 500
+      const message = item.error.originalResponse?.getBody().slice(1, -1)
+      return t('components.upload.status_error', {
+        error: message ? t(message) : 'HTTP status ' + status,
+      })
+    }
     return String(item.error)
   } else if (item.finished) {
     if (item.duration && item.speed) {
@@ -259,6 +262,8 @@ function getStatus(item: UploadItem) {
         speed: formatSize(item.speed, true),
       })
     }
+  } else if (item.paused) {
+    return t('components.upload.status_paused', {uploaded: formatSize(item.uploaded), size: formatSize(item.size)})
   } else if (item.remaining && item.speed) {
     return t('components.upload.status_loading', {
       uploaded: formatSize(item.uploaded),
@@ -268,6 +273,14 @@ function getStatus(item: UploadItem) {
     })
   }
   return ''
+}
+
+function getProgressParams(item: UploadItem): {variant: keyof BaseColorVariant; striped: boolean; animated: boolean} {
+  if (item.error || item.finished) {
+    return {variant: item.error ? 'danger' : 'success', striped: false, animated: false}
+  }
+
+  return {variant: 'primary', striped: true, animated: !item.paused}
 }
 
 function onDropFiles({dataTransfer}: DragEvent) {

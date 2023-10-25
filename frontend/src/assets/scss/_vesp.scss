@@ -11,6 +11,16 @@
         }
       }
 
+      &.error {
+        td:not(.actions) {
+          color: $danger;
+
+          * {
+            color: $danger !important;
+          }
+        }
+      }
+
       &.blocked {
         td:not(.actions) {
           color: $danger;

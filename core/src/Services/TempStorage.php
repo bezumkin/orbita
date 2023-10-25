@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use FFMpeg\Coordinate\TimeCode;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use League\Flysystem\StorageAttributes;
 use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile;
@@ -39,7 +39,7 @@ class TempStorage extends Filesystem
     {
         $dir = implode(DIRECTORY_SEPARATOR, [rtrim(getenv('CACHE_DIR'), DIRECTORY_SEPARATOR), 'video']);
         if (!is_dir($dir) && !mkdir($dir) && !is_dir($dir)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
 
         return $dir;
@@ -98,12 +98,8 @@ class TempStorage extends Filesystem
         $this->redis->del('meta-' . $uuid);
     }
 
-    public function writeFile(string $uuid): ?array
+    public function writeFile(string $uuid, array $meta): ?array
     {
-        if (!$meta = $this->getMeta($uuid)) {
-            return null;
-        }
-
         $input = fopen('php://input', 'rb');
         $file = fopen($this->getFullPath($meta['file']), 'ab');
         fseek($file, $meta['offset']);
@@ -159,7 +155,7 @@ class TempStorage extends Filesystem
     public function getPreview(string $uuid): ?string
     {
         if (!$meta = $this->getMeta($uuid)) {
-            throw new \RuntimeException('Could not load meta file for ' . $uuid);
+            throw new RuntimeException('Could not load meta file for ' . $uuid);
         }
 
         $video = $this->ffmpeg->open($this->getFullPath($meta['file']));

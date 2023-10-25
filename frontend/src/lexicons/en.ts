@@ -56,6 +56,7 @@ export default {
       dimension: 'Dimension',
       created_at: 'Created at',
       qualities: 'Versions',
+      error: 'Processing error',
     },
     setting: {
       title: 'Title',
@@ -87,7 +88,9 @@ export default {
     },
     upload: {
       status_loading: 'Uploaded {uploaded} from {size}. There are {remaining} left at a speed of {speed}.',
+      status_paused: 'Uploaded {uploaded} from {size}.',
       status_finished: 'Successfully uploaded {size} in {duration} at a speed of {speed}.',
+      status_error: 'Unexpected error from the server: "{error}".',
     },
   },
   pages: {
@@ -136,6 +139,14 @@ export default {
     },
     setting: {
       required: 'This setting is required',
+    },
+    upload: {
+      no_filename: 'Could not get the name of file',
+      no_size: 'Could not get the size of file',
+      missing_meta: 'Could not get upload metadata',
+      wrong_offset: 'Wrong upload chunk offset',
+      wrong_content: 'Wrong uploading encoding',
+      write: 'File writing error',
     },
   },
 }

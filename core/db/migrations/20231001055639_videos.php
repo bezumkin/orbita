@@ -46,7 +46,7 @@ final class Videos extends Migration
                 $table->boolean('moved')->default(false);
                 $table->string('bandwidth', 10)->nullable();
                 $table->string('resolution', 10)->nullable();
-                $table->text('manifest')->nullable();
+                $table->mediumText('manifest')->nullable();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('processed_at')->nullable();
                 $table->timestamp('moved_at')->nullable();

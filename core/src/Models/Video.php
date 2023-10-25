@@ -76,18 +76,25 @@ class Video extends Model
     {
         $media = new TempStorage();
 
-        if (!$this->image && $image = $media->getPreview($this->id)) {
-            $stream = new Stream(fopen('data:image/jpeg;base64,' . base64_encode($image), 'rb'));
-            $file = new File();
-            $file->uploadFile(new UploadedFile($stream, $this->title . '.jpg', 'image/jpeg'));
-            $this->image_id = $file->id;
-            $this->save();
+        try {
+            if (!$this->image && $image = $media->getPreview($this->id)) {
+                $stream = new Stream(fopen('data:image/jpeg;base64,' . base64_encode($image), 'rb'));
+                $file = new File();
+                $file->uploadFile(new UploadedFile($stream, $this->title . '.jpg', 'image/jpeg'));
+                $this->image_id = $file->id;
+                $this->save();
 
-            if (!$this->file->height || !$this->file->width) {
-                $this->file->height = $file->height;
-                $this->file->width = $file->width;
-                $this->file->save();
+                if (!$this->file->height || !$this->file->width) {
+                    $this->file->height = $file->height;
+                    $this->file->width = $file->width;
+                    $this->file->save();
+                }
             }
+        } catch (\Throwable $e) {
+            $this->processed = false;
+            $this->error = $e->getMessage();
+            $this->save();
+            return;
         }
 
         $representations = $media->getQualities($this->file->width, $this->file->height);
@@ -126,15 +133,14 @@ class Video extends Model
                     function ($video, $format, $percentage) use ($quality, $startTime, $stepTime, $step, $stepSize) {
                         $progress = ($stepSize / 100 * $percentage) + ($step - 1) * $stepSize;
                         $round = ceil($progress / 4);
-                        $elapsed = date('H:i:s', time() - $stepTime);
                         if (PHP_SAPI === 'cli') {
                             echo sprintf(
                                 "\r%s %s => %s%%, %s (%s) [%s%s]",
                                 $this->id,
                                 $quality->quality . 'p',
                                 number_format($progress, 2),
-                                $elapsed,
-                                date('H:i:s', time() - $startTime),
+                                Carbon::now()->subSeconds($stepTime)->timezone('UTC')->format('H:i:s'),
+                                Carbon::now()->subSeconds($startTime)->timezone('UTC')->format('H:i:s'),
                                 str_repeat('#', $round),
                                 str_repeat('-', (25 - $round))
                             );
@@ -156,14 +162,15 @@ class Video extends Model
                 }
                 $step++;
                 $quality->finishProcessing();
+                if (PHP_SAPI === 'cli') {
+                    echo PHP_EOL;
+                }
             } catch (\Throwable $e) {
                 $this->processed = false;
                 $this->error = $e->getMessage();
                 $this->save();
+                return;
             }
-        }
-        if (PHP_SAPI === 'cli') {
-            echo PHP_EOL;
         }
         $this->finishProcessing();
     }
@@ -205,6 +212,14 @@ class Video extends Model
         Socket::send('transcode', $this->toArray());
     }
 
+    protected function stopProcessing(): void
+    {
+        exec("ps ax | grep [f]fmpeg | grep $this->id", $processes);
+        if (($process = current($processes)) && preg_match('#\d+#', trim($process), $matches)) {
+            exec("kill $matches[0]");
+        }
+    }
+
     public function getManifest(): string
     {
         $manifest = [
@@ -225,6 +240,7 @@ class Video extends Model
 
     public function delete(): bool
     {
+        $this->stopProcessing();
         try {
             $fs = (new TempStorage())->getBaseFilesystem();
             if ($fs->directoryExists($this->id)) {

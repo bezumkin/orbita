@@ -2,14 +2,11 @@
 
 namespace App\Controllers\Admin\Videos;
 
-use App\Models\File;
 use App\Models\Video;
 use App\Services\TempStorage;
 use Carbon\Carbon;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
-use Slim\Psr7\Stream;
-use Slim\Psr7\UploadedFile;
 use Vesp\Controllers\Controller;
 use Vesp\Services\Eloquent;
 
@@ -55,13 +52,13 @@ class Upload extends Controller
             }
         }
         if (empty($meta['filename'])) {
-            return $this->failure('', 400);
+            return $this->failure('errors.upload.no_filename', 400);
         }
         $tmp = explode('.', $meta['filename']);
         $ext = count($tmp) > 1 ? end($tmp) : 'mp4';
 
         if (!$size = (int)$this->request->getHeaderLine('Upload-Length')) {
-            return $this->failure('', 400);
+            return $this->failure('errors.upload.no_size', 400);
         }
 
         $uuid = Uuid::uuid4()->toString();
@@ -84,21 +81,21 @@ class Upload extends Controller
     {
         $uuid = $this->getProperty('uuid');
         if (!$uuid || !$meta = $this->storage->getMeta($uuid)) {
-            return $this->failure('', 410);
+            return $this->failure('errors.upload.missing_meta', 410);
         }
 
         $offset = (int)$this->request->getHeaderLine('Upload-Offset');
         if ($offset && $offset !== $meta['offset']) {
-            return $this->failure('', 409);
+            return $this->failure('errors.upload.wrong_offset', 409);
         }
 
         $contentType = $this->request->getHeaderLine('Content-Type');
         if ($contentType !== 'application/offset+octet-stream') {
-            return $this->failure('', 415);
+            return $this->failure('errors.upload.wrong_content', 415);
         }
 
-        if (!$meta = $this->storage->writeFile($uuid)) {
-            return $this->failure('', 500);
+        if (!$meta = $this->storage->writeFile($uuid, $meta)) {
+            return $this->failure('errors.upload.write', 500);
         }
 
         if ($meta['size'] === $meta['offset']) {

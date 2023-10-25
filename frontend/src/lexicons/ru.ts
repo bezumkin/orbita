@@ -56,6 +56,7 @@ export default {
       dimension: 'Разрешение',
       created_at: 'Загружено',
       qualities: 'Версии',
+      error: 'Ошибка обработки',
     },
     setting: {
       title: 'Название',
@@ -87,7 +88,9 @@ export default {
     },
     upload: {
       status_loading: 'Загружено {uploaded} из {size}. Осталось {remaining} на скорости {speed}.',
+      status_paused: 'Загружено {uploaded} из {size}.',
       status_finished: 'Успешно загружено {size} за {duration} на скорости {speed}.',
+      status_error: 'Получена ошибка при загрузке на сервер: "{error}".',
     },
   },
   pages: {
@@ -136,6 +139,14 @@ export default {
     },
     setting: {
       required: 'Эта настройка обязательна для заполнения',
+    },
+    upload: {
+      no_filename: 'Не могу определить имя файла',
+      no_size: 'Не могу определить размер файла',
+      missing_meta: 'Не могу получить метаданные загрузки',
+      wrong_offset: 'Ошибка дозагрузки файла',
+      wrong_content: 'Неверная кодировка загружаемых данных',
+      write: 'Ошибка записи файла',
     },
   },
 }

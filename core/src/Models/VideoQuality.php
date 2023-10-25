@@ -64,8 +64,6 @@ class VideoQuality extends Model
         $manifestFile = $this->video_id . '/' . $basename . '.m3u8';
         $tempFs = $storage->getBaseFilesystem();
 
-        echo get_class($this->file) . PHP_EOL;
-
         $path = $this->file->getFullFilePathAttribute();
         if (str_starts_with($path, getenv('UPLOAD_DIR'))) {
             $this->file->size = filesize($storage->getFullPath($videoFile));

@@ -18,6 +18,7 @@ import {
   faPlay,
   faUpload,
   faCheck,
+  faQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -36,6 +37,7 @@ library.add(
   faPlay,
   faUpload,
   faCheck,
+  faQuestion,
 )
 
 config.autoAddCss = false

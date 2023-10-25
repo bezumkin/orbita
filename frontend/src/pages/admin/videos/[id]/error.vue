@@ -1,8 +1,8 @@
 <template>
-  <vesp-modal v-model="record" v-bind="{url}" method="patch" update-key="admin-videos" :title="record.title" size="lg">
-    <template #form-fields>
-      <forms-video v-model="record" />
-    </template>
+  <vesp-modal :title="record.title" :cancel-title="$t('actions.close')">
+    <b-form-group :label="$t('models.video.error')">
+      <b-form-textarea v-model="record.error" disabled rows="10" />
+    </b-form-group>
   </vesp-modal>
 </template>
 

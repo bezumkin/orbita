@@ -48,7 +48,18 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
     title: t('actions.view'),
     isActive: (item: any) => item && item.processed_qualities.length > 0,
   },
-  {route: {name: 'admin-videos-id-edit'}, icon: 'edit', title: t('actions.edit')},
+  {
+    route: {name: 'admin-videos-id-edit'},
+    icon: 'edit',
+    title: t('actions.edit'),
+    isActive: (item: any) => item && item.processed !== false,
+  },
+  {
+    route: {name: 'admin-videos-id-error'},
+    icon: 'question',
+    title: t('actions.view'),
+    isActive: (item: any) => item && item.processed === false,
+  },
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
 
@@ -77,6 +88,9 @@ function formatQualities(value: any) {
 function rowClass(item: any) {
   if (item) {
     const cls = []
+    if (item.processed === false) {
+      cls.push('error')
+    }
     if (!item.active) {
       cls.push('inactive')
     }
