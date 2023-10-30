@@ -62,6 +62,17 @@ declare global {
     type: string
     required: boolean
   }
+
+  type VespLevel = {
+    id: number
+    title: string
+    content?: string
+    price: number
+    active: bool
+    new_cover?: {file: string; metadata: {[key: string]: any}} | Boolean
+    cover_id?: number
+    cover?: VespFile
+  }
 }
 
 declare module '@vue/runtime-core' {
@@ -69,6 +80,7 @@ declare module '@vue/runtime-core' {
     $i18n: i18n
     $image: getImageLink
     $scope: hasScope
+    $price: Function
     $socket: Socket
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>
@@ -80,6 +92,7 @@ declare module '#app' {
     $i18n: i18n
     $image: getImageLink
     $scope: hasScope
+    $price: Function
     $socket: Socket
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>

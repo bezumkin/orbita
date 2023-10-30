@@ -74,8 +74,4 @@ async function saveSetting(setting: VespSetting) {
     saving.value = ''
   }
 }
-
-useHead({
-  title: () => [t('pages.admin.settings'), t('pages.admin.title'), $settings.value.title].join(' / '),
-})
 </script>

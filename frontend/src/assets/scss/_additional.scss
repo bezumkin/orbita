@@ -121,9 +121,12 @@ fieldset {
     .col-center,
     .col-end {
       background: $white;
-      height: 100%;
       border: 1px solid $border-color;
       border-radius: $border-radius;
+    }
+
+    .col-start,
+    .col-center {
       padding: 1rem;
     }
 
@@ -152,6 +155,40 @@ fieldset {
           top: -200px;
         }
       }
+    }
+  }
+}
+
+.subscriptions {
+  .level {
+    display: flex;
+    flex-flow: nowrap column;
+    row-gap: 0.25rem;
+    padding: 1rem;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+
+    .cover {
+      img {
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+      }
+    }
+
+    .content {
+      white-space: pre-line;
+      font-size: 0.875em;
+    }
+
+    .btn {
+      width: 100%;
     }
   }
 }

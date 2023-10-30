@@ -10,6 +10,11 @@ export default {
     edit: 'Изменить',
     add: 'Добавить',
     view: 'Просмотреть',
+    levels: {
+      manage: 'Управление подписками',
+      subscribe: 'Подписаться',
+      subscribed: 'Подписка оформлена',
+    },
   },
   security: {
     login: 'Вход',
@@ -31,6 +36,8 @@ export default {
       active: 'Активирован',
       blocked: 'Заблокирован',
       role: 'Группа',
+      created_at: 'Дата создания',
+      active_at: 'Был онлайн',
     },
     user_role: {
       title_one: 'Группа',
@@ -74,6 +81,17 @@ export default {
       started: 'Дата начала проекта',
       started_desc: 'Дата начала проекта используется для формирования строки копирайта в подвале',
     },
+    level: {
+      title_one: 'Уровень подписки',
+      title_many: 'Уровни подписки',
+      id: 'Id',
+      title: 'Название',
+      content: 'Описание',
+      price: 'Цена',
+      cover: 'Обложка',
+      active: 'Включено',
+      per_month: 'в месяц',
+    },
   },
   components: {
     table: {
@@ -103,6 +121,7 @@ export default {
       user_roles: 'Группы',
       videos: 'Видео',
       settings: 'Настройки',
+      levels: 'Подписки',
     },
     user: {
       title: 'Аккаунт',
@@ -147,6 +166,12 @@ export default {
       wrong_offset: 'Ошибка дозагрузки файла',
       wrong_content: 'Неверная кодировка загружаемых данных',
       write: 'Ошибка записи файла',
+    },
+    level: {
+      no_title: 'Вы забыли указать название уровня подписки',
+      no_price: 'Нужно указать стоимость подписки',
+      title_exists: 'Такое название уже существует',
+      price_exists: 'Уровень с такой ценой уже создан',
     },
   },
 }

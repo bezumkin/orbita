@@ -3,10 +3,10 @@
     <b-row>
       <b-col md="8" class="order-1 order-md-0">
         <b-form-group :label="$t('models.user.username')">
-          <b-form-input v-model="record.username" required autofocus />
+          <b-form-input v-model.trim="record.username" required autofocus />
         </b-form-group>
         <b-form-group :label="$t('models.user.password')">
-          <vesp-input-password v-model="record.password" :required="!record.id" />
+          <vesp-input-password v-model.trim="record.password" :required="!record.id" />
         </b-form-group>
       </b-col>
       <b-col md="4" class="d-flex justify-content-center justify-content-md-end order-0 order-md-1">
@@ -29,7 +29,7 @@
     <b-row>
       <b-col md="6">
         <b-form-group :label="$t('models.user.email')">
-          <b-form-input v-model.trim="record.email" type="email" />
+          <b-form-input v-model="record.email" type="email" />
         </b-form-group>
       </b-col>
       <b-col md="6">
@@ -46,14 +46,14 @@
     <b-row v-if="showStatus">
       <b-col md="6">
         <b-form-group>
-          <b-form-checkbox v-model.trim="record.active">
+          <b-form-checkbox v-model="record.active">
             {{ $t('models.user.active') }}
           </b-form-checkbox>
         </b-form-group>
       </b-col>
       <b-col md="6">
         <b-form-group>
-          <b-form-checkbox v-model.trim="record.blocked">
+          <b-form-checkbox v-model="record.blocked">
             {{ $t('models.user.blocked') }}
           </b-form-checkbox>
         </b-form-group>

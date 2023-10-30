@@ -51,6 +51,7 @@ export function hasScope(scopes: string | string[]): boolean {
 
 export function getAdminSections() {
   const items = [
+    {scope: 'levels/get', title: 'levels', route: 'admin-levels'},
     {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
     {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
     {scope: 'users/get', title: 'users', route: 'admin-users'},

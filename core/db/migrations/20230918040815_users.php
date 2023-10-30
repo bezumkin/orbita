@@ -15,9 +15,11 @@ final class Users extends Migration
             'user_roles',
             static function (Blueprint $table) {
                 $table->id();
-                $table->string('title')->unique();
+                $table->string('title');
                 $table->json('scope')->nullable();
                 $table->timestamps();
+
+                $table->unique('title');
             }
         );
 
@@ -29,7 +31,7 @@ final class Users extends Migration
                     ->constrained('user_roles')->cascadeOnDelete();
                 $table->foreignId('avatar_id')->nullable()
                     ->constrained('files')->nullOnDelete();
-                $table->string('username')->unique();
+                $table->string('username');
                 $table->string('password');
                 $table->string('fullname')->nullable();
                 $table->string('email')->nullable();
@@ -42,6 +44,7 @@ final class Users extends Migration
                 $table->timestamp('active_at')->nullable();
 
                 $table->index(['active', 'blocked']);
+                $table->unique('username');
             }
         );
 
@@ -51,11 +54,12 @@ final class Users extends Migration
                 $table->string('token')->primary();
                 $table->foreignId('user_id')
                     ->constrained('users')->cascadeOnDelete();
-                $table->timestamp('valid_till')->index();
+                $table->timestamp('valid_till');
                 $table->string('ip', 16)->nullable();
                 $table->boolean('active')->default(true);
                 $table->timestamps();
 
+                $table->index('valid_till');
                 $table->index(['token', 'user_id', 'active']);
             }
         );

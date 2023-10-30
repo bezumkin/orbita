@@ -5,11 +5,28 @@ import {useVespStore} from '~/stores/vesp'
 export default defineNuxtPlugin(async (nuxtApp) => {
   const $i18n = nuxtApp.$i18n as Composer
   const $socket = nuxtApp.$socket as Socket
+  const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
   await store.load()
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
+  nuxtApp.provide('price', (val: number) => {
+    if (!val) {
+      return ''
+    }
+    const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
+    if (locale && typeof locale !== 'string') {
+      const formatter = new Intl.NumberFormat(locale.iso || 'ru-RU', {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      return formatter.format(val)
+    }
+    return val
+  })
   nuxtApp.provide(
     'settings',
     computed(() => {

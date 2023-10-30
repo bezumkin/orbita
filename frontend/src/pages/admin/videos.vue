@@ -21,11 +21,10 @@
 
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
-import {format, parseISO} from 'date-fns'
 import type {VespTableAction} from '~/components/vesp/table.vue'
 
-const {t} = useI18n()
-const {$socket, $settings} = useNuxtApp()
+const {t, d} = useI18n()
+const {$socket} = useNuxtApp()
 const url = 'admin/videos'
 const sort = 'created_at'
 const dir = 'desc'
@@ -70,7 +69,7 @@ function formatSize(value: any) {
   return value ? prettyBytes(value) : ''
 }
 function formatDate(value: any) {
-  return value ? format(parseISO(value), 'dd.MM.yy HH:mm') : ''
+  return value ? d(value, 'long') : ''
 }
 
 function formatDimension(_value: any, _field: any, item: any) {
@@ -118,9 +117,5 @@ onMounted(() => {
 
 onUnmounted(() => {
   $socket.off('transcode', listener)
-})
-
-useHead({
-  title: () => [t('pages.admin.videos'), t('pages.admin.title'), $settings.value.title].join(' / '),
 })
 </script>

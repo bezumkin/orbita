@@ -54,7 +54,6 @@
 </template>
 
 <script setup lang="ts">
-import {format} from 'date-fns'
 import ru from '~/assets/icons/ru.svg'
 import en from '~/assets/icons/gb.svg'
 
@@ -81,7 +80,7 @@ const record: Ref<string | Record<string, any>> = computed({
 })
 
 const jsonTypes = ['string', 'text']
-const {locale, localeCodes} = useI18n()
+const {d, locale, localeCodes} = useI18n()
 const lang: Ref<string> = ref(String(locale.value))
 
 const imageProps = computed(() => {
@@ -112,7 +111,7 @@ function onLang(code: string) {
 }
 
 function formatDate(date: string) {
-  return format(new Date(date), 'dd.MM.yyyy')
+  return d(date)
 }
 </script>
 

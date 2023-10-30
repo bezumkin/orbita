@@ -8,7 +8,6 @@
 import type {VespTableAction} from '~/components/vesp/table.vue'
 
 const {t} = useI18n()
-const {$settings} = useNuxtApp()
 const table = ref()
 const url = 'admin/user-roles'
 const filters = ref({query: ''})
@@ -31,8 +30,4 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
 function formatTags(value?: any) {
   return value ? value.join(', ') : ''
 }
-
-useHead({
-  title: () => [t('pages.admin.user_roles'), t('pages.admin.title'), $settings.value.title].join(' / '),
-})
 </script>

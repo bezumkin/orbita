@@ -11,7 +11,7 @@
         <b-tab :title="$t('pages.about')">
           <app-author />
 
-          <app-subscriptions class="mt-5" />
+          <app-levels class="mt-5" />
         </b-tab>
         <b-tab :title="$t('pages.posts')">
           <slot name="default" />
@@ -30,7 +30,7 @@
         </b-col>
         <b-col md="3" class="col-end-wrapper">
           <div class="col-end">
-            <app-subscriptions />
+            <app-levels />
           </div>
         </b-col>
       </b-row>

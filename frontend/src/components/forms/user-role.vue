@@ -1,11 +1,11 @@
 <template>
   <div>
     <b-form-group :label="$t('models.user_role.title')">
-      <b-form-input v-model="record.title" required autofocus />
+      <b-form-input v-model.trim="record.title" required autofocus />
     </b-form-group>
 
     <b-form-group :label="$t('models.user_role.scope')">
-      <b-form-tags v-model="record.scope" remove-on-delete placeholder="" :add-button-text="$t('actions.add')" />
+      <b-form-tags v-model.trim="record.scope" remove-on-delete placeholder="" :add-button-text="$t('actions.add')" />
     </b-form-group>
   </div>
 </template>

@@ -21,6 +21,7 @@ export default defineNuxtConfig({
       SITE_URL: process.env.SITE_URL || '127.0.0.1',
       API_URL: process.env.API_URL || '/api/',
       JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
+      CURRENCY: process.env.CURRENCY || 'RUB',
       REGISTER_ENABLED: process.env.REGISTER_ENABLED || '1',
     },
   },
@@ -62,8 +63,8 @@ export default defineNuxtConfig({
     defaultLocale: 'ru',
     langDir: 'lexicons',
     locales: [
-      {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru_RU'},
-      {code: 'en', name: 'English', file: 'en.ts', iso: 'en_US'},
+      {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru-RU'},
+      {code: 'en', name: 'English', file: 'en.ts', iso: 'en-US'},
     ],
   },
 })

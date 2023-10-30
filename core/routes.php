@@ -1,6 +1,5 @@
 <?php
 
-use App\Middlewares\Admin;
 use Slim\Routing\RouteCollectorProxy;
 
 /** @var Slim\App $app */
@@ -33,12 +32,14 @@ $group = $app->group(
             $group->any('/videos/upload[/{uuid}]', App\Controllers\Admin\Videos\Upload::class);
             $group->any('/videos[/{id}]', App\Controllers\Admin\Videos::class);
             $group->any('/settings[/{key}]', App\Controllers\Admin\Settings::class);
+            $group->any('/levels[/{id}]', App\Controllers\Admin\Levels::class);
         });
 
         $group->group(
             '/web',
             static function (RouteCollectorProxy $group) {
                 $group->any('/settings', App\Controllers\Web\Settings::class);
+                $group->any('/levels', App\Controllers\Web\Levels::class);
             }
         );
     }

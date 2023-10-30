@@ -14,6 +14,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const {user} = useAuth()
+const {t} = useI18n()
+const {$settings} = useNuxtApp()
 const sections = computed(() => getAdminSections())
 
 function checkAccess() {
@@ -31,6 +33,24 @@ function checkAccess() {
   }
 }
 
+function setTitle() {
+  const routeName = route.name as string
+  if (route.matched.length === 2) {
+    const name = routeName.replace(/^admin-/, '').replace('-', '_')
+    useHead({
+      title: () => [t('pages.admin.' + name), t('pages.admin.title'), $settings.value.title].join(' / '),
+    })
+  }
+}
+
 checkAccess()
-watch(() => route.name, checkAccess)
+setTitle()
+
+watch(
+  () => route.name,
+  () => {
+    checkAccess()
+    setTitle()
+  },
+)
 </script>

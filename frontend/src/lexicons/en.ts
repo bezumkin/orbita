@@ -10,6 +10,11 @@ export default {
     edit: 'Edit',
     add: 'Add',
     view: 'View',
+    levels: {
+      manage: 'Manage subscriptions',
+      subscribe: 'Subscribe',
+      subscribed: 'Subscribed',
+    },
   },
   security: {
     login: 'Login',
@@ -31,6 +36,8 @@ export default {
       active: 'Activated',
       blocked: 'Blocked',
       role: 'Role',
+      created_at: 'Was created',
+      active_at: 'Last online',
     },
     user_role: {
       title_one: 'User Role',
@@ -74,6 +81,17 @@ export default {
       started: 'Project start date',
       started_desc: 'The project start date is used to form the copyright line in the footer',
     },
+    level: {
+      title_one: 'Subscription level',
+      title_many: 'Subscription levels',
+      id: 'Id',
+      title: 'Title',
+      content: 'Description',
+      price: 'Price',
+      cover: 'Cover image',
+      active: 'Enabled',
+      per_month: 'per month',
+    },
   },
   components: {
     table: {
@@ -103,6 +121,7 @@ export default {
       user_roles: 'Roles',
       videos: 'Videos',
       settings: 'Settings',
+      levels: 'Subscriptions',
     },
     user: {
       title: 'Account',
@@ -147,6 +166,12 @@ export default {
       wrong_offset: 'Wrong upload chunk offset',
       wrong_content: 'Wrong uploading encoding',
       write: 'File writing error',
+    },
+    level: {
+      no_title: 'You forgot to specify the name of the subscription level',
+      no_price: 'You must specify the price of the subscription',
+      title_exists: 'This title already exists',
+      price_exists: 'A level with this price has already been made',
     },
   },
 }

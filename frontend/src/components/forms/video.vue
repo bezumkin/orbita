@@ -1,11 +1,11 @@
 <template>
   <div>
     <b-form-group :label="$t('models.video.title')">
-      <b-form-input v-model="record.title" required autofocus />
+      <b-form-input v-model.trim="record.title" required autofocus />
     </b-form-group>
 
     <b-form-group :label="$t('models.video.description')">
-      <b-form-textarea v-model="record.description" />
+      <b-form-textarea v-model.trim="record.description" />
     </b-form-group>
 
     <b-form-group :label="$t('models.video.image')">
@@ -21,7 +21,7 @@
     </b-form-group>
 
     <b-form-group>
-      <b-form-checkbox v-model.trim="record.active">
+      <b-form-checkbox v-model="record.active">
         {{ $t('models.video.active') }}
       </b-form-checkbox>
     </b-form-group>

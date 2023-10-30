@@ -1,3 +1,20 @@
+const dateFormat = {
+  short: {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  },
+  long: {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  },
+}
+
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: 'ru',
@@ -18,5 +35,9 @@ export default defineI18nConfig(() => ({
 
       return choicesLength < 4 ? 2 : 3
     },
+  },
+  datetimeFormats: {
+    ru: dateFormat,
+    en: dateFormat,
   },
 }))

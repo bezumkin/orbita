@@ -18,8 +18,7 @@
 <script setup lang="ts">
 import type {VespTableAction} from '~/components/vesp/table.vue'
 
-const {t} = useI18n()
-const {$settings} = useNuxtApp()
+const {t, d} = useI18n()
 const table = ref()
 const url = 'admin/users'
 const filters = ref({query: ''})
@@ -31,6 +30,8 @@ const fields = computed(() => [
   {key: 'username', label: t('models.user.username'), sortable: true},
   {key: 'fullname', label: t('models.user.fullname'), sortable: true},
   {key: 'email', label: t('models.user.email'), sortable: true},
+  {key: 'created_at', label: t('models.user.created_at'), sortable: true, formatter: formatDate},
+  {key: 'active_at', label: t('models.user.active_at'), sortable: true, formatter: formatDate},
 ])
 const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-users-create'}, icon: 'plus', title: t('actions.create')},
@@ -39,6 +40,10 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-users-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
+
+function formatDate(value: any) {
+  return value ? d(value, 'long') : ''
+}
 
 function rowClass(item: any) {
   if (item) {
@@ -52,8 +57,4 @@ function rowClass(item: any) {
     return cls
   }
 }
-
-useHead({
-  title: () => [t('pages.admin.users'), t('pages.admin.title'), $settings.value.title].join(' / '),
-})
 </script>

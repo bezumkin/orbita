@@ -1,11 +1,11 @@
 <template>
   <div>
     <b-form-group :label="$t('models.user.username')">
-      <b-form-input v-model="record.username" required autofocus />
+      <b-form-input v-model.trim="record.username" required autofocus />
     </b-form-group>
 
     <b-form-group :label="$t('models.user.fullname')">
-      <b-form-input v-model="record.fullname" required />
+      <b-form-input v-model.trim="record.fullname" required />
     </b-form-group>
 
     <b-form-group :label="$t('models.user.email')">
@@ -13,7 +13,7 @@
     </b-form-group>
 
     <b-form-group :label="$t('models.user.password')">
-      <vesp-input-password v-model="record.password" />
+      <vesp-input-password v-model.trim="record.password" />
     </b-form-group>
   </div>
 </template>

@@ -12,7 +12,7 @@ final class Files extends Migration
             'files',
             static function (Blueprint $table) {
                 $table->id();
-                $table->uuid()->unique();
+                $table->uuid();
                 $table->string('file');
                 $table->string('path');
                 $table->string('title')->nullable();
@@ -22,6 +22,8 @@ final class Files extends Migration
                 $table->unsignedBigInteger('size')->nullable();
                 $table->json('metadata')->nullable();
                 $table->timestamps();
+
+                $table->unique('uuid');
             }
         );
     }
