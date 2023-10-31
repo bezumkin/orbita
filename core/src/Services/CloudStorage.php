@@ -5,10 +5,13 @@ namespace App\Services;
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\FilesystemAdapter;
+use Psr\Http\Message\StreamInterface;
 use Vesp\Services\Filesystem;
 
 class CloudStorage extends Filesystem
 {
+    protected S3Client $client;
+
     protected function getAdapter(): FilesystemAdapter
     {
         $params = [
@@ -23,13 +26,27 @@ class CloudStorage extends Filesystem
             $params = array_merge($options, $params);
         }
 
-        $client = new S3Client($params);
+        $this->client = new S3Client($params);
 
-        return new AwsS3V3Adapter($client, getenv('S3_BUCKET'));
+        return new AwsS3V3Adapter($this->client, getenv('S3_BUCKET'));
     }
 
     protected function getRoot(): string
     {
         return '/';
+    }
+
+    public function readRangeStream(string $path, int $start, int $end): StreamInterface
+    {
+        $options = [
+            'Bucket' => getenv('S3_BUCKET'),
+            'Key' => $path,
+            'Range' => "bytes=$start-$end",
+        ];
+        $command = $this->client->getCommand('GetObject', $options);
+
+        return $this->client
+            ->execute($command)
+            ->get('Body');
     }
 }

@@ -86,12 +86,17 @@ class Video extends Controller
 
         try {
             $file = $videoQuality->file;
-            $stream = $file->getFilesystem()
-                ->getBaseFilesystem()
-                ->readStream($file->getFilePathAttribute());
-            $data = stream_get_contents($stream, $end - $start + 1, $start);
-            $this->response->getBody()->write($data);
-            $length = strlen($data);
+            $fs = $file->getFilesystem();
+            if (method_exists($fs, 'readRangeStream')) {
+                $body = $fs->readRangeStream($file->getFilePathAttribute(), $start, $end);
+                $this->response = $this->response->withBody($body);
+                $length = $body->getSize();
+            } else {
+                $stream = $fs->getBaseFilesystem()->readStream($file->getFilePathAttribute());
+                $data = stream_get_contents($stream, $end - $start + 1, $start);
+                $this->response->getBody()->write($data);
+                $length = strlen($data);
+            }
 
             return $this->response
                 ->withStatus(206, 'Partial Content')
@@ -111,7 +116,7 @@ class Video extends Controller
 
     protected function post(): ResponseInterface
     {
-        if ($this->user && $quality = $this->getProperty('quality')) {
+        if ($this->user && $this->getProperty('quality')) {
             if (!$item = $this->video->videoUsers()->where('user_id', $this->user->id)->first()) {
                 $item = new VideoUser();
                 $item->video_id = $this->video->id;
