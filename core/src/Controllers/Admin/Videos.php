@@ -35,13 +35,16 @@ class Videos extends ModelController
                 }
             );
         }
+        if ($this->getProperty('active')) {
+            $c->where('active', true);
+        }
 
         return $c;
     }
 
     protected function afterCount(Builder $c): Builder
     {
-        $c->with('file:id,width,height,size');
+        $c->with('file:id,uuid,width,height,size', 'image:id,uuid,width,height,size');
 
         return $c;
     }

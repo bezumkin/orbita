@@ -10,10 +10,19 @@ export default {
     edit: 'Edit',
     add: 'Add',
     view: 'View',
+    pick: 'Pick',
     levels: {
       manage: 'Manage subscriptions',
       subscribe: 'Subscribe',
       subscribed: 'Subscribed',
+    },
+    editor: {
+      image: 'Photo',
+      video: 'Video',
+      file: 'File',
+      audio: 'Audio',
+      pick_video: 'Pick video',
+      code: 'Code',
     },
   },
   security: {
@@ -92,6 +101,20 @@ export default {
       active: 'Enabled',
       per_month: 'per month',
     },
+    topic: {
+      title_one: 'Topic',
+      title_many: 'Topics',
+      title: 'Title',
+      content: 'Content',
+      teaser: 'Teaser',
+      cover: 'Cover',
+      level: 'Subscription level',
+      price: 'Price',
+      active: 'Published',
+      closed: 'No comments',
+      created_at: 'Created At',
+      published_at: 'Published At',
+    },
   },
   components: {
     table: {
@@ -122,6 +145,7 @@ export default {
       videos: 'Videos',
       settings: 'Settings',
       levels: 'Subscriptions',
+      topics: 'Topics',
     },
     user: {
       title: 'Account',

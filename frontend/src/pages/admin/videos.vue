@@ -3,6 +3,16 @@
     <file-queue accept="video/mp4" @success="onSuccess" />
 
     <vesp-table ref="table" class="mt-4" v-bind="{url, filters, fields, tableActions, rowClass, sort, dir}">
+      <template #cell(image)="{value}: any">
+        <b-img
+          v-if="value?.id"
+          :src="$image(value, {w: 100, h: 50, fit: 'crop'})"
+          :srcset="$image(value, {w: 200, h: 100, fit: 'crop'}) + ' 2x'"
+          width="100"
+          height="50"
+          class="rounded"
+        />
+      </template>
       <template #cell(title)="{item, value}">
         <div>{{ value }}</div>
         <div class="small text-muted">{{ item.id }}</div>
@@ -32,7 +42,7 @@ const table = ref()
 const filters = ref({query: ''})
 const fields = computed(() => [
   // {key: 'id', label: t('models.video.id'), sortable: true},
-  // {key: 'image', label: ''},
+  {key: 'image', label: t('models.video.image')},
   {key: 'title', label: t('models.video.title'), sortable: true},
   {key: 'progress', label: t('models.video.progress'), sortable: true},
   {key: 'file.size', label: t('models.video.size'), sortable: true, formatter: formatSize},

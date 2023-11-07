@@ -1,0 +1,61 @@
+code {
+  color: $body-color;
+
+  .token {
+    &.punctuation {
+      color: #4a4a4a;
+    }
+
+    &.keyword {
+      color: $red;
+    }
+
+    /* &.operator {
+      color: $red;
+    } */
+
+    &.string {
+      color: #0a3069;
+    }
+
+    &.comment {
+      color: $text-muted;
+    }
+
+    &.function {
+      color: #953800;
+    }
+
+    &.boolean {
+      color: #953800;
+    }
+
+    &.number {
+      color: #953800;
+    }
+
+    &.selector {
+      color: #953800;
+    }
+
+    &.property {
+      color: #953800;
+    }
+
+    &.tag {
+      color: #953800;
+    }
+
+    &.package {
+      color: #953800;
+    }
+
+    &.class-name {
+      color: #953800;
+    }
+
+    &.attr-value {
+      color: #953800;
+    }
+  }
+}

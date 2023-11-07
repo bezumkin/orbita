@@ -19,6 +19,11 @@ import {
   faUpload,
   faCheck,
   faQuestion,
+  faImage,
+  faVideo,
+  faFile,
+  faMusic,
+  faCode,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -38,6 +43,11 @@ library.add(
   faUpload,
   faCheck,
   faQuestion,
+  faImage,
+  faVideo,
+  faFile,
+  faMusic,
+  faCode,
 )
 
 config.autoAddCss = false

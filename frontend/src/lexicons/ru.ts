@@ -10,10 +10,19 @@ export default {
     edit: 'Изменить',
     add: 'Добавить',
     view: 'Просмотреть',
+    pick: 'Выбрать',
     levels: {
       manage: 'Управление подписками',
       subscribe: 'Подписаться',
       subscribed: 'Подписка оформлена',
+    },
+    editor: {
+      image: 'Фото',
+      video: 'Видео',
+      file: 'Файл',
+      audio: 'Аудио',
+      pick_video: 'Выберите видео',
+      code: 'Код',
     },
   },
   security: {
@@ -92,6 +101,20 @@ export default {
       active: 'Включено',
       per_month: 'в месяц',
     },
+    topic: {
+      title_one: 'Заметка',
+      title_many: 'Заметки',
+      title: 'Название',
+      content: 'Содержимое',
+      teaser: 'Тизер',
+      cover: 'Обложка',
+      level: 'Уровень подписки',
+      price: 'Цена',
+      active: 'Опубликовано',
+      closed: 'Без комментариев',
+      created_at: 'Дата создания',
+      published_at: 'Дата публикации',
+    },
   },
   components: {
     table: {
@@ -122,6 +145,7 @@ export default {
       videos: 'Видео',
       settings: 'Настройки',
       levels: 'Подписки',
+      topics: 'Заметки',
     },
     user: {
       title: 'Аккаунт',

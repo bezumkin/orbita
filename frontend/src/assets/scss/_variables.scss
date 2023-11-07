@@ -1,3 +1,4 @@
+$enable-cssgrid: true;
 $transition: 0.25s;
 $grid-breakpoints: (
     xs: 0,
@@ -14,3 +15,5 @@ $transition-speed: 0.25s;
 @import "bootstrap-scss/functions";
 @import "bootstrap-scss/variables";
 @import "bootstrap-scss/variables-dark";
+
+$plyr-color-main: $primary;

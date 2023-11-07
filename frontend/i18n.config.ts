@@ -1,4 +1,6 @@
-const dateFormat = {
+import type {DateTimeFormat} from '@intlify/core-base'
+
+const dateFormat: DateTimeFormat = {
   short: {
     year: 'numeric',
     month: 'numeric',

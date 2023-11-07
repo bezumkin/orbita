@@ -30,9 +30,6 @@
 </template>
 
 <script setup lang="ts">
-const {t} = useI18n()
-const {$settings} = useNuxtApp()
-
 const editing = ref('')
 const saving = ref('')
 const save = ref('')

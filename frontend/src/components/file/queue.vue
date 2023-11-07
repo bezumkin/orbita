@@ -56,10 +56,6 @@ import {DetailedError, Upload} from 'tus-js-client'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
 import type {BaseColorVariant} from 'bootstrap-vue-next/src/types'
 
-if (!hasScope('videos/get')) {
-  showError({statusCode: 403, statusMessage: 'Access Denied'})
-}
-
 const props = defineProps({
   accept: {
     type: String,
@@ -223,9 +219,11 @@ function continueUpload(item: UploadItem) {
 }
 
 async function cancelUpload(item: UploadItem) {
-  const upload = uploads[item.id]
-  await upload.abort(true)
   removeUpload(item)
+  try {
+    const upload = uploads[item.id]
+    await upload.abort(true)
+  } catch (e) {}
 }
 
 function removeUpload(item: UploadItem) {

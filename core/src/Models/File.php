@@ -4,14 +4,18 @@ namespace App\Models;
 
 use App\Services\CloudStorage;
 use Ramsey\Uuid\Uuid;
-use Vesp\Services\Filesystem;
 
 /**
  * @property string $uuid
+ * @property ?bool $temporary
  */
 class File extends \Vesp\Models\File
 {
     protected $guarded = ['created_at', 'updated_at'];
+    protected $casts = [
+        'temporary' => 'bool',
+        'metadata' => 'array',
+    ];
 
     protected static function booted(): void
     {
@@ -25,6 +29,8 @@ class File extends \Vesp\Models\File
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->filesystem = getenv('S3_ENABLED') ? new CloudStorage() : new Filesystem();
+        if (getenv('S3_ENABLED')) {
+            $this->filesystem = new CloudStorage();
+        }
     }
 }

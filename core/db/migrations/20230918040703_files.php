@@ -21,6 +21,7 @@ final class Files extends Migration
                 $table->unsignedSmallInteger('height')->nullable();
                 $table->unsignedBigInteger('size')->nullable();
                 $table->json('metadata')->nullable();
+                $table->boolean('temporary')->nullable();
                 $table->timestamps();
 
                 $table->unique('uuid');

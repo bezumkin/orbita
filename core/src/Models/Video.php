@@ -13,6 +13,7 @@ use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile;
 use Streaming\Format\X264;
 use Streaming\Representation;
+use Vesp\Services\Eloquent;
 
 /**
  * @property string $id
@@ -94,6 +95,7 @@ class Video extends Model
             $this->processed = false;
             $this->error = $e->getMessage();
             $this->save();
+
             return;
         }
 
@@ -151,7 +153,7 @@ class Video extends Model
                         $this->progress = number_format($progress, 2);
                         $this->save();
 
-                        Socket::send('transcode', $this->toArray());
+                        $this->sendInfoToSocket();
                     }
                 );
 
@@ -169,6 +171,7 @@ class Video extends Model
                 $this->processed = false;
                 $this->error = $e->getMessage();
                 $this->save();
+
                 return;
             }
         }
@@ -187,7 +190,7 @@ class Video extends Model
         $this->processed = true;
         $this->processed_at = time();
         $this->save();
-        Socket::send('transcode', $this->toArray());
+        $this->sendInfoToSocket();
 
         $storage = new TempStorage();
         $meta = $storage->getMeta($this->id);
@@ -209,7 +212,7 @@ class Video extends Model
         $this->moved_at = time();
         $this->save();
 
-        Socket::send('transcode', $this->toArray());
+        $this->sendInfoToSocket();
     }
 
     protected function stopProcessing(): void
@@ -264,5 +267,14 @@ class Video extends Model
     public function getProcessedQualitiesAttribute(): array
     {
         return $this->qualities()->where('processed', true)->pluck('quality')->toArray();
+    }
+
+    protected function sendInfoToSocket(): void
+    {
+        $data = $this
+            ->fresh('file:id,uuid,width,height,size', 'image:id,uuid,width,height,size')
+            ?->toArray();
+
+        Socket::send('transcode', $data);
     }
 }

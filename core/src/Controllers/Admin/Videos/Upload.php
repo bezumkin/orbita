@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin\Videos;
 
+use App\Models\File;
 use App\Models\Video;
 use App\Services\TempStorage;
 use Carbon\Carbon;
@@ -42,6 +43,16 @@ class Upload extends Controller
             ->withHeader('Cache-Control', 'no-store');
     }
 
+    public function get(): ResponseInterface
+    {
+        $file = File::query()
+            ->where('uuid', $this->getProperty('uuid'))
+            ->where('temporary', true)
+            ->first();
+
+        return $file ? $this->success($file->toArray()) : $this->failure('Not Found', 404);
+    }
+
     public function post(): ResponseInterface
     {
         $meta = [];
@@ -54,15 +65,13 @@ class Upload extends Controller
         if (empty($meta['filename'])) {
             return $this->failure('errors.upload.no_filename', 400);
         }
-        $tmp = explode('.', $meta['filename']);
-        $ext = count($tmp) > 1 ? end($tmp) : 'mp4';
 
         if (!$size = (int)$this->request->getHeaderLine('Upload-Length')) {
             return $this->failure('errors.upload.no_size', 400);
         }
 
         $uuid = Uuid::uuid4()->toString();
-        $meta['file'] = $uuid . '/video.' . $ext;
+        $meta['file'] = $this->getTempName($uuid, $meta['filename']);
         $meta['offset'] = 0;
         $meta['size'] = $size;
         $meta['expires'] = Carbon::now()->addHours($this::EXPIRE_HOURS)->toRfc7231String();
@@ -142,5 +151,13 @@ class Upload extends Controller
         $video->title = implode('.', $tmp);
         $video->file_id = $this->storage::getFakeFile($meta['filename'], $meta['filetype'], $meta['size'])->id;
         $video->save();
+    }
+
+    protected function getTempName(string $uuid, string $filename): string
+    {
+        $tmp = explode('.', $filename);
+        $ext = count($tmp) > 1 ? end($tmp) : 'mp4';
+
+        return $uuid . '/video.' . $ext;
     }
 }

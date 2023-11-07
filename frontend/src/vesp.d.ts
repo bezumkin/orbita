@@ -73,6 +73,20 @@ declare global {
     cover_id?: number
     cover?: VespFile
   }
+
+  type VespTopic = {
+    id: number
+    uuid?: string
+    title: string
+    content: Record<string, any>
+    teaser?: string
+    price?: number
+    active: bool
+    closed: bool
+    new_cover?: {file: string; metadata: {[key: string]: any}} | Boolean
+    cover_id?: number
+    cover?: VespFile
+  }
 }
 
 declare module '@vue/runtime-core' {

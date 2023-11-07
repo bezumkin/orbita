@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    '/admin/**': {ssr: false},
+  },
   runtimeConfig: {
     REDIS_SECRET: process.env.REDIS_SECRET,
     public: {

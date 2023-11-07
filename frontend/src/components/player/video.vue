@@ -1,5 +1,13 @@
 <template>
-  <video ref="video" controls :poster="poster" class="mw-100" v-on="listeners">
+  <div v-if="!activated" class="plyr plyr--full-ui plyr--video" @click.prevent="onActivate">
+    <b-img :src="poster" fluid />
+    <button class="plyr__control plyr__control--overlaid">
+      <svg aria-hidden="true" focusable="false">
+        <use v-bind="{'xlink:href': sprite + '#plyr-play'}" />
+      </svg>
+    </button>
+  </div>
+  <video v-else ref="video" controls :poster="poster" class="mw-100" v-on="listeners">
     <source :src="source" type="application/x-mpegURL" />
   </video>
 </template>
@@ -7,6 +15,7 @@
 <script setup lang="ts">
 import Hls from 'hls.js'
 import Plyr from 'plyr'
+import sprite from '~/assets/icons/plyr.svg'
 
 const {user} = useAuth()
 const props = defineProps({
@@ -18,11 +27,23 @@ const props = defineProps({
     type: Object,
     default: undefined,
   },
+  autoplay: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const video = ref()
 const hls = ref()
 const player = ref()
+const activated = ref(false)
+
+function onActivate() {
+  activated.value = true
+  nextTick(() => {
+    initPlayer()
+  })
+}
 
 let ready = false
 const source = getApiUrl() + 'video/' + props.uuid
@@ -31,6 +52,7 @@ const currentLevel = ref(0)
 const levels: Ref<number[]> = computed(() => {
   return hls.value && hls.value.levels ? hls.value.levels.map((i: Record<string, any>) => i.height) : []
 })
+
 function selectLevel(size: number) {
   const idx = levels.value.findIndex((i) => i === size)
   if (idx !== -1) {
@@ -45,12 +67,13 @@ function initPlayer() {
   }
 
   hls.value = new Hls()
-
   hls.value.loadSource(source)
   hls.value.attachMedia(video.value)
+
   // eslint-disable-next-line import/no-named-as-default-member
   hls.value.on(Hls.Events.MANIFEST_PARSED, () => {
     const options: Record<string, any> = {
+      iconUrl: sprite,
       keyboard: {
         focused: true,
         global: true,
@@ -75,12 +98,18 @@ function initPlayer() {
     }
 
     player.value = new Plyr(video.value, options)
+    player.value.play()
   })
 }
 
-onMounted(initPlayer)
+onMounted(() => {
+  if (props.autoplay) {
+    onActivate()
+  }
+})
 
 onUnmounted(() => {
+  saveStatus()
   if (player.value) {
     player.value.destroy()
   }

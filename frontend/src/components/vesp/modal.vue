@@ -178,4 +178,6 @@ onMounted(() => {
     showModal.value = true
   }
 })
+
+defineExpose({hide, submit, formSubmit})
 </script>
