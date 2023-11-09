@@ -30,7 +30,7 @@ use Ramsey\Uuid\Uuid;
  * @property-read File $cover
  * @property-read Level $level
  * @property-read TopicFile[] $topicFiles
- * @property-read TopicView[] $topicViews
+ * @property-read TopicView[] $views
  */
 class Topic extends Model
 {
@@ -39,6 +39,7 @@ class Topic extends Model
         'content' => 'array',
         'price' => 'float',
         'active' => 'bool',
+        'published_at' => 'datetime',
     ];
 
     protected static function booted(): void
@@ -70,8 +71,71 @@ class Topic extends Model
         return $this->hasMany(TopicFile::class);
     }
 
-    public function topicViews(): HasMany
+    public function views(): HasMany
     {
         return $this->hasMany(TopicView::class);
+    }
+
+    public function saveView(?User $user): int
+    {
+        if ($this->hasAccess($user)) {
+            if ($user) {
+                if ($view = $this->views()->where('user_id', $user->id)->first()) {
+                    $view->update(['timestamp' => time()]);
+                } else {
+                    $view = new TopicView();
+                    $view->topic_id = $this->id;
+                    $view->user_id = $user->id;
+                    $view->timestamp = time();
+                    $view->save();
+                    $this->increment('views_count');
+                }
+
+                // Disable unsent notifications to user
+                /*
+                $user->notifications()
+                    ->where(['topic_id' => $this->id, 'active' => true, 'sent' => false])
+                    ->update(['active' => false]);
+                */
+            } else {
+                $this->increment('views_count');
+            }
+        }
+
+        return $this->views_count;
+    }
+
+    public function hasAccess(?User $user): bool
+    {
+        $allow = false;
+        // Free topic
+        if (!$this->level_id && !$this->price) {
+            $allow = true;
+        }
+        if ($user) {
+            // Admin can see anything
+            if ($user->hasScope('topics/patch')) {
+                $allow = true;
+            }
+            // @TODO check UserPayment and UserLevel
+        }
+
+        return $allow;
+    }
+
+    public function prepareOutput(?User $user, bool $listView = false): array
+    {
+        $array = $this->only('id', 'uuid', 'title', 'views_count', 'comments_count', 'published_at');
+
+        $array['access'] = $this->hasAccess($user);
+        if ($listView || !$array['access']) {
+            $array['teaser'] = $this->teaser;
+            $array['cover'] = $this->cover?->only('id', 'uuid', 'published_at');
+        }
+        if (!$listView && $array['access']) {
+            $array['content'] = $this->content;
+        }
+
+        return $array;
     }
 }

@@ -1,5 +1,4 @@
 import type {BlockTool, BlockToolConstructorOptions, BlockToolData} from '@editorjs/editorjs'
-import Plyr from 'plyr'
 import Hls from 'hls.js'
 
 export default class implements BlockTool {
@@ -34,11 +33,13 @@ export default class implements BlockTool {
     source.type = 'application/x-mpegURL'
 
     const video = document.createElement('video')
-    video.poster = getApiUrl() + 'poster/' + this.data.uuid
+    video.classList.add('mw-100')
+    video.poster = getApiUrl() + 'poster/' + this.data.uuid + '/1024'
     video.appendChild(source)
 
     this.html.appendChild(video)
 
+    const {$plyr} = useNuxtApp()
     const hls = new Hls()
     hls.loadSource(source.src)
     hls.attachMedia(video)
@@ -46,10 +47,7 @@ export default class implements BlockTool {
     // eslint-disable-next-line import/no-named-as-default-member
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       const levels = hls.levels.map((i: Record<string, any>) => i.height)
-      new Plyr(video, {
-        storage: {
-          enabled: false,
-        },
+      $plyr(video, {
         quality: {
           default: levels[0],
           options: levels,

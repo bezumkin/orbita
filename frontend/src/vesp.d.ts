@@ -1,5 +1,8 @@
+import type {Options} from 'plyr'
+import Plyr from 'plyr'
 import {Socket} from 'socket.io-client'
-import i18n from "@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs";
+import i18n from '@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs'
+import { getFileLink } from "~/utils/vesp";
 
 declare global {
   interface AuthStore {
@@ -79,6 +82,7 @@ declare global {
     uuid?: string
     title: string
     content: Record<string, any>
+    level_id?: number
     teaser?: string
     price?: number
     active: bool
@@ -86,6 +90,8 @@ declare global {
     new_cover?: {file: string; metadata: {[key: string]: any}} | Boolean
     cover_id?: number
     cover?: VespFile
+    level?: VespLevel
+    [key: string]: any
   }
 }
 
@@ -93,11 +99,17 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $i18n: i18n
     $image: getImageLink
+    $file: getFileLink
     $scope: hasScope
     $price: Function
+    $prism: Function
+    $prismLanguages: Record<string, any>
     $socket: Socket
+    $sidebar: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>
+    $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
+    $plyrOptions: Options
   }
 }
 
@@ -105,11 +117,17 @@ declare module '#app' {
   interface NuxtApp {
     $i18n: i18n
     $image: getImageLink
+    $file: getFileLink
     $scope: hasScope
     $price: Function
+    $prism: Function
+    $prismLanguages: Record<string, any>
     $socket: Socket
+    $sidebar: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>
+    $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
+    $plyrOptions: Options
   }
 }
 

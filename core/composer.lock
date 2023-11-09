@@ -5807,12 +5807,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezumkin/vesp-core.git",
-                "reference": "7b11ff215ad0f1c4fb023696c752e4077dac7bfe"
+                "reference": "c36e7817e550f862785fd2d74b462a7989d19eac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/7b11ff215ad0f1c4fb023696c752e4077dac7bfe",
-                "reference": "7b11ff215ad0f1c4fb023696c752e4077dac7bfe",
+                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/c36e7817e550f862785fd2d74b462a7989d19eac",
+                "reference": "c36e7817e550f862785fd2d74b462a7989d19eac",
                 "shasum": ""
             },
             "require": {
@@ -5858,7 +5858,7 @@
                 "issues": "https://github.com/bezumkin/vesp-core/issues",
                 "source": "https://github.com/bezumkin/vesp-core/tree/3.x"
             },
-            "time": "2023-11-02T12:39:34+00:00"
+            "time": "2023-11-07T10:19:20+00:00"
         },
         {
             "name": "voku/portable-ascii",

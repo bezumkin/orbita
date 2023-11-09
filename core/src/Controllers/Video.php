@@ -55,6 +55,9 @@ class Video extends Controller
             ->write($manifest);
 
         return $this->response
+            ->withHeader('Accept-Ranges', 'bytes')
+            ->withHeader('Content-Type', 'audio/mpegurl')
+            ->withHeader('Content-Length', $this->response->getBody()->getSize())
             ->withHeader(
                 'Access-Control-Allow-Origin',
                 getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
@@ -71,6 +74,8 @@ class Video extends Controller
 
         return $this->response
             ->withHeader('Accept-Ranges', 'bytes')
+            ->withHeader('Content-Type', 'audio/mpegurl')
+            ->withHeader('Content-Length', $this->response->getBody()->getSize())
             ->withHeader(
                 'Access-Control-Allow-Origin',
                 getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
@@ -100,6 +105,7 @@ class Video extends Controller
 
             return $this->response
                 ->withStatus(206, 'Partial Content')
+                ->withHeader('Accept-Ranges', 'bytes')
                 ->withHeader('Content-Type', $file->type)
                 ->withHeader('Content-Range', "bytes $start-$end/$file->size")
                 ->withHeader('Content-Length', $length)
@@ -108,24 +114,9 @@ class Video extends Controller
                     getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
                 );
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error($e);
         }
 
         return null;
-    }
-
-    protected function post(): ResponseInterface
-    {
-        if ($this->user && $this->getProperty('quality')) {
-            if (!$item = $this->video->videoUsers()->where('user_id', $this->user->id)->first()) {
-                $item = new VideoUser();
-                $item->video_id = $this->video->id;
-                $item->user_id = $this->user->id;
-            }
-            $item->fill($this->getProperties());
-            $item->save();
-        }
-
-        return $this->success();
     }
 }

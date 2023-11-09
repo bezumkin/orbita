@@ -35,6 +35,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  minHeight: {
+    type: Number,
+    default: 100,
+  },
   btnVariant: {
     type: String as PropType<keyof BaseButtonVariant>,
     default: 'outline-secondary',
@@ -63,6 +67,7 @@ const record = computed({
 const holder = ref()
 const editor = ref()
 const {locale} = useI18n()
+const currentBlockIdx = ref(0)
 const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
   return locale.value === 'ru'
     ? {
@@ -136,6 +141,7 @@ function insertImage() {
 }
 
 function insertVideo() {
+  currentBlockIdx.value = editor.value.blocks.getCurrentBlockIndex()
   showVideos.value = true
 }
 
@@ -149,14 +155,15 @@ provide('pickVideo', (video: any) => {
     uuid: video.id,
     updated_at: video.updated_at,
   }
-  editor.value.blocks.insert('video', data)
+  editor.value.focus()
+  editor.value.blocks.insert('video', data, {}, currentBlockIdx.value + 1)
 })
 onMounted(() => {
   nextTick(() => {
     editor.value = new EditorJS({
       holder: holder.value,
       data: record.value as OutputData,
-      minHeight: 50,
+      minHeight: props.minHeight,
       hideToolbar: true,
       logLevel: 'ERROR' as LogLevels,
       readOnly: props.readOnly,

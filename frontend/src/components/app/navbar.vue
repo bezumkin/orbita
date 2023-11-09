@@ -1,6 +1,6 @@
 <template>
-  <b-navbar variant="light">
-    <b-navbar-brand :to="{name: 'index'}" class="p-0">
+  <b-navbar id="navbar" variant="light" sticky="top">
+    <b-navbar-brand :to="{name: 'index'}" class="p-0" @click="hideSidebar">
       <b-img :src="logo" height="40" />
     </b-navbar-brand>
 
@@ -25,7 +25,7 @@
         </template>
       </vesp-change-locale>-->
 
-      <app-login>
+      <app-login @click="hideSidebar">
         <template #user-menu>
           <b-dropdown-item v-if="adminSections.length" :to="{name: 'admin'}">
             {{ $t('pages.admin.title') }}
@@ -33,6 +33,12 @@
           <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
         </template>
       </app-login>
+      <b-button variant="light" class="d-md-none ms-1" @click.stop="toggleSidebar">
+        <transition name="fade" mode="out-in">
+          <fa v-if="!$sidebar" icon="bars" class="fa-fw" />
+          <fa v-else icon="times" class="fa-fw" />
+        </transition>
+      </b-button>
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -40,6 +46,15 @@
 <script setup lang="ts">
 import logo from '~/assets/images/logo-orbita.svg'
 const adminSections = computed(() => getAdminSections())
+
+const {$sidebar} = useNuxtApp()
+
+function toggleSidebar() {
+  $sidebar.value = !$sidebar.value
+}
+function hideSidebar() {
+  $sidebar.value = false
+}
 // import ru from '~/assets/icons/ru.svg'
 // import en from '~/assets/icons/gb.svg'
 </script>

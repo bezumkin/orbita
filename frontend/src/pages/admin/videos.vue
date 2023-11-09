@@ -1,6 +1,6 @@
 <template>
   <div>
-    <file-queue accept="video/mp4" @success="onSuccess" />
+    <file-queue accept="video/*" @success="onSuccess" />
 
     <vesp-table ref="table" class="mt-4" v-bind="{url, filters, fields, tableActions, rowClass, sort, dir}">
       <template #cell(image)="{value}: any">

@@ -1,10 +1,8 @@
 <template>
-  <audio ref="audio" :src="source" controls preload="metadata" class="mw-100" />
+  <audio v-show="false" ref="audio" :src="source" controls preload="metadata" />
 </template>
 
 <script setup lang="ts">
-import Plyr from 'plyr'
-
 const props = defineProps({
   uuid: {
     type: String,
@@ -12,9 +10,18 @@ const props = defineProps({
   },
 })
 
+const {$plyr} = useNuxtApp()
 const audio = ref()
 const player = ref()
-
 const source = getApiUrl() + 'audio/' + props.uuid
-player.value = new Plyr(audio.value)
+
+onMounted(() => {
+  $plyr(audio.value)
+})
+
+onUnmounted(() => {
+  if (player.value) {
+    player.value.destroy()
+  }
+})
 </script>

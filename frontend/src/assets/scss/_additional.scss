@@ -5,6 +5,16 @@ fieldset {
   margin-bottom: 1rem;
 }
 
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text-pre {
+  white-space: pre-line;
+}
+
 .upload-box {
   overflow: hidden;
   position: relative;
@@ -60,7 +70,7 @@ fieldset {
   }
 }
 
-#three-column {
+#layout-columns {
   .main-background {
     position: relative;
     transition: height $transition-speed;
@@ -82,58 +92,20 @@ fieldset {
     }
   }
 
-  .main-poster {
-    max-width: 225px;
-    margin: auto;
-
-    img {
-      border-radius: $border-radius;
-    }
-  }
-
-  .main-tabs {
-    position: relative;
-    top: 0;
-    transition: top $transition-speed;
-    background: $white;
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
-
-    .nav {
-      padding: 1rem;
-
-      &-link {
-        &:not(.active) {
-          background: $light;
-        }
-      }
-    }
-
-    .tab-pane {
-      padding: 0 1rem 1rem;
-    }
-  }
-
-  .main-cols {
+  .main-columns {
     position: relative;
 
-    .col-start,
-    .col-center,
-    .col-end {
+    .offset {
+      position: relative;
+      margin-top: 0;
+      transition: margin-top $transition-speed;
+    }
+
+    .column {
       background: $white;
       border: 1px solid $border-color;
       border-radius: $border-radius;
-    }
-
-    .col-start,
-    .col-center {
       padding: 1rem;
-    }
-
-    .col-start {
-      position: relative;
-      top: 0;
-      transition: top $transition-speed;
     }
   }
 
@@ -142,21 +114,17 @@ fieldset {
       height: 240px;
     }
 
-    .main-tabs {
-      position: relative;
-      top: -100px;
-    }
-  }
-
-  @include media-breakpoint-up(md) {
-    &.main-page {
-      .main-cols {
-        .col-start {
-          top: -200px;
-        }
+    .main-columns {
+      .offset {
+        margin-top: -200px;
       }
     }
   }
+}
+
+#sidebar {
+  z-index: $zindex-sticky - 10;
+  padding-top: 4rem;
 }
 
 .subscriptions {
@@ -189,6 +157,27 @@ fieldset {
 
     .btn {
       width: 100%;
+    }
+  }
+}
+
+.topic {
+  display: flex;
+  flex-flow: column nowrap;
+  row-gap: 0.5rem;
+
+  &.teaser {
+    .text {
+      white-space: pre-line;
+    }
+
+    .cover {
+      img {
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+        height: 384px;
+      }
     }
   }
 }

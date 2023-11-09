@@ -54,10 +54,7 @@ class TempStorage extends Filesystem
         $path = $this->getFullPath($uuid);
         $video = $this->ffmpeg->open($this->getFullPath($meta['file']));
 
-        $result = $video
-            ->hls()
-            ->fragmentedMP4()
-            ->setFormat($format);
+        $result = $video->hls()->setFormat($format);
         $result->addRepresentation($representation);
         $result->save($path . '/' . $representation->getHeight());
 
@@ -66,11 +63,11 @@ class TempStorage extends Filesystem
         /** @var StorageAttributes $file */
         foreach ($files as $file) {
             $path = $file->path();
-            if (str_ends_with($path, '%04d.m4s')) {
-                $fs->move($path, str_replace('_%04d.m4s', '.m4s', $path));
+            if (str_ends_with($path, '%04d.ts')) {
+                $fs->move($path, str_replace('_%04d.ts', '.ts', $path));
             } elseif (str_ends_with($path, '.m3u8')) {
                 $tmp = $fs->read($path);
-                $fs->write($path, str_replace('_%04d.m4s', '.m4s', $tmp));
+                $fs->write($path, str_replace('_%04d.ts', '.ts', $tmp));
             }
         }
 
@@ -122,7 +119,7 @@ class TempStorage extends Filesystem
             $this->getBaseFilesystem()->deleteDirectory($uuid);
             $this->deleteMeta($uuid);
         } catch (\Throwable $e) {
-            Log::info($e->getMessage());
+            Log::info($e);
         }
     }
 
@@ -171,6 +168,10 @@ class TempStorage extends Filesystem
 
     public static function getFakeFile(string $name, string $type, ?int $size = null): File
     {
+        if ($type === 'video/mp2t') {
+            $name = preg_replace('/\.\w+$/', '.ts', $name);
+        }
+
         $file = new File();
         $stream = new Stream(fopen('data:image/png;base64, ', 'rb'));
         $data = new UploadedFile($stream, $name, $type);

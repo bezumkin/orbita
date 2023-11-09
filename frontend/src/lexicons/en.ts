@@ -24,6 +24,7 @@ export default {
       pick_video: 'Pick video',
       code: 'Code',
     },
+    back: 'Back',
   },
   security: {
     login: 'Login',
@@ -79,8 +80,6 @@ export default {
       title_desc: 'Project title, used on all pages',
       description: 'Description',
       description_desc: 'Brief description of the project',
-      about: 'About project',
-      about_desc: 'A detailed note with a story about the project, pinned to the main page',
       poster: 'Main poster',
       poster_desc: 'Project avatar, displayed on the main page',
       background: 'Poster background',
@@ -106,14 +105,21 @@ export default {
       title_many: 'Topics',
       title: 'Title',
       content: 'Content',
-      teaser: 'Teaser',
+      teaser: 'Teaser text',
       cover: 'Cover',
       level: 'Subscription level',
-      price: 'Price',
+      price: 'Price of topic',
       active: 'Published',
       closed: 'No comments',
       created_at: 'Created At',
       published_at: 'Published At',
+      access: {
+        title: 'Topic access',
+        free: 'Free topic',
+        subscribers: 'Only subscribers',
+        sub_payments: 'Subscribers and one time payment',
+        payments: 'One time payment',
+      },
     },
   },
   components: {
@@ -137,7 +143,7 @@ export default {
   pages: {
     index: 'Main',
     about: 'About',
-    posts: 'Posts',
+    topics: 'Topics',
     admin: {
       title: 'Admin',
       users: 'Users',
@@ -197,5 +203,6 @@ export default {
       title_exists: 'This title already exists',
       price_exists: 'A level with this price has already been made',
     },
+    not_ready: 'This function is not ready yet',
   },
 }

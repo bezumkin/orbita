@@ -1,5 +1,6 @@
 import {Socket} from 'socket.io-client'
 import type {Composer} from 'vue-i18n'
+import {storeToRefs} from 'pinia'
 import {useVespStore} from '~/stores/vesp'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
@@ -11,6 +12,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
+  nuxtApp.provide('file', getFileLink)
+  nuxtApp.provide('sidebar', storeToRefs(store).sidebar)
   nuxtApp.provide('price', (val: number) => {
     if (!val) {
       return ''

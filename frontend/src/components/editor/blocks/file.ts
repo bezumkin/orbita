@@ -2,8 +2,22 @@ import type {API, BlockAPI, BlockTool, BlockToolConstructorOptions, BlockToolDat
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
 import {DetailedError, Upload} from 'tus-js-client'
 import {icon} from '@fortawesome/fontawesome-svg-core'
-import {faTimes, faFile} from '@fortawesome/free-solid-svg-icons'
+import {faTimes, faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
 import prettyBytes from 'pretty-bytes'
+
+export function getDescription(file: VespFile) {
+  const parts = []
+  if (file.size) {
+    parts.push(prettyBytes(file.size))
+  }
+  if (file.type) {
+    parts.push(file.type)
+  }
+  if (file.width && file.height) {
+    parts.push(file.width + ' x ' + file.height)
+  }
+  return parts.join(', ')
+}
 
 export default class implements BlockTool {
   api: API
@@ -170,39 +184,42 @@ export default class implements BlockTool {
     fileData.classList.add('d-flex', 'flex-column')
     if (this.data.title) {
       const title = document.createElement('div')
-      title.classList.add('fw-medium')
-      title.style.textOverflow = 'ellipsis'
-      title.style.overflow = 'hidden'
+      title.classList.add('fw-medium', 'text-break')
       title.textContent = this.data.title
-
       fileData.appendChild(title)
-      fileData.style.width = '85%'
     }
-    if (this.data.size) {
-      const size = document.createElement('div')
-      size.classList.add('small', 'text-muted')
-      size.textContent = prettyBytes(this.data.size)
-      if (this.data.width && this.data.height) {
-        size.textContent += `, ${this.data.width} x ${this.data.height}`
-      }
-      fileData.appendChild(size)
-    }
+    const description = document.createElement('div')
+    description.classList.add('small', 'text-muted')
+    description.textContent = getDescription(this.data)
+    fileData.appendChild(description)
 
-    const icon = this.getIcon()
-    if (icon) {
-      icon.classList.add('fa-fw', 'fa-2x', 'me-3')
-      wrapper.appendChild(icon)
+    const button = this.getButton()
+    if (button) {
+      wrapper.appendChild(button)
     }
     wrapper.appendChild(fileData)
 
     this.html.appendChild(wrapper)
   }
 
-  getIcon() {
+  getButton() {
     const span = document.createElement('span')
-    span.innerHTML = icon(faFile).html[0]
+    span.innerHTML = icon(faCloudArrowDown).html[0]
+    span.firstElementChild?.classList.add('fa-fw')
 
-    return span.firstElementChild
+    const btn = document.createElement('button')
+    btn.classList.add('btn', 'btn-light', 'btn-lg', 'me-3')
+    if (span.firstElementChild) {
+      btn.appendChild(span.firstElementChild)
+    }
+
+    btn.onclick = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      window.location.href = getFileLink(this.data)
+    }
+
+    return btn
   }
 
   static get pasteConfig() {

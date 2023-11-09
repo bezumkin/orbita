@@ -37,7 +37,11 @@ class Levels extends ModelController
 
     protected function afterCount(Builder $c): Builder
     {
-        $c->with('cover:id,uuid,updated_at');
+        if ($this->getProperty('combo')) {
+            $c->select('id', 'title', 'price', 'active');
+        } else {
+            $c->with('cover:id,uuid,updated_at');
+        }
 
         return $c;
     }

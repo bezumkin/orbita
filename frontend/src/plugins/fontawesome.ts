@@ -24,6 +24,11 @@ import {
   faFile,
   faMusic,
   faCode,
+  faCalendar,
+  faCloudArrowDown,
+  faComment,
+  faBars,
+  faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -48,6 +53,11 @@ library.add(
   faFile,
   faMusic,
   faCode,
+  faCalendar,
+  faCloudArrowDown,
+  faComment,
+  faBars,
+  faRightToBracket,
 )
 
 config.autoAddCss = false

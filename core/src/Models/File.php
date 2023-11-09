@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Services\CloudStorage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @property string $uuid
  * @property ?bool $temporary
+ *
+ * @property-read TopicFile[] $topicFiles
  */
 class File extends \Vesp\Models\File
 {
@@ -32,5 +35,10 @@ class File extends \Vesp\Models\File
         if (getenv('S3_ENABLED')) {
             $this->filesystem = new CloudStorage();
         }
+    }
+
+    public function topicFiles(): HasMany
+    {
+        return $this->hasMany(TopicFile::class);
     }
 }

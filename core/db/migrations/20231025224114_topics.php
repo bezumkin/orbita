@@ -15,7 +15,7 @@ final class Topics extends Migration
                 $table->uuid();
                 $table->string('title');
                 $table->json('content');
-                $table->string('teaser')->nullable();
+                $table->text('teaser')->nullable();
                 $table->foreignId('user_id')
                     ->constrained('users')->onDelete('cascade');
                 $table->foreignId('cover_id')->nullable()
@@ -57,7 +57,7 @@ final class Topics extends Migration
                     ->constrained('topics')->onDelete('cascade');
                 $table->foreignId('user_id')
                     ->constrained('users')->onDelete('cascade');
-                $table->timestamps();
+                $table->timestamp('timestamp');
 
                 $table->primary(['topic_id', 'user_id']);
             }

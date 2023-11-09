@@ -1,10 +1,12 @@
 import type {DateTimeFormat} from '@intlify/core-base'
 
+const timeZone = process.client ? window?.__NUXT__?.config.public.TIME_ZONE : process.env.TIME_ZONE
 const dateFormat: DateTimeFormat = {
   short: {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
+    timeZone,
   },
   long: {
     year: 'numeric',
@@ -14,6 +16,7 @@ const dateFormat: DateTimeFormat = {
     minute: 'numeric',
     second: 'numeric',
     hour12: false,
+    timeZone,
   },
 }
 

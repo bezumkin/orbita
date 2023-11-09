@@ -26,6 +26,27 @@ export default defineNuxtConfig({
       JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
       CURRENCY: process.env.CURRENCY || 'RUB',
       REGISTER_ENABLED: process.env.REGISTER_ENABLED || '1',
+      TIME_ZONE: process.env.TIME_ZONE || 'Europe/Moscow',
+      i18n: {
+        datetimeFormats: {
+          short: {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            timeZone: process.env.TIME_ZONE || 'Europe/Moscow',
+          },
+          long: {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false,
+            timeZone: process.env.TIME_ZONE || 'Europe/Moscow',
+          },
+        },
+      },
     },
   },
   modules: [

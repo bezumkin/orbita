@@ -24,6 +24,7 @@ export default {
       pick_video: 'Выберите видео',
       code: 'Код',
     },
+    back: 'Назад',
   },
   security: {
     login: 'Вход',
@@ -79,8 +80,6 @@ export default {
       title_desc: 'Название проекта, используется на всех страницах',
       description: 'Описание',
       description_desc: 'Короткое описание проекта',
-      about: 'О проекте',
-      about_desc: 'Подробная заметка с рассказом о проекте, закрепляется на главной',
       poster: 'Основной постер',
       poster_desc: 'Аватарка проекта, выводится на главной',
       background: 'Фон для постера',
@@ -106,14 +105,21 @@ export default {
       title_many: 'Заметки',
       title: 'Название',
       content: 'Содержимое',
-      teaser: 'Тизер',
+      teaser: 'Текст анонса',
       cover: 'Обложка',
       level: 'Уровень подписки',
-      price: 'Цена',
+      price: 'Стоимость заметки',
       active: 'Опубликовано',
       closed: 'Без комментариев',
       created_at: 'Дата создания',
       published_at: 'Дата публикации',
+      access: {
+        title: 'Настройка доступа',
+        free: 'Бесплатный доступ',
+        subscribers: 'Только подписчики',
+        sub_payments: 'Подписчики и разовая оплата',
+        payments: 'Только разовая оплата',
+      },
     },
   },
   components: {
@@ -137,7 +143,7 @@ export default {
   pages: {
     index: 'Главная',
     about: 'Об авторе',
-    posts: 'Посты',
+    topics: 'Заметки',
     admin: {
       title: 'Админка',
       users: 'Пользователи',
@@ -197,5 +203,6 @@ export default {
       title_exists: 'Такое название уже существует',
       price_exists: 'Уровень с такой ценой уже создан',
     },
+    not_ready: 'Эта функция еще не готова',
   },
 }

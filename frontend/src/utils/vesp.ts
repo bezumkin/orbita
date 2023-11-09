@@ -22,6 +22,10 @@ export function getImageLink(file: VespFile | Record<string, any>, options?: Ves
   return params.join('/') + '?' + new URLSearchParams(options as Record<string, string>).toString()
 }
 
+export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
+  return getImageLink(file, options, prefix || 'file')
+}
+
 export function hasScope(scopes: string | string[]): boolean {
   const {user: data} = useAuth()
   const user: VespUser = {id: 0, username: '', ...data.value}

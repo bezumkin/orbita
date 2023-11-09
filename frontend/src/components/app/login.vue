@@ -28,8 +28,13 @@
       <div v-else key="guest">
         <slot name="guest">
           <b-button @click="showModal = true">
-            <template v-if="registerEnabled">{{ $t('security.login') }} / {{ $t('security.register') }}</template>
-            <template v-else>{{ $t('security.login') }}</template>
+            <span class="d-none d-md-inline">
+              <template v-if="registerEnabled">{{ $t('security.login') }} / {{ $t('security.register') }}</template>
+              <template v-else>{{ $t('security.login') }}</template>
+            </span>
+            <span class="d-md-none">
+              <fa icon="right-to-bracket" class="fa-fw" />
+            </span>
           </b-button>
         </slot>
       </div>
@@ -87,6 +92,7 @@ async function onLogin() {
     await login(formLogin.value.username, formLogin.value.password)
     showModal.value = false
     formLogin.value = {username: '', password: ''}
+    refreshNuxtData()
   } catch (e) {
   } finally {
     loading.value = false
@@ -96,6 +102,7 @@ async function onLogin() {
 async function onLogout() {
   try {
     await logout()
+    refreshNuxtData()
   } catch (e) {
     console.error(e)
   }

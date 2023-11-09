@@ -14,19 +14,21 @@
         </div>
         <div v-if="level.content" class="content">{{ level.content }}</div>
         <b-button v-if="isSubscribed" disabled>{{ $t('actions.levels.subscribed') }}</b-button>
-        <b-button v-else>{{ $t('actions.levels.subscribe') }}</b-button>
+        <b-button v-else @click="onSubscribe">{{ $t('actions.levels.subscribe') }}</b-button>
       </div>
     </div>
-    <div v-if="$scope('levels/patch')" class="p-3 border-top">
+    <!--<div v-if="$scope('levels/patch')" class="p-3 border-top">
       <b-button :to="{name: 'admin-levels'}" variant="primary" class="w-100">
         {{ $t('actions.levels.manage') }}
       </b-button>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script setup lang="ts">
 const {$socket} = useNuxtApp()
+const {t} = useI18n()
+const {user} = useAuth()
 const levels: Ref<VespLevel[]> = ref([])
 const isSubscribed = computed(() => {
   return false
@@ -40,6 +42,11 @@ async function fetch() {
 }
 
 await fetch()
+watch(user, fetch)
+
+function onSubscribe() {
+  useToastInfo(t('errors.not_ready'))
+}
 
 onMounted(() => {
   $socket.on('levels', fetch)

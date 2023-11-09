@@ -1,6 +1,3 @@
-import {icon} from '@fortawesome/fontawesome-svg-core'
-import {faMusic} from '@fortawesome/free-solid-svg-icons'
-import Plyr from 'plyr'
 import Parent from './file'
 
 export default class extends Parent {
@@ -12,23 +9,25 @@ export default class extends Parent {
     }
   }
 
-  getIcon() {
-    const span = document.createElement('span')
-    span.innerHTML = icon(faMusic).html[0]
-
-    return span.firstElementChild
-  }
-
   showPreview() {
     if (!this.data.uuid) {
       return
     }
 
+    const title = document.createElement('div')
+    title.classList.add('px-4', 'fw-medium', 'text-break')
+    title.textContent = this.data.title
+
+    const audioWrapper = document.createElement('div')
+    audioWrapper.classList.add('px-2')
+
     const audio = document.createElement('audio')
     audio.src = getApiUrl() + 'audio/' + this.data.uuid
+    audioWrapper.appendChild(audio)
 
-    this.html.classList.add('rounded', 'border', 'p-2')
-    this.html.appendChild(audio)
-    new Plyr(audio)
+    this.html.classList.add('py-3', 'border', 'rounded')
+    this.html.appendChild(title)
+    this.html.appendChild(audioWrapper)
+    useNuxtApp().$plyr(audio)
   }
 }

@@ -81,7 +81,7 @@ class Video extends Model
             if (!$this->image && $image = $media->getPreview($this->id)) {
                 $stream = new Stream(fopen('data:image/jpeg;base64,' . base64_encode($image), 'rb'));
                 $file = new File();
-                $file->uploadFile(new UploadedFile($stream, $this->title . '.jpg', 'image/jpeg'));
+                $file->uploadFile(new UploadedFile($stream, $this->title . '.jpg', 'image/jpeg', $stream->getSize()));
                 $this->image_id = $file->id;
                 $this->save();
 
@@ -126,7 +126,7 @@ class Video extends Model
 
                 $quality = new VideoQuality();
                 $quality->video_id = $this->id;
-                $quality->file_id = TempStorage::getFakeFile($this->file->title, 'video/mp4')->id;
+                $quality->file_id = TempStorage::getFakeFile($this->file->title, 'video/mp2t')->id;
                 $quality->quality = $rep->getHeight();
                 $quality->save();
 
@@ -250,7 +250,7 @@ class Video extends Model
                 $fs->deleteDirectory($this->id);
             }
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error($e);
         }
 
         foreach ($this->qualities as $quality) {

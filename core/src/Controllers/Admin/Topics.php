@@ -67,6 +67,10 @@ class Topics extends ModelController
             return $error;
         }
 
+        if ($record->active && !$record->published_at) {
+            $record->published_at = time();
+        }
+
         return null;
     }
 

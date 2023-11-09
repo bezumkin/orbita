@@ -1419,7 +1419,7 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.3.tgz#291c243e4b94dbfbc0c0ee26b7666f1d5c030e2c"
   integrity sha512-ehPtgRgaULsFG8x0NeYJvmyH1hmlfsNLujHe9dQEia/7MAJYdzMSi19JtchUHjmBA6XC/75dK55mzZH+RyieSg==
 
-"@types/prismjs@^1.26.2", "@types/prismjs@^1.9.1":
+"@types/prismjs@^1.9.1":
   version "1.26.2"
   resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.2.tgz#f574066903a7f0d516353581185db74326100edc"
   integrity sha512-/r7Cp7iUIk7gts26mHXD66geUC+2Fo26TZYjQK6Nr4LDfi6lmdRmMqM0oPwfiMhUwoBAOFe8GstKi2pf6hZvwA==

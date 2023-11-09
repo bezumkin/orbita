@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $topic_id
  * @property int $user_id
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property Carbon $timestamp
  *
  * @property-read Topic $topic
  * @property-read User $user
@@ -19,7 +18,10 @@ class TopicView extends Model
 {
     use Traits\CompositeKey;
 
+    public $timestamps = false;
     protected $primaryKey = ['topic_id', 'user_id'];
+    protected $fillable = ['timestamp'];
+    protected $casts = ['timestamp' => 'datetime'];
 
     public function topic(): BelongsTo
     {

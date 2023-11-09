@@ -25,7 +25,6 @@ final class Settings extends Migration
         $settings = [
             'title' => ['type' => 'string', 'value' => ['ru' => 'Орбита', 'en' => 'Orbita']],
             'description' => ['type' => 'text', 'value' => ['ru' => 'Описание проекта', 'en' => 'Project description']],
-            'about' => ['type' => 'post'],
             'poster' => ['type' => 'image'],
             'background' => ['type' => 'image'],
             'copyright' => ['type' => 'string', 'value' =>  ['ru' => 'Василий Наумкин', 'en' => 'Vasily Naumkin']],

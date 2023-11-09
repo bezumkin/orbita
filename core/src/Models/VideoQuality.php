@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\CompositeKey;
 use App\Services\TempStorage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -27,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class VideoQuality extends Model
 {
-    use CompositeKey;
+    use Traits\CompositeKey;
 
     public $timestamps = false;
     protected $primaryKey = ['quality', 'video_id'];
@@ -59,7 +58,7 @@ class VideoQuality extends Model
 
         $storage = new TempStorage();
         $basename = $this->quality . '_' . $this->quality . 'p';
-        $videoFile = $this->video_id . '/' . $basename . '.m4s';
+        $videoFile = $this->video_id . '/' . $basename . '.ts';
         $mainFile = $this->video_id . '/' . $this->quality . '.m3u8';
         $manifestFile = $this->video_id . '/' . $basename . '.m3u8';
         $tempFs = $storage->getBaseFilesystem();
@@ -84,7 +83,7 @@ class VideoQuality extends Model
         }
         $this->file->save();
 
-        $this->manifest = str_replace($basename . '.m4s', $this->quality, $tempFs->read($manifestFile));
+        $this->manifest = str_replace($basename . '.ts', $this->quality, $tempFs->read($manifestFile));
 
         $tempFs->delete($mainFile);
         $tempFs->delete($manifestFile);

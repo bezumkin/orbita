@@ -1,12 +1,10 @@
 <template>
   <div>
-    <div class="main-poster">
-      <b-img v-if="poster" :src="poster" width="225" height="280" fluid />
-    </div>
+    <b-img v-if="poster" :src="poster" width="225" height="280" class="d-block m-auto rounded" fluid />
 
-    <div class="mt-4">
-      <h5 class="text-center">{{ $settings.title }}</h5>
-      <p class="small">{{ $settings.description }}</p>
+    <div class="mt-4 text-center">
+      <h5 class="">{{ $settings.title }}</h5>
+      <p class="small text-pre">{{ $settings.description }}</p>
     </div>
   </div>
 </template>

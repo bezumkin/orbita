@@ -1,5 +1,5 @@
 <template>
-  <vesp-modal ref="modal" :title="$t('actions.editor.pick_video')" @shown="onShown" @hidden="onHidden">
+  <vesp-modal ref="modal" :title="$t('actions.editor.pick_video')" size="lg" @shown="onShown" @hidden="onHidden">
     <b-form-group>
       <b-input-group>
         <template #append>
@@ -15,7 +15,7 @@
       <div class="grid">
         <b-card v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
           <template #img>
-            <b-img v-if="video.image" :src="$image(video.image, {w: 200})" />
+            <b-img v-if="video.image" :src="$image(video.image, {w: 1024})" />
           </template>
           <template #default>
             <div class="fw-medium">{{ video.title }}</div>
@@ -61,7 +61,7 @@ const input = ref()
 
 const total = ref(0)
 const page = ref(1)
-const limit = 4
+const limit = 6
 
 async function fetch() {
   loading.value = true
@@ -112,11 +112,11 @@ function pick(video: VespVideo) {
 function getProps(video: VespVideo) {
   const isActive = picked.value && picked.value.id === video.id
   return {
-    class: 'g-col-12 g-col-md-6 ',
+    class: 'g-col-12 g-col-md-6 g-col-lg-4',
     style: 'cursor: pointer',
     'body-class': 'd-flex flex-column',
     'bg-variant': isActive ? 'white' : 'light',
-    'border-variant': isActive ? 'primary' : 'secondary',
+    'border-variant': isActive ? 'primary' : 'light',
   }
 }
 

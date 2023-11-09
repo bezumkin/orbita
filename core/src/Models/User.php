@@ -29,6 +29,7 @@ use Vesp\Helpers\Jwt;
  * @property-read ?File $avatar
  * @property-read UserToken[] $tokens
  * @property-read VideoUser[] $userVideos
+ * @property-read TopicView[] $views
  */
 class User extends \Vesp\Models\User
 {
@@ -63,6 +64,11 @@ class User extends \Vesp\Models\User
     public function userVideos(): HasMany
     {
         return $this->hasMany(VideoUser::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(TopicView::class);
     }
 
     public function setAttribute($key, $value)

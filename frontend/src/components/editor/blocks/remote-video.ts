@@ -1,5 +1,4 @@
 import type {BlockTool, BlockToolConstructorOptions, BlockToolData} from '@editorjs/editorjs'
-import Plyr from 'plyr'
 
 export default class implements BlockTool {
   data: BlockToolData
@@ -31,9 +30,10 @@ export default class implements BlockTool {
     frame.src = this.data.url
     frame.allowFullscreen = true
     frame.allow = 'autoplay'
+    frame.style.display = 'none'
     this.html.appendChild(frame)
 
-    new Plyr(this.html)
+    useNuxtApp().$plyr(this.html)
   }
 
   static get pasteConfig() {

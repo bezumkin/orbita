@@ -59,7 +59,7 @@ class Audio extends Controller
                     getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
                 );
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
+            Log::error($e);
         }
 
         return $this->failure('', 500);

@@ -3,6 +3,7 @@ import {defineStore} from 'pinia'
 export const useVespStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
   const isMobile = ref(false)
+  const sidebar = ref(false)
 
   async function load() {
     try {
@@ -15,5 +16,5 @@ export const useVespStore = defineStore('settings', () => {
     }
   }
 
-  return {settings, load, isMobile}
+  return {settings, load, isMobile, sidebar}
 })

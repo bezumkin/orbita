@@ -1,26 +1,4 @@
 import type {BlockAPI, BlockTool, BlockToolConstructorOptions, BlockToolData} from '@editorjs/editorjs'
-import {highlight, languages as PrismLanguages} from 'prismjs'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-docker'
-import 'prismjs/components/prism-php'
-import 'prismjs/components/prism-php-extras'
-import 'prismjs/components/prism-ini'
-import 'prismjs/components/prism-java'
-import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-markdown'
-import 'prismjs/components/prism-nginx'
-import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-regex'
-import 'prismjs/components/prism-ruby'
-import 'prismjs/components/prism-rust'
-import 'prismjs/components/prism-sass'
-import 'prismjs/components/prism-scss'
-import 'prismjs/components/prism-sql'
-import 'prismjs/components/prism-plsql'
-import 'prismjs/components/prism-typescript'
-import 'prismjs/components/prism-yaml'
-import 'prismjs/components/prism-markup-templating'
-// import '@jongwooo/prism-theme-github/themes/prism-github-default-auto.css'
 // @ts-ignore
 import CodeFlask from 'codeflask'
 
@@ -103,8 +81,9 @@ export default class implements BlockTool {
   }
 
   changeLanguage(lang: string, update: boolean = false) {
-    if (PrismLanguages[lang]) {
-      this.flask?.addLanguage(lang, PrismLanguages[lang])
+    const {$prismLanguages} = useNuxtApp()
+    if ($prismLanguages[lang]) {
+      this.flask?.addLanguage(lang, $prismLanguages[lang])
       this.flask?.updateLanguage(lang)
     }
     if (update) {
@@ -172,23 +151,19 @@ export default class implements BlockTool {
   }
 
   showPreview() {
-    const code = document.createElement('code')
+    try {
+      const {$prism} = useNuxtApp()
+      const code = document.createElement('code')
+      code.innerHTML = $prism(this.data.code, this.data.language)
 
-    const tmp = document.createElement('code')
-    tmp.innerHTML = highlight(this.data.code, PrismLanguages[this.data.language], this.data.language)
-    if (tmp.firstElementChild) {
-      tmp.firstElementChild.classList.forEach((i) => {
-        code.classList.add(i)
-      })
-      code.classList.add('d-block', 'p-3')
-      code.innerHTML = tmp.firstElementChild.innerHTML
+      const pre = document.createElement('pre')
+      pre.classList.add('rounded')
+      pre.appendChild(code)
+
+      this.html.appendChild(pre)
+    } catch (e) {
+      console.error(e)
     }
-
-    const pre = document.createElement('pre')
-    pre.classList.add('rounded')
-    pre.appendChild(code)
-
-    this.html.appendChild(pre)
   }
 
   static get pasteConfig() {

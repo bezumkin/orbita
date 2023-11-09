@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\CompositeKey;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,10 +21,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class VideoUser extends Model
 {
-    use CompositeKey;
+    use Traits\CompositeKey;
 
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = ['user_id', 'video_id'];
     protected $fillable = ['quality', 'time', 'speed', 'volume'];
     protected $casts = [
         'quality' => 'int',
