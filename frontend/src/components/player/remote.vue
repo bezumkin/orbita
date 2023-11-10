@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  autoplay: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const {$plyr} = useNuxtApp()
@@ -22,7 +26,11 @@ function initPlayer() {
   }
 
   player.value = $plyr(frame.value)
-  player.value.play()
+  if (props.autoplay) {
+    nextTick(() => {
+      player.value.play()
+    })
+  }
 }
 
 onMounted(initPlayer)
