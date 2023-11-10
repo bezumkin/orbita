@@ -1,11 +1,13 @@
 <template>
   <b-col xl="10" class="m-auto">
-    <b-form @submit.prevent="onSubmit">
-      <forms-user v-model="form" :show-status="false" :show-group="false" />
-      <div class="text-center mt-3">
-        <b-button variant="primary" type="submit">{{ t('actions.save') }}</b-button>
-      </div>
-    </b-form>
+    <b-overlay :show="loading" opacity="0.5">
+      <b-form @submit.prevent="onSubmit">
+        <forms-user v-model="form" :show-status="false" :show-group="false" />
+        <div class="text-center mt-3">
+          <b-button variant="primary" type="submit">{{ t('actions.save') }}</b-button>
+        </div>
+      </b-form>
+    </b-overlay>
   </b-col>
 </template>
 
@@ -14,13 +16,13 @@ const {t} = useI18n()
 const {$settings} = useNuxtApp()
 const {loadUser} = useAuth()
 const loading = ref(false)
-const form = ref()
-form.value = {id: 0, username: '', ...useAuth().user.value}
+const form: Ref<VespUser> = ref({id: 0, username: '', ...useAuth().user.value})
 
 async function onSubmit() {
   loading.value = true
   try {
-    form.value = await usePatch('user/profile', form.value)
+    const {user} = await usePatch('user/profile', form.value)
+    form.value = user
     useToastSuccess(t('success.profile'))
     await loadUser()
   } catch (e) {
