@@ -20,24 +20,16 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const topic: Ref<VespTopic | undefined> = ref()
 const {$settings} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
-const topics: Ref<string[] | undefined> = useCookie('topics')
+const {data} = useGet('web/topics/' + route.params.uuid)
+const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
+const topics: Ref<string[] | undefined> = useCookie('topics', {sameSite: true})
 if (!topics.value) {
   topics.value = []
 }
 
-async function fetch() {
-  try {
-    topic.value = await useGet('web/topics/' + route.params.uuid)
-  } catch (e: any) {
-    showError({statusCode: e.statusCode, statusMessage: e.message})
-  }
-}
-
-await fetch()
 async function saveView() {
   if (!topic.value || !topic.value.uuid || !topic.value.access) {
     return
@@ -46,7 +38,7 @@ async function saveView() {
     return
   }
   try {
-    const data = await usePost('web/topics/' + topic.value.uuid + '/view')
+    const data = await useApi('web/topics/' + topic.value.uuid + '/view', {method: 'POST'})
     if (topic.value && data.views_count) {
       topic.value.views_count = data.views_count
     }
@@ -56,14 +48,10 @@ async function saveView() {
   } catch (e) {}
 }
 
-watch(user, async () => {
-  await fetch()
-  await saveView()
-})
-
 onMounted(() => {
-  saveView()
+  nextTick(saveView)
 })
+watch(() => topic.value?.access, saveView)
 
 definePageMeta({
   layout: 'layout-columns',

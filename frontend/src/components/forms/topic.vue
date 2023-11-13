@@ -78,10 +78,11 @@ const record = computed({
 
 const {t} = useI18n()
 const {$socket, $price} = useNuxtApp()
-const levels: Ref<VespLevel[]> = ref([])
+const {data, refresh} = useGet('admin/levels', {combo: true, limit: 0})
+const levels: Ref<VespLevel[]> = computed(() => data.value?.rows || [])
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
-  levels.value.forEach((i: VespLevel) => {
+  levels.value?.forEach((i: VespLevel) => {
     options.push({value: i.id, text: i.title + ', ' + $price(i.price), disabled: !i.active})
   })
   return options
@@ -122,17 +123,11 @@ watch(accessLevel, (value: string) => {
   }
 })
 
-async function loadLevels() {
-  const {rows} = await useGet('admin/levels', {combo: true, limit: 0})
-  levels.value = rows
-}
-
 onMounted(() => {
-  $socket.on('levels', loadLevels)
-  loadLevels()
+  $socket.on('levels', refresh)
 })
 
 onUnmounted(() => {
-  $socket.off('levels', loadLevels)
+  $socket.off('levels', refresh)
 })
 </script>

@@ -11,7 +11,7 @@
       </b-input-group>
     </b-form-group>
 
-    <b-overlay v-if="videos.length" :show="loading" opacity="0.5">
+    <b-overlay :show="loading" opacity="0.5">
       <div class="grid">
         <b-card v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
           <template #img>
@@ -39,7 +39,7 @@
         class="mt-4"
       />
     </b-overlay>
-    <b-alert v-else-if="!loading" variant="light" :model-value="true">
+    <b-alert v-if="!videos.length && !loading" variant="light" :model-value="true">
       {{ query ? $t('components.table.no_results') : $t('components.table.no_data') }}
     </b-alert>
 
@@ -52,38 +52,29 @@
 
 <script setup lang="ts">
 const {d} = useI18n()
-const loading = ref(false)
-const videos: Ref<VespVideo[]> = ref([])
+
 const picked: Ref<VespVideo | undefined> = ref()
 const query = ref('')
 const modal = ref()
 const input = ref()
 
-const total = ref(0)
 const page = ref(1)
 const limit = 6
 
-async function fetch() {
-  loading.value = true
-  picked.value = undefined
-  try {
-    const params: Record<string, any> = {active: true, sort: 'created_at', dir: 'desc', limit}
-    if (page.value > 1) {
-      params.page = page.value
-    }
-    if (query.value) {
-      params.query = query.value
-    }
-    const data = await useGet('admin/videos', params)
-    videos.value = data.rows
-    total.value = data.total
-  } catch (e) {
-  } finally {
-    loading.value = false
+const params = computed(() => {
+  const tmp: Record<string, any> = {active: true, sort: 'created_at', dir: 'desc', limit}
+  if (page.value > 1) {
+    tmp.page = page.value
   }
-}
+  if (query.value) {
+    tmp.query = query.value
+  }
+  return tmp
+})
 
-await fetch()
+const {data, pending: loading, refresh} = useGet('admin/videos', params)
+const videos: ComputedRef<VespVideo[]> = computed(() => data.value?.rows || [])
+const total = computed(() => data.value?.total || 0)
 
 const emit = defineEmits(['hidden'])
 function onHidden() {
@@ -128,12 +119,12 @@ function useVideo() {
   }
 }
 
-watch(page, fetch)
+watch(page, () => refresh())
 watch(query, () => {
   if (page.value > 1) {
     page.value = 1
   } else {
-    fetch()
+    refresh()
   }
 })
 </script>

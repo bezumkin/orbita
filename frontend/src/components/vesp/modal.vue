@@ -108,7 +108,6 @@ const modalProps = computed(() => {
   return values
 })
 const updateKey = props.updateKey || props.url?.split('/').join('-')
-const refreshVespTable: Function | undefined = inject('refreshVespTable')
 
 function formSubmit() {
   if (form.value && form.value.$el) {
@@ -136,10 +135,8 @@ async function submit() {
         loading.value = true
         const data = await useApi(props.url, {method: props.method.toUpperCase(), body: values})
         emit('after-submit', data)
-        if (updateKey && refreshVespTable) {
-          refreshVespTable(updateKey)
-        }
         hide()
+        refreshNuxtData(updateKey)
       }
     }
   } catch (e) {
@@ -154,14 +151,14 @@ function hide() {
 }
 
 function goBack() {
-  const router = useRouter()
   const route = useRoute()
   const idx = route.matched.findIndex((item) => item.name === route.name)
   if (idx > 0 && route.matched[idx - 1]) {
-    router.push({name: route.matched[idx - 1].name})
+    navigateTo({name: route.matched[idx - 1].name})
   } else {
-    router.go(-1)
+    useRouter().go(-1)
   }
+  useNuxtApp().callHook('page:finish')
 }
 
 function focusField() {

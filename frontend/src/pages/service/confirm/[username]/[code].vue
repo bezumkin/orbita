@@ -13,9 +13,9 @@ if (!params.username || !params.code) {
 }
 
 try {
-  const {token} = await usePost('security/activate', params)
-  if (token) {
-    await useAuth().setToken(token)
+  const {data} = await usePost('security/activate', params)
+  if (data.value?.token) {
+    await useAuth().setToken(data.value.token)
     nextTick(() => {
       navigateTo({name: 'user-profile'}, options)
     })

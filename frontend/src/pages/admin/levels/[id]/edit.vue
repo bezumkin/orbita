@@ -17,7 +17,7 @@ const record = ref()
 
 const url = 'admin/levels/' + useRoute().params.id
 try {
-  record.value = await useGet(url)
+  record.value = await useApi(url)
 } catch (e: any) {
   showError({statusCode: e.statusCode, statusMessage: e.message})
 }

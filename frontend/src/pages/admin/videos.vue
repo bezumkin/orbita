@@ -24,8 +24,9 @@
       <template #cell(dimension)="{item}">
         <div v-if="item.width && item.height">{{ item.width }}x{{ item.height }}</div>
       </template>
-      <nuxt-page />
     </vesp-table>
+
+    <nuxt-page />
   </div>
 </template>
 

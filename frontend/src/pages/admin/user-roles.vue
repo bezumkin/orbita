@@ -1,7 +1,8 @@
 <template>
-  <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, sort, dir}">
+  <div>
+    <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, sort, dir}" />
     <nuxt-page />
-  </vesp-table>
+  </div>
 </template>
 
 <script setup lang="ts">

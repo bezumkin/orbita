@@ -1,45 +1,58 @@
+import type {FetchOptions, FetchContext} from 'ofetch'
+import type {UseFetchOptions} from 'nuxt/app'
 import {ofetch} from 'ofetch'
-import type {FetchOptions} from 'ofetch'
 
-export function useApi(endpoint: string | Ref, options: FetchOptions<any> = {}) {
-  return ofetch(typeof endpoint === 'object' ? endpoint.value : endpoint, {
+function onRequest({options}: FetchContext): void {
+  const {token} = useAuth()
+  if (token.value) {
+    const headers = new Headers(options.headers || {})
+    headers.set('Authorization', token.value)
+    options.headers = headers
+  }
+}
+
+function onResponseError({response}: FetchContext): void {
+  if (process.client && response?._data) {
+    const {t} = useNuxtApp().$i18n
+    useToastError(t ? t(response._data) : response._data)
+  }
+}
+
+export function useApi(endpoint: string, options: FetchOptions<any> = {}) {
+  return ofetch(endpoint, {
     baseURL: getApiUrl(),
-    method: 'GET',
-    // https://github.com/unjs/ofetch#%EF%B8%8F-interceptors
+    onRequest,
+    onResponseError,
     ...options,
-    onRequest({options}) {
-      const {token} = useAuth()
-      if (token.value) {
-        const headers = new Headers(options.headers || {})
-        headers.set('Authorization', token.value)
-        options.headers = headers
-      }
-    },
-    onResponseError({response}) {
-      if (process.client && response._data) {
-        const {t} = useNuxtApp().$i18n
-        useToastError(t ? t(response._data) : response._data)
-      }
-    },
   })
 }
 
-export async function useGet(endpoint: string | Ref, params = {}, options: FetchOptions<any> = {}) {
-  return await useApi(endpoint, {...options, query: params, method: 'GET'})
+function useCustomFetch(endpoint: string, options: UseFetchOptions<any> = {}) {
+  return useFetch(endpoint, {
+    baseURL: getApiUrl(),
+    key: options.key || endpoint.split('/').join('-'),
+    onRequest,
+    onResponseError,
+    ...options,
+  })
 }
 
-export async function usePost(endpoint: string | Ref, params = {}, options: FetchOptions<any> = {}) {
-  return await useApi(endpoint, {...options, body: params, method: 'POST'})
+export function useGet(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
+  return useCustomFetch(endpoint, {...options, query: params, method: 'GET'})
 }
 
-export async function usePut(endpoint: string | Ref, params = {}, options: FetchOptions<any> = {}) {
-  return await useApi(endpoint, {...options, body: params, method: 'PUT'})
+export function usePost(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
+  return useCustomFetch(endpoint, {...options, body: params, method: 'POST'})
 }
 
-export async function usePatch(endpoint: string | Ref, params = {}, options: FetchOptions<any> = {}) {
-  return await useApi(endpoint, {...options, body: params, method: 'PATCH'})
+export function usePut(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
+  return useCustomFetch(endpoint, {...options, body: params, method: 'PUT'})
 }
 
-export async function useDelete(endpoint: string | Ref, params = {}, options: FetchOptions<any> = {}) {
-  return await useApi(endpoint, {...options, query: params, method: 'DELETE'})
+export function usePatch(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
+  return useCustomFetch(endpoint, {...options, body: params, method: 'PATCH'})
+}
+
+export function useDelete(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
+  return useCustomFetch(endpoint, {...options, query: params, method: 'DELETE'})
 }

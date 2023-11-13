@@ -76,10 +76,10 @@
       </template>
     </b-table>
 
-    <slot name="footer" v-bind="{update: loadTable, total, page: tPage, limit, loading}">
+    <slot name="footer" v-bind="{refresh, total, page: tPage, limit, loading}">
       <b-row class="mt-5 align-items-center justify-content-center justify-content-md-start gap-3" no-gutters>
         <b-col cols="12" md="auto" class="d-flex justify-content-center">
-          <slot name="pagination" v-bind="{update: loadTable, total, page: tPage, limit, loading}">
+          <slot name="pagination" v-bind="{refresh, total, page: tPage, limit, loading}">
             <b-pagination
               v-if="total > limit"
               v-model="tPage"
@@ -91,8 +91,8 @@
           </slot>
         </b-col>
         <b-col cols="12" md="auto" class="d-flex align-items-center justify-content-center gap-2">
-          <slot name="pagination-data" v-bind="{update: loadTable, total, page: tPage, limit, loading}">
-            <b-button @click="loadTable">
+          <slot name="pagination-data" v-bind="{refresh, total, page: tPage, limit, loading}">
+            <b-button @click="() => refresh()">
               <b-spinner v-if="loading" :small="true" />
               <fa v-else icon="repeat" />
             </b-button>
@@ -263,9 +263,6 @@ const props = defineProps({
 
 const {t} = useI18n()
 const internalValue = ref(1)
-const loading = ref(false)
-const total = ref(0)
-const items = ref([])
 const tSort = ref(props.sort)
 const tDir = ref(props.dir)
 const tLimit = ref(props.limit)
@@ -296,28 +293,22 @@ const deleteLoading = ref(false)
 const deleting: Ref<Record<any, any>> = ref({})
 const deleteProps = {item: deleting, visible: deleteVisible, loading: deleteLoading, deleteItem}
 
-async function loadTable() {
-  loading.value = true
-  try {
-    const params: Record<string, any> = {
-      limit: props.limit,
-      page: tPage.value,
-      ...getParams(true),
-    }
-    const data = props.onLoad(await useGet(props.url, params))
-    total.value = data.total || 0
-    items.value = (data.rows as []) || []
-  } catch (e) {
-    return Promise.reject(e)
-  } finally {
-    loading.value = false
+const params = computed(() => {
+  return {
+    key: updateKey,
+    limit: props.limit,
+    page: tPage.value,
+    ...getParams(true),
   }
-}
+})
+const {data, refresh, pending: loading} = useGet(props.url, params)
+const total = computed(() => data.value?.total || 0)
+const items = computed(() => data.value?.rows || [])
 
 function onSort(field: string, desc: boolean) {
   tSort.value = field
   tDir.value = desc ? 'desc' : 'asc'
-  loadTable()
+  refresh()
 }
 
 function mapRouteParams(action: VespTableAction, item: Record<string, any>): RouteLocationNamedRaw | undefined {
@@ -378,6 +369,7 @@ function onDelete(item: any) {
   deleteVisible.value = true
   deleting.value = item
 }
+
 async function deleteItem() {
   deleteLoading.value = true
   const item = deleting.value
@@ -394,34 +386,26 @@ async function deleteItem() {
       await useDelete(props.url, item)
     }
     deleteVisible.value = false
-    await loadTable()
+    refresh()
   } catch (e) {
   } finally {
     deleteLoading.value = false
   }
 }
 
-defineExpose({getParams, page: tPage, sort: tSort, dir: tDir, loading, delete: onDelete, refresh: loadTable, items})
+defineExpose({getParams, page: tPage, sort: tSort, dir: tDir, loading, delete: onDelete, refresh, items})
 
-provide('refreshVespTable', (key: string) => {
-  if (key.startsWith(updateKey)) {
-    loadTable()
-  }
+watch(tPage, () => {
+  refresh()
 })
-
-watch(tPage, loadTable)
 watch(
   tFilters,
   () => {
     if (tPage.value !== 1) {
       tPage.value = 1
     }
-    loadTable()
+    refresh()
   },
   {deep: true},
 )
-
-onMounted(() => {
-  loadTable()
-})
 </script>

@@ -205,7 +205,7 @@ async function fetch(query = externalValue.value) {
     }
     loading.value = true
     try {
-      const {total, rows} = await useGet(props.url, params)
+      const {total, rows} = await useApi(props.url, {query: params})
       options.value = rows
       total.value = total
       emit('load', rows, total)

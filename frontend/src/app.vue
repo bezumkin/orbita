@@ -1,5 +1,6 @@
 <template>
   <nuxt-layout>
+    <nuxt-loading-indicator color="var(--bs-primary)" :throttle="0" />
     <nuxt-page />
   </nuxt-layout>
 </template>

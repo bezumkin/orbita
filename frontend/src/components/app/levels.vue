@@ -28,21 +28,11 @@
 <script setup lang="ts">
 const {$socket} = useNuxtApp()
 const {t} = useI18n()
-const {user} = useAuth()
-const levels: Ref<VespLevel[]> = ref([])
+const {data} = useGet('web/levels')
+const levels: ComputedRef<VespLevel[]> = computed(() => data.value?.rows || [])
 const isSubscribed = computed(() => {
   return false
 })
-
-async function fetch() {
-  try {
-    const {rows} = await useGet('web/levels')
-    levels.value = {...rows}
-  } catch (e) {}
-}
-
-await fetch()
-watch(user, fetch)
 
 function onSubscribe() {
   useToastInfo(t('errors.not_ready'))

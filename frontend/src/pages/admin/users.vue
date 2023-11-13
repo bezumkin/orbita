@@ -1,18 +1,20 @@
 <template>
-  <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
-    <template #cell(avatar)="{value}: any">
-      <b-img
-        v-if="value?.id"
-        :src="$image(value, {w: 50, h: 50, fit: 'crop'})"
-        :srcset="$image(value, {w: 100, h: 100, fit: 'crop'}) + ' 2x'"
-        width="50"
-        height="50"
-        class="rounded-circle"
-      />
-    </template>
+  <div>
+    <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
+      <template #cell(avatar)="{value}: any">
+        <b-img
+          v-if="value?.id"
+          :src="$image(value, {w: 50, h: 50, fit: 'crop'})"
+          :srcset="$image(value, {w: 100, h: 100, fit: 'crop'}) + ' 2x'"
+          width="50"
+          height="50"
+          class="rounded-circle"
+        />
+      </template>
+    </vesp-table>
 
     <nuxt-page />
-  </vesp-table>
+  </div>
 </template>
 
 <script setup lang="ts">

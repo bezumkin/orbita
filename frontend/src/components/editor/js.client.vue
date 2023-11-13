@@ -108,7 +108,9 @@ const showVideos = ref(false)
 
 async function onChange() {
   try {
-    record.value = await editor.value.save()
+    if (editor.value && typeof editor.value.save === 'function') {
+      record.value = await editor.value.save()
+    }
   } catch (e) {
     console.error(e)
   }
@@ -158,19 +160,22 @@ provide('pickVideo', (video: any) => {
   editor.value.focus()
   editor.value.blocks.insert('video', data, {}, currentBlockIdx.value + 1)
 })
+
 onMounted(() => {
   nextTick(() => {
-    editor.value = new EditorJS({
-      holder: holder.value,
-      data: record.value as OutputData,
-      minHeight: props.minHeight,
-      hideToolbar: true,
-      logLevel: 'ERROR' as LogLevels,
-      readOnly: props.readOnly,
-      onChange,
-      i18n: {messages: messages.value},
-      tools: tools.value,
-    })
+    try {
+      editor.value = new EditorJS({
+        holder: holder.value,
+        data: record.value as OutputData,
+        minHeight: props.minHeight,
+        hideToolbar: true,
+        logLevel: 'ERROR' as LogLevels,
+        readOnly: props.readOnly,
+        onChange,
+        i18n: {messages: messages.value},
+        tools: tools.value,
+      })
+    } catch (e) {}
   })
 })
 
