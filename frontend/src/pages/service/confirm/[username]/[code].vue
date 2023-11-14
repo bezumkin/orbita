@@ -1,34 +1,21 @@
 <template>
-  <div></div>
+  <div class="p-5 text-center">
+    <b-spinner size="lg" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import {FetchError} from 'ofetch'
-
 const {params} = useRoute()
 const options = {replace: true, redirectCode: 302}
+const route = ref({name: 'index'})
 
-if (!params.username || !params.code) {
-  navigateTo({name: 'index'}, options)
-}
-
-try {
+if (params.username && params.code) {
   const {data} = await usePost('security/activate', params)
   if (data.value?.token) {
     await useAuth().setToken(data.value.token)
-    nextTick(() => {
-      navigateTo({name: 'user-profile'}, options)
-    })
-  }
-} catch (e: any) {
-  if (e instanceof FetchError) {
-    showError({
-      statusCode: e.status,
-      statusMessage: e.statusMessage,
-      message: e.response?._data ? useI18n().t(e.response?._data) : '',
-    })
-  } else {
-    showError({statusCode: 500, statusMessage: 'Internal Server Error'})
+    route.value = {name: 'user-profile'}
   }
 }
+
+navigateTo(route.value, options)
 </script>

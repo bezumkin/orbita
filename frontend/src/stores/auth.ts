@@ -6,7 +6,7 @@ const tokenType = 'Bearer'
 export const useAuthStore = defineStore('auth', () => {
   // const maxAge = Number(useRuntimeConfig().public.JWT_EXPIRE)
   const maxAge = 14 * 86400 // @TODO temporary fix https://github.com/nuxt/nuxt/issues/24227
-  const token = useCookie(tokenName, {maxAge, sameSite: true})
+  const token = useCookie(tokenName, {path: '/', maxAge, sameSite: true})
   const user: Ref<VespUser | undefined> = ref()
   const loggedIn = computed(() => Boolean(user.value && user.value.id > 0))
 

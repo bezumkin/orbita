@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+const {t} = useI18n()
 const {user, login, logout} = useAuth()
 const showModal = ref(false)
 const loading = ref(false)
@@ -92,6 +93,7 @@ async function onLogin() {
     await login(formLogin.value.username, formLogin.value.password)
     showModal.value = false
     formLogin.value = {username: '', password: ''}
+    useToastInfo(t('success.login'))
     refreshNuxtData()
   } catch (e) {
   } finally {
@@ -102,6 +104,7 @@ async function onLogin() {
 async function onLogout() {
   try {
     await logout()
+    useToastInfo(t('success.logout'))
     refreshNuxtData()
   } catch (e) {
     console.error(e)
@@ -114,6 +117,7 @@ async function onRegister() {
     await usePost('security/register', formRegister.value)
     showModal.value = false
     formRegister.value = {username: '', password: '', fullname: '', email: ''}
+    useToastInfo(t('success.register'))
   } catch (e) {
   } finally {
     loading.value = false
@@ -126,6 +130,7 @@ async function onReset() {
     await usePost('security/reset', formReset.value)
     showModal.value = false
     formReset.value = {username: ''}
+    useToastInfo(t('success.reset'))
   } catch (e) {
   } finally {
     loading.value = false

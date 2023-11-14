@@ -160,6 +160,10 @@ export default {
   },
   success: {
     profile: 'Profile saved successfully',
+    login: 'Welcome!',
+    register: 'An activation link has been sent to your email.',
+    reset: 'The authorization link has been sent to your email.',
+    logout: 'Goodbye!',
   },
   errors: {
     user: {

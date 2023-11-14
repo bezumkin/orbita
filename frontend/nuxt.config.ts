@@ -17,6 +17,8 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/admin/**': {ssr: false},
+    '/service/**': {ssr: false},
+    '/user/**': {ssr: false},
   },
   runtimeConfig: {
     REDIS_SECRET: process.env.REDIS_SECRET,
@@ -75,6 +77,9 @@ export default defineNuxtConfig({
         {rel: 'shortcut icon', href: '/favicons/favicon.ico'},
       ],
     },
+  },
+  experimental: {
+    inlineSSRStyles: false,
   },
   eslint: {
     lintOnStart: false,

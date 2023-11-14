@@ -41,16 +41,3 @@ const owner = computed(() => {
   return locale.value === 'ru' ? 'Василий Наумкин' : 'Vasily Naumkin'
 })
 </script>
-
-<style scoped lang="scss">
-:deep(.row) {
-  .vesp-change-locale {
-    max-width: 200px;
-    margin: auto;
-  }
-
-  a {
-    color: inherit;
-  }
-}
-</style>
