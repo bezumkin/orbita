@@ -11,3 +11,4 @@
 /upload/
 /log/
 /.env
+/docker-compose.override.yml

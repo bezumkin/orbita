@@ -10,9 +10,7 @@ services:
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - ./docker/mariadb:/var/lib/mysql
-    ports:
-      - ${MARIADB_PORT}:3306
-    working_dir: /vesp
+    restart: unless-stopped
 
   nginx:
     image: nginx:${NGINX_VERSION}
@@ -24,19 +22,18 @@ services:
       - ./frontend:/vesp/frontend
       - ./www:/vesp/www
     ports:
-      - ${NGINX_PORT}:80
-      - ${NODE_PORT_WS}:3001
+      - ${NGINX_HOST}:${NGINX_PORT}:80
+    restart: unless-stopped
     depends_on:
       - php-fpm
       - mariadb
-    working_dir: /vesp
 
   php-fpm:
     build:
       context: ./docker/php-fpm
-      dockerfile: dev.dockerfile
       args:
         - PHP_VERSION
+        - PHP_XDEBUG
         - TIME_ZONE
     volumes:
       - ./.env:/vesp/.env
@@ -51,10 +48,10 @@ services:
     depends_on:
       - mariadb
     environment:
-      - PHP_IDE_CONFIG=serverName=VespDocker
       - COMPOSER_ALLOW_SUPERUSER=1
+    restart: unless-stopped
     working_dir: /vesp/core
-    command: sh -c 'composer install && cron && php-fpm'
+    command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'
 
   node:
     image: node:${NODE_VERSION}
@@ -63,19 +60,10 @@ services:
       - ./frontend:/vesp/frontend
     depends_on:
       - nginx
-    environment:
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
     network_mode: 'service:nginx'
+    restart: unless-stopped
     working_dir: /vesp/frontend
-#    command: sh -c 'rm -rf /tmp/* && yarn && yarn analyze'
-    command: sh -c 'rm -rf /tmp/* && yarn && yarn dev'
+    command: sh -c 'rm -rf /tmp/* && yarn && yarn build && node ./.output/server/index.mjs'
 
   redis:
     image: redis:${REDIS_VERSION}
-    ports:
-      - ${REDIS_PORT:-6379}:6379
-
-  mailhog:
-    image: teawithfruit/mailhog
-    ports:
-      - ${MAILHOG_PORT:-8090}:8025
