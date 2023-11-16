@@ -1,12 +1,14 @@
 /.idea
 /.local
 /core/vendor
+/core/composer.lock
 /docker/mariadb
 /frontend/.nuxt
 /frontend/.eslintcache
 /frontend/.stylelintcache
 /frontend/.output
 /frontend/node_modules
+/frontend/yarn.lock
 /tmp/
 /upload/
 /log/
