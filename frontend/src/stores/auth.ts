@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loggedIn = computed(() => Boolean(user.value && user.value.id > 0))
 
   async function login(username: string, password: string) {
-    const {token} = await useApi('security/login', {method: 'POST', body: {username, password}})
+    const {token} = await usePost('security/login', {username, password})
     if (token) {
       await setToken(token)
     }
@@ -19,14 +19,14 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     if (token.value) {
-      await useApi('security/logout', {method: 'POST'})
+      await usePost('security/logout')
     }
     await setToken(undefined)
   }
 
   async function loadUser() {
     if (token.value) {
-      const {user} = await useApi('user/profile')
+      const {user} = await useGet('user/profile')
       if (user) {
         setUser(user)
       }

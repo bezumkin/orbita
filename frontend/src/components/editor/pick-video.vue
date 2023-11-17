@@ -57,24 +57,33 @@ const picked: Ref<VespVideo | undefined> = ref()
 const query = ref('')
 const modal = ref()
 const input = ref()
-
+const loading = ref(false)
+const videos: Ref<VespVideo[]> = ref([])
+const total = ref(0)
 const page = ref(1)
 const limit = 6
 
-const params = computed(() => {
-  const tmp: Record<string, any> = {active: true, sort: 'created_at', dir: 'desc', limit}
-  if (page.value > 1) {
-    tmp.page = page.value
+async function fetch() {
+  loading.value = true
+  picked.value = undefined
+  try {
+    const params: Record<string, any> = {active: true, sort: 'created_at', dir: 'desc', limit}
+    if (page.value > 1) {
+      params.page = page.value
+    }
+    if (query.value) {
+      params.query = query.value
+    }
+    const data = await useGet('admin/videos', params)
+    videos.value = data.rows
+    total.value = data.total
+  } catch (e) {
+  } finally {
+    loading.value = false
   }
-  if (query.value) {
-    tmp.query = query.value
-  }
-  return tmp
-})
+}
 
-const {data, pending: loading, refresh} = useGet('admin/videos', params)
-const videos: ComputedRef<VespVideo[]> = computed(() => data.value?.rows || [])
-const total = computed(() => data.value?.total || 0)
+await fetch()
 
 const emit = defineEmits(['hidden'])
 function onHidden() {
@@ -119,12 +128,12 @@ function useVideo() {
   }
 }
 
-watch(page, () => refresh())
+watch(page, fetch)
 watch(query, () => {
   if (page.value > 1) {
     page.value = 1
   } else {
-    refresh()
+    fetch()
   }
 })
 </script>

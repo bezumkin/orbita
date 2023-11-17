@@ -112,7 +112,7 @@ export function contentClick(e: MouseEvent) {
     e.preventDefault()
     if (!/:\/\//.test(target.href) || target.href.startsWith(local)) {
       const router = useRouter()
-      const route = router.resolve(target.href.replace(local, ''))
+      const route = router.resolve(target.href.replace(local, '/'))
       if (route) {
         router.push(route)
       }

@@ -57,7 +57,7 @@ function getCommentLink(topic: VespTopic, comment: VespComment) {
 
 async function send(item: any) {
   try {
-    await useApi(url + '/' + item.id, {method: 'POST'})
+    await usePost(url + '/' + item.id)
     table.value.refresh()
   } catch (e) {}
 }

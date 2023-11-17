@@ -1,6 +1,6 @@
 <template>
   <div class="column">
-    <b-overlay id="topic-comments" ref="tree" :show="loading" opacity="0.5">
+    <b-overlay id="topic-comments" ref="tree" :show="pending" opacity="0.5">
       <h4>{{ t('components.comments.title', {total}, total) }}</h4>
 
       <comments-thread v-model="commentForm" :comments="commentsTree" :topic="topic" :loading-form="submitting">
@@ -74,7 +74,7 @@ const commentForm: Ref<VespComment> = ref({id: 0, parent_id: 0, content: {}})
 const form = ref()
 const tree = ref()
 
-const {data, pending: loading, refresh} = await useGet(url)
+const {data, refresh, pending} = await useCustomFetch(url)
 const comments = computed(() => data.value?.rows || [])
 const total = computed(() => comments.value.length)
 const commentsTree = computed(() => {
@@ -129,9 +129,9 @@ async function onSubmit(comment: VespComment) {
   try {
     submitting.value = true
     if (comment.id) {
-      await useApi(url + '/' + comment.id, {method: 'PATCH', body: comment})
+      await usePatch(url + '/' + comment.id, comment)
     } else {
-      await useApi(url, {method: 'PUT', body: comment})
+      await usePut(url, comment)
     }
     onCancel()
   } catch (e) {
@@ -203,11 +203,11 @@ function canDelete() {
 }
 async function onDelete(comment: VespComment) {
   try {
-    loading.value = true
-    await useApi(url + '/' + comment.id, {method: 'PATCH', body: {active: !comment.active}})
+    pending.value = true
+    await usePatch(url + '/' + comment.id, {active: !comment.active})
   } catch (e) {
   } finally {
-    loading.value = false
+    pending.value = false
   }
 }
 
@@ -217,12 +217,12 @@ function onDestroy(comment: VespComment) {
 
 async function destroy() {
   try {
-    loading.value = true
-    await useApi(url + '/' + destroying.value, {method: 'DELETE'})
+    pending.value = true
+    await useDelete(url + '/' + destroying.value)
     destroying.value = 0
   } catch (e) {
   } finally {
-    loading.value = false
+    pending.value = false
   }
 }
 

@@ -19,13 +19,17 @@ const loading = ref(false)
 const form: Ref<VespUser> = ref({id: 0, username: '', ...useAuth().user.value})
 
 async function onSubmit() {
-  loading.value = true
-  const {data} = await usePatch('user/profile', form.value)
-  loading.value = false
-  if (data.value) {
-    form.value = data.value.user
-    useToastSuccess(t('success.profile'))
-    await loadUser()
+  try {
+    loading.value = true
+    const {user} = await usePatch('user/profile', form.value)
+    if (user) {
+      form.value = user
+      useToastSuccess(t('success.profile'))
+      await loadUser()
+    }
+  } catch (e) {
+  } finally {
+    loading.value = false
   }
 }
 

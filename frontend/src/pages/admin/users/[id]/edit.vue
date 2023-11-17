@@ -21,7 +21,7 @@ const record = ref({
 
 const url = 'admin/users/' + useRoute().params.id
 try {
-  record.value = await useApi(url)
+  record.value = await useGet(url)
 } catch (e: any) {
   showError({statusCode: e.statusCode, statusMessage: e.message})
 }

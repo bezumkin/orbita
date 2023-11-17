@@ -10,9 +10,9 @@ const options = {replace: true, redirectCode: 302}
 const route = ref({name: 'index'})
 
 if (params.username && params.code) {
-  const {data} = await usePost('security/activate', params)
-  if (data.value?.token) {
-    await useAuth().setToken(data.value.token)
+  const {token} = await usePost('security/activate', params)
+  if (token) {
+    await useAuth().setToken(token)
     route.value = {name: 'user-profile'}
   }
 }

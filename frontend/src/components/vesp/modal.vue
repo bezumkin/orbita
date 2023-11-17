@@ -136,7 +136,7 @@ async function submit() {
         const data = await useApi(props.url, {method: props.method.toUpperCase(), body: values})
         emit('after-submit', data)
         hide()
-        refreshNuxtData(updateKey)
+        await refreshNuxtData(updateKey)
       }
     }
   } catch (e) {

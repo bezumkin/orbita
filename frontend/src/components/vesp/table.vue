@@ -295,13 +295,12 @@ const deleteProps = {item: deleting, visible: deleteVisible, loading: deleteLoad
 
 const params = computed(() => {
   return {
-    key: updateKey,
     limit: props.limit,
     page: tPage.value,
     ...getParams(true),
   }
 })
-const {data, refresh, pending: loading} = useGet(props.url, params)
+const {data, refresh, pending: loading} = useCustomFetch(props.url, {key: updateKey, query: params})
 const total = computed(() => data.value?.total || 0)
 const items = computed(() => data.value?.rows || [])
 

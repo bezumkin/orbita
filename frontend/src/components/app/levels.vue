@@ -29,7 +29,7 @@
 <script setup lang="ts">
 const {$socket} = useNuxtApp()
 const {t} = useI18n()
-const {data, refresh, pending} = useGet('web/levels')
+const {data, refresh, pending} = useCustomFetch('web/levels')
 const levels: ComputedRef<VespLevel[]> = computed(() => data.value?.rows || [])
 const isSubscribed = computed(() => {
   return false

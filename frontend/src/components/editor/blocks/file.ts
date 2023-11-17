@@ -98,7 +98,7 @@ export default class implements BlockTool {
 
   async onSuccess() {
     if (this.upload && this.upload.url) {
-      const file = await useApi(this.upload.url)
+      const file = await useGet(this.upload.url)
       this.data = {
         id: file.id,
         uuid: file.uuid,

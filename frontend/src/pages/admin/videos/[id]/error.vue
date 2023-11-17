@@ -13,7 +13,7 @@ const record: Ref<VespVideo> = ref({
 
 const url = 'admin/videos/' + useRoute().params.id
 try {
-  record.value = await useApi(url)
+  record.value = await useGet(url)
 } catch (e: any) {
   showError({statusCode: e.statusCode, statusMessage: e.message})
 }

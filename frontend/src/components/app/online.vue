@@ -27,7 +27,7 @@
 const url = 'web/comments/latest'
 const {d} = useI18n()
 const {$socket} = useNuxtApp()
-const {data, pending, refresh} = useGet(url, {limit: 10})
+const {data, refresh, pending} = useCustomFetch(url, {query: {limit: 10}})
 const comments: ComputedRef<VespComment[]> = computed(() => data.value?.rows || [])
 
 function getCommentLink(comment: VespComment) {

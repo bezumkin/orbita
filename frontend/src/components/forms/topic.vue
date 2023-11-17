@@ -78,12 +78,10 @@ const record = computed({
 
 const {t} = useI18n()
 const {$socket, $price} = useNuxtApp()
-const {data, refresh} = useGet('admin/levels', {combo: true, limit: 0})
-const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS).split(',') || []
-const levels: Ref<VespLevel[]> = computed(() => data.value?.rows || [])
+const levels: Ref<VespLevel[]> = ref([])
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
-  levels.value?.forEach((i: VespLevel) => {
+  levels.value.forEach((i: VespLevel) => {
     options.push({value: i.id, text: i.title + ', ' + $price(i.price), disabled: !i.active})
   })
   return options
@@ -94,6 +92,7 @@ const accessOptions = [
   {value: 'sub_payments', text: t('models.topic.access.sub_payments')},
   {value: 'payments', text: t('models.topic.access.payments')},
 ]
+const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS).split(',') || []
 
 const accessLevel = ref('free')
 if (record.value.id) {
@@ -124,11 +123,17 @@ watch(accessLevel, (value: string) => {
   }
 })
 
+async function loadLevels() {
+  const {rows} = await useGet('admin/levels', {combo: true, limit: 0})
+  levels.value = rows
+}
+
 onMounted(() => {
-  $socket.on('levels', refresh)
+  $socket.on('levels', loadLevels)
+  loadLevels()
 })
 
 onUnmounted(() => {
-  $socket.off('levels', refresh)
+  $socket.off('levels', loadLevels)
 })
 </script>

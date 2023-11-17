@@ -29,7 +29,7 @@
 <script setup lang="ts">
 const {t} = useI18n()
 const {$socket, $settings} = useNuxtApp()
-const {data, refresh, pending} = await useGet('web/topics')
+const {data, refresh, pending} = await useCustomFetch('web/topics')
 const topics = computed(() => data.value?.rows || [])
 const total = computed(() => data.value?.total || 0)
 const page = ref(1)

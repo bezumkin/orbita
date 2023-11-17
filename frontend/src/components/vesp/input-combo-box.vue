@@ -205,7 +205,7 @@ async function fetch(query = externalValue.value) {
     }
     loading.value = true
     try {
-      const {total, rows} = await useApi(props.url, {query: params})
+      const {total, rows} = await useGet(props.url, params)
       options.value = rows
       total.value = total
       emit('load', rows, total)
@@ -338,7 +338,7 @@ async function setValue(value: string | number) {
     if (options.value.findIndex((item) => item[props.valueField] == value) === -1) {
       const params = {...props.filterProps, combo: true}
       params[props.valueField] = value
-      const data = await useApi(props.url, {params})
+      const data = await useGet(props.url, params)
       // eslint-disable-next-line eqeqeq
       if (data[props.valueField] == value) {
         options.value.push(data)

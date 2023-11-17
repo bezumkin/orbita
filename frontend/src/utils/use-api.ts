@@ -27,7 +27,7 @@ export function useApi(endpoint: string, options: FetchOptions<any> = {}) {
   })
 }
 
-function useCustomFetch(endpoint: string, options: UseFetchOptions<any> = {}) {
+export function useCustomFetch(endpoint: string, options: UseFetchOptions<any> = {}) {
   return useFetch(endpoint, {
     baseURL: getApiUrl(),
     key: options.key || endpoint.split('/').join('-'),
@@ -37,22 +37,22 @@ function useCustomFetch(endpoint: string, options: UseFetchOptions<any> = {}) {
   })
 }
 
-export function useGet(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
-  return useCustomFetch(endpoint, {...options, query: params, method: 'GET'})
+export function useGet(endpoint: string, params = {}, options: FetchOptions<any> = {}) {
+  return useApi(endpoint, {...options, query: params, method: 'GET'})
 }
 
-export function usePost(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
-  return useCustomFetch(endpoint, {...options, body: params, method: 'POST'})
+export function usePost(endpoint: string, params = {}, options: FetchOptions<any> = {}) {
+  return useApi(endpoint, {...options, body: params, method: 'POST'})
 }
 
-export function usePut(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
-  return useCustomFetch(endpoint, {...options, body: params, method: 'PUT'})
+export function usePut(endpoint: string, params = {}, options: FetchOptions<any> = {}) {
+  return useApi(endpoint, {...options, body: params, method: 'PUT'})
 }
 
-export function usePatch(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
-  return useCustomFetch(endpoint, {...options, body: params, method: 'PATCH'})
+export function usePatch(endpoint: string, params = {}, options: FetchOptions<any> = {}) {
+  return useApi(endpoint, {...options, body: params, method: 'PATCH'})
 }
 
-export function useDelete(endpoint: string, params = {}, options: UseFetchOptions<any> = {}) {
-  return useCustomFetch(endpoint, {...options, query: params, method: 'DELETE'})
+export function useDelete(endpoint: string, params = {}, options: FetchOptions<any> = {}) {
+  return useApi(endpoint, {...options, query: params, method: 'DELETE'})
 }

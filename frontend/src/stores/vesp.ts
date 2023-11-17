@@ -8,7 +8,7 @@ export const useVespStore = defineStore('settings', () => {
 
   async function load() {
     try {
-      const {rows} = await useApi('web/settings')
+      const {rows} = await useGet('web/settings')
       rows.forEach((i: Record<string, string>) => {
         settings.value[i.key] = i.value
       })

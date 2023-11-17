@@ -23,7 +23,7 @@ const route = useRoute()
 const {$settings} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
-const {data} = await useGet('web/topics/' + route.params.uuid)
+const {data} = await useCustomFetch('web/topics/' + route.params.uuid)
 const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
 const topics: Ref<string[] | undefined> = useCookie('topics', {sameSite: true})
 if (!topics.value) {
@@ -39,7 +39,7 @@ async function saveView(updateView: boolean) {
     return
   }
   try {
-    const data = await useApi('web/topics/' + topic.value.uuid + '/view', {method: 'POST'})
+    const data = await usePost('web/topics/' + topic.value.uuid + '/view')
     if (topic.value) {
       if (data.views_count) {
         topic.value.views_count = data.views_count

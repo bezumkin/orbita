@@ -35,7 +35,7 @@ const saving = ref('')
 const save = ref('')
 const settings: Ref<VespSetting[]> = ref([])
 
-const {data, refresh} = await useGet('admin/settings')
+const {data, refresh} = await useCustomFetch('admin/settings')
 settings.value = data.value.rows
 
 function startEdit(setting: VespSetting) {
@@ -59,7 +59,7 @@ async function saveSetting(setting: VespSetting) {
   }
   try {
     saving.value = setting.key
-    await useApi('admin/settings/' + setting.key, {method: 'PATCH', body: {value: setting.value}})
+    await usePatch('admin/settings/' + setting.key, {value: setting.value})
     save.value = ''
     editing.value = ''
     refresh()
