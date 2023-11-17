@@ -104,6 +104,24 @@ export function contentPreview(content: OutputData, length: number = 100) {
   return text.length > length + 3 ? text.slice(0, length) + '...' : text
 }
 
+export function contentClick(e: MouseEvent) {
+  const target = e.target as HTMLLinkElement
+  // External link
+  if (target.tagName === 'A') {
+    const local = useRuntimeConfig().public.SITE_URL
+    e.preventDefault()
+    if (!/:\/\//.test(target.href) || target.href.startsWith(local)) {
+      const router = useRouter()
+      const route = router.resolve(target.href.replace(local, ''))
+      if (route) {
+        router.push(route)
+      }
+    } else {
+      window.open(target.href)
+    }
+  }
+}
+
 export function getAdminSections() {
   const items = [
     {scope: 'topics/get', title: 'topics', route: 'admin-topics'},
@@ -112,7 +130,7 @@ export function getAdminSections() {
     {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
     {scope: 'notifications/get', title: 'notifications', route: 'admin-notifications'},
     {scope: 'users/get', title: 'users', route: 'admin-users'},
-    {scope: 'users/get', title: 'user_roles', route: 'admin-user-roles'},
+    {scope: 'roles/get', title: 'user_roles', route: 'admin-user-roles'},
   ]
 
   return items.filter((i) => hasScope(i.scope))

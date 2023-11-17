@@ -123,11 +123,13 @@ declare module '@vue/runtime-core' {
     $prismLanguages: Record<string, any>
     $socket: Socket
     $sidebar: Ref<boolean>
+    $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
     $contentPreview: Function
+    $contentClick: Function
   }
 }
 
@@ -142,11 +144,13 @@ declare module '#app' {
     $prismLanguages: Record<string, any>
     $socket: Socket
     $sidebar: Ref<boolean>
+    $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
     $contentPreview: Function
+    $contentClick: Function
   }
 }
 

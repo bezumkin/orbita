@@ -37,7 +37,7 @@
           <b-img v-if="code === 'ru'" :src="ru" height="16" />
           <b-img v-else-if="code === 'en'" :src="en" height="16" />
           <div v-else>{{ code }}</div>
-          <div>{{ record[code] }}</div>
+          <div v-html="record[code]" />
         </div>
       </template>
       <div v-else-if="type === 'image' && typeof record === 'object'" :class="'image image-' + key">

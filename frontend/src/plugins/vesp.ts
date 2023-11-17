@@ -9,11 +9,13 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
   await store.load()
+  const refStore = storeToRefs(store)
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
   nuxtApp.provide('file', getFileLink)
-  nuxtApp.provide('sidebar', storeToRefs(store).sidebar)
+  nuxtApp.provide('sidebar', refStore.sidebar)
+  nuxtApp.provide('login', refStore.login)
   nuxtApp.provide('price', (val: number) => {
     if (!val) {
       return ''
@@ -46,6 +48,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   )
   nuxtApp.provide('isMobile', ref(store.isMobile))
   nuxtApp.provide('contentPreview', contentPreview)
+  nuxtApp.provide('contentClick', contentClick)
 
   // Listen for settings update
   if ($socket) {

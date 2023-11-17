@@ -77,7 +77,15 @@
 <script setup lang="ts">
 const {t} = useI18n()
 const {user, login, logout} = useAuth()
-const showModal = ref(false)
+const {$login} = useNuxtApp()
+const showModal = computed({
+  get() {
+    return $login.value
+  },
+  set(newValue) {
+    $login.value = newValue
+  },
+})
 const loading = ref(false)
 const form = ref()
 const tabs = ref()
@@ -94,7 +102,8 @@ async function onLogin() {
     showModal.value = false
     formLogin.value = {username: '', password: ''}
     useToastInfo(t('success.login'))
-    refreshNuxtData()
+    await clearError()
+    await refreshNuxtData()
   } catch (e) {
   } finally {
     loading.value = false
@@ -105,7 +114,7 @@ async function onLogout() {
   try {
     await logout()
     useToastInfo(t('success.logout'))
-    refreshNuxtData()
+    await refreshNuxtData()
   } catch (e) {
     console.error(e)
   }

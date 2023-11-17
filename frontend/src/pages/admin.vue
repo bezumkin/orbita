@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user">
     <b-nav tabs class="mt-4">
       <b-nav-item v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
         {{ $t('pages.admin.' + section.title) }}
@@ -15,12 +15,15 @@
 const route = useRoute()
 const {user} = useAuth()
 const {t} = useI18n()
-const {$settings} = useNuxtApp()
+const {$settings, $login} = useNuxtApp()
 const sections = computed(() => getAdminSections())
 
 function checkAccess() {
   if (!user.value) {
     showError({statusCode: 401, statusMessage: 'Unauthorized'})
+    nextTick(() => {
+      $login.value = true
+    })
   } else if (!sections.value.length) {
     showError({statusCode: 403, statusMessage: 'Access Denied'})
   } else if (route.name === 'admin') {

@@ -4,6 +4,7 @@ export const useVespStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
   const isMobile = ref(false)
   const sidebar = ref(false)
+  const login = ref(false)
 
   async function load() {
     try {
@@ -16,5 +17,5 @@ export const useVespStore = defineStore('settings', () => {
     }
   }
 
-  return {settings, load, isMobile, sidebar}
+  return {settings, load, isMobile, sidebar, login}
 })

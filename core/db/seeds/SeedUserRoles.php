@@ -9,7 +9,7 @@ class SeedUserRoles extends AbstractSeed
     {
         $roles = [
             'Administrator' => [
-                'scope' => ['profile', 'users', 'videos', 'settings', 'levels', 'topics', 'comments'],
+                'scope' => ['profile', 'roles', 'users', 'videos', 'settings', 'levels', 'topics', 'comments'],
             ],
             'Moderator' => [
                 'scope' => ['profile', 'users/get', 'comments'],

@@ -10,7 +10,7 @@ use Vesp\Controllers\ModelController;
 
 class UserRoles extends ModelController
 {
-    protected string|array $scope = 'users';
+    protected string|array $scope = 'roles';
     protected string $model = UserRole::class;
 
     protected function beforeCount(Builder $c): Builder

@@ -4,7 +4,7 @@
 
     <div class="mt-4 text-center">
       <h5>{{ $settings.title }}</h5>
-      <p class="small text-pre" v-html="$settings.description" />
+      <p class="small text-pre" @click="$contentClick" v-html="$settings.description" />
     </div>
   </div>
 </template>
