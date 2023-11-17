@@ -27,8 +27,14 @@ import {
   faCalendar,
   faCloudArrowDown,
   faComment,
+  faComments,
   faBars,
   faRightToBracket,
+  faHashtag,
+  faReply,
+  faTrash,
+  faUndo,
+  faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -56,8 +62,14 @@ library.add(
   faCalendar,
   faCloudArrowDown,
   faComment,
+  faComments,
   faBars,
   faRightToBracket,
+  faHashtag,
+  faReply,
+  faTrash,
+  faUndo,
+  faPaperPlane,
 )
 
 config.autoAddCss = false

@@ -3,8 +3,8 @@
     <b-img v-if="poster" :src="poster" width="225" height="280" class="d-block m-auto rounded" fluid />
 
     <div class="mt-4 text-center">
-      <h5 class="">{{ $settings.title }}</h5>
-      <p class="small text-pre">{{ $settings.description }}</p>
+      <h5>{{ $settings.title }}</h5>
+      <p class="small text-pre" v-html="$settings.description" />
     </div>
   </div>
 </template>

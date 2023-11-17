@@ -16,7 +16,29 @@ class Fenom extends \Fenom
         }
 
         $this->setCompileDir($cache);
-        $this->setOptions(self::DENY_NATIVE_FUNCS | self::AUTO_RELOAD | self::FORCE_VERIFY | self::AUTO_ESCAPE);
-        $this->addAllowedFunctions(['print_r']);
+        $this->setOptions(self::DENY_NATIVE_FUNCS | self::AUTO_RELOAD | self::FORCE_VERIFY);
+        $this->addAllowedFunctions([
+            'print_r',
+            'number_format',
+            'trim',
+        ]);
+
+        $this->addModifier(
+            'content_preview',
+            static function (array $content = []) {
+                $text = [];
+                if ($content && $content['blocks']) {
+                    foreach ($content['blocks'] as $block) {
+                        if ($block['type'] === 'paragraph') {
+                            if (!empty($block['data']) && !empty($block['data']['text'])) {
+                                $text[] = strip_tags($block['data']['text'], '<br>');
+                            }
+                        }
+                    }
+                }
+
+                return implode('<br><br>', $text);
+            }
+        );
     }
 }

@@ -24,7 +24,7 @@ function checkAccess() {
   } else if (!sections.value.length) {
     showError({statusCode: 403, statusMessage: 'Access Denied'})
   } else if (route.name === 'admin') {
-    navigateTo({name: sections.value[0].route})
+    navigateTo({name: sections.value[0].route}, {replace: true})
   } else {
     const section = sections.value.find((i) => i.route === route.name)
     if (section && section.scope && !hasScope(section.scope)) {

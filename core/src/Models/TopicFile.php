@@ -17,6 +17,7 @@ class TopicFile extends Model
 {
     use Traits\CompositeKey;
 
+    public $incrementing = false;
     public $timestamps = false;
     protected $primaryKey = ['topic_id', 'file_id'];
 

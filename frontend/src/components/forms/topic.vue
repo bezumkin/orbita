@@ -6,7 +6,7 @@
           <b-form-input v-model.trim="record.title" required autofocus />
         </b-form-group>
         <b-form-group :label="$t('models.topic.content')">
-          <editor-js v-model="record.content" />
+          <editor-js v-model="record.content" :blocks="editorBlocks" />
         </b-form-group>
       </b-col>
       <b-col md="4">
@@ -79,6 +79,7 @@ const record = computed({
 const {t} = useI18n()
 const {$socket, $price} = useNuxtApp()
 const {data, refresh} = useGet('admin/levels', {combo: true, limit: 0})
+const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS).split(',') || []
 const levels: Ref<VespLevel[]> = computed(() => data.value?.rows || [])
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
@@ -116,10 +117,10 @@ watch(accessLevel, (value: string) => {
     }
   } else if (value === 'payments') {
     record.value.level_id = undefined
-    record.value.price = 0
+    record.value.price = '0'
   } else if (value === 'sub_payments' && levels.value.length) {
     record.value.level_id = levels.value[0].id
-    record.value.price = 0
+    record.value.price = '0'
   }
 })
 

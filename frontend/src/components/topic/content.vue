@@ -3,19 +3,10 @@
     <slot name="header" v-bind="myValue">
       <h1>{{ myValue.title }}</h1>
     </slot>
-    <div v-if="myValue.content.blocks" class="d-flex flex-column gap-1">
-      <div v-for="block in myValue.content.blocks" :key="block.id">
-        <div v-if="block.type === 'paragraph'" @click="onTextClick" v-html="block.data.text" />
-        <player-video v-else-if="block.type === 'video'" :uuid="block.data.uuid" />
-        <player-remote v-else-if="block.type === 'remote-video'" :url="block.data.url" />
-        <topic-block-file v-else-if="block.type === 'file'" :block="block" />
-        <topic-block-image v-else-if="block.type === 'image'" :block="block" />
-        <topic-block-audio v-else-if="block.type === 'audio'" :block="block" />
-        <topic-block-code v-else-if="block.type === 'code'" :block="block" />
-        <template v-else>{{ block }}</template>
-      </div>
+    <div v-if="myValue.content?.blocks" class="d-flex flex-column gap-1">
+      <editor-content :content="myValue.content" type="topic" />
     </div>
-    <topic-footer :topic="myValue" />
+    <topic-footer :topic="myValue" :list-view="listView" />
   </div>
 </template>
 
@@ -27,29 +18,30 @@ const props = defineProps({
       return {}
     },
   },
+  listView: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const myValue: Ref<VespTopic> = ref(props.topic)
 const {$socket} = useNuxtApp()
+const myValue: Ref<VespTopic> = ref(props.topic)
 
-function onTextClick(e: MouseEvent) {
-  const target = e.target as HTMLLinkElement
-  // External link
-  if (target.tagName === 'A' && /:\/\//.test(target.href)) {
-    e.preventDefault()
-    window.open(target.href)
+function onTopicUpdate(topic: VespTopic) {
+  if (topic.uuid === myValue.value.uuid) {
+    Object.keys(myValue.value).forEach((key: string) => {
+      if (topic[key] !== undefined) {
+        myValue.value[key] = topic[key]
+      }
+    })
   }
 }
 
 onMounted(() => {
-  $socket.on('topics', (data: any) => {
-    if (data.uuid === myValue.value.uuid) {
-      Object.keys(myValue.value).forEach((key: string) => {
-        if (data[key] !== undefined) {
-          myValue.value[key] = data[key]
-        }
-      })
-    }
-  })
+  $socket.on('topic-update', onTopicUpdate)
+})
+
+onUnmounted(() => {
+  $socket.off('topic-update', onTopicUpdate)
 })
 </script>

@@ -11,13 +11,18 @@ class View extends Controller
     public function post(): ResponseInterface
     {
         /** @var Topic $topic */
-        $topic = Topic::query()->where('uuid', $this->getProperty('uuid'))->first();
+        $topic = Topic::query()->where('uuid', $this->getProperty('topic_uuid'))->first();
         if (!$topic || !$topic->active) {
             return $this->failure('Not Found', 404);
         }
 
-        return $this->success([
-            'views_count' => $topic->saveView($this->user),
-        ]);
+        if ($view = $topic->saveView($this->user)) {
+            return $this->success([
+                'views_count' => $view->topic->views_count,
+                'viewed_at' => $view->timestamp,
+            ]);
+        }
+
+        return $this->success();
     }
 }

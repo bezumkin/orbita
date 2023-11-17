@@ -4,14 +4,18 @@ $grid-breakpoints: (
     xs: 0,
     md: 768px,
     lg: 1100px,
+    xl: 1600px,
 );
 $container-max-widths: (
     // md: 768px,
     lg: 1140px,
+    xl: 1520px,
 );
 $modal-header-border-width: 0;
 $transition-speed: 0.25s;
 $offcanvas-horizontal-width: 350px;
+$link-decoration: none;
+$link-hover-decoration: underline;
 
 @import "bootstrap-scss/functions";
 @import "bootstrap-scss/variables";

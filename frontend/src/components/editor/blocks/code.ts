@@ -173,7 +173,6 @@ export default class implements BlockTool {
   }
 
   onPaste(e: CustomEvent) {
-    console.log(e)
     const content = e.detail.data
 
     this.data = {

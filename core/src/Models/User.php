@@ -12,24 +12,26 @@ use Vesp\Helpers\Jwt;
 /**
  * @property int $id
  * @property int $role_id
- * @property int $avatar_id
+ * @property ?int $avatar_id
  * @property string $username
  * @property string $password
- * @property string $fullname
- * @property string $email
- * @property string $phone
+ * @property ?string $fullname
+ * @property ?string $email
+ * @property ?string $phone
  * @property bool $active
  * @property bool $blocked
- * @property string $reset_password
- * @property Carbon $reset_at
+ * @property ?string $lang
+ * @property ?string $reset_password
+ * @property ?Carbon $reset_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon $active_at
+ * @property ?Carbon $active_at
  *
  * @property-read ?File $avatar
  * @property-read UserToken[] $tokens
  * @property-read VideoUser[] $userVideos
  * @property-read TopicView[] $views
+ * @property-read UserNotification[] $notifications
  */
 class User extends \Vesp\Models\User
 {
@@ -42,6 +44,7 @@ class User extends \Vesp\Models\User
         'phone',
         'active',
         'blocked',
+        'lang',
     ];
     protected $hidden = ['password', 'reset_password', 'reset_at'];
     protected $casts = [
@@ -69,6 +72,11 @@ class User extends \Vesp\Models\User
     public function views(): HasMany
     {
         return $this->hasMany(TopicView::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
     }
 
     public function setAttribute($key, $value)

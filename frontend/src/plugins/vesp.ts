@@ -1,5 +1,5 @@
-import {Socket} from 'socket.io-client'
 import type {Composer} from 'vue-i18n'
+import {Socket} from 'socket.io-client'
 import {storeToRefs} from 'pinia'
 import {useVespStore} from '~/stores/vesp'
 
@@ -21,8 +21,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
     if (locale && typeof locale !== 'string') {
       const formatter = new Intl.NumberFormat(locale.iso || 'ru-RU', {
-        style: 'currency',
         currency,
+        style: 'currency',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
       })
@@ -45,6 +45,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     }),
   )
   nuxtApp.provide('isMobile', ref(store.isMobile))
+  nuxtApp.provide('contentPreview', contentPreview)
 
   // Listen for settings update
   if ($socket) {

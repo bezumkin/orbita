@@ -15,6 +15,11 @@ $scheduler->php(__DIR__ . '/prepare-videos.php', null, [], 'prepare_videos')
     ->everyMinute()
     ->onlyOne();
 
+$scheduler->php(__DIR__ . '/send-notifications.php', null, [], 'send_notifications')
+    ->everyMinute(10)
+    ->inForeground()
+    ->onlyOne();
+
 $executed = $scheduler->run();
 /** @var Job $job */
 foreach ($executed as $job) {

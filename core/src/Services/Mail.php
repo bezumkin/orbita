@@ -34,7 +34,7 @@ class Mail
             $mail->addAddress($to);
             $mail->setFrom(getenv('SMTP_USER'), getenv('SMTP_USER_NAME'));
 
-            if (substr($tpl, -4) !== '.tpl') {
+            if (!str_ends_with($tpl, '.tpl')) {
                 $tpl .= '.tpl';
             }
             // Content
@@ -46,8 +46,12 @@ class Mail
 
             return null;
         } catch (Exception $e) {
+            Log::error($e);
+
             return $mail->ErrorInfo;
         } catch (\Exception $e) {
+            Log::error($e);
+
             return $e->getMessage();
         }
     }

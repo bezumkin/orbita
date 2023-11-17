@@ -82,15 +82,32 @@ declare global {
     uuid?: string
     title: string
     content: Record<string, any>
+    user_id?: VespUser
     level_id?: number
     teaser?: string
-    price?: number
+    price?: number | string
     active: bool
     closed: bool
     new_cover?: {file: string; metadata: {[key: string]: any}} | Boolean
     cover_id?: number
     cover?: VespFile
     level?: VespLevel
+    viewed_at?: string
+    comments_count?: number
+    views_count?: number
+    unseen_comments_count?: number
+    [key: string]: any
+  }
+
+  type VespComment = {
+    id: number
+    topic_id?: number
+    topic?: VespTopic
+    content: Record<string, any>
+    active?: bool
+    created_at?: string
+    user?: VespUser
+    children?: VespComment[]
     [key: string]: any
   }
 }
@@ -110,6 +127,7 @@ declare module '@vue/runtime-core' {
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
+    $contentPreview: Function
   }
 }
 
@@ -128,6 +146,7 @@ declare module '#app' {
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
+    $contentPreview: Function
   }
 }
 

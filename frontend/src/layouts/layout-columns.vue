@@ -15,7 +15,9 @@
           <div class="column">
             <app-author />
           </div>
-
+          <div v-if="showOnline" class="column mt-4">
+            <app-online />
+          </div>
           <div class="column mt-4">
             <app-levels />
           </div>
@@ -26,6 +28,7 @@
     <b-offcanvas v-if="$isMobile" id="sidebar" v-model="$sidebar" placement="end" no-header>
       <div class="d-flex flex-column align-items-center">
         <app-author />
+        <app-online v-if="showOnline" class="mt-4" />
         <app-levels class="mt-4" />
       </div>
     </b-offcanvas>
@@ -37,6 +40,7 @@
 <script setup lang="ts">
 const {$settings, $image, $isMobile, $sidebar} = useNuxtApp()
 const route = useRoute()
+const showOnline = useRuntimeConfig().public.COMMENTS_SHOW_ONLINE === '1'
 
 const background = computed(() => {
   const bg = $settings.value.background

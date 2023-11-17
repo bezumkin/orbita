@@ -2,27 +2,28 @@ version: '3.9'
 services:
 
   mariadb:
-    image: mariadb:${MARIADB_VERSION}
+    image: mariadb:${MARIADB_VERSION:-11}
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
-      - MARIADB_DATABASE=${MARIADB_DATABASE}
-      - MARIADB_USER=${MARIADB_USERNAME}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE:-vesp}
+      - MARIADB_USER=${MARIADB_USERNAME:-vesp}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD:-vesp}
     volumes:
       - ./docker/mariadb:/var/lib/mysql
     restart: unless-stopped
 
   nginx:
-    image: nginx:${NGINX_VERSION}
+    image: nginx:${NGINX_VERSION:-1.25}
     environment:
-      - NGINX_PORT=${NGINX_PORT}
-      - NODE_PORT=${NODE_PORT}
+      - NGINX_PORT=${NGINX_PORT:-8080}
+      - NODE_PORT=${NODE_PORT:-3000}
+      - TZ=${TIME_ZONE:-Europe/Moscow}
     volumes:
       - ./docker/nginx:/etc/nginx/templates
       - ./frontend:/vesp/frontend
       - ./www:/vesp/www
     ports:
-      - ${NGINX_HOST}:${NGINX_PORT}:80
+      - ${NGINX_HOST:-127.0.0.1}:${NGINX_PORT:-8080}:80
     restart: unless-stopped
     depends_on:
       - php-fpm
@@ -32,9 +33,9 @@ services:
     build:
       context: ./docker/php-fpm
       args:
-        - PHP_VERSION
-        - PHP_XDEBUG
-        - TIME_ZONE
+        - PHP_VERSION=${PHP_VERSION:-8.2}
+        - PHP_XDEBUG=${PHP_XDEBUG:-0}
+        - TZ=${TIME_ZONE:-Europe/Moscow}
     volumes:
       - ./.env:/vesp/.env
       - ./core:/vesp/core
@@ -49,21 +50,25 @@ services:
       - mariadb
     environment:
       - COMPOSER_ALLOW_SUPERUSER=1
+      - TZ=${TIME_ZONE:-Europe/Moscow}
     restart: unless-stopped
     working_dir: /vesp/core
     command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'
 
   node:
-    image: node:${NODE_VERSION}
+    image: node:${NODE_VERSION:-20.6}
     volumes:
       - ./.env:/vesp/.env
       - ./frontend:/vesp/frontend
     depends_on:
       - nginx
+    environment:
+      - TIME_ZONE=${TIME_ZONE:-Europe/Moscow}
+      - TZ=${TIME_ZONE:-Europe/Moscow}
     network_mode: 'service:nginx'
     restart: unless-stopped
     working_dir: /vesp/frontend
     command: sh -c 'rm -rf /tmp/* && yarn && yarn build && node ./.output/server/index.mjs'
 
   redis:
-    image: redis:${REDIS_VERSION}
+    image: redis:${REDIS_VERSION:-7-alpine}

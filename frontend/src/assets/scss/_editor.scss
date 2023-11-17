@@ -1,0 +1,35 @@
+// stylelint-disable
+.editorjs {
+  .codex-editor__redactor {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+  }
+
+  .ce-toolbar__plus,
+  .cdx-search-field {
+    display: none;
+  }
+
+  @media (width < 651px) {
+    .ce-toolbar__actions {
+      right: unset;
+      left: -0.25rem;
+    }
+  }
+
+  @media (width >= 651px) {
+    .ce-block__content,
+    .ce-toolbar__content {
+      max-width: unset;
+    }
+
+    .ce-block__content {
+      margin-left: 1rem;
+    }
+
+    .ce-toolbar__content {
+      margin-left: 1.25rem;
+    }
+  }
+}

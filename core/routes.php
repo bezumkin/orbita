@@ -30,14 +30,16 @@ $group = $app->group(
         });
 
         $group->group('/admin', static function (RouteCollectorProxy $group) {
-            $group->any('/users[/{id}]', App\Controllers\Admin\Users::class);
-            $group->any('/user-roles[/{id}]', App\Controllers\Admin\UserRoles::class);
+            $group->any('/users[/{id:\d+}]', App\Controllers\Admin\Users::class);
+            $group->any('/user-roles[/{id:\d+}]', App\Controllers\Admin\UserRoles::class);
             $group->any('/videos/upload[/{uuid}]', App\Controllers\Admin\Videos\Upload::class);
-            $group->any('/videos[/{id}]', App\Controllers\Admin\Videos::class);
+            $group->any('/videos[/{id:\d+}]', App\Controllers\Admin\Videos::class);
             $group->any('/settings[/{key}]', App\Controllers\Admin\Settings::class);
-            $group->any('/levels[/{id}]', App\Controllers\Admin\Levels::class);
+            $group->any('/levels[/{id:\d+}]', App\Controllers\Admin\Levels::class);
             $group->any('/topics/upload[/{uuid}]', App\Controllers\Admin\Topics\Upload::class);
-            $group->any('/topics[/{id}]', App\Controllers\Admin\Topics::class);
+            $group->any('/topics[/{id:\d+}]', App\Controllers\Admin\Topics::class);
+            $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
+
         });
 
         $group->group(
@@ -46,7 +48,10 @@ $group = $app->group(
                 $group->any('/settings', App\Controllers\Web\Settings::class);
                 $group->any('/levels', App\Controllers\Web\Levels::class);
                 $group->any('/topics[/{uuid}]', App\Controllers\Web\Topics::class);
-                $group->any('/topics/{uuid}/view', App\Controllers\Web\Topics\View::class);
+                $group->any('/topics/{topic_uuid}/view', App\Controllers\Web\Topics\View::class);
+                $group->any('/topics/{topic_uuid}/comments[/{id:\d+}]', App\Controllers\Web\Comments::class);
+                $group->any('/topics/{topic_uuid}/comments/upload[/{uuid}]', App\Controllers\Web\Comments\Upload::class);
+                $group->any('/comments/latest', App\Controllers\Web\Comments\Latest::class);
             }
         );
     }

@@ -1,4 +1,4 @@
-import type {API, BlockAPI, BlockTool, BlockToolConstructorOptions, BlockToolData} from '@editorjs/editorjs'
+import type {API, BlockAPI, BlockTool, BlockToolConstructorOptions, BlockToolData, ToolConfig} from '@editorjs/editorjs'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
 import {DetailedError, Upload} from 'tus-js-client'
 import {icon} from '@fortawesome/fontawesome-svg-core'
@@ -25,11 +25,13 @@ export default class implements BlockTool {
   html: HTMLElement
   block?: BlockAPI
   upload?: Upload
+  config?: ToolConfig
 
-  constructor({api, data, block}: BlockToolConstructorOptions) {
+  constructor({api, data, block, config}: BlockToolConstructorOptions) {
     this.api = api
     this.data = data
     this.block = block
+    this.config = config
     this.html = document.createElement('div')
   }
 
@@ -146,7 +148,7 @@ export default class implements BlockTool {
 
     const options: UploadOptions = {
       retryDelays: [],
-      endpoint: getApiUrl() + 'admin/topics/upload',
+      endpoint: this.config.uploadUrl,
       metadata: {filename: file.name, filetype: file.type},
       chunkSize: 104857600,
       removeFingerprintOnSuccess: true,

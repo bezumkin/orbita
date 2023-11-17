@@ -34,6 +34,8 @@
         .footer td.right { text-align: right }
         .footer a { color: #999; font-weight: bold }
 
+        .preview { padding: 10px; background-color: #efefef; border-radius: 5px; }
+
         {block 'style'}{/block}
     </style>
 </head>

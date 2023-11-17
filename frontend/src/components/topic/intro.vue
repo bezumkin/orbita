@@ -7,7 +7,7 @@
       <b-img :src="$image(topic.cover, {w: 1024, h: 768, fit: 'crop'})" class="rounded" fluid />
     </div>
     <div v-if="topic.teaser" class="text">{{ topic.teaser }}</div>
-    <topic-footer :topic="myValue" />
+    <topic-footer :topic="myValue" :list-view="listView" />
   </div>
 </template>
 
@@ -19,21 +19,30 @@ const props = defineProps({
       return {}
     },
   },
+  listView: {
+    type: Boolean,
+    default: false,
+  },
 })
 
+const {$socket} = useNuxtApp()
 const myValue: Ref<VespTopic> = ref(props.topic)
 
-const {$socket} = useNuxtApp()
+function onTopicUpdate(topic: VespTopic) {
+  if (topic.uuid === myValue.value.uuid) {
+    Object.keys(myValue.value).forEach((key: string) => {
+      if (topic[key] !== undefined) {
+        myValue.value[key] = topic[key]
+      }
+    })
+  }
+}
 
 onMounted(() => {
-  $socket.on('topics', (data: any) => {
-    if (data.uuid === myValue.value.uuid) {
-      Object.keys(myValue.value).forEach((key: string) => {
-        if (data[key] !== undefined) {
-          myValue.value[key] = data[key]
-        }
-      })
-    }
-  })
+  $socket.on('topic-update', onTopicUpdate)
+})
+
+onUnmounted(() => {
+  $socket.off('topic-update', onTopicUpdate)
 })
 </script>

@@ -1,3 +1,5 @@
+import type {OutputData} from '@editorjs/editorjs'
+
 export function getApiUrl(): string {
   const {public: config} = useRuntimeConfig()
   const SITE_URL = String(config.SITE_URL)
@@ -53,12 +55,62 @@ export function hasScope(scopes: string | string[]): boolean {
   return check(scopes)
 }
 
+export function scrollPageTo(id: string, offset: number = 65) {
+  const el = document.getElementById(id)
+  if (el) {
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - offset,
+      behavior: 'smooth',
+    })
+  }
+}
+
+export function setLocationHash(hash?: string) {
+  const href = document.location.href
+  if (!hash) {
+    history.replaceState({}, '', href.replace(/#.*/, ''))
+  } else if (href.includes('#')) {
+    history.replaceState({}, '', href.replace(/#.*/, '#' + hash))
+  } else {
+    history.replaceState({}, '', href + '#' + hash)
+  }
+}
+
+export function contentPreview(content: OutputData, length: number = 100) {
+  const blocks: string[] = []
+  content.blocks?.forEach((i) => {
+    if (i.type === 'paragraph' && i.data.text) {
+      blocks.push(i.data.text)
+    }
+  })
+
+  let text = blocks.join('\n\n').replace(/<\/?[^>]+(>|$)/g, '')
+  const entities = [
+    ['amp', '&'],
+    ['apos', "'"],
+    ['#x27', "'"],
+    ['#x2F', '/'],
+    ['#39', "'"],
+    ['#47', '/'],
+    ['lt', '<'],
+    ['gt', '>'],
+    ['nbsp', ' '],
+    ['quot', '"'],
+  ]
+  entities.forEach((i: string[]) => {
+    text = text.replace(new RegExp('&' + i[0] + ';', 'g'), i[1])
+  })
+
+  return text.length > length + 3 ? text.slice(0, length) + '...' : text
+}
+
 export function getAdminSections() {
   const items = [
     {scope: 'topics/get', title: 'topics', route: 'admin-topics'},
     {scope: 'levels/get', title: 'levels', route: 'admin-levels'},
     {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
     {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
+    {scope: 'notifications/get', title: 'notifications', route: 'admin-notifications'},
     {scope: 'users/get', title: 'users', route: 'admin-users'},
     {scope: 'users/get', title: 'user_roles', route: 'admin-user-roles'},
   ]

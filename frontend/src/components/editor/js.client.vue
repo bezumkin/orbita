@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button-group v-if="!readOnly" class="w-100 mb-1">
-      <template v-for="action in enabledActions" :key="action.type">
+      <template v-for="action in enabledBlocks" :key="action.type">
         <b-button v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
           <fa :icon="action.icon" class="fa-fw" />
           {{ $t('actions.editor.' + action.type) }}
@@ -9,7 +9,6 @@
       </template>
     </b-button-group>
     <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
-    <!--<pre>{{ record.blocks }}</pre>-->
 
     <editor-pick-video v-if="showVideos" @hidden="showVideos = false" />
   </div>
@@ -23,7 +22,7 @@ import AudioBlock from './blocks/audio'
 import FileBlock from './blocks/file'
 import ImageBlock from './blocks/image'
 import VideoBlock from './blocks/video'
-import RemoteVideoBlock from './blocks/remote-video'
+import EmbedBlock from './blocks/embed'
 import CodeBlock from './blocks/code'
 
 const props = defineProps({
@@ -31,7 +30,17 @@ const props = defineProps({
     type: Object as PropType<Record<string, any>>,
     required: true,
   },
+  uploadUrl: {
+    type: String,
+    default() {
+      return getApiUrl() + 'admin/topics/upload'
+    },
+  },
   readOnly: {
+    type: Boolean,
+    default: false,
+  },
+  autofocus: {
     type: Boolean,
     default: false,
   },
@@ -47,7 +56,7 @@ const props = defineProps({
     type: String as PropType<keyof BaseSize>,
     default: 'sm',
   },
-  actions: {
+  blocks: {
     type: Array as PropType<string[]>,
     default() {
       return []
@@ -82,27 +91,23 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
       }
     : undefined
 })
-const allActions = [
-  {type: 'audio', icon: 'music', block: AudioBlock, click: insertAudio},
-  {type: 'file', icon: 'file', block: FileBlock, click: insertFile},
-  {type: 'image', icon: 'image', block: ImageBlock, click: insertImage},
-  {type: 'video', icon: 'video', block: VideoBlock, click: insertVideo},
-  {type: 'code', icon: 'code', block: CodeBlock, click: insertCode},
-  {type: 'remote-video', icon: undefined, block: RemoteVideoBlock, click: undefined},
+const allBlocks = [
+  {type: 'audio', icon: 'music', class: AudioBlock, click: insertAudio, config: {uploadUrl: props.uploadUrl}},
+  {type: 'file', icon: 'file', class: FileBlock, click: insertFile, config: {uploadUrl: props.uploadUrl}},
+  {type: 'image', icon: 'image', class: ImageBlock, click: insertImage, config: {uploadUrl: props.uploadUrl}},
+  {type: 'video', icon: 'video', class: VideoBlock, click: insertVideo, config: {uploadUrl: props.uploadUrl}},
+  {type: 'code', icon: 'code', class: CodeBlock, click: insertCode},
+  {type: 'embed', icon: undefined, class: EmbedBlock, click: undefined},
 ]
-const enabledActions = computed(() => {
-  if (props.actions.length) {
-    const types = props.actions.map((i: string) => i.toLowerCase())
-    return allActions.filter((i) => types.includes(i.type))
+const enabledBlocks = computed(() => {
+  if (props.blocks.length) {
+    const types = props.blocks.map((i: string) => i.toLowerCase())
+    return allBlocks.filter((i) => types.includes(i.type))
   }
-  return allActions
+  return allBlocks
 })
-const tools = computed(() => {
-  const tools: Record<string, any> = {}
-  enabledActions.value.forEach((i) => {
-    tools[i.type] = i.block
-  })
-  return tools
+const tools: ComputedRef<Record<string, any>> = computed(() => {
+  return Object.fromEntries(enabledBlocks.value.map((i) => [i.type, {class: i.class, config: i.config || {}}]))
 })
 const showVideos = ref(false)
 
@@ -161,22 +166,41 @@ provide('pickVideo', (video: any) => {
   editor.value.blocks.insert('video', data, {}, currentBlockIdx.value + 1)
 })
 
+function initEditor() {
+  try {
+    editor.value = new EditorJS({
+      holder: holder.value,
+      data: record.value as OutputData,
+      minHeight: props.minHeight,
+      hideToolbar: true,
+      logLevel: 'ERROR' as LogLevels,
+      readOnly: props.readOnly,
+      onChange,
+      i18n: {messages: messages.value},
+      tools: tools.value,
+    })
+    if (props.autofocus) {
+      setTimeout(() => {
+        if (editor.value && editor.value.caret) {
+          editor.value.caret.focus(true)
+        }
+      }, 100)
+    }
+  } catch (e) {}
+}
+
+function resetEditor() {
+  if (editor.value) {
+    if (editor.value.destroy) {
+      editor.value.destroy()
+    }
+  }
+  record.value = {data: []}
+  nextTick(initEditor)
+}
+
 onMounted(() => {
-  nextTick(() => {
-    try {
-      editor.value = new EditorJS({
-        holder: holder.value,
-        data: record.value as OutputData,
-        minHeight: props.minHeight,
-        hideToolbar: true,
-        logLevel: 'ERROR' as LogLevels,
-        readOnly: props.readOnly,
-        onChange,
-        i18n: {messages: messages.value},
-        tools: tools.value,
-      })
-    } catch (e) {}
-  })
+  nextTick(initEditor)
 })
 
 onUnmounted(() => {
@@ -184,42 +208,5 @@ onUnmounted(() => {
     editor.value.destroy()
   }
 })
+defineExpose({reset: resetEditor})
 </script>
-
-<style scoped lang="scss">
-// stylelint-disable
-:deep(.editorjs) {
-  .codex-editor__redactor {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 0.5rem;
-  }
-
-  .ce-toolbar__plus,
-  .cdx-search-field {
-    display: none;
-  }
-
-  @media (width < 651px) {
-    .ce-toolbar__actions {
-      right: unset;
-      left: -0.25rem;
-    }
-  }
-
-  @media (width >= 651px) {
-    .ce-block__content,
-    .ce-toolbar__content {
-      max-width: unset;
-    }
-
-    .ce-block__content {
-      margin-left: 1rem;
-    }
-
-    .ce-toolbar__content {
-      margin-left: 1.25rem;
-    }
-  }
-}
-</style>

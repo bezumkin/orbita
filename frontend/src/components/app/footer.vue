@@ -1,6 +1,6 @@
 <template>
   <footer class="mt-5 py-3">
-    <b-container fluid class="text-muted small">
+    <b-container class="text-muted small">
       <b-row align-v="center">
         <b-col md="4" class="font-weight-bold text-center text-md-start">
           <a href="https://orbita.bezumkin.ru" target="_blank">

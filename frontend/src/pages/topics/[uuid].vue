@@ -1,15 +1,15 @@
 <template>
   <div>
     <template v-if="topic?.access">
-      <topic-content :topic="topic" class="column">
+      <topic-content :topic="topic" class="column" :list-view="false">
         <template #header="{title}">
           <b-link :to="{name: 'index'}">&larr; {{ $t('actions.back') }}</b-link>
           <h1>{{ title }}</h1>
         </template>
       </topic-content>
-      <topic-comments :topic="topic" class="column mt-4" />
+      <comments-tree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
     </template>
-    <topic-intro v-else :topic="topic" class="column mt-4">
+    <topic-intro v-else :topic="topic" class="column mt-4" :list-view="false">
       <template #header="{title}">
         <b-link :to="{name: 'index'}">&larr; {{ $t('actions.back') }}</b-link>
         <h2>{{ title }}</h2>
@@ -23,14 +23,15 @@ const route = useRoute()
 const {$settings} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
-const {data} = useGet('web/topics/' + route.params.uuid)
+const {data} = await useGet('web/topics/' + route.params.uuid)
 const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
 const topics: Ref<string[] | undefined> = useCookie('topics', {sameSite: true})
 if (!topics.value) {
   topics.value = []
 }
+const timeout = ref()
 
-async function saveView() {
+async function saveView(updateView: boolean) {
   if (!topic.value || !topic.value.uuid || !topic.value.access) {
     return
   }
@@ -39,8 +40,13 @@ async function saveView() {
   }
   try {
     const data = await useApi('web/topics/' + topic.value.uuid + '/view', {method: 'POST'})
-    if (topic.value && data.views_count) {
-      topic.value.views_count = data.views_count
+    if (topic.value) {
+      if (data.views_count) {
+        topic.value.views_count = data.views_count
+      }
+      if (updateView && data.viewed_at) {
+        topic.value.viewed_at = data.viewed_at
+      }
     }
     if (!user.value && topics.value) {
       topics.value.push(topic.value.uuid)
@@ -48,10 +54,23 @@ async function saveView() {
   } catch (e) {}
 }
 
+function onCommentView(comment: VespComment) {
+  if (!topic.value || !topic.value.viewed_at || !comment.created_at || topic.value.viewed_at >= comment.created_at) {
+    return
+  }
+  if (timeout.value) {
+    clearTimeout(timeout.value)
+  }
+  timeout.value = setTimeout(() => saveView(true), 5000)
+}
+
 onMounted(() => {
-  nextTick(saveView)
+  timeout.value = setTimeout(() => saveView(false), 2500)
 })
-watch(() => topic.value?.access, saveView)
+watch(
+  () => topic.value?.access,
+  () => saveView(false),
+)
 
 definePageMeta({
   layout: 'layout-columns',

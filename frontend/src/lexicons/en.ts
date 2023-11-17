@@ -25,12 +25,15 @@ export default {
       code: 'Code',
     },
     back: 'Back',
+    reply: 'Reply',
+    restore: 'Restore',
+    destroy: 'Destroy',
   },
   security: {
     login: 'Login',
     logout: 'Logout',
     register: 'Register',
-    reset: 'Forgot password',
+    reset: 'Reset',
     reset_desc: `You can request a one-time link to log in to your account. After logging in, you will be able to change your old password.`,
   },
   models: {
@@ -121,6 +124,21 @@ export default {
         payments: 'One time payment',
       },
     },
+    comment: {
+      title_one: 'Comment',
+      title_many: 'Comments',
+    },
+    user_notification: {
+      title_one: 'Notification',
+      title_many: 'Notifications',
+      active: 'Active',
+      sent: 'Send',
+      user: 'Receiver',
+      topic: 'Topic',
+      comment: 'Comment',
+      created_at: 'Created at',
+      sent_at: 'Sent at',
+    },
   },
   components: {
     table: {
@@ -139,6 +157,19 @@ export default {
       status_finished: 'Successfully uploaded {size} in {duration} at a speed of {speed}.',
       status_error: 'Unexpected error from the server: "{error}".',
     },
+    comments: {
+      title: 'Comments | 1 comment | {total} comments',
+      latest: 'Online',
+      info: {
+        deleted: 'This message has been deleted',
+        guest: 'You must be logged in to post comments',
+        no_scope: "You don't have permission to comment",
+      },
+      destroy: {
+        title: 'Confirmation required',
+        text: 'Are you sure you want to permanently delete this comment with all possible answers?',
+      },
+    },
   },
   pages: {
     index: 'Main',
@@ -152,11 +183,16 @@ export default {
       settings: 'Settings',
       levels: 'Subscriptions',
       topics: 'Topics',
+      notifications: 'Notifications',
     },
     user: {
       title: 'Account',
       profile: 'Profile',
     },
+  },
+  widgets: {
+    comments: 'Online',
+    levels: 'Subscriptions',
   },
   success: {
     profile: 'Profile saved successfully',
@@ -206,6 +242,13 @@ export default {
       no_price: 'You must specify the price of the subscription',
       title_exists: 'This title already exists',
       price_exists: 'A level with this price has already been made',
+    },
+    comment: {
+      no_content: 'You forgot to write a comment',
+      edit_time: 'Editing time has expired',
+      wrong_topic: 'Incorrect topic specified',
+      wrong_parent: 'Incorrect parent comment specified',
+      children_exists: "You can't edit this comment because it already has answers.",
     },
     not_ready: 'This function is not ready yet',
   },

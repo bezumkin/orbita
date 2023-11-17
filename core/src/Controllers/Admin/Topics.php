@@ -20,6 +20,7 @@ class Topics extends ModelController
     protected string $model = Topic::class;
     protected string|array $scope = 'topics';
     public array $attachments = ['cover'];
+    private bool $isNew = false;
 
     protected function beforeGet(Builder $c): Builder
     {
@@ -70,6 +71,10 @@ class Topics extends ModelController
         if ($record->active && !$record->published_at) {
             $record->published_at = time();
         }
+        if (!$record->price) {
+            $record->price = null;
+        }
+        $this->isNew = !$record->exists;
 
         return null;
     }
@@ -77,45 +82,13 @@ class Topics extends ModelController
     protected function afterSave(Model $record): Model
     {
         /** @var Topic $record */
-        $content =  $record->content;
-        $blocks = $content['blocks'];
-        $fileTypes = ['image', 'file', 'audio', 'video'];
-        $files = [];
-        foreach ($blocks as $idx => $block) {
-            $type = $block['type'];
-            if (in_array($type, $fileTypes, true)) {
-                if (empty($block['data']['id'])) {
-                    unset($blocks[$idx]);
-                } else {
-                    $files[$block['data']['id']] = $type;
-                }
-            }
-        }
-        $content['blocks'] = $blocks;
-        $record->content = $content;
-        $record->save();
+        $record->processUploadedFiles();
 
-        // Save topic files
-        foreach ($files as $id => $type) {
-            TopicFile::query()->insertOrIgnore(['topic_id' => $record->id, 'file_id' => $id, 'type' => $type]);
-            /** @var File $file */
-            if ($file = File::query()->where('temporary', true)->find($id)) {
-                $file->temporary = false;
-                $file->save();
-            }
+        if ($this->isNew) {
+            Socket::send('topic-create', $this->prepareRow($record));
+        } else {
+            Socket::send('topic-update', $this->prepareRow($record));
         }
-
-        // Clean abandoned topic files
-        $ids = array_keys($files);
-        /** @var TopicFile $topicFile */
-        foreach ($record->topicFiles()->whereNotIn('file_id', $ids)->cursor() as $topicFile) {
-            if ($topicFile->type !== 'video') {
-                $topicFile->file->delete();
-            }
-            $topicFile->delete();
-        }
-
-        Socket::send('topics', $this->prepareRow($record));
 
         return $record;
     }

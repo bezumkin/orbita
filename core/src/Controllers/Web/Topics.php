@@ -5,6 +5,7 @@ namespace App\Controllers\Web;
 use App\Models\Topic;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Vesp\Controllers\ModelGetController;
 
 class Topics extends ModelGetController
@@ -15,6 +16,11 @@ class Topics extends ModelGetController
     protected function beforeGet(Builder $c): Builder
     {
         $c->where('active', true);
+        if ($this->user) {
+            $c->with('views', function (HasMany $c) {
+                $c->where('user_id', $this->user->id);
+            });
+        }
 
         return $c;
     }
@@ -22,6 +28,11 @@ class Topics extends ModelGetController
     protected function afterCount(Builder $c): Builder
     {
         $c->with('cover:id,uuid,updated_at');
+        if ($this->user) {
+            $c->with('views', function (HasMany $c) {
+                $c->where('user_id', $this->user->id);
+            });
+        }
 
         return $c;
     }

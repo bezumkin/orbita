@@ -21,34 +21,19 @@ export default defineNuxtConfig({
     '/user/**': {ssr: false},
   },
   runtimeConfig: {
-    REDIS_SECRET: process.env.REDIS_SECRET,
+    SOCKET_SECRET: process.env.SOCKET_SECRET,
     public: {
+      TZ: process.env.TZ || 'Europe/Moscow',
       SITE_URL: process.env.SITE_URL || '127.0.0.1',
       API_URL: process.env.API_URL || '/api/',
       JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
       CURRENCY: process.env.CURRENCY || 'RUB',
       REGISTER_ENABLED: process.env.REGISTER_ENABLED || '1',
-      TIME_ZONE: process.env.TIME_ZONE || 'Europe/Moscow',
-      i18n: {
-        datetimeFormats: {
-          short: {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            timeZone: process.env.TIME_ZONE || 'Europe/Moscow',
-          },
-          long: {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            hour12: false,
-            timeZone: process.env.TIME_ZONE || 'Europe/Moscow',
-          },
-        },
-      },
+      COMMENTS_SHOW_ONLINE: process.env.COMMENTS_SHOW_ONLINE || '3',
+      COMMENTS_MAX_LEVEL: process.env.COMMENTS_MAX_LEVEL || '3',
+      COMMENTS_EDIT_TIME: process.env.COMMENTS_EDIT_TIME || '600',
+      EDITOR_TOPIC_BLOCKS: process.env.EDITOR_TOPIC_BLOCKS || '',
+      EDITOR_COMMENT_BLOCKS: process.env.EDITOR_COMMENT_BLOCKS || '',
     },
   },
   modules: [

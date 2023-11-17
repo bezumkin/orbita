@@ -22,6 +22,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $closed
  * @property int $comments_count
  * @property int $views_count
+ * @property ?int $last_comment_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property ?Carbon $published_at
@@ -31,6 +32,8 @@ use Ramsey\Uuid\Uuid;
  * @property-read Level $level
  * @property-read TopicFile[] $topicFiles
  * @property-read TopicView[] $views
+ * @property-read Comment $lastComment
+ * @property-read Comment[] $comments
  */
 class Topic extends Model
 {
@@ -53,7 +56,7 @@ class Topic extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(User::class);
     }
 
     public function cover(): BelongsTo
@@ -76,8 +79,30 @@ class Topic extends Model
         return $this->hasMany(TopicView::class);
     }
 
-    public function saveView(?User $user): int
+    public function lastComment(): BelongsTo
     {
+        return $this->belongsTo(Comment::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getLastCommentId(): ?int
+    {
+        /** @var Comment $comment */
+        $comment = $this->comments()
+            ->where('active', true)
+            ->orderByDesc('id')
+            ->first();
+
+        return $comment?->id;
+    }
+
+    public function saveView(?User $user): ?TopicView
+    {
+        $view = null;
         if ($this->hasAccess($user)) {
             if ($user) {
                 if ($view = $this->views()->where('user_id', $user->id)->first()) {
@@ -92,17 +117,15 @@ class Topic extends Model
                 }
 
                 // Disable unsent notifications to user
-                /*
                 $user->notifications()
                     ->where(['topic_id' => $this->id, 'active' => true, 'sent' => false])
                     ->update(['active' => false]);
-                */
             } else {
                 $this->increment('views_count');
             }
         }
 
-        return $this->views_count;
+        return $view;
     }
 
     public function hasAccess(?User $user): bool
@@ -114,7 +137,7 @@ class Topic extends Model
         }
         if ($user) {
             // Admin can see anything
-            if ($user->hasScope('topics/patch')) {
+            if ($user->hasScope('topics/patch') || $user->hasScope('vip')) {
                 $allow = true;
             }
             // @TODO check UserPayment and UserLevel
@@ -132,10 +155,66 @@ class Topic extends Model
             $array['teaser'] = $this->teaser;
             $array['cover'] = $this->cover?->only('id', 'uuid', 'published_at');
         }
-        if (!$listView && $array['access']) {
-            $array['content'] = $this->content;
+        if ($user && $array['access']) {
+            if ($this->relationLoaded('views') && count($this->views)) {
+                $array['viewed_at'] = $this->views[0]->timestamp;
+                $array['unseen_comments_count'] = $this->comments()
+                    ->where('created_at', '>', $array['viewed_at'])
+                    ->where('active', true)
+                    ->where('user_id', '!=', $user->id)
+                    ->count();
+            }
+            if (!$listView) {
+                $array['content'] = $this->content;
+            }
         }
 
         return $array;
+    }
+
+    public function processUploadedFiles(): void
+    {
+        $content = $this->content;
+        $blocks = $content['blocks'];
+        $fileTypes = ['image', 'file', 'audio', 'video'];
+        $files = [];
+        foreach ($blocks as $idx => $block) {
+            $type = $block['type'];
+            if (in_array($type, $fileTypes, true)) {
+                if (empty($block['data']['id'])) {
+                    unset($blocks[$idx]);
+                } else {
+                    $files[$block['data']['id']] = $type;
+                }
+            }
+        }
+        $content['blocks'] = $blocks;
+        $this->content = $content;
+        $this->save();
+
+        // Save topic files
+        foreach ($files as $id => $type) {
+            TopicFile::query()->insertOrIgnore(['topic_id' => $this->id, 'file_id' => $id, 'type' => $type]);
+            /** @var File $file */
+            if ($file = File::query()->where('temporary', true)->find($id)) {
+                $file->temporary = false;
+                $file->save();
+            }
+        }
+
+        // Clean abandoned topic files
+        $ids = array_keys($files);
+        /** @var TopicFile $topicFile */
+        foreach ($this->topicFiles()->whereNotIn('file_id', $ids)->cursor() as $topicFile) {
+            if ($topicFile->type !== 'video') {
+                $topicFile->file->delete();
+            }
+            $topicFile->delete();
+        }
+    }
+
+    public function getLink(): string
+    {
+        return implode('/', [rtrim(getenv('SITE_URL'), '/'), 'topics', $this->uuid]);
     }
 }

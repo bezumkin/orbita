@@ -19,7 +19,7 @@ export const SocketMessage = async (server: any, redisSecret: string) => {
 export default defineNuxtModule({
   setup(_, nuxt) {
     nuxt.hook('listen', (server) => {
-      SocketMessage(server, nuxt.options.runtimeConfig.REDIS_SECRET as string)
+      SocketMessage(server, nuxt.options.runtimeConfig.SOCKET_SECRET as string)
     })
   },
 })
