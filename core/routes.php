@@ -33,7 +33,7 @@ $group = $app->group(
             $group->any('/users[/{id:\d+}]', App\Controllers\Admin\Users::class);
             $group->any('/user-roles[/{id:\d+}]', App\Controllers\Admin\UserRoles::class);
             $group->any('/videos/upload[/{uuid}]', App\Controllers\Admin\Videos\Upload::class);
-            $group->any('/videos[/{id:\d+}]', App\Controllers\Admin\Videos::class);
+            $group->any('/videos[/{id}]', App\Controllers\Admin\Videos::class);
             $group->any('/settings[/{key}]', App\Controllers\Admin\Settings::class);
             $group->any('/levels[/{id:\d+}]', App\Controllers\Admin\Levels::class);
             $group->any('/topics/upload[/{uuid}]', App\Controllers\Admin\Topics\Upload::class);

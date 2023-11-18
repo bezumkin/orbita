@@ -1,26 +1,76 @@
 <template>
-  <nuxt-layout>
+  <div>
     <nuxt-loading-indicator color="var(--bs-primary)" :throttle="0" />
-    <nuxt-page />
-  </nuxt-layout>
+
+    <div id="layout" :class="mainClasses">
+      <app-navbar :class="navbarClasses" :sidebar="isColumns" />
+
+      <div v-if="isColumns" class="main-background">
+        <b-img :src="background" height="240" />
+      </div>
+
+      <b-container class="pt-4 flex-grow-1">
+        <div v-if="isColumns">
+          <b-row class="main-columns">
+            <b-col md="8" :class="{offset: $isMobile}">
+              <nuxt-page />
+            </b-col>
+            <b-col v-if="!$isMobile" md="4" class="offset">
+              <div class="column">
+                <app-author />
+              </div>
+              <div v-if="showOnline" class="column mt-4">
+                <app-online />
+              </div>
+              <div class="column mt-4">
+                <app-levels />
+              </div>
+            </b-col>
+            <app-sidebar v-else :show-online="showOnline" />
+          </b-row>
+        </div>
+        <slot v-else>
+          <nuxt-page />
+        </slot>
+      </b-container>
+
+      <app-footer :class="footerClasses" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-const {user} = useAuth()
-const {$isMobile} = useNuxtApp()
+const {$settings, $image, $isMobile} = useNuxtApp()
+const router = useRouter()
+const route = useRoute()
+const isColumns = computed(() => {
+  return ['index', 'topics-uuid'].includes(router.currentRoute.value?.name as string)
+})
+const background = computed(() => {
+  const bg = $settings.value.background
+  return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
+})
+const showOnline = useRuntimeConfig().public.COMMENTS_SHOW_ONLINE === '1'
 
-watch(user, () => {
-  if (user.value) {
-    const error = useError()
-    if (!(error.value instanceof Error) && error.value?.statusCode === 401) {
-      clearError()
-    }
-  } else {
-    const name = String(useRoute()?.name)
-    if (name.startsWith('user') || name.startsWith('admin')) {
-      navigateTo('/')
-    }
+const mainClasses = computed(() => {
+  const arr = ['d-flex', 'flex-column', 'min-vh-100']
+  if (isColumns.value) {
+    arr.push('bg-light')
   }
+  if (route.name === 'index') {
+    arr.push('main-page')
+  }
+  return arr
+})
+const navbarClasses = computed(() => {
+  const arr = ['border-bottom']
+  if (isColumns.value) {
+    arr.push('bg-white')
+  }
+  return arr
+})
+const footerClasses = computed(() => {
+  return ['border-top', isColumns.value ? 'bg-white' : 'bg-light']
 })
 
 function handleResize() {

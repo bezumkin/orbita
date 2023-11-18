@@ -64,16 +64,19 @@ function onCommentView(comment: VespComment) {
   timeout.value = setTimeout(() => saveView(true), 5000)
 }
 
-onMounted(() => {
-  timeout.value = setTimeout(() => saveView(false), 2500)
-})
 watch(
   () => topic.value?.access,
   () => saveView(false),
 )
 
-definePageMeta({
-  layout: 'layout-columns',
+onMounted(() => {
+  timeout.value = setTimeout(() => saveView(false), 2500)
+})
+
+onUnmounted(() => {
+  if (timeout.value) {
+    clearTimeout(timeout.value)
+  }
 })
 
 useHead({

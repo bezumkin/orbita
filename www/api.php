@@ -13,6 +13,7 @@ require BASE_DIR . 'core/routes.php';
 try {
     $app->run();
 } catch (Throwable $e) {
-    http_response_code($e->getCode() || 500);
+    \App\Services\Log::error($e);
+    http_response_code($e->getCode() ?: 500);
     echo json_encode($e->getMessage());
 }

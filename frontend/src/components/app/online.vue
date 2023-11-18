@@ -12,10 +12,10 @@
         </div>
         <div class="comment-text">{{ $contentPreview(comment.content, 100) }}</div>
         <div v-if="comment.topic" class="comment-footer">
-          <b-link :to="getCommentLink(comment)" class="me-2">
-            <fa icon="file" class="fa-fw" />
-            {{ comment.topic.title }}
+          <b-link v-if="showLink(comment)" :to="getCommentLink(comment)" class="me-2">
+            <fa icon="file" class="fa-fw" /> {{ comment.topic.title }}
           </b-link>
+          <div v-else><fa icon="file" class="fa-fw" /> {{ comment.topic.title }}</div>
           <div class="ms-auto text-nowrap"><fa icon="comments" /> {{ comment.topic.comments_count }}</div>
         </div>
       </div>
@@ -29,6 +29,11 @@ const {d} = useI18n()
 const {$socket} = useNuxtApp()
 const {data, refresh, pending} = useCustomFetch(url, {query: {limit: 10}})
 const comments: ComputedRef<VespComment[]> = computed(() => data.value?.rows || [])
+const route = useRoute()
+
+function showLink(comment: VespComment) {
+  return route.name !== 'topics-uuid' || route.params.uuid !== comment.topic?.uuid
+}
 
 function getCommentLink(comment: VespComment) {
   return {name: 'topics-uuid', params: {uuid: comment.topic?.uuid}, hash: '#comment-' + comment.id}

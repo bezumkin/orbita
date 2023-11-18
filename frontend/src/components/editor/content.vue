@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column gap-1">
     <div v-for="block in content.blocks" :key="block.id">
-      <div v-if="block.type === 'paragraph'" @click="() => $contentClick()" v-html="block.data.text" />
+      <div v-if="block.type === 'paragraph'" @click="$contentClick" v-html="block.data.text" />
       <player-video v-else-if="block.type === 'video'" :uuid="block.data.uuid" />
       <player-embed v-else-if="block.type === 'embed'" :url="block.data.url" />
       <topic-block-file v-else-if="block.type === 'file'" :block="block" />

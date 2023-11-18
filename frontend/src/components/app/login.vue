@@ -102,6 +102,7 @@ async function onLogin() {
     showModal.value = false
     formLogin.value = {username: '', password: ''}
     useToastInfo(t('success.login'))
+    clearNuxtData()
     await clearError()
     await refreshNuxtData()
   } catch (e) {
@@ -114,7 +115,14 @@ async function onLogout() {
   try {
     await logout()
     useToastInfo(t('success.logout'))
-    await refreshNuxtData()
+    clearNuxtData()
+
+    const name = String(useRoute().name)
+    if (name.startsWith('user') || name.startsWith('admin')) {
+      navigateTo('/')
+    } else {
+      await refreshNuxtData()
+    }
   } catch (e) {
     console.error(e)
   }

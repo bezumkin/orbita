@@ -129,7 +129,7 @@ declare module '@vue/runtime-core' {
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
     $contentPreview: Function
-    $contentClick: Function
+    $contentClick: (e: MouseClick) => void
   }
 }
 
@@ -150,7 +150,7 @@ declare module '#app' {
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
     $contentPreview: Function
-    $contentClick: Function
+    $contentClick: (e: MouseClick) => void
   }
 }
 

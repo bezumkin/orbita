@@ -1,7 +1,8 @@
 <template>
   <vesp-table ref="table" v-bind="{url, fields, tableActions, rowClass, sort, dir}">
     <template #cell(user)="{value}: any">
-      <b-link :to="getUserLink(value)">{{ (value as VespUser).fullname }}</b-link>
+      <b-link v-if="$scope('users/get')" :to="getUserLink(value)">{{ value.fullname }}</b-link>
+      <template v-else>{{ value.fullname }}</template>
     </template>
     <template #cell(topic)="{value}: any">
       <b-link :to="getTopicLink(value)" target="_blank">{{ value.title }}</b-link>

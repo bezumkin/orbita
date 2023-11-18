@@ -51,7 +51,6 @@
 
 <script setup lang="ts">
 import {differenceInSeconds} from 'date-fns'
-import {scrollPageTo} from '~/utils/vesp'
 
 const props = defineProps({
   topic: {
@@ -261,7 +260,6 @@ function scrollPage() {
       }
     }
     if (id) {
-      console.log(id)
       scrollPageTo(id)
     }
   }

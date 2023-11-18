@@ -34,7 +34,7 @@
             <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
           </template>
         </app-login>
-        <b-button v-if="layout === 'layout-columns'" variant="light" class="d-md-none ms-1" @click.stop="toggleSidebar">
+        <b-button v-if="sidebar" variant="light" class="d-md-none ms-1" @click.stop="toggleSidebar">
           <transition name="fade" mode="out-in">
             <fa v-if="!$sidebar" icon="bars" class="fa-fw" />
             <fa v-else icon="times" class="fa-fw" />
@@ -47,11 +47,16 @@
 
 <script setup lang="ts">
 import logo from '~/assets/images/logo-orbita.svg'
+
+defineProps({
+  sidebar: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const adminSections = computed(() => getAdminSections())
 const {$sidebar} = useNuxtApp()
-const layout = computed(() => {
-  return useRoute().meta.layout
-})
 
 function toggleSidebar() {
   $sidebar.value = !$sidebar.value

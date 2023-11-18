@@ -63,7 +63,6 @@ services:
     depends_on:
       - nginx
     environment:
-      - TIME_ZONE=${TIME_ZONE:-Europe/Moscow}
       - TZ=${TIME_ZONE:-Europe/Moscow}
     network_mode: 'service:nginx'
     restart: unless-stopped

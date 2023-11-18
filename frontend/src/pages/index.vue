@@ -28,29 +28,18 @@
 
 <script setup lang="ts">
 const {t} = useI18n()
-const {$socket, $settings} = useNuxtApp()
-const {data, refresh, pending} = await useCustomFetch('web/topics')
-const topics = computed(() => data.value?.rows || [])
-const total = computed(() => data.value?.total || 0)
+const {$settings} = useNuxtApp()
 const page = ref(1)
 const limit = 12
+const {data, pending} = await useCustomFetch('web/topics', {query: {page, limit}})
+const topics = computed(() => data.value?.rows || [])
+const total = computed(() => data.value?.total || 0)
 
-onMounted(() => {
-  $socket.on('test', (data: any) => {
-    console.log(data)
-  })
-})
-
-definePageMeta({
-  layout: 'layout-columns',
-})
-
-watch([page], () => {
+watch(page, () => {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
   })
-  refresh()
 })
 
 useHead({

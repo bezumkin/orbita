@@ -1,10 +1,7 @@
 <template>
   <div class="footer border-top pt-2 d-flex">
     <div class="d-flex gap-3">
-      <div>
-        <fa icon="eye" class="fa-fw" />
-        {{ topic.views_count }}
-      </div>
+      <div><fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
       <div v-if="listView">
         <b-link
           v-if="topic.access && commentsCount"
@@ -19,8 +16,7 @@
     </div>
 
     <div v-if="topic.published_at" class="ms-auto">
-      <fa icon="calendar" class="fa-fw" />
-      {{ d(topic.published_at, 'long') }}
+      <fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
     </div>
   </div>
 </template>

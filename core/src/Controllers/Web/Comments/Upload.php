@@ -7,9 +7,9 @@ use Vesp\Controllers\Controller;
 
 class Upload extends Controller
 {
-    protected string|array $scope = 'comments';
-
     use UploadController;
+
+    protected string|array $scope = 'comments';
 
     // @TODO Check access to topic
 }

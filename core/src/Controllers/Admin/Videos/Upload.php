@@ -10,6 +10,8 @@ class Upload extends Controller
 {
     use UploadController;
 
+    protected string|array $scope = 'videos';
+
     protected function getTempName(string $uuid, string $filename): string
     {
         $tmp = explode('.', $filename);

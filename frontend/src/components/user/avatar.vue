@@ -29,7 +29,7 @@ const {$image} = useNuxtApp()
 const imgProps = computed(() => {
   return {
     style: {width: props.size + 'px', height: props.size + 'px'},
-    alt: props.user ? props.user.username : '',
+    alt: '',
     class: `user-avatar d-inline-flex rounded-circle bg-${props.variant}`,
   }
 })
