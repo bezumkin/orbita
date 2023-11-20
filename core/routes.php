@@ -39,7 +39,7 @@ $group = $app->group(
             $group->any('/topics/upload[/{uuid}]', App\Controllers\Admin\Topics\Upload::class);
             $group->any('/topics[/{id:\d+}]', App\Controllers\Admin\Topics::class);
             $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
-
+            $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
         });
 
         $group->group(
@@ -50,8 +50,12 @@ $group = $app->group(
                 $group->any('/topics[/{uuid}]', App\Controllers\Web\Topics::class);
                 $group->any('/topics/{topic_uuid}/view', App\Controllers\Web\Topics\View::class);
                 $group->any('/topics/{topic_uuid}/comments[/{id:\d+}]', App\Controllers\Web\Comments::class);
-                $group->any('/topics/{topic_uuid}/comments/upload[/{uuid}]', App\Controllers\Web\Comments\Upload::class);
+                $group->any(
+                    '/topics/{topic_uuid}/comments/upload[/{uuid}]',
+                    App\Controllers\Web\Comments\Upload::class
+                );
                 $group->any('/comments/latest', App\Controllers\Web\Comments\Latest::class);
+                $group->any('/pages[/{alias}]', App\Controllers\Web\Pages::class);
             }
         );
     }

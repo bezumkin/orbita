@@ -11,7 +11,7 @@ final class Comments extends Migration
     {
         $this->schema->create(
             'comments',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('user_id')
                     ->constrained('users')->cascadeOnDelete();
@@ -29,7 +29,7 @@ final class Comments extends Migration
 
         $this->schema->table(
             'topics',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->foreignId('last_comment_id')->nullable()->after('views_count')
                     ->constrained('comments')->nullOnDelete();
             }
@@ -53,7 +53,7 @@ final class Comments extends Migration
     {
         $this->schema->table(
             'topics',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->dropConstrainedForeignId('last_comment_id');
             }
         );

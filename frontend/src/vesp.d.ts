@@ -110,6 +110,17 @@ declare global {
     children?: VespComment[]
     [key: string]: any
   }
+
+  type VespPage = {
+    id: number
+    title: string
+    content: Record<string, any>
+    alias?: string
+    position?: string
+    rank?: number
+    active?: bool
+    [key: string]: any
+  }
 }
 
 declare module '@vue/runtime-core' {
@@ -125,6 +136,7 @@ declare module '@vue/runtime-core' {
     $sidebar: Ref<boolean>
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
+    $pages: Ref<Record<string, any>[]>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
@@ -146,6 +158,7 @@ declare module '#app' {
     $sidebar: Ref<boolean>
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
+    $pages: Ref<Record<string, any>[]>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options

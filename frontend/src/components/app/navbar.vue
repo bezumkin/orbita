@@ -5,36 +5,18 @@
         <b-img :src="logo" height="40" />
       </b-navbar-brand>
 
-      <b-navbar-nav class="ms-auto">
-        <!--<vesp-change-locale>
-        <template #default="{locale, locales, setLocale}">
-          <b-dropdown variant="light">
-            <template #button-content>
-              <fa icon="globe" class="fa-fw" />
-              {{ locale.toUpperCase() }}
-            </template>
-            <b-dropdown-item
-              v-for="i in locales"
-              :key="i.code"
-              link-class="d-flex align-items-center"
-              @click="setLocale(i.code)"
-            >
-              <b-img :src="i.code === 'en' ? en : ru" height="16" class="me-1" />
-              {{ i.name }}
-            </b-dropdown-item>
-          </b-dropdown>
-        </template>
-      </vesp-change-locale>-->
+      <app-pages class="d-none d-md-flex" />
 
-        <app-login @click="hideSidebar">
+      <b-navbar-nav class="ms-auto">
+        <app-login :btn-variant="btnVariant" @click="hideSidebar">
           <template #user-menu>
-            <b-dropdown-item v-if="adminSections.length" :to="{name: 'admin'}">
+            <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}">
               {{ $t('pages.admin.title') }}
             </b-dropdown-item>
             <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
           </template>
         </app-login>
-        <b-button v-if="sidebar" variant="light" class="d-md-none ms-1" @click.stop="toggleSidebar">
+        <b-button v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">
           <transition name="fade" mode="out-in">
             <fa v-if="!$sidebar" icon="bars" class="fa-fw" />
             <fa v-else icon="times" class="fa-fw" />
@@ -46,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import type {BaseButtonVariant} from 'bootstrap-vue-next/src/types'
 import logo from '~/assets/images/logo-orbita.svg'
 
 defineProps({
@@ -53,17 +36,20 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  btnVariant: {
+    type: String as PropType<keyof BaseButtonVariant>,
+    default: 'light',
+  },
 })
 
-const adminSections = computed(() => getAdminSections())
+const hasAdmin = computed(() => getAdminSections().length)
 const {$sidebar} = useNuxtApp()
 
 function toggleSidebar() {
   $sidebar.value = !$sidebar.value
 }
+
 function hideSidebar() {
   $sidebar.value = false
 }
-// import ru from '~/assets/icons/ru.svg'
-// import en from '~/assets/icons/gb.svg'
 </script>

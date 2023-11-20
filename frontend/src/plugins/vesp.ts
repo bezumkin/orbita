@@ -3,19 +3,21 @@ import {Socket} from 'socket.io-client'
 import {storeToRefs} from 'pinia'
 import {useVespStore} from '~/stores/vesp'
 
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin((nuxtApp) => {
   const $i18n = nuxtApp.$i18n as Composer
   const $socket = nuxtApp.$socket as Socket
   const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
-  await store.load()
-  const refStore = storeToRefs(store)
+  const {sidebar, login, isMobile} = storeToRefs(store)
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
   nuxtApp.provide('file', getFileLink)
-  nuxtApp.provide('sidebar', refStore.sidebar)
-  nuxtApp.provide('login', refStore.login)
+  nuxtApp.provide('contentPreview', contentPreview)
+  nuxtApp.provide('contentClick', contentClick)
+  nuxtApp.provide('sidebar', sidebar)
+  nuxtApp.provide('login', login)
+  nuxtApp.provide('isMobile', isMobile)
   nuxtApp.provide('price', (val: number) => {
     if (!val) {
       return ''
@@ -46,14 +48,33 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       return settings
     }),
   )
-  nuxtApp.provide('isMobile', ref(store.isMobile))
-  nuxtApp.provide('contentPreview', contentPreview)
-  nuxtApp.provide('contentClick', contentClick)
+  nuxtApp.provide(
+    'pages',
+    computed(() => store.pages.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
+  )
 
   // Listen for settings update
   if ($socket) {
     $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
       store.settings[key] = value
+    })
+    $socket.on('page-create', (page: VespPage) => {
+      if (page.active) {
+        store.pages.push(page)
+      }
+    })
+    $socket.on('page-update', (page: VespPage) => {
+      const idx = store.pages.findIndex((i: any) => i.id === page.id)
+      console.log(idx)
+      if (idx > -1) {
+        if (!page.active) {
+          store.pages.splice(idx, 1)
+        } else {
+          store.pages[idx] = page
+        }
+      } else if (page.active) {
+        store.pages.push(page)
+      }
     })
   }
 })

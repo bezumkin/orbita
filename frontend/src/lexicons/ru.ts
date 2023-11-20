@@ -139,6 +139,20 @@ export default {
       created_at: 'Создано',
       sent_at: 'Отправлено',
     },
+    page: {
+      title_one: 'Страница',
+      title_many: 'Страницы',
+      title: 'Заголовок',
+      content: 'Содержимое',
+      alias: 'Ссылка',
+      position: 'Позиция',
+      position_both: 'И шапка и подвал',
+      position_header: 'Только шапка',
+      position_footer: 'Только подвал',
+      position_null: 'Скрытая страница',
+      rank: 'Сортировка',
+      active: 'Активно',
+    },
   },
   components: {
     table: {
@@ -184,6 +198,7 @@ export default {
       levels: 'Подписки',
       topics: 'Заметки',
       notifications: 'Уведомления',
+      pages: 'Страницы',
     },
     user: {
       title: 'Аккаунт',
@@ -243,12 +258,19 @@ export default {
       title_exists: 'Такое название уже существует',
       price_exists: 'Уровень с такой ценой уже создан',
     },
+    topic: {
+      title_exists: 'Заметка с таким названием уже существует',
+    },
     comment: {
       no_content: 'Вы забыли написать комментарий',
       edit_time: 'Время редактирования истекло',
       wrong_topic: 'Указана неправильная заметка',
       wrong_parent: 'Указан неправильный родительский комментарий',
       children_exists: 'Вы не можете редактировать этот комментарий, потому что у него уже есть ответы',
+    },
+    page: {
+      alias_exists: 'Адрес страницы должен быть уникальным',
+      title_exists: 'Страница с таким названием уже существует',
     },
     not_ready: 'Эта функция еще не готова',
   },

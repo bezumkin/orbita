@@ -23,13 +23,17 @@ const route = useRoute()
 const {$settings} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
-const {data} = await useCustomFetch('web/topics/' + route.params.uuid)
+const {data, error} = await useCustomFetch('web/topics/' + route.params.uuid)
 const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
 const topics: Ref<string[] | undefined> = useCookie('topics', {sameSite: true})
 if (!topics.value) {
   topics.value = []
 }
 const timeout = ref()
+
+if (error.value) {
+  showError({statusCode: error.value.statusCode || 500, statusMessage: error.value.statusMessage || 'Server Error'})
+}
 
 async function saveView(updateView: boolean) {
   if (!topic.value || !topic.value.uuid || !topic.value.access) {
@@ -70,7 +74,11 @@ watch(
 )
 
 onMounted(() => {
-  timeout.value = setTimeout(() => saveView(false), 2500)
+  if (error.value) {
+    clearError()
+  } else {
+    timeout.value = setTimeout(() => saveView(false), 2500)
+  }
 })
 
 onUnmounted(() => {

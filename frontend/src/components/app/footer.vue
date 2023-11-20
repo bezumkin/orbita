@@ -1,16 +1,17 @@
 <template>
-  <footer class="mt-5 py-3">
+  <footer id="footer" class="mt-5 py-3">
     <b-container class="text-muted small">
       <b-row align-v="center">
-        <b-col md="4" class="font-weight-bold text-center text-md-start">
+        <b-col md="3" class="font-weight-bold text-center text-md-start">
           <a href="https://orbita.bezumkin.ru" target="_blank">
             {{ $t('project') }}
           </a>
         </b-col>
-        <b-col md="4" class="my-2 my-md-0">
-          <vesp-change-locale select-class="bg-light" />
+        <b-col md="6" :class="middleClasses">
+          <app-pages position="footer" />
+          <app-language />
         </b-col>
-        <b-col md="4" class="text-center text-md-end mt-2 mt-md-0">
+        <b-col md="3" class="text-center text-md-end">
           {{ owner }} &copy; {{ Array.isArray(date) ? date.join(' &mdash; ') : date }}
         </b-col>
       </b-row>
@@ -40,4 +41,14 @@ const owner = computed(() => {
   }
   return locale.value === 'ru' ? 'Василий Наумкин' : 'Vasily Naumkin'
 })
+const middleClasses = [
+  'my-2',
+  'my-md-0',
+  'd-flex',
+  'flex-column',
+  'flex-md-row',
+  'align-items-center',
+  'justify-content-center',
+  'justify-content-md-between',
+]
 </script>

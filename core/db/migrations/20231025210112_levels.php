@@ -10,7 +10,7 @@ final class Levels extends Migration
     {
         $this->schema->create(
             'levels',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->id();
                 $table->string('title');
                 $table->text('content')->nullable();

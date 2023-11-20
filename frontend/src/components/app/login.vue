@@ -3,7 +3,7 @@
     <transition name="fade" mode="out-in">
       <div v-if="user" key="user">
         <slot name="default" v-bind="{user, logout: onLogout}">
-          <b-dropdown v-if="user" variant="light">
+          <b-dropdown v-if="user" :variant="btnVariant">
             <template #button-content>
               <slot name="button" v-bind="{user}">
                 <b-img
@@ -75,6 +75,15 @@
 </template>
 
 <script setup lang="ts">
+import type {BaseButtonVariant} from 'bootstrap-vue-next/src/types'
+
+defineProps({
+  btnVariant: {
+    type: String as PropType<keyof BaseButtonVariant>,
+    default: 'light',
+  },
+})
+
 const {t} = useI18n()
 const {user, login, logout} = useAuth()
 const {$login} = useNuxtApp()

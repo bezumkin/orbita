@@ -12,7 +12,7 @@ final class Settings extends Migration
     {
         $this->schema->create(
             'settings',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->string('key')->primary();
                 $table->text('value')->nullable();
                 $table->string('type')->default('string');

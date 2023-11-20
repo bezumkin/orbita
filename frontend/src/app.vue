@@ -3,7 +3,7 @@
     <nuxt-loading-indicator color="var(--bs-primary)" :throttle="0" />
 
     <div id="layout" :class="mainClasses">
-      <app-navbar :class="navbarClasses" :sidebar="isColumns" />
+      <app-navbar :class="navbarClasses" :sidebar="!isAdmin" />
 
       <div v-if="isColumns" class="main-background">
         <b-img :src="background" height="240" />
@@ -26,7 +26,6 @@
                 <app-levels />
               </div>
             </b-col>
-            <app-sidebar v-else :show-online="showOnline" />
           </b-row>
         </div>
         <slot v-else>
@@ -34,6 +33,7 @@
         </slot>
       </b-container>
 
+      <app-sidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
       <app-footer :class="footerClasses" />
     </div>
   </div>
@@ -45,6 +45,9 @@ const router = useRouter()
 const route = useRoute()
 const isColumns = computed(() => {
   return ['index', 'topics-uuid'].includes(router.currentRoute.value?.name as string)
+})
+const isAdmin = computed(() => {
+  return router.currentRoute.value?.name && (router.currentRoute.value?.name as string).startsWith('admin')
 })
 const background = computed(() => {
   const bg = $settings.value.background
@@ -81,6 +84,10 @@ function handleResize() {
 onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
+
+  // router.beforeEach(() => {
+  //   clearError()
+  // })
 })
 
 onUnmounted(() => {

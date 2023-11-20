@@ -45,12 +45,6 @@ function formatDate(value: any) {
 }
 
 function rowClass(item: any) {
-  if (item) {
-    const cls = []
-    if (!item.active) {
-      cls.push('inactive')
-    }
-    return cls
-  }
+  return item && !item.active ? 'inactive' : ''
 }
 </script>

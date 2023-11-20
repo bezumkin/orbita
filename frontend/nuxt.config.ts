@@ -20,6 +20,11 @@ export default defineNuxtConfig({
     '/service/**': {ssr: false},
     '/user/**': {ssr: false},
   },
+  router: {
+    options: {
+      // scrollBehaviorType: undefined,
+    },
+  },
   runtimeConfig: {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
     public: {

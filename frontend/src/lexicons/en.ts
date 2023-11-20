@@ -139,6 +139,20 @@ export default {
       created_at: 'Created at',
       sent_at: 'Sent at',
     },
+    page: {
+      title_one: 'Page',
+      title_many: 'Pages',
+      title: 'Title',
+      content: 'Content',
+      alias: 'Link',
+      position: 'Position',
+      position_both: 'Both header and footer',
+      position_header: 'Only header',
+      position_footer: 'Only footer',
+      position_null: 'Hidden page',
+      rank: 'Rank',
+      active: 'Active',
+    },
   },
   components: {
     table: {
@@ -184,6 +198,7 @@ export default {
       levels: 'Subscriptions',
       topics: 'Topics',
       notifications: 'Notifications',
+      pages: 'Pages',
     },
     user: {
       title: 'Account',
@@ -243,12 +258,19 @@ export default {
       title_exists: 'This title already exists',
       price_exists: 'A level with this price has already been made',
     },
+    topic: {
+      title_exists: 'A topic with this name already exists',
+    },
     comment: {
       no_content: 'You forgot to write a comment',
       edit_time: 'Editing time has expired',
       wrong_topic: 'Incorrect topic specified',
       wrong_parent: 'Incorrect parent comment specified',
       children_exists: "You can't edit this comment because it already has answers.",
+    },
+    page: {
+      alias_exists: 'The page alias must be unique',
+      title_exists: 'A page with this name already exists',
     },
     not_ready: 'This function is not ready yet',
   },

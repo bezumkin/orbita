@@ -11,7 +11,7 @@ final class UserNotifications extends Migration
     {
         $this->schema->create(
             'user_notifications',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->uuid('id');
                 $table->foreignId('user_id')
                     ->constrained('users')->cascadeOnDelete();
@@ -32,7 +32,7 @@ final class UserNotifications extends Migration
 
         $this->schema->table(
             'users',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->char('lang', 2)->nullable()->after('blocked');
             }
         );
@@ -42,7 +42,7 @@ final class UserNotifications extends Migration
     {
         $this->schema->table(
             'users',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->dropColumn('lang');
             }
         );

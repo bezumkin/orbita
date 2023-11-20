@@ -129,6 +129,7 @@ export function getAdminSections() {
     {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
     {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
     {scope: 'notifications/get', title: 'notifications', route: 'admin-notifications'},
+    {scope: 'pages/get', title: 'pages', route: 'admin-pages'},
     {scope: 'users/get', title: 'users', route: 'admin-users'},
     {scope: 'roles/get', title: 'user_roles', route: 'admin-user-roles'},
   ]

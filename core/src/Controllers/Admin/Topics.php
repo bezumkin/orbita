@@ -3,10 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\Traits\FileModelController;
-use App\Models\File;
-use App\Models\Level;
 use App\Models\Topic;
-use App\Models\TopicFile;
 use App\Services\Socket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -56,7 +53,7 @@ class Topics extends ModelController
             return $this->failure('errors.topic.no_title');
         }
 
-        $c = Level::query();
+        $c = Topic::query();
         if ($record->id) {
             $c->where('id', '!=', $record->id);
         }

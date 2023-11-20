@@ -74,6 +74,32 @@ fieldset {
   }
 }
 
+#navbar, #footer {
+  transition: all 0.25s;
+
+  .pages {
+    .nav-link {
+      color: $secondary;
+
+      &:not(.active):hover {
+        color: $body-color;
+      }
+
+      &.active {
+        color: $body-color;
+      }
+    }
+  }
+}
+
+#footer {
+  @include media-breakpoint-down(md) {
+    .pages {
+      justify-content: center;
+    }
+  }
+}
+
 #layout {
   .main-background {
     position: relative;
@@ -186,11 +212,6 @@ fieldset {
 }
 
 footer {
-  .vesp-change-locale {
-    max-width: 200px;
-    margin: auto;
-  }
-
   a {
     color: inherit;
   }

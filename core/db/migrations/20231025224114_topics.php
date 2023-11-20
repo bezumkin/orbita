@@ -10,7 +10,7 @@ final class Topics extends Migration
     {
         $this->schema->create(
             'topics',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->id();
                 $table->uuid();
                 $table->string('title');
@@ -39,7 +39,7 @@ final class Topics extends Migration
 
         $this->schema->create(
             'topic_files',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->foreignId('topic_id')
                     ->constrained('topics')->onDelete('cascade');
                 $table->foreignId('file_id')
@@ -52,7 +52,7 @@ final class Topics extends Migration
 
         $this->schema->create(
             'topic_views',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->foreignId('topic_id')
                     ->constrained('topics')->onDelete('cascade');
                 $table->foreignId('user_id')

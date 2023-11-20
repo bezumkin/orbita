@@ -11,7 +11,7 @@ final class Videos extends Migration
     {
         $this->schema->create(
             'videos',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->foreignId('file_id')
                     ->constrained('files')->cascadeOnDelete();
@@ -35,7 +35,7 @@ final class Videos extends Migration
 
         $this->schema->create(
             'video_qualities',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->unsignedSmallInteger('quality');
                 $table->foreignUuid('video_id')
                     ->constrained('videos')->cascadeOnDelete();
@@ -57,7 +57,7 @@ final class Videos extends Migration
 
         $this->schema->create(
             'video_users',
-            function (Blueprint $table) {
+            static function (Blueprint $table) {
                 $table->uuid('video_id');
                 $table->foreignId('user_id')
                     ->constrained('users')->cascadeOnDelete();
