@@ -11,6 +11,8 @@ use Ramsey\Uuid\Uuid;
  * @property ?bool $temporary
  *
  * @property-read TopicFile[] $topicFiles
+ * @property-read CommentFile[] $commentFiles
+ * @property-read PageFile[] $pageFiles
  */
 class File extends \Vesp\Models\File
 {
@@ -40,5 +42,15 @@ class File extends \Vesp\Models\File
     public function topicFiles(): HasMany
     {
         return $this->hasMany(TopicFile::class);
+    }
+
+    public function commentFiles(): HasMany
+    {
+        return $this->hasMany(CommentFile::class);
+    }
+
+    public function pageFiles(): HasMany
+    {
+        return $this->hasMany(PageFile::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ContentFilesTrait;
 use App\Services\Socket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -22,10 +23,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Topic $topic
  * @property-read ?Comment $parent
  * @property-read Comment[] $children
- * @property-read CommentFile[] $commentFiles
+ * @property-read CommentFile[] $contentFiles
  */
 class Comment extends Model
 {
+    use ContentFilesTrait;
+
     protected $fillable = ['content', 'active'];
     protected $casts = [
         'active' => 'boolean',
@@ -102,52 +105,14 @@ class Comment extends Model
         return $this->hasMany(self::class, 'parent_id', 'id');
     }
 
-    public function commentFiles(): HasMany
+    public function contentFiles(): HasMany
     {
-        return $this->hasMany(CommentFile::class);
+        return $this->hasMany(CommentFile::class, 'comment_id');
     }
 
     public function getLink(): string
     {
         return $this->topic->getLink() . '#comment-' . $this->id;
-    }
-
-    public function processUploadedFiles(): void
-    {
-        $content = $this->content;
-        $blocks = $content['blocks'];
-        $fileTypes = ['image', 'file', 'audio'];
-        $files = [];
-        foreach ($blocks as $idx => $block) {
-            $type = $block['type'];
-            if (in_array($type, $fileTypes, true)) {
-                if (empty($block['data']['id'])) {
-                    unset($blocks[$idx]);
-                } else {
-                    $files[$block['data']['id']] = $type;
-                }
-            }
-        }
-        $content['blocks'] = $blocks;
-        $this->content = $content;
-        $this->save();
-
-        // Save topic files
-        foreach ($files as $id => $type) {
-            CommentFile::query()->insertOrIgnore(['comment_id' => $this->id, 'file_id' => $id, 'type' => $type]);
-            /** @var File $file */
-            if ($file = File::query()->where('temporary', true)->find($id)) {
-                $file->temporary = false;
-                $file->save();
-            }
-        }
-
-        // Clean abandoned comment files
-        $ids = array_keys($files);
-        /** @var TopicFile $topicFile */
-        foreach ($this->commentFiles()->whereNotIn('file_id', $ids)->cursor() as $commentFile) {
-            $commentFile->delete();
-        }
     }
 
     public function prepareOutput(?User $user): array

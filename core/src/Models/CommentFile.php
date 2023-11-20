@@ -19,6 +19,7 @@ class CommentFile extends Model
 
     public $incrementing = false;
     public $timestamps = false;
+    protected $guarded = [];
     protected $primaryKey = ['comment_id', 'file_id'];
 
     public function comment(): BelongsTo

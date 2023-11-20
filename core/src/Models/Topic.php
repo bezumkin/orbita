@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ContentFilesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,13 +31,15 @@ use Ramsey\Uuid\Uuid;
  * @property-read User $user
  * @property-read File $cover
  * @property-read Level $level
- * @property-read TopicFile[] $topicFiles
+ * @property-read TopicFile[] $contentFiles
  * @property-read TopicView[] $views
  * @property-read Comment $lastComment
  * @property-read Comment[] $comments
  */
 class Topic extends Model
 {
+    use ContentFilesTrait;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $casts = [
         'content' => 'array',
@@ -69,9 +72,9 @@ class Topic extends Model
         return $this->belongsTo(File::class);
     }
 
-    public function topicFiles(): HasMany
+    public function contentFiles(): HasMany
     {
-        return $this->hasMany(TopicFile::class);
+        return $this->hasMany(TopicFile::class, 'topic_id');
     }
 
     public function views(): HasMany
@@ -170,47 +173,6 @@ class Topic extends Model
         }
 
         return $array;
-    }
-
-    public function processUploadedFiles(): void
-    {
-        $content = $this->content;
-        $blocks = $content['blocks'];
-        $fileTypes = ['image', 'file', 'audio', 'video'];
-        $files = [];
-        foreach ($blocks as $idx => $block) {
-            $type = $block['type'];
-            if (in_array($type, $fileTypes, true)) {
-                if (empty($block['data']['id'])) {
-                    unset($blocks[$idx]);
-                } else {
-                    $files[$block['data']['id']] = $type;
-                }
-            }
-        }
-        $content['blocks'] = $blocks;
-        $this->content = $content;
-        $this->save();
-
-        // Save topic files
-        foreach ($files as $id => $type) {
-            TopicFile::query()->insertOrIgnore(['topic_id' => $this->id, 'file_id' => $id, 'type' => $type]);
-            /** @var File $file */
-            if ($file = File::query()->where('temporary', true)->find($id)) {
-                $file->temporary = false;
-                $file->save();
-            }
-        }
-
-        // Clean abandoned topic files
-        $ids = array_keys($files);
-        /** @var TopicFile $topicFile */
-        foreach ($this->topicFiles()->whereNotIn('file_id', $ids)->cursor() as $topicFile) {
-            if ($topicFile->type !== 'video') {
-                $topicFile->file->delete();
-            }
-            $topicFile->delete();
-        }
     }
 
     public function getLink(): string

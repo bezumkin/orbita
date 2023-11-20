@@ -54,12 +54,13 @@ class Pages extends ModelController
 
     protected function afterSave(Model $record): Model
     {
-        // Sort pages
+        /** @var Page $record */
         foreach (Page::query()->orderBy('rank')->orderByDesc('updated_at')->cursor() as $idx => $page) {
             $page->update(['rank' => $idx]);
         }
 
-        /** @var Page $record */
+        $record->processUploadedFiles();
+
         if ($this->isNew) {
             Socket::send('page-create', $this->prepareRow($record));
         } else {

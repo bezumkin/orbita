@@ -19,6 +19,7 @@ class TopicFile extends Model
 
     public $incrementing = false;
     public $timestamps = false;
+    protected $guarded = [];
     protected $primaryKey = ['topic_id', 'file_id'];
 
     public function topic(): BelongsTo

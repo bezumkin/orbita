@@ -19,6 +19,7 @@ class PageFile extends Model
 
     public $incrementing = false;
     public $timestamps = false;
+    protected $guarded = [];
     protected $primaryKey = ['page_id', 'file_id'];
 
     public function page(): BelongsTo
