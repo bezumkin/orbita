@@ -71,6 +71,9 @@ class Topics extends ModelController
         if (!$record->price) {
             $record->price = null;
         }
+        if (!$record->level_id) {
+            $record->level_id = null;
+        }
         $this->isNew = !$record->exists;
 
         return null;

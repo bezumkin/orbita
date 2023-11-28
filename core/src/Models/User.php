@@ -6,6 +6,7 @@ use App\Services\Mail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use RuntimeException;
 use Vesp\Helpers\Jwt;
 
@@ -27,11 +28,14 @@ use Vesp\Helpers\Jwt;
  * @property Carbon $updated_at
  * @property ?Carbon $active_at
  *
- * @property-read ?File $avatar
+ * @property-read File $avatar
  * @property-read UserToken[] $tokens
  * @property-read VideoUser[] $userVideos
  * @property-read TopicView[] $views
  * @property-read UserNotification[] $notifications
+ * @property-read Subscription[] $subscriptions
+ * @property-read Subscription $currentSubscription
+ * @property-read Payment[] $payments
  */
 class User extends \Vesp\Models\User
 {
@@ -77,6 +81,23 @@ class User extends \Vesp\Models\User
     public function notifications(): HasMany
     {
         return $this->hasMany(UserNotification::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function currentSubscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('active', true)
+            ->where('active_until', '>', time());
     }
 
     public function setAttribute($key, $value)

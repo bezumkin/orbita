@@ -38,6 +38,7 @@ use Vesp\Services\Eloquent;
  * @property-read File $image
  * @property-read VideoQuality[] $qualities
  * @property-read VideoUser[] $videoUsers
+ * @property-read TopicFile[] $topicFiles
  */
 class Video extends Model
 {
@@ -71,6 +72,11 @@ class Video extends Model
     public function videoUsers(): HasMany
     {
         return $this->hasMany(VideoUser::class);
+    }
+
+    public function topicFiles(): HasMany
+    {
+        return $this->hasMany(TopicFile::class, 'file_id', 'file_id');
     }
 
     public function transcode(): void

@@ -27,6 +27,8 @@ $group = $app->group(
             if (getenv('REGISTER_ENABLED')) {
                 $group->any('/register', App\Controllers\Security\Register::class);
             }
+            $group->any('/payments[/{id}]', App\Controllers\User\Payments::class);
+            $group->any('/subscription/{action}[/{level:\d+}]', App\Controllers\User\Subscription::class);
         });
 
         $group->group('/admin', static function (RouteCollectorProxy $group) {
@@ -40,13 +42,14 @@ $group = $app->group(
             $group->any('/topics[/{id:\d+}]', App\Controllers\Admin\Topics::class);
             $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
             $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
+            $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
         });
 
         $group->group(
             '/web',
             static function (RouteCollectorProxy $group) {
                 $group->any('/settings', App\Controllers\Web\Settings::class);
-                $group->any('/levels', App\Controllers\Web\Levels::class);
+                $group->any('/levels[/{id:\d+}]', App\Controllers\Web\Levels::class);
                 $group->any('/topics[/{uuid}]', App\Controllers\Web\Topics::class);
                 $group->any('/topics/{topic_uuid}/view', App\Controllers\Web\Topics\View::class);
                 $group->any('/topics/{topic_uuid}/comments[/{id:\d+}]', App\Controllers\Web\Comments::class);

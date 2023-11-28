@@ -4,6 +4,7 @@
       <b-col md="3">
         <b-nav pills vertical>
           <b-nav-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-nav-item>
+          <b-nav-item :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</b-nav-item>
         </b-nav>
       </b-col>
       <b-col md="9" class="mt-5 mt-md-0">
@@ -16,7 +17,8 @@
 <script setup lang="ts">
 const route = useRoute()
 const {user} = useAuth()
-if (!user.value) {
+
+if (!user.value && !String(route.name).startsWith('user-confirm')) {
   showError({statusCode: 401, statusMessage: 'Unauthorized'})
 }
 

@@ -65,9 +65,11 @@ class Comment extends Model
         static::deleting(
             static function (self $record) {
                 /** @var CommentFile $commentFile */
-                foreach ($record->commentFiles()->cursor() as $commentFile) {
-                    $c = CommentFile::query()->where('file_id', $commentFile->file_id)->where('comment_id', '!=', $record->id);
-                    if (!$c->count()) {
+                foreach ($record->contentFiles()->cursor() as $commentFile) {
+                    $count = CommentFile::query()
+                        ->where('file_id', $commentFile->file_id)->where('comment_id', '!=', $record->id)
+                        ->count();
+                    if (!$count) {
                         $commentFile->file->delete();
                     }
                 }

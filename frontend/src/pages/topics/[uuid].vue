@@ -1,26 +1,17 @@
 <template>
   <div>
+    <b-link :to="{name: 'index'}" class="d-block mb-2">&larr; {{ $t('actions.back') }}</b-link>
     <template v-if="topic?.access">
-      <topic-content :topic="topic" class="column" :list-view="false">
-        <template #header="{title}">
-          <b-link :to="{name: 'index'}">&larr; {{ $t('actions.back') }}</b-link>
-          <h1>{{ title }}</h1>
-        </template>
-      </topic-content>
+      <topic-content :topic="topic" class="column" />
       <comments-tree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
     </template>
-    <topic-intro v-else :topic="topic" class="column mt-4" :list-view="false">
-      <template #header="{title}">
-        <b-link :to="{name: 'index'}">&larr; {{ $t('actions.back') }}</b-link>
-        <h2>{{ title }}</h2>
-      </template>
-    </topic-intro>
+    <topic-intro v-else :topic="topic" />
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
-const {$settings} = useNuxtApp()
+const {$settings, $image} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
 const {data, error} = await useCustomFetch('web/topics/' + route.params.uuid)
@@ -90,4 +81,15 @@ onUnmounted(() => {
 useHead({
   title: () => [topic.value?.title, t('pages.topics'), $settings.value.title].join(' / '),
 })
+
+if (topic.value) {
+  useSeoMeta({
+    title: topic.value.title,
+    ogTitle: topic.value.title,
+    description: topic.value.teaser,
+    ogDescription: topic.value.teaser,
+    ogImage: topic.value.cover ? $image(topic.value.cover) : undefined,
+    twitterCard: 'summary_large_image',
+  })
+}
 </script>

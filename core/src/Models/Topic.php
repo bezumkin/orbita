@@ -40,7 +40,7 @@ class Topic extends Model
 {
     use ContentFilesTrait;
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $guarded = ['id', 'created_at', 'updated_at', 'published_at'];
     protected $casts = [
         'content' => 'array',
         'price' => 'float',
@@ -142,8 +142,11 @@ class Topic extends Model
             // Admin can see anything
             if ($user->hasScope('topics/patch') || $user->hasScope('vip')) {
                 $allow = true;
+            } elseif ($user->payments()->where(['topic_id' => $this->id, 'paid' => true])->count()) {
+                $allow = true;
+            } elseif ($this->level_id && $user->currentSubscription) {
+
             }
-            // @TODO check UserPayment and UserLevel
         }
 
         return $allow;
@@ -151,15 +154,12 @@ class Topic extends Model
 
     public function prepareOutput(?User $user, bool $listView = false): array
     {
-        $array = $this->only('id', 'uuid', 'title', 'views_count', 'comments_count', 'published_at');
+        $array = $this->only('id', 'uuid', 'title', 'teaser', 'level_id', 'price', 'views_count', 'comments_count', 'published_at');
 
+        $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');
         $array['access'] = $this->hasAccess($user);
-        if ($listView || !$array['access']) {
-            $array['teaser'] = $this->teaser;
-            $array['cover'] = $this->cover?->only('id', 'uuid', 'published_at');
-        }
-        if ($user && $array['access']) {
-            if ($this->relationLoaded('views') && count($this->views)) {
+        if ($array['access']) {
+            if ($user && $this->relationLoaded('views') && count($this->views)) {
                 $array['viewed_at'] = $this->views[0]->timestamp;
                 $array['unseen_comments_count'] = $this->comments()
                     ->where('created_at', '>', $array['viewed_at'])
@@ -178,5 +178,24 @@ class Topic extends Model
     public function getLink(): string
     {
         return implode('/', [rtrim(getenv('SITE_URL'), '/'), 'topics', $this->uuid]);
+    }
+
+    public function createPayment(User $user, string $serviceName): ?Payment
+    {
+        if ($this->hasAccess($user)) {
+            return null;
+        }
+
+        $payment = new Payment();
+        $payment->user_id = $user->id;
+        $payment->topic_id = $this->id;
+        $payment->service = $serviceName;
+        $payment->amount = $this->price;
+        $payment->metadata = [
+            'uuid' => $this->uuid,
+            'title' => $this->title,
+        ];
+
+        return $payment;
     }
 }

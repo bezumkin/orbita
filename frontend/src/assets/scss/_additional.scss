@@ -157,60 +157,6 @@ fieldset {
   padding-top: 4rem;
 }
 
-.subscriptions {
-  .level {
-    display: flex;
-    flex-flow: nowrap column;
-    row-gap: 0.25rem;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid $border-color;
-    }
-
-    .title {
-      font-weight: bold;
-    }
-
-    .cover {
-      img {
-        height: 150px;
-        object-fit: cover;
-        width: 100%;
-      }
-    }
-
-    .content {
-      white-space: pre-line;
-      font-size: 0.875em;
-    }
-
-    .btn {
-      width: 100%;
-    }
-  }
-}
-
-.topic {
-  display: flex;
-  flex-flow: column nowrap;
-  row-gap: 0.5rem;
-
-  &.teaser {
-    .text {
-      white-space: pre-line;
-    }
-
-    .cover {
-      img {
-        object-fit: cover;
-        object-position: center;
-        width: 100%;
-        height: 384px;
-      }
-    }
-  }
-}
-
 footer {
   a {
     color: inherit;
@@ -227,6 +173,6 @@ footer {
   .widget-body {
     display: flex;
     flex-flow: column nowrap;
-    row-gap: 1.5rem;
+    row-gap: $widget-items-gap;
   }
 }

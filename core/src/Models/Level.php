@@ -30,4 +30,19 @@ class Level extends Model
     {
         return $this->belongsTo(File::class);
     }
+
+    public function costPerDay(): float
+    {
+        $cost = round($this->price / 30, 2);
+        if ($cost > 1) {
+            $cost = round($cost);
+        }
+
+        return $cost;
+    }
+
+    public function costForPeriod(int $period = 1): float
+    {
+        return $this->price * $period;
+    }
 }

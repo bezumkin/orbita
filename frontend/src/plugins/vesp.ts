@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const $socket = nuxtApp.$socket as Socket
   const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
-  const {sidebar, login, isMobile} = storeToRefs(store)
+  const {sidebar, login, isMobile, payment} = storeToRefs(store)
 
   nuxtApp.provide('scope', hasScope)
   nuxtApp.provide('image', getImageLink)
@@ -18,6 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('sidebar', sidebar)
   nuxtApp.provide('login', login)
   nuxtApp.provide('isMobile', isMobile)
+  nuxtApp.provide('payment', payment)
   nuxtApp.provide('price', (val: number) => {
     if (!val) {
       return ''
@@ -48,24 +49,32 @@ export default defineNuxtPlugin((nuxtApp) => {
       return settings
     }),
   )
+
   nuxtApp.provide(
     'pages',
+    // @ts-ignore
     computed(() => store.pages.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
   )
 
-  // Listen for settings update
+  nuxtApp.provide(
+    'levels',
+    computed(() => store.levels.sort((a, b) => (a.price > b.price ? 1 : -1))),
+  )
+
   if ($socket) {
+    // Listen for Settings update
     $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
       store.settings[key] = value
     })
+
+    // Listen for Pages update
     $socket.on('page-create', (page: VespPage) => {
       if (page.active) {
         store.pages.push(page)
       }
     })
     $socket.on('page-update', (page: VespPage) => {
-      const idx = store.pages.findIndex((i: any) => i.id === page.id)
-      console.log(idx)
+      const idx = store.pages.findIndex((i: VespPage) => i.id === page.id)
       if (idx > -1) {
         if (!page.active) {
           store.pages.splice(idx, 1)
@@ -74,6 +83,25 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       } else if (page.active) {
         store.pages.push(page)
+      }
+    })
+
+    // Listen for Levels update
+    $socket.on('level-create', (level: VespLevel) => {
+      if (level.active) {
+        store.levels.push(level)
+      }
+    })
+    $socket.on('level-update', (level: VespLevel) => {
+      const idx = store.levels.findIndex((i: VespLevel) => i.id === level.id)
+      if (idx > -1) {
+        if (!level.active) {
+          store.levels.splice(idx, 1)
+        } else {
+          store.levels[idx] = level
+        }
+      } else if (level.active) {
+        store.levels.push(level)
       }
     })
   }

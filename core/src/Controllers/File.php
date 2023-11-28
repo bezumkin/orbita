@@ -16,23 +16,18 @@ class File extends \Vesp\Controllers\Data\Image
             return $this->failure('Not Found', 404);
         }
 
-        if ($this->user && $this->user->hasScope('topics/patch')) {
-            $allowDownload = true;
-        } else {
-            $allowDownload = false;
+        $allow = true;
+        if (!$this->user || !$this->user->hasScope('topics/patch')) {
             $topicFiles = $file->topicFiles()->where('type', 'file');
             /** @var TopicFile $topicFile */
             foreach ($topicFiles->cursor() as $topicFile) {
-                // $topic = $topicFile->topic;
-                // @TODO check topic permissions
-                if (true) {
-                    $allowDownload = true;
+                if (!$topicFile->topic->hasAccess($this->user)) {
+                    $allow = false;
                     break;
                 }
             }
         }
-
-        if (!$allowDownload) {
+        if (!$allow) {
             return $this->failure('Access Denied', 403);
         }
 

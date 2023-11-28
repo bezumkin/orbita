@@ -18,6 +18,7 @@ class Levels extends ModelController
     protected string $model = Level::class;
     protected string|array $scope = 'levels';
     public array $attachments = ['cover'];
+    private bool $isNew = false;
 
     protected function beforeGet(Builder $c): Builder
     {
@@ -56,8 +57,10 @@ class Levels extends ModelController
             return $this->failure('errors.level.no_price');
         }
 
+        $this->isNew = !$record->exists;
+
         $c = Level::query();
-        if ($record->id) {
+        if (!$this->isNew) {
             $c->where('id', '!=', $record->id);
         }
         if ((clone $c)->where('title', $title)->count()) {
@@ -76,7 +79,11 @@ class Levels extends ModelController
 
     protected function afterSave(Model $record): Model
     {
-        Socket::send('levels', $this->prepareRow($record));
+        if ($this->isNew) {
+            Socket::send('level-create', $this->prepareRow($record));
+        } else {
+            Socket::send('level-update', $this->prepareRow($record));
+        }
 
         return $record;
     }

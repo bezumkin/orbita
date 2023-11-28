@@ -124,6 +124,7 @@ export function contentClick(e: MouseEvent) {
 
 export function getAdminSections() {
   const items = [
+    {scope: 'payments/get', title: 'payments', route: 'admin-payments'},
     {scope: 'topics/get', title: 'topics', route: 'admin-topics'},
     {scope: 'levels/get', title: 'levels', route: 'admin-levels'},
     {scope: 'settings/get', title: 'settings', route: 'admin-settings'},

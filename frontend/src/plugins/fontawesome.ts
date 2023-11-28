@@ -35,6 +35,10 @@ import {
   faTrash,
   faUndo,
   faPaperPlane,
+  faWallet,
+  faHourglassHalf,
+  faLock,
+  faLockOpen,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -70,6 +74,10 @@ library.add(
   faTrash,
   faUndo,
   faPaperPlane,
+  faWallet,
+  faHourglassHalf,
+  faLock,
+  faLockOpen,
 )
 
 config.autoAddCss = false

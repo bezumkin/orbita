@@ -1,8 +1,8 @@
 <template>
   <div class="widget">
     <h5 class="widget-title">{{ $t('widgets.levels') }}</h5>
-    <b-overlay class="widget-body subscriptions" :show="pending" opacity="0.5">
-      <div v-for="level in levels" :key="level.id" class="level">
+    <div class="widget-body subscriptions">
+      <div v-for="level in $levels" :key="level.id" class="level">
         <div class="title">{{ level.title }}</div>
         <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
         <div v-if="level.cover" class="cover">
@@ -14,36 +14,77 @@
           />
         </div>
         <div v-if="level.content" class="content">{{ level.content }}</div>
-        <b-button v-if="isSubscribed" disabled>{{ $t('actions.levels.subscribed') }}</b-button>
-        <b-button v-else @click="onSubscribe">{{ $t('actions.levels.subscribe') }}</b-button>
+        <b-button v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</b-button>
       </div>
-      <!--<div v-if="$scope('levels/patch')" class="p-3 border-top">
-        <b-button :to="{name: 'admin-levels'}" variant="primary" class="w-100">
-          {{ $t('actions.levels.manage') }}
-        </b-button>
-      </div>-->
-    </b-overlay>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const {$socket} = useNuxtApp()
-const {t} = useI18n()
-const {data, refresh, pending} = useCustomFetch('web/levels')
-const levels: ComputedRef<VespLevel[]> = computed(() => data.value?.rows || [])
-const isSubscribed = computed(() => {
-  return false
-})
+const {$levels, $payment, $i18n} = useNuxtApp()
+const {user, loadUser} = useAuth()
 
-function onSubscribe() {
-  useToastInfo(t('errors.not_ready'))
+function getBtnParams(level: VespLevel) {
+  const params: Record<string, any> = {}
+
+  params.onClick = () => onSubscribe(level)
+
+  if (user.value && user.value.subscription) {
+    // Cancel change level from next date
+    if (level.id === user.value.subscription.next_level_id) {
+      params.variant = 'outline-secondary'
+      params.onClick = onCancelChange
+    }
+    // Unsubscribe or renew
+    else if (level.id === user.value.subscription.level_id) {
+      params.variant = 'outline-secondary'
+      params.onClick = user.value.subscription.cancelled ? onRenew : onUnsubscribe
+    }
+  }
+
+  return params
 }
 
-onMounted(() => {
-  $socket.on('levels', refresh)
-})
+function getBtnLabel(level: VespLevel) {
+  if (user.value && user.value.subscription && user.value.subscription.active_until) {
+    const date = $i18n.d(user.value.subscription.active_until, 'short')
 
-onUnmounted(() => {
-  $socket.off('levels', refresh)
-})
+    if (user.value.subscription.next_level_id === level.id && user.value.subscription.active_until) {
+      return $i18n.t('components.payment.level.active_from', {date})
+    }
+    if (user.value.subscription.level_id === level.id) {
+      if (user.value.subscription.next_level_id || user.value.subscription.cancelled) {
+        return $i18n.t('components.payment.level.active_until', {date})
+      }
+      return $i18n.t('components.payment.level.subscribed')
+    }
+  }
+  return $i18n.t('components.payment.level.subscribe')
+}
+
+function onSubscribe(level: VespLevel) {
+  if ($payment.value) {
+    $payment.value = undefined
+    nextTick(() => {
+      $payment.value = level
+    })
+  } else {
+    $payment.value = level
+  }
+}
+
+async function onCancelChange() {
+  await usePost('user/subscription/cancel-next')
+  await loadUser()
+}
+
+async function onUnsubscribe() {
+  await usePost('user/subscription/cancel')
+  await loadUser()
+}
+
+async function onRenew() {
+  await usePost('user/subscription/renew')
+  await loadUser()
+}
 </script>

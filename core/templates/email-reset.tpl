@@ -1,7 +1,7 @@
 {extends 'email.tpl'}
 
 {block 'content'}
-    {var $link = $.env.SITE_URL ~ 'service/confirm/' ~ $user.username ~ '/' ~ $code}
+    {var $link = $.env.SITE_URL ~ 'user/confirm/' ~ $user.username ~ '/' ~ $code}
     {if $lang === 'en'}
         <h2>Login link</h2>
         <p>

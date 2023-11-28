@@ -1,15 +1,14 @@
 <template>
   <div>
     <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
-      <template #cell(avatar)="{value}: any">
-        <b-img
-          v-if="value?.id"
-          :src="$image(value, {w: 50, h: 50, fit: 'crop'})"
-          :srcset="$image(value, {w: 100, h: 100, fit: 'crop'}) + ' 2x'"
-          width="50"
-          height="50"
-          class="rounded-circle"
-        />
+      <template #cell(fullname)="{item}: any">
+        <div class="d-flex align-items-center">
+          <user-avatar :user="item" size="40" />
+          <div class="ms-2">
+            <div>{{ item.fullname }}</div>
+            <div class="small text-muted">{{ item.username }}</div>
+          </div>
+        </div>
       </template>
     </vesp-table>
 
@@ -28,9 +27,7 @@ const sort = 'id'
 const dir = 'desc'
 const fields = computed(() => [
   {key: 'id', label: t('models.user.id'), sortable: true},
-  {key: 'avatar', label: ''},
-  {key: 'username', label: t('models.user.username'), sortable: true},
-  {key: 'fullname', label: t('models.user.fullname'), sortable: true},
+  {key: 'fullname', label: t('models.user.fullname')},
   {key: 'email', label: t('models.user.email'), sortable: true},
   {key: 'created_at', label: t('models.user.created_at'), sortable: true, formatter: formatDate},
   {key: 'active_at', label: t('models.user.active_at'), sortable: true, formatter: formatDate},

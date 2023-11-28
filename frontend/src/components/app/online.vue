@@ -1,5 +1,5 @@
 <template>
-  <div class="widget">
+  <div v-if="comments.length" class="widget">
     <h5 class="widget-title">{{ $t('widgets.comments') }}</h5>
     <b-overlay class="widget-body comments" :show="pending" opacity="0.5">
       <div v-for="comment in comments" :key="comment.id" class="comment">

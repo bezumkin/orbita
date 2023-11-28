@@ -1,8 +1,8 @@
 <template>
-  <div class="col-md-9 m-auto">
-    <h1>{{ page.title }}</h1>
+  <div class="col-md-9 m-auto topic">
+    <h1 class="topic-header">{{ page.title }}</h1>
 
-    <editor-content :content="page.content" class="mt-5" />
+    <editor-content :content="page.content" class="topic-content" />
   </div>
 </template>
 

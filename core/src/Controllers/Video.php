@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\TopicFile;
 use App\Models\Video as VideoFile;
 use App\Models\VideoQuality;
-use App\Models\VideoUser;
 use App\Services\Log;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
@@ -13,18 +13,30 @@ class Video extends Controller
 {
     protected ?VideoFile $video = null;
 
-    public function checkScope(string $method): ?ResponseInterface
+    public function get(): ResponseInterface
     {
         $uuid = $this->getProperty('uuid');
         if (!$this->video = VideoFile::query()->find($uuid)) {
-            return $this->failure('', 404);
+            return $this->failure('Not Found', 404);
         }
 
-        return parent::checkScope($method);
-    }
+        // Check permissions
+        $allow = true;
+        if (!$this->user || !$this->user->hasScope('videos/patch')) {
+            $topicFiles = $this->video->topicFiles();
+            /** @var TopicFile $topicFile */
+            foreach ($topicFiles->cursor() as $topicFile) {
+                if (!$topicFile->topic->hasAccess($this->user)) {
+                    $allow = false;
+                    break;
+                }
+            }
+        }
+        if (!$allow) {
+            return $this->failure('Access Denied', 403);
+        }
+        // ---
 
-    public function get(): ResponseInterface
-    {
         if ($quality = $this->getProperty('quality')) {
             if ($range = $this->request->getHeaderLine('Range')) {
                 $range = explode('=', $range);

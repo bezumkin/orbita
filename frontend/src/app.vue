@@ -19,12 +19,10 @@
               <div class="column">
                 <app-author />
               </div>
-              <div v-if="showOnline" class="column mt-4">
-                <app-online />
-              </div>
-              <div class="column mt-4">
-                <app-levels />
-              </div>
+
+              <app-online v-if="showOnline" class="column mt-4" />
+
+              <app-levels class="column mt-4" />
             </b-col>
           </b-row>
         </div>
@@ -35,6 +33,7 @@
 
       <app-sidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
       <app-footer :class="footerClasses" />
+      <app-payment />
     </div>
   </div>
 </template>
@@ -84,13 +83,19 @@ function handleResize() {
 onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
-
-  // router.beforeEach(() => {
-  //   clearError()
-  // })
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
+})
+
+const description = String($settings.value.description).replace(/<\/?[^>]+(>|$)/g, '')
+useSeoMeta({
+  title: $settings.value.title as string,
+  ogTitle: $settings.value.title as string,
+  description,
+  ogDescription: description,
+  ogImage: $settings.value.poster ? $image($settings.value.poster) : undefined,
+  twitterCard: 'summary_large_image',
 })
 </script>

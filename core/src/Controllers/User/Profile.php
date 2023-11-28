@@ -3,6 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\Traits\FileModelController;
+use App\Models\User;
 use Psr\Http\Message\ResponseInterface;
 
 class Profile extends \Vesp\Controllers\User\Profile
@@ -14,10 +15,17 @@ class Profile extends \Vesp\Controllers\User\Profile
 
     public function get(): ResponseInterface
     {
-        if ($this->user) {
-            $data = $this->user->only('id', 'username', 'fullname', 'email', 'phone');
-            $data['avatar'] = $this->user->avatar?->only('uuid', 'updated_at');
-            $data['role'] = $this->user->role->only('id', 'title', 'scope');
+        /** @var User $user */
+        if ($user = $this->user) {
+            $data = $user->only('id', 'username', 'fullname', 'email', 'phone');
+            $data['role'] = $user->role->only('id', 'title', 'scope');
+            $data['avatar'] = $user->avatar?->only('uuid', 'updated_at');
+            $data['subscription'] = $user->currentSubscription?->only(
+                'level_id',
+                'next_level_id',
+                'active_until',
+                'cancelled'
+            );
 
             return $this->success(['user' => $data]);
         }

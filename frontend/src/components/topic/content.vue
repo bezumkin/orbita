@@ -1,12 +1,12 @@
 <template>
-  <div class="topic content">
-    <slot name="header" v-bind="myValue">
-      <h1>{{ myValue.title }}</h1>
-    </slot>
-    <div v-if="myValue.content?.blocks" class="d-flex flex-column gap-1">
-      <editor-content :content="myValue.content" type="topic" />
+  <div class="topic">
+    <div class="topic-header">
+      <h1 class="mt-2">{{ myValue.title }}</h1>
     </div>
-    <topic-footer :topic="myValue" :list-view="listView" />
+
+    <editor-content v-if="myValue.content?.blocks" :content="myValue.content" class="topic-content" />
+
+    <topic-footer :topic="myValue" />
   </div>
 </template>
 
@@ -17,10 +17,6 @@ const props = defineProps({
     default() {
       return {}
     },
-  },
-  listView: {
-    type: Boolean,
-    default: false,
   },
 })
 

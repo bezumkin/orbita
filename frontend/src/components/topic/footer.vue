@@ -1,8 +1,8 @@
 <template>
-  <div class="footer border-top pt-2 d-flex">
+  <div class="topic-footer">
     <div class="d-flex gap-3">
       <div><fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
-      <div v-if="listView">
+      <div v-if="!isTopic">
         <b-link
           v-if="topic.access && commentsCount"
           :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
@@ -29,14 +29,12 @@ const props = defineProps({
       return {}
     },
   },
-  listView: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 const {d} = useI18n()
 const {$socket} = useNuxtApp()
+const {params} = useRoute()
+const isTopic = computed(() => params.uuid === props.topic.uuid)
 
 const commentsCount = ref(props.topic.comments_count || 0)
 const unseenCount = ref(props.topic.unseen_comments_count || 0)
@@ -71,7 +69,7 @@ function onCommentDelete(comment: VespComment) {
   }
 }
 
-if (props.listView) {
+if (!isTopic.value) {
   onMounted(() => {
     $socket.on('topic-comments', onTopicComments)
     $socket.on('comment-create', onCommentCreate)

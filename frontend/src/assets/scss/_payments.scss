@@ -1,0 +1,102 @@
+#payment {
+  .subscription {
+    padding: 1rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+  }
+
+  .item {
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.25s, border 0.25s;
+
+    &.active {
+      background-color: rgba($primary, 0.125);
+      border-color: $primary;
+      cursor: default;
+    }
+  }
+
+  .levels,
+  .services,
+  .periods,
+  .variants {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem;
+  }
+
+  .levels,
+  .variants {
+    flex-flow: row nowrap;
+
+    .item {
+      flex-basis: 50%;
+      cursor: default;
+    }
+  }
+
+  .services {
+    .item {
+      img {
+        max-height: 50px;
+        max-width: 125px;
+      }
+    }
+  }
+
+  .periods {
+    .item {
+      flex-grow: 1;
+    }
+  }
+
+  .variants {
+    .item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  .price {
+    font-size: 2rem;
+  }
+}
+
+.subscriptions {
+  .level {
+    display: flex;
+    flex-flow: nowrap column;
+    row-gap: 0.25rem;
+
+    &:not(:last-child) {
+      padding-bottom: $widget-items-gap;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+
+    .cover {
+      img {
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+      }
+    }
+
+    .content {
+      white-space: pre-line;
+      font-size: 0.875em;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

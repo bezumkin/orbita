@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 const {params} = useRoute()
-const options = {replace: true, redirectCode: 302}
 const route = ref({name: 'index'})
 
 if (params.username && params.code) {
@@ -17,5 +16,7 @@ if (params.username && params.code) {
   }
 }
 
-navigateTo(route.value, options)
+onMounted(() => {
+  navigateTo(route.value, {replace: true, redirectCode: 302})
+})
 </script>

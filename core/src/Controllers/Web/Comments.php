@@ -13,6 +13,7 @@ use Vesp\Controllers\ModelController;
 
 class Comments extends ModelController
 {
+    protected string|array $scope = 'comments';
     protected string $model = Comment::class;
     private ?Topic $topic = null;
     private bool $isNew = false;

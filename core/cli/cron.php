@@ -20,6 +20,11 @@ $scheduler->php(__DIR__ . '/send-notifications.php', null, [], 'send_notificatio
     ->inForeground()
     ->onlyOne();
 
+$scheduler->php(__DIR__ . '/subscriptions.php', null, [], 'subscriptions')
+    ->hourly()
+    ->inForeground()
+    ->onlyOne();
+
 $executed = $scheduler->run();
 /** @var Job $job */
 foreach ($executed as $job) {

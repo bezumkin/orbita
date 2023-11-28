@@ -34,6 +34,7 @@ declare global {
     role?: VespUserRole
     avatar_id?: number
     avatar?: VespFile
+    subscription?: VespSubscription
     new_avatar?: {file: string; metadata: {[key: string]: any}} | Boolean
   }
 
@@ -121,6 +122,27 @@ declare global {
     active?: bool
     [key: string]: any
   }
+
+  type VespSubscription = {
+    id?: number
+    user_id?: number
+    level_id: number
+    next_level_id?: number
+    service?: string
+    period?: number
+    cancelled?: boolean
+    active?: boolean
+    active_until?: string
+    [key: string]: any
+  }
+
+  type VespPayment = {
+    id: number
+    amount: number
+    topic?: VespTopic
+    subscription?: VespSubscription
+    metadata?: Record<string, any>
+  }
 }
 
 declare module '@vue/runtime-core' {
@@ -136,7 +158,9 @@ declare module '@vue/runtime-core' {
     $sidebar: Ref<boolean>
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
-    $pages: Ref<Record<string, any>[]>
+    $pages: Ref<VespPage[]>
+    $levels: Ref<VespLevel[]>
+    $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options
@@ -159,6 +183,8 @@ declare module '#app' {
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[]>>
     $pages: Ref<Record<string, any>[]>
+    $levels: Ref<VespLevel[]>
+    $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
     $plyrOptions: Options

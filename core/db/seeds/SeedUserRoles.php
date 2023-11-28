@@ -20,13 +20,14 @@ class SeedUserRoles extends AbstractSeed
                     'comments',
                     'notifications',
                     'pages',
+                    'payments',
                 ],
             ],
             'Moderator' => [
                 'scope' => ['profile', 'users/get', 'comments', 'notifications'],
             ],
             'User' => [
-                'scope' => ['profile', 'comments/put', 'comments/patch'],
+                'scope' => ['profile', 'comments/get', 'comments/put', 'comments/patch', 'comments/post'],
             ],
         ];
 

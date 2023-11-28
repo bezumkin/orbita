@@ -1,16 +1,7 @@
 <template>
   <div>
-    <b-overlay :show="pending" opacity="0.5" class="d-flex flex-column gap-4">
-      <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" :list-view="true" class="column">
-        <template #header="{title, access}">
-          <h2>
-            <b-link v-if="access" :to="{name: 'topics-uuid', params: {uuid: topic.uuid}}">
-              {{ title }}
-            </b-link>
-            <template v-else>{{ title }}</template>
-          </h2>
-        </template>
-      </topic-intro>
+    <b-overlay :show="pending" opacity="0.5" class="topics">
+      <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" />
     </b-overlay>
 
     <b-pagination

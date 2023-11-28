@@ -10,10 +10,11 @@
       <b-navbar-nav class="ms-auto">
         <app-login :btn-variant="btnVariant" @click="hideSidebar">
           <template #user-menu>
-            <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}">
+            <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
               {{ $t('pages.admin.title') }}
             </b-dropdown-item>
             <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
+            <b-dropdown-item :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</b-dropdown-item>
           </template>
         </app-login>
         <b-button v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">

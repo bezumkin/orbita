@@ -107,19 +107,19 @@ if (record.value.id) {
 
 watch(accessLevel, (value: string) => {
   if (value === 'free') {
-    record.value.level_id = undefined
-    record.value.price = undefined
+    record.value.level_id = 0
+    record.value.price = 0
   } else if (value === 'subscribers') {
-    record.value.price = undefined
+    record.value.price = 0
     if (levels.value.length) {
       record.value.level_id = levels.value[0].id
     }
   } else if (value === 'payments') {
-    record.value.level_id = undefined
-    record.value.price = '0'
+    record.value.level_id = 0
+    record.value.price = 0
   } else if (value === 'sub_payments' && levels.value.length) {
     record.value.level_id = levels.value[0].id
-    record.value.price = '0'
+    record.value.price = 0
   }
 })
 
@@ -129,11 +129,13 @@ async function loadLevels() {
 }
 
 onMounted(() => {
-  $socket.on('levels', loadLevels)
+  $socket.on('level-create', loadLevels)
+  $socket.on('level-update', loadLevels)
   loadLevels()
 })
 
 onUnmounted(() => {
-  $socket.off('levels', loadLevels)
+  $socket.off('level-create', loadLevels)
+  $socket.off('level-update', loadLevels)
 })
 </script>
