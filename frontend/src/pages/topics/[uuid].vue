@@ -16,7 +16,7 @@ const {t} = useI18n()
 const {user} = useAuth()
 const {data, error} = await useCustomFetch('web/topics/' + route.params.uuid)
 const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
-const topics: Ref<string[] | undefined> = useCookie('topics', {sameSite: true})
+const topics: Ref<string[] | undefined> = useCookie('topics')
 if (!topics.value) {
   topics.value = []
 }

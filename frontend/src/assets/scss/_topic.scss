@@ -7,9 +7,12 @@
   }
 
   .topic-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    @extend %editor-content;
+
+    img {
+      display: block;
+      margin: auto;
+    }
   }
 
   .topic-cover {
@@ -47,7 +50,8 @@
 
   .topic-footer {
     display: flex;
-    padding-top: 0.5rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
     border-top: 1px solid $border-color;
   }
 
@@ -57,7 +61,19 @@
     border-radius: $border-radius;
     overflow: hidden;
 
+    h2 {
+      a {
+        color: inherit;
+        text-decoration: underline;
+
+        &:hover {
+          color: $link-hover-color;
+        }
+      }
+    }
+
     .topic-footer {
+      margin-top: 0;
       padding: 1rem;
       border-top: none;
     }

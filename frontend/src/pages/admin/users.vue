@@ -5,7 +5,7 @@
         <div class="d-flex align-items-center">
           <user-avatar :user="item" size="40" />
           <div class="ms-2">
-            <div>{{ item.fullname }}</div>
+            <div class="text-nowrap">{{ item.fullname }}</div>
             <div class="small text-muted">{{ item.username }}</div>
           </div>
         </div>

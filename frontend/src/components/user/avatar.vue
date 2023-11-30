@@ -1,7 +1,7 @@
 <template>
   <b-img v-if="source" :src="source" :srcset="srcSet" v-bind="imgProps" lazy />
   <div v-else :style="{width: size + 'px', height: size + 'px'}" v-bind="imgProps">
-    <fa icon="user" class="m-auto" :style="{color: '#fff', width: halfSize + 'px', height: halfSize + 'px'}" />
+    <fa icon="user" class="fa-fw m-auto" :style="{color: '#fff', width: halfSize + 'px', height: halfSize + 'px'}" />
   </div>
 </template>
 
@@ -30,7 +30,7 @@ const imgProps = computed(() => {
   return {
     style: {width: props.size + 'px', height: props.size + 'px'},
     alt: '',
-    class: `user-avatar d-inline-flex rounded-circle bg-${props.variant}`,
+    class: `user-avatar d-inline-flex rounded-circle flex-shrink-0 bg-${props.variant}`,
   }
 })
 const source = computed(() => {

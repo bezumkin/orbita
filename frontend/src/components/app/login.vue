@@ -6,14 +6,7 @@
           <b-dropdown v-if="user" :variant="btnVariant">
             <template #button-content>
               <slot name="button" v-bind="{user}">
-                <b-img
-                  v-if="user.avatar"
-                  :src="$image(user.avatar, {w: 50, h: 50})"
-                  class="rounded-circle"
-                  width="25"
-                  height="25"
-                />
-                <fa v-else icon="user" class="fa-fw" />
+                <user-avatar :user="user" size="25" />
               </slot>
             </template>
             <slot name="user-menu" v-bind="{user}" />
@@ -179,7 +172,7 @@ function onShown() {
 function onTab() {
   if (tabs.value && tabs.value.$el) {
     nextTick(() => {
-      const tab = tabs.value.$el.querySelector('.tab-pane.active')
+      const tab = tabs.value?.$el.querySelector('.tab-pane.active')
       if (tab) {
         const form = tab.querySelector('form')
         if (form) {

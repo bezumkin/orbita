@@ -176,3 +176,8 @@ footer {
     row-gap: $widget-items-gap;
   }
 }
+
+// Glightbox
+.goverlay {
+  background: rgba($modal-backdrop-bg, $modal-backdrop-opacity) !important;
+}

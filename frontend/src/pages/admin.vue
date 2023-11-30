@@ -1,12 +1,14 @@
 <template>
-  <div v-if="user">
-    <b-nav tabs class="mt-4">
-      <b-nav-item v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
-        {{ $t('pages.admin.' + section.title) }}
-      </b-nav-item>
-    </b-nav>
-    <div class="mt-4">
-      <nuxt-page />
+  <div>
+    <div v-if="user">
+      <b-nav :tabs="!$isMobile" :pills="$isMobile" class="mt-4 justify-content-between justify-content-md-start">
+        <b-nav-item v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
+          {{ $t('pages.admin.' + section.title) }}
+        </b-nav-item>
+      </b-nav>
+      <div class="mt-4">
+        <nuxt-page />
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +17,7 @@
 const route = useRoute()
 const {user} = useAuth()
 const {t} = useI18n()
-const {$settings, $login} = useNuxtApp()
+const {$settings, $login, $isMobile} = useNuxtApp()
 const sections = computed(() => getAdminSections())
 
 function checkAccess() {

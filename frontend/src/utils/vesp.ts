@@ -77,6 +77,9 @@ export function setLocationHash(hash?: string) {
 }
 
 export function contentPreview(content: OutputData, length: number = 100) {
+  if (!content.blocks || !Array.isArray(content.blocks)) {
+    return ''
+  }
   const blocks: string[] = []
   content.blocks?.forEach((i) => {
     if (i.type === 'paragraph' && i.data.text) {

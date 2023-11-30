@@ -13,7 +13,9 @@
         <div v-if="isColumns">
           <b-row class="main-columns">
             <b-col md="8" :class="{offset: $isMobile}">
-              <nuxt-page />
+              <slot>
+                <nuxt-page />
+              </slot>
             </b-col>
             <b-col v-if="!$isMobile" md="4" class="offset">
               <div class="column">

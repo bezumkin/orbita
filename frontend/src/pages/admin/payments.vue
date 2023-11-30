@@ -4,7 +4,7 @@
       <b-link :to="{name: 'admin-users-id-edit', params: {id: value.id}}" class="d-flex align-items-center">
         <user-avatar :user="value" size="40" />
         <div class="ms-2">
-          <div>{{ value.fullname }}</div>
+          <div class="text-nowrap">{{ value.fullname }}</div>
           <div class="small text-muted">{{ value.username }}</div>
         </div>
       </b-link>

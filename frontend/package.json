@@ -25,6 +25,7 @@
     "bootstrap-vue-next": "^0.14.9",
     "codeflask": "^1.4.1",
     "date-fns": "^2.30.0",
+    "glightbox": "^3.2.0",
     "hls.js": "^1.4.12",
     "humps": "^2.0.1",
     "nuxt": "^3.8.1",

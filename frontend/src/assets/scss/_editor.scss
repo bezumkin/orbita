@@ -1,14 +1,38 @@
 // stylelint-disable
+
+%editor-content {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+
+  pre, code {
+    color: inherit;
+    background-color: $light;
+  }
+
+  blockquote {
+    background: $light;
+    border-left: 3px solid $secondary;
+    padding: 0.25rem 0.5rem;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
 .editorjs {
   .codex-editor__redactor {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 0.5rem;
+    @extend %editor-content;
   }
 
   .ce-toolbar__plus,
   .cdx-search-field {
     display: none;
+  }
+
+  .cdx-block {
+    padding: 0;
   }
 
   @media (width < 651px) {
