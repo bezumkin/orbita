@@ -47,7 +47,6 @@ defineProps({
 })
 
 const hasAdmin = computed(() => getAdminSections().length)
-const {user} = useAuth()
 const {$sidebar} = useNuxtApp()
 
 function toggleSidebar() {
