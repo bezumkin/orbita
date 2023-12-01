@@ -25,6 +25,13 @@ class Topics extends ModelGetController
         return $c;
     }
 
+    protected function beforeCount(Builder $c): Builder
+    {
+        $c->where('active', true);
+
+        return $c;
+    }
+
     protected function afterCount(Builder $c): Builder
     {
         $c->with('cover:id,uuid,updated_at');
