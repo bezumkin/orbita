@@ -13,6 +13,9 @@
             <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
               {{ $t('pages.admin.title') }}
             </b-dropdown-item>
+            <!--<b-dropdown-item v-if="user && user.subscription" :to="{name: 'user-subscription'}">
+              {{ $t('pages.user.subscription') }}
+            </b-dropdown-item>-->
             <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
             <b-dropdown-item :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</b-dropdown-item>
           </template>
@@ -44,6 +47,7 @@ defineProps({
 })
 
 const hasAdmin = computed(() => getAdminSections().length)
+const {user} = useAuth()
 const {$sidebar} = useNuxtApp()
 
 function toggleSidebar() {

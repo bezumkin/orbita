@@ -1,5 +1,5 @@
 <template>
-  <vesp-modal v-model="record" url="admin/pages" method="put" :title="$t('models.page.title_one')">
+  <vesp-modal v-model="record" url="admin/pages" method="put" :title="$t('models.page.title_one')" size="lg">
     <template #form-fields>
       <forms-page v-model="record" />
     </template>

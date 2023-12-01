@@ -5,6 +5,7 @@
     method="patch"
     update-key="admin-pages"
     :title="$t('models.page.title_one')"
+    size="lg"
   >
     <template #form-fields>
       <forms-page v-model="record" />

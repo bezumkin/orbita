@@ -10,16 +10,22 @@
 
     <transition name="fade" mode="out-in">
       <div v-if="qr" class="qr">
+        <div class="text-center">{{ t('components.payment.service.scan_qr') }}</div>
         <b-img :src="qr.image" alt="QR" width="250" height="250" class="d-block m-auto" fluid />
       </div>
       <div v-else-if="canPay">
         <div v-if="services.length" class="mt-4">
-          <div class="fw-bold">{{ t('components.payment.service') }}</div>
+          <div class="fw-bold">{{ t('components.payment.service.title') }}</div>
           <div class="services mt-1">
             <div v-for="i in services" :key="i" :class="serviceClass(i)" @click="onService(i)">
               <b-img :src="'/payments/' + i + '.svg'" height="50" />
             </div>
           </div>
+          <transition name="fade" mode="out-in">
+            <div v-if="subscriptionWarning" class="alert alert-warning mt-2 small p-2">
+              {{ t('components.payment.service.no_subscription') }}
+            </div>
+          </transition>
         </div>
 
         <div class="mt-4">
@@ -43,14 +49,12 @@
       <b-button variant="light" @click="onCancel">{{ t('actions.cancel') }}</b-button>
       <b-button v-if="!qr" variant="primary" :disabled="loading" @click="onSubmit">
         <b-spinner v-if="loading" small />
+        <template v-if="canPay">
+          <fa icon="wallet" class="fa-fw" />
+          {{ t('components.payment.actions.pay') }}
+        </template>
         <template v-else>
-          <template v-if="canPay">
-            <fa icon="wallet" class="fa-fw" />
-            {{ t('components.payment.actions.pay') }}
-          </template>
-          <template v-else>
-            {{ t('actions.submit') }}
-          </template>
+          {{ t('actions.submit') }}
         </template>
       </b-button>
       <b-button v-else variant="primary" :disabled="loading" @click="onCheck">
@@ -72,7 +76,7 @@ const {user, loadUser} = useAuth()
 const loading = ref(false)
 const size: Ref<keyof BaseSize> = ref('md')
 const qr: Ref<undefined | Record<string, string>> = ref()
-const services = (useRuntimeConfig().public.PAYMENT_SERVICES || '').split(',').map((i: string) => {
+const services = (useRuntimeConfig().public.PAYMENT_SERVICES as string).split(',').map((i: string) => {
   return slugify(
     i.trim().replace(/[A-Z]/g, (s) => ' ' + s),
     {lower: true},
@@ -98,6 +102,20 @@ const isVariants = computed(() => {
 })
 const isTopic = computed(() => {
   return $payment.value && 'uuid' in $payment.value && $payment.value.price
+})
+const subscriptionWarning = computed(() => {
+  const subscriptions = (useRuntimeConfig().public.PAYMENT_SUBSCRIPTIONS as string).split(',').map((i: string) => {
+    return slugify(
+      i.trim().replace(/[A-Z]/g, (s) => ' ' + s),
+      {lower: true},
+    )
+  })
+  return Boolean(
+    !isTopic.value &&
+      subscriptions.length > 0 &&
+      paymentProperties.value.service &&
+      !subscriptions.includes(paymentProperties.value.service),
+  )
 })
 const title = ref('')
 

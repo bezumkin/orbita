@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Interfaces\Payment as PaymentInterface;
+use App\Services\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -71,7 +71,7 @@ class Payment extends Model
         return $this->belongsTo(Topic::class);
     }
 
-    protected function getService(): PaymentInterface
+    protected function getService(): PaymentService
     {
         $service = '\App\Services\Payments\\' . $this->service;
 

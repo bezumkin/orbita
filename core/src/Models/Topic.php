@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\Traits\ContentFilesTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -69,7 +71,7 @@ class Topic extends Model
 
     public function level(): BelongsTo
     {
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(Level::class);
     }
 
     public function contentFiles(): HasMany
@@ -144,8 +146,8 @@ class Topic extends Model
                 $allow = true;
             } elseif ($user->payments()->where(['topic_id' => $this->id, 'paid' => true])->count()) {
                 $allow = true;
-            } elseif ($this->level_id && $user->currentSubscription) {
-
+            } elseif ($this->level && $user->currentSubscription) {
+                $allow = $user->currentSubscription->level->price >= $this->level->price;
             }
         }
 
@@ -154,7 +156,17 @@ class Topic extends Model
 
     public function prepareOutput(?User $user, bool $listView = false): array
     {
-        $array = $this->only('id', 'uuid', 'title', 'teaser', 'level_id', 'price', 'views_count', 'comments_count', 'published_at');
+        $array = $this->only(
+            'id',
+            'uuid',
+            'title',
+            'teaser',
+            'level_id',
+            'price',
+            'views_count',
+            'comments_count',
+            'published_at'
+        );
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');
         $array['access'] = $this->hasAccess($user);
@@ -197,5 +209,54 @@ class Topic extends Model
         ];
 
         return $payment;
+    }
+
+    public function notifyUsers(): void
+    {
+        $level = $this->level;
+        $users = User::query()
+            // ->where('id', '!=', $this->user_id)
+            ->where('active', true)
+            ->where('blocked', false)
+            ->whereNotNull('email');
+
+        if ($level && $this->price) {
+            $users->where(function (Builder $c) use ($level) {
+                $c->whereHas('currentSubscription', static function (Builder $c) use ($level) {
+                    $c->whereHas('level', static function (Builder $c) use ($level) {
+                        $c->where('price', '>=', $level->price);
+                    });
+                });
+                $c->orWhereHas('payments', function (Builder $c) {
+                    $c->where('topic_id', $this->id);
+                    $c->where('paid', true);
+                });
+            });
+        } elseif ($level) {
+            $users->whereHas('currentSubscription', static function (Builder $c) use ($level) {
+                $c->whereHas('level', static function (Builder $c) use ($level) {
+                    $c->where('price', '>=', $level->price);
+                });
+            });
+        } elseif ($this->price) {
+            $users->whereHas('payments', function (Builder $c) {
+                $c->where('topic_id', $this->id);
+                $c->where('paid', true);
+            });
+        }
+
+        $data = [
+            'topic' => $this->toArray(),
+        ];
+        $data['topic']['link'] = $this->getLink();
+
+        /** @var User $user */
+        foreach ($users->cursor() as $user) {
+            $lang = $user->lang ?? 'ru';
+            $subject = getenv('EMAIL_TOPIC_NEW_' . strtoupper($lang));
+            $data['lang'] = $lang;
+
+            $user->sendEmail($subject, 'topic-new', $data);
+        }
     }
 }

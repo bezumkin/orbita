@@ -197,7 +197,11 @@ export default {
       },
     },
     payment: {
-      service: 'Payment service',
+      service: {
+        title: 'Payment service',
+        scan_qr: 'Scan the QR code to pay',
+        no_subscription: `The service doesn't support automatic payments; you will have to renew your subscription manually.`,
+      },
       subscription: {
         title: 'Purchase a subscription',
         price: 'Subscription price',
@@ -215,6 +219,7 @@ export default {
           current: 'Current level',
           new: 'New level',
         },
+        paid_until: 'Paid until',
       },
       topic: {
         title: 'Unlock this topic only',
@@ -263,6 +268,7 @@ export default {
       title: 'Account',
       profile: 'Profile',
       payments: 'Payments',
+      subscription: 'Subscription',
     },
   },
   widgets: {

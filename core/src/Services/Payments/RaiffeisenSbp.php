@@ -3,14 +3,15 @@
 namespace App\Services\Payments;
 
 use App\Models\Payment;
+use App\Services\Log;
+use App\Services\PaymentService;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 
-class RaiffeisenSbp implements \App\Interfaces\Payment
+class RaiffeisenSbp extends PaymentService
 {
     public const NAME = 'raiffeisen-sbp';
 
@@ -18,9 +19,7 @@ class RaiffeisenSbp implements \App\Interfaces\Payment
 
     public function __construct()
     {
-        // https://pay.raif.ru/api/sbp/v2/
-        $this->client = new Client(['base_uri' => getenv('PAYMENT_RAIFFEISEN_ENDPOINT')]);
-        // https://pay.raif.ru/api/sbp/v1/subscriptions
+        $this->client = new Client(['base_uri' => getenv('PAYMENT_RAIFFEISEN_SBP_ENDPOINT')]);
     }
 
     public function makePayment(Payment $payment): ?string
@@ -31,7 +30,7 @@ class RaiffeisenSbp implements \App\Interfaces\Payment
             'order' => $payment->id,
             'qrType' => 'QRDynamic',
             // 'qrExpirationDate' => Carbon::now()->addMinutes(10)->toIso8601String(),
-            'sbpMerchantId' => getenv('PAYMENT_RAIFFEISEN_ID'),
+            'sbpMerchantId' => getenv('PAYMENT_RAIFFEISEN_SBP_ID'),
             'redirectUrl' => $this->getSuccessUrl($payment),
         ];
 
@@ -49,10 +48,11 @@ class RaiffeisenSbp implements \App\Interfaces\Payment
             $payment->link = $output['payload'];
             $payment->save();
 
+            /*
             if (!empty($output['subscriptionId']) && $payment->subscription) {
                 $payment->subscription->remote_id = $output['subscriptionId'];
                 $payment->subscription->save();
-            }
+            } */
 
             return $this::getQR($payment);
         }
@@ -64,7 +64,7 @@ class RaiffeisenSbp implements \App\Interfaces\Payment
     {
         try {
             $response = $this->client->get('qrs/' . $payment->remote_id, [
-                'headers' => ['Authorization' => 'Bearer ' . getenv('PAYMENT_RAIFFEISEN_KEY')],
+                'headers' => ['Authorization' => 'Bearer ' . getenv('PAYMENT_RAIFFEISEN_SBP_KEY')],
             ]);
             $output = json_decode((string)$response->getBody(), true);
             if ($output['qrStatus'] === 'PAID') {
@@ -74,6 +74,7 @@ class RaiffeisenSbp implements \App\Interfaces\Payment
                 return false;
             }
         } catch (\Throwable  $e) {
+            Log::error($e);
         }
 
         return null;

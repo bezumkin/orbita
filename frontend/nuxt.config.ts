@@ -38,7 +38,8 @@ export default defineNuxtConfig({
       COMMENTS_EDIT_TIME: process.env.COMMENTS_EDIT_TIME || '600',
       EDITOR_TOPIC_BLOCKS: process.env.EDITOR_TOPIC_BLOCKS || '',
       EDITOR_COMMENT_BLOCKS: process.env.EDITOR_COMMENT_BLOCKS || '',
-      PAYMENT_SERVICES: process.env.PAYMENT_SERVICES,
+      PAYMENT_SERVICES: process.env.PAYMENT_SERVICES || '',
+      PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
     },
   },
   modules: [

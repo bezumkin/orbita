@@ -2,12 +2,13 @@
 
 namespace App\Controllers\User;
 
-use App\Interfaces\Payment as PaymentInterface;
 use App\Models\Level;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\Topic;
 use App\Models\User;
+use App\Services\PaymentService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -127,7 +128,7 @@ class Payments extends ModelGetController
         return $response;
     }
 
-    protected function getService(string $name): PaymentInterface
+    protected function getService(string $name): PaymentService
     {
         $allowedServices = array_map('trim', explode(',', strtolower(getenv('PAYMENT_SERVICES') ?: '')));
         $serviceName = implode('', array_map('ucfirst', explode('-', $name)));
@@ -141,7 +142,7 @@ class Payments extends ModelGetController
         }
 
         $service = new $serviceClass();
-        if (!($service instanceof PaymentInterface)) {
+        if (!($service instanceof PaymentService)) {
             throw new RuntimeException('errors.payment.wrong_service');
         }
 

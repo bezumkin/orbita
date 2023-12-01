@@ -197,7 +197,11 @@ export default {
       },
     },
     payment: {
-      service: 'Сервис оплаты',
+      service: {
+        title: 'Сервис оплаты',
+        scan_qr: 'Отсканируйте QR код для оплаты',
+        no_subscription: 'Сервис не поддерживает автоплатежи, вы будете продлять подписку вручную.',
+      },
       subscription: {
         title: 'Покупка подписки',
         price: 'Стоимость подписки',
@@ -215,6 +219,7 @@ export default {
           current: 'Текущий уровень',
           new: 'Новый уровень',
         },
+        paid_until: 'Оплачено до',
       },
       topic: {
         title: 'Доступ к заметке',
@@ -263,6 +268,7 @@ export default {
       title: 'Аккаунт',
       profile: 'Профиль',
       payments: 'Платежи',
+      subscription: 'Подписка',
     },
   },
   widgets: {

@@ -50,7 +50,7 @@ const periods = [1, 3, 6, 12]
 const currentLevel: Ref<VespLevel | undefined> = ref()
 const downgrading = ref(false)
 const upgrading = ref(false)
-const level: Ref<VespLevel> = ref($payment as unknown as VespLevel)
+const level: ComputedRef<VespLevel> = computed(() => $payment.value as unknown as VespLevel)
 
 const myValue: WritableComputedRef<Record<string, any>> = computed({
   get() {
@@ -121,6 +121,8 @@ function setPrice() {
     }
   }
 }
+
+emit('title', t('components.payment.subscription.title'))
 
 if (user.value?.subscription) {
   if (user.value.subscription.level_id === level.value.id) {

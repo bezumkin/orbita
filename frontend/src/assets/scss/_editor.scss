@@ -5,11 +5,6 @@
   flex-flow: column nowrap;
   gap: 0.5rem;
 
-  pre, code {
-    color: inherit;
-    background-color: $light;
-  }
-
   blockquote {
     background: $light;
     border-left: 3px solid $secondary;

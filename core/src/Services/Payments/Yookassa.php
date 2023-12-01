@@ -3,12 +3,14 @@
 namespace App\Services\Payments;
 
 use App\Models\Payment;
-use Carbon\Carbon;
+use App\Services\Log;
+use App\Services\PaymentService;
 use GuzzleHttp\Client;
 use Ramsey\Uuid\Uuid;
 
-class Yookassa implements \App\Interfaces\Payment
+class Yookassa extends PaymentService
 {
+    public const SUBSCRIPTIONS = true;
     protected Client $client;
 
     public function __construct()
@@ -36,13 +38,13 @@ class Yookassa implements \App\Interfaces\Payment
             ],
             'description' => '',
             'capture' => true,
-            'save_payment_method' => (bool)$payment->subscription,
             'metadata' => [
                 'payment_id' => $payment->id,
             ],
         ];
         if ($payment->subscription) {
             $data['description'] = $payment->subscription->level->title;
+            $data['save_payment_method'] = $this->canSubscribe();
             $data['metadata']['subscription_id'] = $payment->subscription->id;
         } elseif ($payment->topic) {
             $data['description'] = $payment->topic->title;
@@ -86,6 +88,7 @@ class Yookassa implements \App\Interfaces\Payment
                 return false;
             }
         } catch (\Throwable  $e) {
+            Log::error($e);
         }
 
         return null;
@@ -94,5 +97,41 @@ class Yookassa implements \App\Interfaces\Payment
     public function getSuccessUrl(Payment $payment): string
     {
         return rtrim(getenv('SITE_URL'), '/') . '/user/payments/' . $payment->id;
+    }
+
+    public function chargeSubscription(Payment $payment): ?bool
+    {
+        if (!$payment->subscription || !$payment->subscription->remote_id) {
+            return null;
+        }
+
+        try {
+            $data = [
+                'amount' => [
+                    'value' => $payment->amount,
+                    'currency' => getenv('CURRENCY') ?: 'RUB',
+                ],
+                'description' => $payment->subscription->level->title,
+                'capture' => true,
+                'payment_method_id' => $payment->subscription->remote_id,
+            ];
+
+            $url = $this->getSuccessUrl($payment);
+            $response = $this->client->post('payments', [
+                'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
+                'json' => $data,
+            ]);
+            $output = json_decode((string)$response->getBody(), true);
+            if (!empty($output['id'])) {
+                $payment->remote_id = $output['id'];
+                $payment->save();
+
+                return @$output['status'] === 'succeeded';
+            }
+        } catch (\Throwable  $e) {
+            Log::error($e);
+        }
+
+        return false;
     }
 }

@@ -18,6 +18,7 @@ class Topics extends ModelController
     protected string|array $scope = 'topics';
     public array $attachments = ['cover'];
     private bool $isNew = false;
+    private bool $notifyUsers = false;
 
     protected function beforeGet(Builder $c): Builder
     {
@@ -67,6 +68,7 @@ class Topics extends ModelController
 
         if ($record->active && !$record->published_at) {
             $record->published_at = time();
+            $this->notifyUsers = true;
         }
         if (!$record->price) {
             $record->price = null;
@@ -88,6 +90,10 @@ class Topics extends ModelController
             Socket::send('topic-create', $this->prepareRow($record));
         } else {
             Socket::send('topic-update', $this->prepareRow($record));
+        }
+
+        if ($this->notifyUsers) {
+            $record->notifyUsers();
         }
 
         return $record;

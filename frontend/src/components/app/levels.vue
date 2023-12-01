@@ -1,5 +1,5 @@
 <template>
-  <div class="widget">
+  <div v-if="$levels.length" class="widget">
     <h5 class="widget-title">{{ $t('widgets.levels') }}</h5>
     <div class="widget-body subscriptions">
       <div v-for="level in $levels" :key="level.id" class="level">
@@ -38,6 +38,7 @@ function getBtnParams(level: VespLevel) {
     // Unsubscribe or renew
     else if (level.id === user.value.subscription.level_id) {
       params.variant = 'outline-secondary'
+      // params.disabled = true
       params.onClick = user.value.subscription.cancelled ? onRenew : onUnsubscribe
     }
   }

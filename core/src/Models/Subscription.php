@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Interfaces\Payment as PaymentInterface;
+use App\Services\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,7 +49,7 @@ class Subscription extends Model
         return $this->belongsTo(Level::class, 'next_level_id');
     }
 
-    protected function getService(): PaymentInterface
+    protected function getService(): PaymentService
     {
         $service = '\App\Services\Payments\\' . $this->service;
 
@@ -64,8 +64,8 @@ class Subscription extends Model
         $payment->service = $service ?? $this->service;
         $payment->amount = $this->amountForPeriod($period);
         $payment->metadata = [
-            'level' => $this->level->id,
-            'title' => $this->level->title,
+            'level' => $this->nextLevel->id ?? $this->level->id,
+            'title' => $this->nextLevel->title ?? $this->level->title,
             'period' => $period,
             'until' => (string)Carbon::now()->addMonths($period),
         ];
@@ -80,21 +80,32 @@ class Subscription extends Model
 
     public function activate(): void
     {
+        $now = Carbon::now()->toImmutable();
+
         $period = $this->next_period ?? $this->period;
-        $now = Carbon::now();
-        if (!$this->active_until || $this->active_until < $now) {
+        if (!$this->active_until || $this->active_until < $now || $this->next_level_id) {
             $this->active_until = $now->addMonths($period);
+            if ($this->next_level_id) {
+                $this->level_id = $this->next_level_id;
+            }
         } else {
-            $this->active_until->addMonths($period);
-        }
-        if ($this->next_level_id) {
-            $this->level_id = $this->next_level_id;
+            $this->active_until = $this->active_until->addMonths($period);
         }
         $this->active = true;
         $this->cancelled = false;
         $this->next_level_id = null;
         $this->next_period = null;
         $this->save();
+
+        $this->sendEmail('paid');
+    }
+
+    public function disable(): void
+    {
+        $this->active = false;
+        $this->save();
+
+        $this->sendEmail('cancelled');
     }
 
     public function paidAmountLeft(): float
@@ -107,10 +118,32 @@ class Subscription extends Model
         return $this->level->costPerDay() * $days;
     }
 
-
-    // Make a payment for the perios
-    public function charge(): bool
+    public function charge(): ?bool
     {
-        return true;
+        $service = $this->getService();
+        if ($this->remote_id && $service::SUBSCRIPTIONS) {
+            $payment = $this->createPayment($this->next_period ?? $this->period);
+            $payment->save();
+
+            return $service->chargeSubscription($payment);
+        }
+
+        return false;
+    }
+
+    protected function sendEmail(string $type): ?string
+    {
+        $lang = $this->user->lang ?? 'ru';
+        $service = $this->getService();
+        $data = [
+            'lang' => $lang,
+            'user' => $this->user->toArray(),
+            'level' => $this->level->toArray(),
+            'subscription' => $this->toArray(),
+            'renew' => $service->canSubscribe(),
+        ];
+        $subject = getenv('EMAIL_SUBSCRIPTION_' . strtoupper($type) . '_' . strtoupper($lang));
+
+        return $this->user->sendEmail($subject, 'subscription-' . $type, $data);
     }
 }

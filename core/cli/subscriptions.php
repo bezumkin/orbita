@@ -16,12 +16,13 @@ Subscription::query()
     ->where('created_at', '<', $now->addDay())
     ->delete();
 
-// @TODO pay for current subscriptions
+// Try to prolong active subscriptions
 $subscriptions = Subscription::query()->where('active', true)->where('active_until', '<', $now);
-/** @var Subscription $subscription */
 foreach ($subscriptions->cursor() as $subscription) {
-    if (!$subscription->charge()) {
-        $subscription->active = false;
-        $subscription->save();
+    /** @var Subscription $subscription */
+    if ($subscription->charge()) {
+        $subscription->activate();
+    } else {
+        $subscription->disable();
     }
 }
