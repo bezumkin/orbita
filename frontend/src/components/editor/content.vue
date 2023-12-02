@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <div v-for="block in content.blocks" :key="block.id">
-      <div v-if="block.type === 'paragraph'" @click="$contentClick" v-html="block.data.text" />
-      <player-video v-else-if="block.type === 'video'" :uuid="block.data.uuid" />
+  <div :class="type + '-content'">
+    <template v-for="block in content.blocks" :key="block.id">
+      <player-video v-if="block.type === 'video'" :uuid="block.data.uuid" />
       <player-embed v-else-if="block.type === 'embed'" :url="block.data.url" />
+      <topic-block-paragraph v-else-if="block.type === 'paragraph'" :block="block" />
       <topic-block-file v-else-if="block.type === 'file'" :block="block" />
-      <topic-block-image v-else-if="block.type === 'image'" :block="block" />
+      <topic-block-image v-else-if="block.type === 'image'" :block="block" :max-width="type === 'topic' ? 800 : 400" />
       <topic-block-audio v-else-if="block.type === 'audio'" :block="block" />
       <topic-block-code v-else-if="block.type === 'code'" :block="block" />
+      <topic-block-header v-else-if="block.type === 'header'" :block="block" />
+      <topic-block-list v-else-if="block.type === 'list'" :block="block" />
       <template v-else>{{ block }}</template>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -22,6 +24,10 @@ defineProps({
         blocks: [],
       }
     },
+  },
+  type: {
+    type: String,
+    default: 'topic',
   },
 })
 </script>

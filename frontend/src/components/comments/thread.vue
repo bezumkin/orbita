@@ -14,7 +14,7 @@
             </div>
           </div>
           <div v-if="record.id !== comment.id" class="comment-text">
-            <editor-content :content="comment.content" class="comment-content" />
+            <editor-content :content="comment.content" type="comment" />
           </div>
         </template>
         <div v-else class="comment-text" v-text="$t('components.comments.info.deleted')" />

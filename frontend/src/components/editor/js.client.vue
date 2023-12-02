@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <b-button-group v-if="!readOnly" class="w-100 mb-1">
+  <div class="content-editor">
+    <div v-if="!readOnly" class="actions">
       <template v-for="action in enabledBlocks" :key="action.type">
         <b-button v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
           <fa :icon="action.icon" class="fa-fw" />
           {{ $t('actions.editor.' + action.type) }}
         </b-button>
       </template>
-    </b-button-group>
+    </div>
     <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
 
     <editor-pick-video v-if="showVideos" @hidden="showVideos = false" />
@@ -18,6 +18,10 @@
 import type {OutputData, LogLevels, I18nDictionary} from '@editorjs/editorjs'
 import type {BaseButtonVariant, BaseSize} from 'bootstrap-vue-next/src/types'
 import EditorJS from '@editorjs/editorjs'
+// @ts-ignore
+import Header from '@editorjs/header'
+// @ts-ignore
+import List from '@editorjs/list'
 import AudioBlock from './blocks/audio'
 import FileBlock from './blocks/file'
 import ImageBlock from './blocks/image'
@@ -75,7 +79,7 @@ const record = computed({
 
 const holder = ref()
 const editor = ref()
-const {locale} = useI18n()
+const {locale, t} = useI18n()
 const currentBlockIdx = ref(0)
 const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
   return locale.value === 'ru'
@@ -85,18 +89,43 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
           moveUp: {'Move up': 'Наверх'},
           moveDown: {'Move down': 'Вниз'},
         },
-        toolNames: {},
-        tools: {link: {'Add a link': 'Вставьте ссылку'}},
-        ui: {},
+        toolNames: {Text: 'Текст', Heading: 'Заголовок', List: 'Список'},
+        tools: {
+          link: {'Add a link': 'Вставьте ссылку'},
+          header: {
+            'Heading 2': 'Заголовок 2',
+            'Heading 3': 'Заголовок 3',
+            'Heading 4': 'Заголовок 4',
+            'Heading 5': 'Заголовок 5',
+          },
+          list: {Ordered: 'Нумерованный', Unordered: 'Маркированный'},
+        },
+        ui: {inlineToolbar: {converter: {'Convert to': 'Конвертировать в'}}},
       }
     : undefined
 })
 const allBlocks = [
+  {
+    type: 'header',
+    icon: 'heading',
+    class: Header,
+    click: () => insert('header'),
+    toolbar: true,
+    config: {placeholder: t('actions.editor.header'), levels: [2, 3, 4, 5], defaultLevel: 3},
+  },
   {type: 'audio', icon: 'music', class: AudioBlock, click: insertAudio, config: {uploadUrl: props.uploadUrl}},
   {type: 'file', icon: 'file', class: FileBlock, click: insertFile, config: {uploadUrl: props.uploadUrl}},
   {type: 'image', icon: 'image', class: ImageBlock, click: insertImage, config: {uploadUrl: props.uploadUrl}},
   {type: 'video', icon: 'video', class: VideoBlock, click: insertVideo, config: {uploadUrl: props.uploadUrl}},
-  {type: 'code', icon: 'code', class: CodeBlock, click: insertCode},
+  {type: 'code', icon: 'code', class: CodeBlock, click: () => insert('code')},
+  {
+    type: 'list',
+    icon: 'list',
+    class: List,
+    click: () => insert('list'),
+    toolbar: true,
+    config: {defaultStyle: 'unordered'},
+  },
   {type: 'embed', icon: undefined, class: EmbedBlock, click: undefined},
 ]
 const enabledBlocks = computed(() => {
@@ -107,7 +136,12 @@ const enabledBlocks = computed(() => {
   return allBlocks
 })
 const tools: ComputedRef<Record<string, any>> = computed(() => {
-  return Object.fromEntries(enabledBlocks.value.map((i) => [i.type, {class: i.class, config: i.config || {}}]))
+  return Object.fromEntries(
+    enabledBlocks.value.map((i) => [
+      i.type,
+      {class: i.class, inlineToolbar: i.toolbar || false, config: i.config || {}},
+    ]),
+  )
 })
 const showVideos = ref(false)
 
@@ -152,8 +186,8 @@ function insertVideo() {
   showVideos.value = true
 }
 
-function insertCode() {
-  editor.value.blocks.insert('code')
+function insert(block: string) {
+  editor.value.blocks.insert(block)
 }
 
 provide('pickVideo', (video: any) => {

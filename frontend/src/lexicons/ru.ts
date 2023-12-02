@@ -18,6 +18,8 @@ export default {
       audio: 'Аудио',
       pick_video: 'Выберите видео',
       code: 'Код',
+      header: 'Заголовок',
+      list: 'Список',
     },
     back: 'Назад',
     reply: 'Ответить',

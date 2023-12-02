@@ -5,6 +5,12 @@
   flex-flow: column nowrap;
   gap: 0.5rem;
 
+  ul, ol {
+    padding: 0;
+    margin: 0;
+    list-style-position: inside;
+  }
+
   blockquote {
     background: $light;
     border-left: 3px solid $secondary;
@@ -16,7 +22,28 @@
   }
 }
 
+.content-editor {
+  width: 100%;
+
+  .actions {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+
+    .btn {
+      flex-grow: 1;
+    }
+  }
+}
+
 .editorjs {
+  &.form-control {
+    max-height: 600px;
+    overflow: scroll;
+  }
+
   .codex-editor__redactor {
     @extend %editor-content;
   }
@@ -27,6 +54,14 @@
   }
 
   .cdx-block {
+    padding: 0;
+  }
+
+  .ce-header {
+    padding: 0;
+  }
+
+  .cdx-list__item {
     padding: 0;
   }
 

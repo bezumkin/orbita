@@ -108,19 +108,31 @@ export function contentPreview(content: OutputData, length: number = 100) {
 }
 
 export function contentClick(e: MouseEvent) {
-  const target = e.target as HTMLLinkElement
-  // External link
+  let target = e.target as HTMLElement
+
+  // Handle links
+  if (['I', 'B'].includes(target.tagName)) {
+    let parent = target.parentElement
+    while (parent) {
+      if (parent.tagName === 'A') {
+        target = parent
+        break
+      }
+      parent = parent.parentElement
+    }
+  }
   if (target.tagName === 'A') {
-    const local = useRuntimeConfig().public.SITE_URL
     e.preventDefault()
-    if (!/:\/\//.test(target.href) || target.href.startsWith(local)) {
+    const href = (target as HTMLLinkElement).href
+    const local = useRuntimeConfig().public.SITE_URL
+    if (!/:\/\//.test(href) || href.startsWith(local)) {
       const router = useRouter()
-      const route = router.resolve(target.href.replace(local, '/'))
+      const route = router.resolve(href.replace(local, '/'))
       if (route) {
         router.push(route)
       }
     } else {
-      window.open(target.href)
+      window.open(href)
     }
   }
 }

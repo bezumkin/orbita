@@ -18,6 +18,8 @@ export default {
       audio: 'Audio',
       pick_video: 'Pick video',
       code: 'Code',
+      header: 'Header',
+      list: 'List',
     },
     back: 'Back',
     reply: 'Reply',

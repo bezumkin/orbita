@@ -2,7 +2,7 @@
   <div class="col-md-9 m-auto topic">
     <h1 class="topic-header">{{ page.title }}</h1>
 
-    <editor-content :content="page.content" class="topic-content" />
+    <editor-content :content="page.content" />
   </div>
 </template>
 

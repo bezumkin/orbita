@@ -16,6 +16,8 @@
   "dependencies": {
     "@bootstrap-vue-next/nuxt": "^0.14.9",
     "@editorjs/editorjs": "^2.28.2",
+    "@editorjs/header": "^2.8.1",
+    "@editorjs/list": "^1.9.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",

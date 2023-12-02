@@ -39,6 +39,8 @@ import {
   faHourglassHalf,
   faLock,
   faLockOpen,
+  faHeading,
+  faList,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -78,6 +80,8 @@ library.add(
   faHourglassHalf,
   faLock,
   faLockOpen,
+  faHeading,
+  faList,
 )
 
 config.autoAddCss = false

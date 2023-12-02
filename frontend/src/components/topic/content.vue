@@ -4,7 +4,7 @@
       <h1 class="mt-2">{{ myValue.title }}</h1>
     </div>
 
-    <editor-content v-if="myValue.content?.blocks" :content="myValue.content" class="topic-content" />
+    <editor-content v-if="myValue.content?.blocks" :content="myValue.content" />
 
     <topic-footer :topic="myValue" />
   </div>
