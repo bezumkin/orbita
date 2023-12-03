@@ -1,7 +1,7 @@
 <template>
-  <b-img v-if="source" :src="source" :srcset="srcSet" v-bind="imgProps" lazy />
-  <div v-else :style="{width: size + 'px', height: size + 'px'}" v-bind="imgProps">
-    <fa icon="user" class="fa-fw m-auto" :style="{color: '#fff', width: halfSize + 'px', height: halfSize + 'px'}" />
+  <b-img v-if="imgProps.src" v-bind="imgProps" lazy />
+  <div v-else v-bind="imgProps">
+    <fa icon="user" class="fa-fw m-auto" v-bind="iconProps" />
   </div>
 </template>
 
@@ -26,23 +26,23 @@ const props = defineProps({
 })
 
 const {$image} = useNuxtApp()
+
 const imgProps = computed(() => {
-  return {
+  const data: Record<string, any> = {
     style: {width: props.size + 'px', height: props.size + 'px'},
-    alt: '',
     class: `user-avatar d-inline-flex rounded-circle flex-shrink-0 bg-${props.variant}`,
   }
+  if (props.user.avatar) {
+    data.src = $image(props.user.avatar, {w: props.size, h: props.size, fit: 'crop'})
+    data.srcSet = $image(props.user.avatar, {w: Number(props.size) * 2, h: Number(props.size) * 2, fit: 'crop'}) + ' 2x'
+  }
+  return data
 })
-const source = computed(() => {
-  return props.user.avatar ? $image(props.user.avatar, {w: props.size, h: props.size}) : undefined
+
+const iconProps = computed(() => {
+  const halfSize = Math.round(Number(props.size) / 2)
+  return {
+    style: {color: '#fff', width: halfSize + 'px', height: halfSize + 'px'},
+  }
 })
-const source2x = computed(() => {
-  return props.user.avatar
-    ? $image(props.user.avatar, {w: Number(props.size) * 2, h: Number(props.size) * 2})
-    : undefined
-})
-const srcSet = computed(() => {
-  return source.value ? [source.value, source2x.value + ' 2x'].join(', ') : undefined
-})
-const halfSize = computed(() => Math.round(Number(props.size) / 2))
 </script>
