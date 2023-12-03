@@ -246,10 +246,14 @@ function getStatus(item: UploadItem) {
   if (item.error) {
     if (item.error instanceof DetailedError) {
       const status = item.error.originalResponse?.getStatus() || 500
-      const message = item.error.originalResponse?.getBody().slice(1, -1)
-      return t('components.upload.status_error', {
-        error: message ? t(message) : 'HTTP status ' + status,
-      })
+      const message = JSON.parse(item.error.originalResponse?.getBody() as string)
+      const translate = translateServerMessage(message)
+
+      return message !== translate
+        ? translate
+        : t('components.upload.status_error', {
+            error: message ? t(message) : 'HTTP status ' + status,
+          })
     }
     return String(item.error)
   } else if (item.finished) {

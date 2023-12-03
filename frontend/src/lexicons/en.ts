@@ -285,6 +285,7 @@ export default {
     logout: 'Goodbye!',
   },
   errors: {
+    scope: 'There are not enough permissions for this action, "{scope}" is required',
     user: {
       no_username: 'Username is required',
       no_fullname: 'Fullname is required',

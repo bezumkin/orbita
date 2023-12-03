@@ -137,6 +137,17 @@ export function contentClick(e: MouseEvent) {
   }
 }
 
+export function translateServerMessage(message: string) {
+  const check = message.match(/^You have no "(.*?)" scope for this action$/)
+  if (check) {
+    const {$i18n} = useNuxtApp()
+    if ($i18n) {
+      return $i18n.t('errors.scope', {scope: check[1]})
+    }
+  }
+  return message
+}
+
 export function getAdminSections() {
   const items = [
     {scope: 'payments/get', title: 'payments', route: 'admin-payments'},

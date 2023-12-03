@@ -168,7 +168,15 @@ export default class implements BlockTool {
         $this.onSuccess()
       },
       onError(e: Error | DetailedError) {
-        console.error(e)
+        if ('originalResponse' in e) {
+          useToastError(JSON.parse(e.originalResponse?.getBody() as string))
+          const status = e.originalResponse?.getStatus() as number
+          if (status >= 400 && status < 500) {
+            $this.abortUpload()
+          }
+        } else {
+          console.error(e)
+        }
       },
     }
 

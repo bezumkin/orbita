@@ -2,15 +2,15 @@ import * as pkg from 'vue-toastification'
 const {useToast} = pkg
 
 export function useToastInfo(message: string, options = {}) {
-  useToast().info(message, options)
+  useToast().info(translateServerMessage(message), options)
 }
 
 export function useToastSuccess(message: string, options = {}) {
-  useToast().success(message, options)
+  useToast().success(translateServerMessage(message), options)
 }
 
 export function useToastError(message: string, options = {}) {
-  useToast().error(message, options)
+  useToast().error(translateServerMessage(message), options)
 }
 
 export function useToastsClear() {
