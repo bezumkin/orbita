@@ -16,7 +16,7 @@ export default {
       video: 'Video',
       file: 'File',
       audio: 'Audio',
-      pick_video: 'Pick video',
+      pick_video: 'Pick uploaded video',
       code: 'Code',
       header: 'Header',
       list: 'List',
@@ -309,6 +309,8 @@ export default {
     },
     video: {
       no_image: 'You forgot to upload an image for the video',
+      pick_none: 'There are no uploaded videos yet',
+      pick_not_found: 'Nothing found',
     },
     setting: {
       required: 'This setting is required',

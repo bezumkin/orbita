@@ -11,37 +11,35 @@
       </b-input-group>
     </b-form-group>
 
-    <b-overlay :show="loading" opacity="0.5">
-      <div class="grid">
-        <b-card v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
-          <template #img>
-            <b-img v-if="video.image" :src="$image(video.image, {w: 1024})" />
-          </template>
-          <template #default>
-            <div class="fw-medium">{{ video.title }}</div>
-            <b-card-text class="small mt-auto pt-2 d-flex flex-column gap-1">
-              <div v-if="video.created_at">{{ d(video.created_at, 'long') }}</div>
-              <div v-if="video.processed_qualities">
-                {{ video.processed_qualities.map((i: number) => i + 'p').join(', ') }}
-              </div>
-            </b-card-text>
-          </template>
-        </b-card>
-      </div>
-      <b-pagination
-        v-if="total > limit"
-        v-model="page"
-        :total-rows="total"
-        :per-page="limit"
-        :limit="5"
-        :hide-goto-end-buttons="true"
-        align="center"
-        class="mt-4"
-      />
-    </b-overlay>
-    <b-alert v-if="!videos.length && !loading" variant="light" :model-value="true">
-      {{ query ? $t('components.table.no_results') : $t('components.table.no_data') }}
-    </b-alert>
+    <div class="grid">
+      <b-card v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
+        <template #img>
+          <b-img v-if="video.image" :src="$image(video.image, {w: 1024})" />
+        </template>
+        <template #default>
+          <div class="fw-medium">{{ video.title }}</div>
+          <b-card-text class="small mt-auto pt-2 d-flex flex-column gap-1">
+            <div v-if="video.created_at">{{ d(video.created_at, 'long') }}</div>
+            <div v-if="video.processed_qualities">
+              {{ video.processed_qualities.map((i: number) => i + 'p').join(', ') }}
+            </div>
+          </b-card-text>
+        </template>
+      </b-card>
+    </div>
+    <b-pagination
+      v-if="total > limit"
+      v-model="page"
+      :total-rows="total"
+      :per-page="limit"
+      :limit="5"
+      :hide-goto-end-buttons="true"
+      align="center"
+      class="mt-4"
+    />
+    <div v-if="!videos.length && !loading" class="alert alert-light">
+      {{ query ? $t('errors.video.pick_not_found') : $t('errors.video.pick_none') }}
+    </div>
 
     <template #footer="{hide}">
       <b-button variant="secondary" @click="hide">{{ $t('actions.close') }}</b-button>
