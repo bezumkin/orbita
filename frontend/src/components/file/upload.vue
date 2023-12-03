@@ -65,7 +65,7 @@ const props = defineProps({
   },
   accept: {
     type: String,
-    default: 'image/*',
+    default: 'image/jpeg, image/png, image/webp',
   },
   wrapperClass: {
     type: [String, Array],

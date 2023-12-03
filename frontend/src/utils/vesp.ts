@@ -19,6 +19,9 @@ export function getImageLink(file: VespFile | Record<string, any>, options?: Ves
     if (!options) {
       options = {}
     }
+    if (!options.fm) {
+      options.fm = 'webp'
+    }
     options.t = file.updated_at.split('.').shift()?.replaceAll(/\D/g, '')
   }
   return params.join('/') + '?' + new URLSearchParams(options as Record<string, string>).toString()
