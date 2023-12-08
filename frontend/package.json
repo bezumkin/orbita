@@ -60,7 +60,7 @@
     "stylelint-config-recommended-vue": "^1.5.0",
     "stylelint-config-standard-scss": "^11.0.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9",
+    "vite": "^4.5.1",
     "vite-plugin-stylelint": "^5.1.1",
     "vue": "^3.3.4",
     "vue-eslint-parser": "^9.3.1",
