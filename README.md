@@ -30,7 +30,7 @@ There are some built-in gateways located in `core/src/Services/Payments`.
 Please use it as an example for your payment connectors. They should extend abstract class `PaymentService`.
 
 Active gateways are listed under `PAYMENT_SERVICES` setting. 
-Services supporting subscriptions (periodical payments) should be also listed under `PAYMENT_SUBSCRIPTIONS`.
+Services supporting subscriptions (periodical payments) should also be listed under `PAYMENT_SUBSCRIPTIONS`.
 
 Don't forget to put `svg` logo of new service into `frontend/src/public/payments`. 
 
