@@ -9,7 +9,7 @@
         </b-col>
         <b-col md="6" :class="middleClasses">
           <app-pages position="footer" />
-          <app-language />
+          <app-language v-if="locales.length > 1" />
         </b-col>
         <b-col md="3" class="text-center text-md-end">
           {{ owner }} &copy; {{ Array.isArray(date) ? date.join(' &mdash; ') : date }}
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-const {locale} = useI18n()
+const {locale, locales} = useI18n()
 const {$settings} = useNuxtApp()
 
 const date = computed(() => {

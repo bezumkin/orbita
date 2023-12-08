@@ -15,9 +15,7 @@
               class="px-2 py-1"
               @click="onLang(code)"
             >
-              <b-img v-if="code === 'ru'" :src="ru" height="16" />
-              <b-img v-else-if="code === 'en'" :src="en" height="16" />
-              <template v-else>{{ code }}</template>
+              <b-img :src="getIcon(code)" height="16" />
             </b-button>
           </div>
         </template>
@@ -34,9 +32,7 @@
     <div v-else key="display">
       <template v-if="jsonTypes.includes(type) && typeof record === 'object'">
         <div v-for="code in Object.keys(record)" :key="code" class="d-flex gap-2 align-items-center">
-          <b-img v-if="code === 'ru'" :src="ru" height="16" />
-          <b-img v-else-if="code === 'en'" :src="en" height="16" />
-          <div v-else>{{ code }}</div>
+          <b-img :src="getIcon(code)" height="16" />
           <div v-html="record[code]" />
         </div>
       </template>
@@ -56,6 +52,7 @@
 <script setup lang="ts">
 import ru from '~/assets/icons/ru.svg'
 import en from '~/assets/icons/gb.svg'
+import de from '~/assets/icons/de.svg'
 
 const props = defineProps({
   modelValue: {
@@ -108,6 +105,19 @@ const imageParams = computed(() => {
 
 function onLang(code: string) {
   lang.value = code
+}
+
+function getIcon(code: string) {
+  if (code === 'ru') {
+    return ru
+  }
+  if (code === 'en') {
+    return en
+  }
+  if (code === 'de') {
+    return de
+  }
+  return undefined
 }
 
 function formatDate(date: string) {

@@ -23,11 +23,17 @@ final class Settings extends Migration
         );
 
         $settings = [
-            'title' => ['type' => 'string', 'value' => ['ru' => 'Орбита', 'en' => 'Orbita']],
-            'description' => ['type' => 'text', 'value' => ['ru' => 'Описание проекта', 'en' => 'Project description']],
+            'title' => ['type' => 'string', 'value' => ['ru' => 'Орбита', 'en' => 'Orbita', 'de' => 'Orbita']],
+            'description' => [
+                'type' => 'text',
+                'value' => ['ru' => 'Описание проекта', 'en' => 'Project description', 'de' => 'Projektbeschreibung'],
+            ],
             'poster' => ['type' => 'image'],
             'background' => ['type' => 'image'],
-            'copyright' => ['type' => 'string', 'value' =>  ['ru' => 'Василий Наумкин', 'en' => 'Vasily Naumkin']],
+            'copyright' => [
+                'type' => 'string',
+                'value' => ['ru' => 'Василий Наумкин', 'en' => 'Vasily Naumkin', 'de' => 'Vasily Naumkin'],
+            ],
             'started' => ['type' => 'date', 'value' => date('Y-m-d')],
         ];
 

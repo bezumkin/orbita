@@ -9,7 +9,7 @@
           link-class="d-flex align-items-center"
           @click="setLocale(i.code)"
         >
-          <b-img :src="i.code === 'en' ? en : ru" height="16" class="me-1" />
+          <b-img :src="getIcon(i.code)" height="16" class="me-1" />
           {{ i.name }}
         </b-dropdown-item>
       </b-dropdown>
@@ -20,4 +20,18 @@
 <script setup lang="ts">
 import ru from '~/assets/icons/ru.svg'
 import en from '~/assets/icons/gb.svg'
+import de from '~/assets/icons/de.svg'
+
+function getIcon(code: string) {
+  if (code === 'ru') {
+    return ru
+  }
+  if (code === 'en') {
+    return en
+  }
+  if (code === 'de') {
+    return de
+  }
+  return undefined
+}
 </script>

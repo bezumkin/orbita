@@ -52,6 +52,7 @@
 import prettyBytes from 'pretty-bytes'
 import {formatDistanceToNow, formatDuration, fromUnixTime, intervalToDuration} from 'date-fns'
 import ru from 'date-fns/locale/ru/index.js'
+import de from 'date-fns/locale/de/index.js'
 import {DetailedError, Upload} from 'tus-js-client'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
 import type {BaseColorVariant} from 'bootstrap-vue-next/src/types'
@@ -88,7 +89,14 @@ type UploadItem = {
 const {t} = useI18n()
 const {token} = useAuth()
 const locale = computed(() => {
-  return useI18n().locale.value === 'ru' ? ru : undefined
+  const code = useI18n().locale.value
+  if (code === 'ru') {
+    return ru
+  }
+  if (code === 'de') {
+    return de
+  }
+  return undefined
 })
 
 const uploading: Ref<UploadItem[]> = ref([])

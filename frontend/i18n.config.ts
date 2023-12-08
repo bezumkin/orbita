@@ -22,7 +22,6 @@ const dateFormat: DateTimeFormat = {
 
 export default defineI18nConfig(() => ({
   legacy: false,
-  locale: 'ru',
   pluralRules: {
     ru: (choice, choicesLength) => {
       if (choice === 0) {
@@ -44,5 +43,6 @@ export default defineI18nConfig(() => ({
   datetimeFormats: {
     ru: dateFormat,
     en: dateFormat,
+    de: dateFormat,
   },
 }))

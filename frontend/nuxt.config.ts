@@ -1,5 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+const enabledLocales = (process.env.LOCALES || 'ru,en,de').split(',')
+const locales = [
+  {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru-RU'},
+  {code: 'en', name: 'English', file: 'en.ts', iso: 'en-US'},
+  {code: 'de', name: 'Deutsch', file: 'de.ts', iso: 'de-DE'},
+].filter((i) => enabledLocales.includes(i.code))
+
 export default defineNuxtConfig({
   telemetry: false,
   srcDir: 'src/',
@@ -80,11 +87,8 @@ export default defineNuxtConfig({
   },
   i18n: {
     strategy: 'no_prefix',
-    defaultLocale: 'ru',
+    defaultLocale: locales[0].code,
     langDir: 'lexicons',
-    locales: [
-      {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru-RU'},
-      {code: 'en', name: 'English', file: 'en.ts', iso: 'en-US'},
-    ],
+    locales,
   },
 })
