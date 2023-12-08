@@ -1,18 +1,9 @@
 <template>
-  <div v-if="!activated" class="plyr plyr--full-ui plyr--video" @click.prevent="onActivate">
-    <b-img :src="posterUrl" fluid />
-    <button class="plyr__control plyr__control--overlaid">
-      <svg aria-hidden="true" focusable="false">
-        <use v-bind="{'xlink:href': sprite + '#plyr-play'}" />
-      </svg>
-    </button>
-  </div>
-  <video v-else ref="video" :src="sourceUrl" controls :poster="posterUrl" class="mw-100" v-on="listeners" />
+  <video ref="video" :src="sourceUrl" controls :poster="poster" v-on="listeners" />
 </template>
 
 <script setup lang="ts">
 import Hls from 'hls.js'
-import sprite from '~/assets/icons/plyr.svg'
 
 const {user} = useAuth()
 const props = defineProps({
@@ -24,26 +15,21 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  poster: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const video = ref()
 const hls = ref()
 const player = ref()
-const activated = ref(false)
 const status = ref()
-
-function onActivate() {
-  activated.value = true
-  nextTick(() => {
-    initPlayer()
-  })
-}
 
 let ready = false
 const {$plyr} = useNuxtApp()
 const sourceUrl = getApiUrl() + 'video/' + props.uuid
 const statusUrl = getApiUrl() + 'user/video/' + props.uuid
-const posterUrl = getApiUrl() + 'poster/' + props.uuid + '/1024'
 const currentLevel = ref(0)
 const levels: Ref<number[]> = computed(() => {
   return hls.value && hls.value.levels ? hls.value.levels.map((i: Record<string, any>) => i.height) : []
@@ -100,7 +86,7 @@ function initPlayer() {
 
 onMounted(() => {
   if (props.autoplay) {
-    onActivate()
+    initPlayer()
   }
 })
 

@@ -10,7 +10,8 @@ $group = $app->group(
         $group->map(['OPTIONS', 'GET', 'POST'], '/audio/{uuid}', App\Controllers\Audio::class);
         $group->get('/image/{uuid}', App\Controllers\Image::class);
         $group->get('/file/{uuid}', App\Controllers\File::class);
-        $group->get('/poster/{uuid}[/{w}]', App\Controllers\Poster::class);
+        $group->get('/poster/{uuid}[/{w:\d+}]', App\Controllers\Poster::class);
+        $group->get('/poster/embed/{service}/{key}', App\Controllers\Poster::class);
 
         $group->group('/security', static function (RouteCollectorProxy $group) {
             $group->any('/login', App\Controllers\Security\Login::class);

@@ -31,6 +31,27 @@ export function getFileLink(file: VespFile | Record<string, any>, options?: Vesp
   return getImageLink(file, options, prefix || 'file')
 }
 
+export function getEmbedLink(service?: string, id?: string, autoplay: boolean = true) {
+  let url
+  if (service && id) {
+    if (service === 'youtube') {
+      url = 'https://www.youtube.com/embed/' + id
+    } else if (service === 'vimeo') {
+      url = 'https://player.vimeo.com/video/' + id
+    } else if (service === 'rutube') {
+      url = 'https://rutube.ru/play/embed/' + id
+    } else if (service === 'vk') {
+      const parts = id.split('_')
+      url = 'https://vk.com/video_ext.php?oid=' + parts[0] + '&id=' + parts[1]
+    }
+
+    if (url && autoplay) {
+      url += (url.includes('?') ? '&' : '?') + 'autoplay=1'
+    }
+  }
+  return url
+}
+
 export function hasScope(scopes: string | string[]): boolean {
   const {user: data} = useAuth()
   const user: VespUser = {id: 0, username: '', ...data.value}

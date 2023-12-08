@@ -1,11 +1,9 @@
 <template>
-  <div ref="frame">
-    <iframe :src="url" allowfullscreen class="d-none" />
-  </div>
+  <iframe :src="url" v-bind="frameProps" />
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   url: {
     type: String,
     required: true,
@@ -16,28 +14,14 @@ const props = defineProps({
   },
 })
 
-const {$plyr} = useNuxtApp()
-const frame = ref()
-const player = ref()
-
-function initPlayer() {
-  if (!props.url) {
-    return
-  }
-
-  player.value = $plyr(frame.value)
-  if (props.autoplay) {
-    nextTick(() => {
-      player.value.play()
-    })
-  }
-}
-
-onMounted(initPlayer)
-
-onUnmounted(() => {
-  if (player.value) {
-    player.value.destroy()
+const frameProps = computed(() => {
+  return {
+    width: '1280',
+    height: '720',
+    allowfullscreen: true,
+    frameborder: '0',
+    allow: 'clipboard-write; autoplay; encrypted-media; fullscreen; picture-in-picture',
+    class: 'rounded',
   }
 })
 </script>

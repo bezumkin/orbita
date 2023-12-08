@@ -19,6 +19,23 @@ fieldset {
   justify-content: space-between;
 }
 
+.ratio {
+  .plyr {
+    position: absolute;
+    border-radius: inherit;
+  }
+
+  &.rounded {
+    > img, div {
+      border-radius: inherit;
+    }
+
+    > img {
+      object-fit: cover;
+    }
+  }
+}
+
 .upload-box {
   overflow: hidden;
   position: relative;

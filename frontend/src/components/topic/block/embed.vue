@@ -1,0 +1,48 @@
+<template>
+  <div v-if="!activated" class="plyr plyr--full-ui plyr--video">
+    <div v-bind="wrapperProps">
+      <b-img :src="posterUrl" />
+    </div>
+    <button class="plyr__control plyr__control--overlaid" @click.prevent="onActivate">
+      <svg aria-hidden="true" focusable="false">
+        <use :xlink:href="sprite + '#plyr-play'" />
+      </svg>
+    </button>
+  </div>
+  <div v-else v-bind="wrapperProps">
+    <player-embed :url="url" :autoplay="true" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import type {OutputBlockData} from '@editorjs/editorjs'
+import sprite from '~/assets/icons/plyr.svg'
+import {getEmbedLink} from '~/utils/vesp'
+
+const props = defineProps({
+  block: {
+    type: Object as PropType<OutputBlockData>,
+    required: true,
+  },
+  maxWidth: {
+    type: Number,
+    default: 800,
+  },
+})
+
+const posterUrl = getApiUrl() + 'poster/embed/' + props.block.data.service + '/' + props.block.data.id
+const url = computed(() => {
+  return getEmbedLink(props.block.data.service, props.block.data.id) || props.block.data.url
+})
+const activated = ref(false)
+const wrapperProps = computed(() => {
+  return {
+    class: ['ratio', 'ratio-16x9', 'm-auto', 'rounded'],
+    style: {maxWidth: props.maxWidth + 'px'},
+  }
+})
+
+function onActivate() {
+  activated.value = true
+}
+</script>
