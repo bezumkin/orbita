@@ -19,7 +19,9 @@ class RaiffeisenSbp extends PaymentService
 
     public function __construct()
     {
-        $this->client = new Client(['base_uri' => getenv('PAYMENT_RAIFFEISEN_SBP_ENDPOINT')]);
+        $this->client = new Client([
+            'base_uri' => getenv('PAYMENT_RAIFFEISEN_SBP_ENDPOINT') ?: 'https://pay.raif.ru/api/sbp/v2/',
+        ]);
     }
 
     public function makePayment(Payment $payment): ?string

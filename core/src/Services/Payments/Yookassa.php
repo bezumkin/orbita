@@ -16,7 +16,7 @@ class Yookassa extends PaymentService
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => getenv('PAYMENT_YOOKASSA_ENDPOINT'),
+            'base_uri' => getenv('PAYMENT_YOOKASSA_ENDPOINT') ?: 'https://api.yookassa.ru/v3/',
             'auth' => [
                 getenv('PAYMENT_YOOKASSA_USER'),
                 getenv('PAYMENT_YOOKASSA_PASSWORD'),

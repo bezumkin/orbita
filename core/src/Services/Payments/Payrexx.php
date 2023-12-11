@@ -14,7 +14,9 @@ class Payrexx extends PaymentService
 
     public function __construct()
     {
-        $this->client = new Client(['base_uri' => getenv('PAYMENT_PAYREXX_ENDPOINT')]);
+        $this->client = new Client([
+            'base_uri' => getenv('PAYMENT_PAYREXX_ENDPOINT') ?: 'https://api.payrexx.com/v1.0/',
+        ]);
     }
 
     public function makePayment(Payment $payment): ?string
