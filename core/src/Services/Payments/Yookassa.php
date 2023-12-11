@@ -126,7 +126,7 @@ class Yookassa extends PaymentService
                 $payment->remote_id = $output['id'];
                 $payment->save();
 
-                return @$output['status'] === 'succeeded';
+                return $output['status'] === 'succeeded';
             }
         } catch (\Throwable  $e) {
             Log::error($e);

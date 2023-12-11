@@ -58,6 +58,8 @@ class Subscription extends Model
 
     public function createPayment(int $period = 1, string $service = null): Payment
     {
+        $now = ($this->active_until ?: Carbon::now())->toImmutable();
+
         $payment = new Payment();
         $payment->user_id = $this->user->id;
         $payment->subscription_id = $this->id;
@@ -67,7 +69,7 @@ class Subscription extends Model
             'level' => $this->nextLevel->id ?? $this->level->id,
             'title' => $this->nextLevel->title ?? $this->level->title,
             'period' => $period,
-            'until' => (string)Carbon::now()->addMonths($period),
+            'until' => (string)$now->addMonths($period),
         ];
 
         return $payment;
@@ -125,7 +127,13 @@ class Subscription extends Model
             $payment = $this->createPayment($this->next_period ?? $this->period);
             $payment->save();
 
-            return $service->chargeSubscription($payment);
+            if ($service->chargeSubscription($payment)) {
+                $payment->paid = true;
+                $payment->paid_at = time();
+                $payment->save();
+
+                return true;
+            }
         }
 
         return false;
