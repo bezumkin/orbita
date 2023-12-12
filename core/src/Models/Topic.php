@@ -46,6 +46,7 @@ class Topic extends Model
         'content' => 'array',
         'price' => 'float',
         'active' => 'bool',
+        'closed' => 'bool',
         'published_at' => 'datetime',
     ];
 
@@ -162,6 +163,7 @@ class Topic extends Model
             'teaser',
             'level_id',
             'price',
+            'closed',
             'views_count',
             'comments_count',
             'published_at'

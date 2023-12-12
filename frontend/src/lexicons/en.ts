@@ -198,6 +198,7 @@ export default {
       info: {
         deleted: 'This message has been deleted',
         guest: 'You must be logged in to post comments',
+        closed: 'Commenting on this topic has been disabled.',
         no_scope: "You don't have permission to comment",
       },
       destroy: {

@@ -21,7 +21,10 @@
     </b-overlay>
 
     <client-only>
-      <template v-if="$scope('comments/put')">
+      <div v-if="topic.closed && !isAdmin" class="alert alert-info mt-5">
+        {{ t('components.comments.info.closed') }}
+      </div>
+      <template v-else-if="$scope('comments/put') || isAdmin">
         <comments-form
           v-if="!replying && !editing"
           ref="form"
@@ -31,9 +34,9 @@
           class="mt-5"
         />
       </template>
-      <b-alert v-else-if="!topic.closed" variant="warning" show class="mt-5">
+      <div v-else class="alert alert-warning mt-5">
         {{ user ? t('components.comments.info.no_scope') : t('components.comments.info.guest') }}
-      </b-alert>
+      </div>
 
       <b-modal v-if="isAdmin" :model-value="Boolean(destroying)" centered @hidden="destroying = 0">
         <template #title>

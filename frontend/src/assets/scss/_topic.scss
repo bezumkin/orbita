@@ -4,6 +4,25 @@
 
   .topic-header {
     margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .topic-form {
+    position: relative;
+
+    .topic-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $light;
+      padding: 1rem;
+      border-radius: $border-radius;
+      margin: -1rem -1rem 1rem;
+      position: sticky;
+      top: 3.5rem;
+      z-index: $zindex-sticky - 1;
+    }
   }
 
   .topic-content {

@@ -198,6 +198,7 @@ export default {
       info: {
         deleted: 'Dieser Kommentar wurde gelöscht',
         guest: 'Du musst eingeloggt sein, um kommentieren zu können',
+        closed: 'Das Kommentieren dieses Themas wurde deaktiviert.',
         no_scope: 'Du hast keine Berechtigung zum Kommentieren',
       },
       destroy: {
