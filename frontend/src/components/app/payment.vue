@@ -204,16 +204,15 @@ watch($payment, (newValue) => {
   }
 })
 
-watch(user, (newValue) => {
+watch(user, async (newValue) => {
   if (newValue && $payment.value) {
-    if (isTopic.value) {
-      // Handle open topic dialog
+    if ('uuid' in $payment.value) {
+      try {
+        const topic = await useGet('web/topics/' + $payment.value.uuid)
+        showModal.value = !topic.access
+      } catch (e) {}
     } else {
-      showModal.value = Boolean(
-        $payment.value &&
-          user.value &&
-          (!user.value.subscription || user.value.subscription.level_id !== $payment.value.id),
-      )
+      showModal.value = !newValue.subscription || newValue.subscription.level_id !== $payment.value.id
     }
   } else {
     $payment.value = undefined
