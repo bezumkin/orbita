@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Payment;
+use ReflectionClass;
 
 abstract class PaymentService
 {
@@ -23,9 +24,9 @@ abstract class PaymentService
         if (!$this::SUBSCRIPTIONS) {
             return false;
         }
-        $name = (new \ReflectionClass($this))->getShortName();
+        $name = (new ReflectionClass($this))->getShortName();
 
-        return in_array($name, array_map('trim',explode(',', getenv('PAYMENT_SUBSCRIPTIONS'))), true);
+        return in_array($name, array_map('trim', explode(',', getenv('PAYMENT_SUBSCRIPTIONS'))), true);
     }
 
     public function chargeSubscription(Payment $payment): ?bool

@@ -4,6 +4,7 @@ namespace App\Controllers\Security;
 
 use App\Models\User;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Vesp\Controllers\Controller;
 
 class Register extends Controller
@@ -12,7 +13,7 @@ class Register extends Controller
     {
         try {
             $user = User::createUser($this->getProperties());
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
 

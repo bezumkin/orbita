@@ -36,19 +36,19 @@ class Log
         return in_array($level, ['error', 'info', 'debug']) ? $level : null;
     }
 
-    public static function error(string | Throwable $message, array $context = []): void
+    public static function error(string|Throwable $message, array $context = []): void
     {
         self::getLogger('error')?->error($message, $context);
     }
 
-    public static function info(string | Throwable $message, array $context = []): void
+    public static function info(string|Throwable $message, array $context = []): void
     {
         if (in_array(self::getLevel(), ['info', 'debug'])) {
             self::getLogger('info')?->info($message, $context);
         }
     }
 
-    public static function debug(string | Throwable $message, array $context = []): void
+    public static function debug(string|Throwable $message, array $context = []): void
     {
         if (self::getLevel() === 'debug') {
             self::getLogger('debug')?->debug($message, $context);

@@ -5,6 +5,7 @@ namespace App\Controllers\User;
 use App\Controllers\Traits\FileModelController;
 use App\Models\User;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class Profile extends \Vesp\Controllers\User\Profile
 {
@@ -37,7 +38,7 @@ class Profile extends \Vesp\Controllers\User\Profile
     {
         try {
             $this->user->fillData($this->getProperties());
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
 

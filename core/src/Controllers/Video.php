@@ -7,6 +7,7 @@ use App\Models\Video as VideoFile;
 use App\Models\VideoQuality;
 use App\Services\Log;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Vesp\Controllers\Controller;
 
 class Video extends Controller
@@ -125,7 +126,7 @@ class Video extends Controller
                     'Access-Control-Allow-Origin',
                     getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
                 );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 

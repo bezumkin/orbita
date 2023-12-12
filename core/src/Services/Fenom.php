@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Fenom\Provider;
+use RuntimeException;
 
 class Fenom extends \Fenom
 {
@@ -12,7 +13,7 @@ class Fenom extends \Fenom
 
         $cache = getenv('CACHE_DIR') . 'fenom/';
         if (!file_exists($cache) && !mkdir($cache) && !is_dir($cache)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $cache));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $cache));
         }
 
         $this->setCompileDir($cache);

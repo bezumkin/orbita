@@ -10,6 +10,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use GuzzleHttp\Client;
+use Throwable;
 
 class RaiffeisenSbp extends PaymentService
 {
@@ -75,7 +76,7 @@ class RaiffeisenSbp extends PaymentService
             if (in_array($output['qrStatus'], ['CANCELLED', 'EXPIRED'])) {
                 return false;
             }
-        } catch (\Throwable  $e) {
+        } catch (Throwable  $e) {
             Log::error($e);
         }
 

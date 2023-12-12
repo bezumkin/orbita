@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Services\Log;
 use App\Services\PaymentService;
 use GuzzleHttp\Client;
+use Throwable;
 
 class Payrexx extends PaymentService
 {
@@ -61,7 +62,7 @@ class Payrexx extends PaymentService
                     return $payment->link;
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 
@@ -97,7 +98,7 @@ class Payrexx extends PaymentService
                     return true;
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 
@@ -134,7 +135,7 @@ class Payrexx extends PaymentService
 
                 return $data['status'] === 'confirmed';
             }
-        } catch (\Throwable  $e) {
+        } catch (Throwable  $e) {
             Log::error($e);
         }
 

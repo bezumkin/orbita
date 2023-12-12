@@ -7,6 +7,7 @@ use App\Services\Log;
 use App\Services\PaymentService;
 use GuzzleHttp\Client;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 class Yookassa extends PaymentService
 {
@@ -87,7 +88,7 @@ class Yookassa extends PaymentService
             if ($output['status'] === 'canceled') {
                 return false;
             }
-        } catch (\Throwable  $e) {
+        } catch (Throwable  $e) {
             Log::error($e);
         }
 
@@ -128,7 +129,7 @@ class Yookassa extends PaymentService
 
                 return $output['status'] === 'succeeded';
             }
-        } catch (\Throwable  $e) {
+        } catch (Throwable  $e) {
             Log::error($e);
         }
 

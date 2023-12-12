@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Vesp\Controllers\ModelController;
 
 class Users extends ModelController
@@ -43,7 +44,7 @@ class Users extends ModelController
         try {
             /** @var User $record */
             $record->fillData($this->getProperties());
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
 

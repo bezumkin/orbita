@@ -32,7 +32,7 @@ class Comment extends Model
     protected $fillable = ['content', 'active'];
     protected $casts = [
         'active' => 'boolean',
-        'content' => 'array'
+        'content' => 'array',
     ];
 
     protected static function booted(): void

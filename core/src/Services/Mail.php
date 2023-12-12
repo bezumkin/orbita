@@ -5,6 +5,7 @@ namespace App\Services;
 use Pelago\Emogrifier\CssInliner;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use Throwable;
 
 class Mail
 {
@@ -49,7 +50,7 @@ class Mail
             Log::error($e);
 
             return $mail->ErrorInfo;
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             Log::error($e);
 
             return $e->getMessage();

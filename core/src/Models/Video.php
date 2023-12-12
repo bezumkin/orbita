@@ -13,7 +13,7 @@ use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile;
 use Streaming\Format\X264;
 use Streaming\Representation;
-use Vesp\Services\Eloquent;
+use Throwable;
 
 /**
  * @property string $id
@@ -97,7 +97,7 @@ class Video extends Model
                     $this->file->save();
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->processed = false;
             $this->error = $e->getMessage();
             $this->save();
@@ -173,7 +173,7 @@ class Video extends Model
                 if (PHP_SAPI === 'cli') {
                     echo PHP_EOL;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->processed = false;
                 $this->error = $e->getMessage();
                 $this->save();
@@ -255,7 +255,7 @@ class Video extends Model
             if ($fs->directoryExists($this->id)) {
                 $fs->deleteDirectory($this->id);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 

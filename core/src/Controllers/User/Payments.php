@@ -8,11 +8,12 @@ use App\Models\Subscription;
 use App\Models\Topic;
 use App\Models\User;
 use App\Services\PaymentService;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
 use RuntimeException;
+use Throwable;
 use Vesp\Controllers\ModelGetController;
 
 class Payments extends ModelGetController
@@ -51,7 +52,7 @@ class Payments extends ModelGetController
     {
         try {
             $service = $this->getService($this->getProperty('service', ''));
-            $serviceName = (new \ReflectionClass($service))->getShortName();
+            $serviceName = (new ReflectionClass($service))->getShortName();
 
             if ($levelId = $this->getProperty('level')) {
                 /** @var Level $level */
@@ -70,7 +71,7 @@ class Payments extends ModelGetController
 
                 return $this->failure('Not Found', 404);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
 

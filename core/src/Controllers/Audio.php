@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\File;
 use App\Services\Log;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Vesp\Controllers\Controller;
 
 class Audio extends Controller
@@ -58,7 +59,7 @@ class Audio extends Controller
                     'Access-Control-Allow-Origin',
                     getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
                 );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 

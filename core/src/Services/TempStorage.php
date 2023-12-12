@@ -4,13 +4,14 @@ namespace App\Services;
 
 use App\Models\File;
 use FFMpeg\Coordinate\TimeCode;
-use RuntimeException;
 use League\Flysystem\StorageAttributes;
+use RuntimeException;
 use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile;
 use Streaming\FFMpeg;
 use Streaming\Format\StreamFormat;
 use Streaming\Representation;
+use Throwable;
 use Vesp\Services\Filesystem;
 
 class TempStorage extends Filesystem
@@ -118,7 +119,7 @@ class TempStorage extends Filesystem
         try {
             $this->getBaseFilesystem()->deleteDirectory($uuid);
             $this->deleteMeta($uuid);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::info($e);
         }
     }

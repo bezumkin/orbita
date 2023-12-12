@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 class Poster extends Image
 {
@@ -35,7 +36,7 @@ class Poster extends Image
                 ->withHeader('Content-Length', $fs->fileSize($uuid))
                 ->withHeader('Cache-Control', 'max-age=31536000, public')
                 ->withHeader('Expires', Carbon::now()->addYear()->toRfc822String());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 
@@ -68,7 +69,7 @@ class Poster extends Image
                 $response = $this->getClient()->get($url);
 
                 return (string)$response->getBody();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 Log::error($e);
             }
         }
@@ -86,7 +87,7 @@ class Poster extends Image
             if (preg_match_all($pattern, $html, $matches)) {
                 return array_combine($matches[1], $matches[2]);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
 
