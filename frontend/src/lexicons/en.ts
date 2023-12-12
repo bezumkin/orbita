@@ -135,6 +135,13 @@ export default {
       comment: 'Comment',
       created_at: 'Created at',
       sent_at: 'Sent at',
+      preview: 'Preview',
+      type: {
+        title: 'Type',
+        'topic-new': 'New topic',
+        'comment-reply': 'Comment reply',
+        'comment-new': 'New comment',
+      },
     },
     page: {
       title_one: 'Page',

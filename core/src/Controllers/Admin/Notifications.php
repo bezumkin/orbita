@@ -15,7 +15,7 @@ class Notifications extends ModelController
     protected function afterCount(Builder $c): Builder
     {
         $c->with('user:id,username,fullname');
-        $c->with('topic:id,uuid,title');
+        $c->with('topic:id,uuid,title,content');
         $c->with('comment:id,content');
 
         return $c;

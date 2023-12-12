@@ -135,6 +135,13 @@ export default {
       comment: 'Kommentar',
       created_at: 'Erstellt am',
       sent_at: 'Gesendet am',
+      preview: 'Vorschau',
+      type: {
+        title: 'Art',
+        'topic-new': 'Neues Thema',
+        'comment-reply': 'Kommentar antworten',
+        'comment-new': 'Neuer Kommentar',
+      },
     },
     page: {
       title_one: 'Seite',

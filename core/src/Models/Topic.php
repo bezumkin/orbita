@@ -244,18 +244,12 @@ class Topic extends Model
             });
         }
 
-        $data = [
-            'topic' => $this->toArray(),
-        ];
-        $data['topic']['link'] = $this->getLink();
-
         /** @var User $user */
         foreach ($users->cursor() as $user) {
-            $lang = $user->lang ?? 'ru';
-            $subject = getenv('EMAIL_TOPIC_NEW_' . strtoupper($lang));
-            $data['lang'] = $lang;
-
-            $user->sendEmail($subject, 'topic-new', $data);
+            $user->notifications()->create([
+                'topic_id' => $this->id,
+                'type' => 'topic-new',
+            ]);
         }
     }
 }

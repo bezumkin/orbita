@@ -135,6 +135,13 @@ export default {
       comment: 'Комментарий',
       created_at: 'Создано',
       sent_at: 'Отправлено',
+      preview: 'Предпросмотр',
+      type: {
+        title: 'Тип',
+        'topic-new': 'Новая заметка',
+        'comment-reply': 'Ответ на комментарий',
+        'comment-new': 'Новый комментарий',
+      },
     },
     page: {
       title_one: 'Страница',

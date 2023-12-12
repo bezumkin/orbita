@@ -12,7 +12,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $id
  * @property int $user_id
  * @property int $topic_id
- * @property int $comment_id
+ * @property ?int $comment_id
  * @property string $type
  * @property bool $active
  * @property bool $sent
@@ -65,18 +65,22 @@ class UserNotification extends Model
         $mail = new Mail();
 
         $data = [
-            'comment' => $this->comment->toArray(),
-            'user' => $this->comment->user->toArray(),
-            'topic' => $this->topic->toArray(),
+            'lang' => $this->user->lang ?? 'ru',
             'author' => $this->topic->user->toArray(),
+            'topic' => $this->topic->toArray(),
         ];
         $data['topic']['link'] = $this->topic->getLink();
-        $data['comment']['link'] = $this->comment->getLink();
-        $data['lang'] = $this->user->lang ?? 'ru';
+
+        if ($this->comment) {
+            $data['user'] = $this->comment->user->toArray();
+            $data['comment'] = $this->comment->toArray();
+            $data['comment']['link'] = $this->comment->getLink();
+        }
 
         $subject = match ($this->type) {
             'comment-new' => getenv('EMAIL_COMMENT_NEW_' . strtoupper($data['lang'])),
             'comment-reply' => getenv('EMAIL_COMMENT_REPLY_' . strtoupper($data['lang'])),
+            'topic-new' => getenv('EMAIL_TOPIC_NEW_' . strtoupper($data['lang'])),
             default => getenv('SITE_NAME'),
         };
         if ($err = $mail->send($this->user->email, $subject, $this->type, $data)) {
