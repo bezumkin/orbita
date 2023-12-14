@@ -34,7 +34,7 @@ services:
     build:
       context: ./docker/php-fpm
       args:
-        - PHP_VERSION=${PHP_VERSION:-8.2}
+        - PHP_VERSION=${PHP_VERSION:-8.3}
         - PHP_XDEBUG=${PHP_XDEBUG:-0}
         - TZ=${TZ:-Europe/Moscow}
     volumes:
