@@ -68,10 +68,10 @@ function getCommentLink(topic: VespTopic, comment: VespComment) {
   return {...getTopicLink(topic), hash: '#comment-' + comment.id}
 }
 
-async function send(item: any) {
+/* async function send(item: any) {
   try {
     await usePost(url + '/' + item.id)
     table.value.refresh()
   } catch (e) {}
-}
+} */
 </script>
