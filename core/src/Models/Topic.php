@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -34,6 +35,8 @@ use Ramsey\Uuid\Uuid;
  * @property-read Level $level
  * @property-read TopicFile[] $contentFiles
  * @property-read TopicView[] $views
+ * @property-read TopicTag[] $topicTags
+ * @property-read Tag[] $tags
  * @property-read Comment $lastComment
  * @property-read Comment[] $comments
  */
@@ -82,6 +85,16 @@ class Topic extends Model
     public function views(): HasMany
     {
         return $this->hasMany(TopicView::class);
+    }
+
+    public function topicTags(): HasMany
+    {
+        return $this->hasMany(TopicTag::class);
+    }
+
+    public function tags(): HasManyThrough
+    {
+        return $this->hasManyThrough(Tag::class, TopicTag::class, 'topic_id', 'id', 'id', 'tag_id');
     }
 
     public function lastComment(): BelongsTo
@@ -166,7 +179,8 @@ class Topic extends Model
             'closed',
             'views_count',
             'comments_count',
-            'published_at'
+            'published_at',
+            'tags'
         );
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');

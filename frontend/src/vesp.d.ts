@@ -97,6 +97,7 @@ declare global {
     comments_count?: number
     views_count?: number
     unseen_comments_count?: number
+    tags?: VespTag[]
     [key: string]: any
   }
 
@@ -142,6 +143,12 @@ declare global {
     topic?: VespTopic
     subscription?: VespSubscription
     metadata?: Record<string, any>
+  }
+
+  type VespTag = {
+    id: number
+    title: string
+    [key: string]: any
   }
 }
 

@@ -40,6 +40,10 @@
       </b-col>
     </b-row>
 
+    <b-form-group :label="$t('models.topic.tags')">
+      <topic-tags v-model="record.tags" />
+    </b-form-group>
+
     <b-row>
       <b-col md="6">
         <b-form-group>

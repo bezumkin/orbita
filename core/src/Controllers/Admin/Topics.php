@@ -3,7 +3,9 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\Traits\FileModelController;
+use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\TopicTag;
 use App\Services\Socket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +25,7 @@ class Topics extends ModelController
     protected function beforeGet(Builder $c): Builder
     {
         $c->with('cover:id,uuid,updated_at');
+        $c->with('tags');
 
         return $c;
     }
@@ -85,6 +88,35 @@ class Topics extends ModelController
     {
         /** @var Topic $record */
         $record->processUploadedFiles();
+
+        // Handle tags
+        $updateTags = 0;
+        $tags = $this->getProperty('tags');
+        if (is_array($tags)) {
+            $topicTags = [];
+            foreach ($tags as $topicTag) {
+                if (!$topicTag['title']) {
+                    continue;
+                }
+                if (!$tag = Tag::query()->where('title', $topicTag['title'])->first()) {
+                    $tag = new Tag(['title' => $topicTag['title']]);
+                    $tag->save();
+                    $updateTags++;
+                }
+                $topicTags[] = $tag->id;
+            }
+
+            foreach ($topicTags as $id) {
+                $updateTags += TopicTag::query()->insertOrIgnore(['topic_id' => $record->id, 'tag_id' => $id]);
+            }
+
+            $updateTags += $record->topicTags()->whereNotIn('tag_id', $topicTags)->delete();
+
+            if ($updateTags) {
+                Socket::send('tags');
+            }
+        }
+        // ---
 
         if ($this->isNew) {
             Socket::send('topic-create', $this->prepareRow($record));

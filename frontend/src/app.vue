@@ -19,12 +19,12 @@
             </b-col>
             <b-col v-if="!$isMobile" md="4" class="offset">
               <div class="column">
-                <app-author />
+                <widgets-author />
               </div>
 
-              <app-online v-if="showOnline" class="column mt-4" />
-
-              <app-levels class="column mt-4" />
+              <widgets-online v-if="showOnline" class="column mt-4" />
+              <widgets-levels class="column mt-4" />
+              <widgets-tags class="column mt-4" />
             </b-col>
           </b-row>
         </div>

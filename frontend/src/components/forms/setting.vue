@@ -12,7 +12,7 @@
               :active="lang === code"
               size="sm"
               variant="light"
-              class="px-2 py-1"
+              class="px-2 py-0"
               @click="onLang(code)"
             >
               <b-img :src="getIcon(code)" height="16" />

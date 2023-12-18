@@ -120,6 +120,8 @@ export default {
         sub_payments: 'Подписчики и разовая оплата',
         payments: 'Только разовая оплата',
       },
+      tags: 'Теги заметки',
+      tags_desc: 'Укажите теги через Enter',
     },
     comment: {
       title_one: 'Комментарий',
@@ -284,6 +286,7 @@ export default {
   widgets: {
     comments: 'Прямой эфир',
     levels: 'Уровни подписки',
+    tags: 'Теги',
   },
   success: {
     profile: 'Профиль успешно сохранён',

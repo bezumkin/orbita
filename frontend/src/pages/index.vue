@@ -1,7 +1,12 @@
 <template>
   <div>
     <b-overlay :show="pending" opacity="0.5" class="topics">
-      <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" />
+      <template v-if="topics.length">
+        <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" />
+      </template>
+      <div v-else class="alert alert-info">
+        {{ $t(tags.length ? 'components.table.no_results' : 'components.table.no_data') }}
+      </div>
     </b-overlay>
 
     <b-pagination
@@ -20,17 +25,45 @@
 <script setup lang="ts">
 const {t} = useI18n()
 const {$settings} = useNuxtApp()
-const page = ref(1)
+const route = useRoute()
+const router = useRouter()
+const page = ref(Number(route.query.page) || 1)
 const limit = 12
-const {data, pending} = await useCustomFetch('web/topics', {query: {page, limit}})
+const tags = computed(() => route.query.tags || [])
+const {data, refresh, pending} = await useCustomFetch('web/topics', {query: {page, limit, tags}, watch: false})
 const topics = computed(() => data.value?.rows || [])
 const total = computed(() => data.value?.total || 0)
 
-watch(page, () => {
+function onScroll() {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
   })
+}
+
+watch(page, (newValue) => {
+  router.push({name: 'index', query: {...route.query, page: newValue > 1 ? String(newValue) : undefined}})
+  refresh()
+  onScroll()
+})
+
+watch(tags, (newValue, oldValue) => {
+  if (newValue.length !== oldValue.length) {
+    page.value = 1
+    refresh()
+    onScroll()
+  }
+})
+
+onMounted(() => {
+  setTimeout(onScroll, 100)
+  if (!topics.value.length) {
+    if (page.value > 1) {
+      navigateTo({name: 'index', query: {...route.query, page: undefined}})
+    } else if (tags.value.length) {
+      navigateTo({name: 'index', query: {...route.query, tags: undefined}})
+    }
+  }
 })
 
 useHead({

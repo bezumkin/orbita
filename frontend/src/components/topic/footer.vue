@@ -1,22 +1,29 @@
 <template>
-  <div class="topic-footer">
-    <div class="d-flex gap-3">
-      <div><fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
-      <div v-if="!isTopic">
-        <b-link
-          v-if="topic.access && commentsCount"
-          :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
-        >
-          <fa icon="comment" class="fa-fw" />
-          {{ commentsCount }}
-          <span v-if="unseenCount" class="text-success">+{{ unseenCount }}</span>
-        </b-link>
-        <template v-else> <fa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
-      </div>
+  <div>
+    <div v-if="topic.tags?.length" class="topic-tags">
+      <b-badge v-for="(tag, idx) in topic.tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1">
+        <div>{{ tag.title }}</div>
+      </b-badge>
     </div>
+    <div class="topic-footer">
+      <div class="d-flex gap-3">
+        <div><fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
+        <div v-if="!isTopic">
+          <b-link
+            v-if="topic.access && commentsCount"
+            :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
+          >
+            <fa icon="comment" class="fa-fw" />
+            {{ commentsCount }}
+            <span v-if="unseenCount" class="text-success">+{{ unseenCount }}</span>
+          </b-link>
+          <template v-else> <fa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
+        </div>
+      </div>
 
-    <div v-if="topic.published_at" class="ms-auto">
-      <fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
+      <div v-if="topic.published_at" class="ms-auto">
+        <fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
+      </div>
     </div>
   </div>
 </template>
@@ -33,11 +40,15 @@ const props = defineProps({
 
 const {d} = useI18n()
 const {$socket} = useNuxtApp()
-const {params} = useRoute()
-const isTopic = computed(() => params.uuid === props.topic.uuid)
+const route = useRoute()
+const isTopic = computed(() => route.params.uuid === props.topic.uuid)
 
 const commentsCount = ref(props.topic.comments_count || 0)
 const unseenCount = ref(props.topic.unseen_comments_count || 0)
+const tags = computed(() => {
+  const value = route.query.tags as string
+  return value ? value.split(',') : []
+})
 
 function onTopicComments(topic: VespTopic) {
   if (props.topic.id === topic.id) {
@@ -67,6 +78,24 @@ function onCommentDelete(comment: VespComment) {
       }
     }
   }
+}
+
+function getTagParams(tag: VespTag) {
+  const id = String(tag.id)
+  const isActive = tags.value.includes(id)
+  const values = [...tags.value]
+
+  const params: Record<string, any> = {}
+  if (!isActive) {
+    values.push(id)
+  } else {
+    params.variant = 'primary'
+    const idx = values.findIndex((i: string) => i === id)
+    values.splice(idx, 1)
+  }
+  params.to = {name: 'index', query: values.length ? {tags: values.join(',')} : undefined}
+
+  return params
 }
 
 if (!isTopic.value) {

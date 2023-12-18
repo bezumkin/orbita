@@ -44,6 +44,7 @@ $group = $app->group(
             $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
             $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
             $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
+            $group->any('/tags', App\Controllers\Admin\Tags::class);
         });
 
         $group->group(
@@ -60,6 +61,7 @@ $group = $app->group(
                 );
                 $group->any('/comments/latest', App\Controllers\Web\Comments\Latest::class);
                 $group->any('/pages[/{alias}]', App\Controllers\Web\Pages::class);
+                $group->any('/tags', App\Controllers\Web\Tags::class);
             }
         );
     }

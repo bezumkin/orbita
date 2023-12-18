@@ -120,6 +120,8 @@ export default {
         sub_payments: 'Subscribers and one time payment',
         payments: 'One time payment',
       },
+      tags: 'Topic tags',
+      tags_desc: 'Specify topic tags with Enter',
     },
     comment: {
       title_one: 'Comment',
@@ -284,6 +286,7 @@ export default {
   widgets: {
     comments: 'Online',
     levels: 'Subscriptions',
+    tags: 'Tags',
   },
   success: {
     profile: 'Profile saved successfully',

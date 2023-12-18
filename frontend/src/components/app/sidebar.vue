@@ -2,9 +2,10 @@
   <b-offcanvas id="sidebar" v-model="$sidebar" placement="end" no-header @click="onClick">
     <div class="d-grid gap-4 align-items-center">
       <app-pages v-if="showPages" position="header" vertical pills class="w-100" />
-      <app-author v-if="showAuthor" />
-      <app-online v-if="showOnline" />
-      <app-levels v-if="showLevels" />
+      <widgets-author v-if="showAuthor" />
+      <widgets-online v-if="showOnline" />
+      <widgets-levels v-if="showLevels" />
+      <widgets-tags v-if="showTags" />
     </div>
   </b-offcanvas>
 </template>
@@ -24,6 +25,10 @@ defineProps({
     default: true,
   },
   showLevels: {
+    type: Boolean,
+    default: true,
+  },
+  showTags: {
     type: Boolean,
     default: true,
   },

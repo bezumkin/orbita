@@ -67,6 +67,13 @@
     }
   }
 
+  .topic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
   .topic-footer {
     display: flex;
     padding-top: 1rem;
@@ -89,6 +96,10 @@
           color: $link-hover-color;
         }
       }
+    }
+
+    .topic-tags {
+      padding: 0 1rem;
     }
 
     .topic-footer {

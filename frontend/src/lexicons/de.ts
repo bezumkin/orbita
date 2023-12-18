@@ -120,6 +120,8 @@ export default {
         sub_payments: 'Für Abonennten und Einmalzahlungen',
         payments: 'Einmalzahlung',
       },
+      tags: 'Topic Tags',
+      tags_desc: 'Geben Sie Themen-Tags mit Enter an',
     },
     comment: {
       title_one: 'Kommentar',
@@ -284,6 +286,7 @@ export default {
   widgets: {
     comments: 'Online',
     levels: 'Abos',
+    tags: 'Tags',
   },
   success: {
     profile: 'Profil erfolgreich gespeichert.',
