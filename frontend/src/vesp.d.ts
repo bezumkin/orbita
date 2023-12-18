@@ -148,6 +148,7 @@ declare global {
   type VespTag = {
     id: number
     title: string
+    topics?: number
     [key: string]: any
   }
 }

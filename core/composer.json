@@ -21,6 +21,7 @@
     "doctrine/dbal": "^3.7",
     "fenom/fenom": "^3.0",
     "guzzlehttp/guzzle": "^7.8",
+    "k-samuel/faceted-search": "^3.2",
     "league/flysystem-aws-s3-v3": "^3.16",
     "monolog/monolog": "^3.4.0",
     "pelago/emogrifier": "^7.2",
