@@ -14,5 +14,6 @@ const record = ref({
   content: {},
   active: true,
   closed: false,
+  tags: [],
 })
 </script>
