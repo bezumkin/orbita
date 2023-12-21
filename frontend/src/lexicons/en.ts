@@ -45,6 +45,7 @@ export default {
       phone: 'Phone',
       active: 'Activated',
       blocked: 'Blocked',
+      notify: 'Send notifications',
       role: 'Role',
       created_at: 'Was created',
       active_at: 'Last online',

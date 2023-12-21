@@ -180,7 +180,7 @@ class Comments extends ModelController
 
         if (getenv('COMMENTS_NOTIFY_REPLY')) {
             // Notify comment author
-            if ($parent && $parent->user_id !== $comment->user_id) {
+            if ($parent && $parent->user_id !== $comment->user_id && $parent->user->notify) {
                 $parent->user->notifications()
                     ->create(['type' => 'comment-reply', 'topic_id' => $topic->id, 'comment_id' => $comment->id]);
             }
@@ -188,7 +188,7 @@ class Comments extends ModelController
 
         if (getenv('COMMENTS_NOTIFY_AUTHOR')) {
             // Notify topic author
-            if ($topic->user_id !== $comment->user_id && (!$parent || $parent->user_id !== $topic->user_id)) {
+            if ($topic->user_id !== $comment->user_id && $topic->user->notify && (!$parent || $parent->user_id !== $topic->user_id)) {
                 $topic->user->notifications()
                     ->create(['type' => 'comment-new', 'topic_id' => $topic->id, 'comment_id' => $comment->id]);
             }

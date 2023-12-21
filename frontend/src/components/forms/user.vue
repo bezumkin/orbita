@@ -43,21 +43,22 @@
       <vesp-input-combo-box v-model="record.role_id" url="admin/user-roles" required />
     </b-form-group>
 
-    <b-row v-if="showStatus">
-      <b-col md="6">
-        <b-form-group>
-          <b-form-checkbox v-model="record.active">
-            {{ $t('models.user.active') }}
-          </b-form-checkbox>
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group>
-          <b-form-checkbox v-model="record.blocked">
-            {{ $t('models.user.blocked') }}
-          </b-form-checkbox>
-        </b-form-group>
-      </b-col>
+    <b-row v-if="showStatus || showNotify" class="flex-md-nowrap justify-content-md-between">
+      <b-form-group v-if="showStatus" class="col-md-auto">
+        <b-form-checkbox v-model="record.active">
+          {{ $t('models.user.active') }}
+        </b-form-checkbox>
+      </b-form-group>
+      <b-form-group v-if="showStatus" class="col-md-auto">
+        <b-form-checkbox v-model="record.blocked">
+          {{ $t('models.user.blocked') }}
+        </b-form-checkbox>
+      </b-form-group>
+      <b-form-group v-if="showNotify" class="col-md-auto">
+        <b-form-checkbox v-model="record.notify">
+          {{ $t('models.user.notify') }}
+        </b-form-checkbox>
+      </b-form-group>
     </b-row>
   </div>
 </template>
@@ -73,6 +74,10 @@ const props = defineProps({
     default: true,
   },
   showStatus: {
+    type: Boolean,
+    default: true,
+  },
+  showNotify: {
     type: Boolean,
     default: true,
   },

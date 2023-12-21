@@ -21,6 +21,7 @@ use Vesp\Helpers\Jwt;
  * @property ?string $phone
  * @property bool $active
  * @property bool $blocked
+ * @property bool $notify
  * @property ?string $lang
  * @property ?string $reset_password
  * @property ?Carbon $reset_at
@@ -48,12 +49,14 @@ class User extends \Vesp\Models\User
         'phone',
         'active',
         'blocked',
+        'notify',
         'lang',
     ];
     protected $hidden = ['password', 'reset_password', 'reset_at'];
     protected $casts = [
         'active' => 'bool',
         'blocked' => 'bool',
+        'notify' => 'bool',
         'reset_at' => 'datetime',
         'active_at' => 'datetime',
     ];

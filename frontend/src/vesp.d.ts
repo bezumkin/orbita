@@ -30,6 +30,7 @@ declare global {
     phone?: string
     active?: boolean
     blocked?: boolean
+    notify?: boolean
     role_id?: number
     role?: VespUserRole
     avatar_id?: number

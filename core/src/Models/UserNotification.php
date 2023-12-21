@@ -62,8 +62,11 @@ class UserNotification extends Model
 
     public function sendEmail(): ?string
     {
-        $mail = new Mail();
+        if (!$this->user->notify) {
+            return null;
+        }
 
+        $mail = new Mail();
         $data = [
             'lang' => $this->user->lang ?? 'ru',
             'author' => $this->topic->user->toArray(),

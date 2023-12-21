@@ -45,6 +45,7 @@ export default {
       phone: 'Телефон',
       active: 'Активирован',
       blocked: 'Заблокирован',
+      notify: 'Отправлять уведомления',
       role: 'Группа',
       created_at: 'Дата создания',
       active_at: 'Был онлайн',

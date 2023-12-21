@@ -232,6 +232,7 @@ class Topic extends Model
         $users = User::query()
             // ->where('id', '!=', $this->user_id)
             ->where('active', true)
+            ->where('notify', true)
             ->where('blocked', false)
             ->whereNotNull('email');
 

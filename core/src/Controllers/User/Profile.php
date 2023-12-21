@@ -18,7 +18,7 @@ class Profile extends \Vesp\Controllers\User\Profile
     {
         /** @var User $user */
         if ($user = $this->user) {
-            $data = $user->only('id', 'username', 'fullname', 'email', 'phone');
+            $data = $user->only('id', 'username', 'fullname', 'email', 'phone', 'notify');
             $data['role'] = $user->role->only('id', 'title', 'scope');
             $data['avatar'] = $user->avatar?->only('uuid', 'updated_at');
             $data['subscription'] = $user->currentSubscription?->only(
