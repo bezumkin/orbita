@@ -12,7 +12,7 @@
       <editor-content v-if="myValue.content?.blocks" :content="myValue.content" />
       <topic-footer :topic="myValue" />
     </div>
-    <b-form v-else-if="$scope('topics/get')" class="topic-form" @submit.prevent="onSubmit">
+    <b-form v-else-if="$scope('topics/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
         <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
         <b-button variant="primary" type="submit" :disabled="loading">
@@ -73,6 +73,13 @@ function onTopicUpdate(topic: VespTopic) {
         myValue.value[key] = topic[key]
       }
     })
+  }
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault()
+    onSubmit()
   }
 }
 

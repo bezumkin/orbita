@@ -9,7 +9,7 @@
       </h1>
       <editor-content :content="page.content" />
     </div>
-    <b-form v-else-if="$scope('pages/get')" class="topic-form" @submit.prevent="onSubmit">
+    <b-form v-else-if="$scope('pages/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
         <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
         <b-button variant="primary" type="submit" :disabled="loading">
@@ -68,6 +68,13 @@ function onUpdatePage(data: VespPage) {
   } else {
     page.value.title = data.title
     page.value.content = data.content
+  }
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault()
+    onSubmit()
   }
 }
 
