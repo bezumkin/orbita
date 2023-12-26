@@ -36,10 +36,14 @@ const levels: Ref<number[]> = computed(() => {
 })
 
 function selectLevel(size: number) {
-  const idx = levels.value.findIndex((i) => i === size)
-  if (idx !== -1) {
-    currentLevel.value = hls.value.currentLevel = idx
-    saveStatus()
+  if (size < 0) {
+    currentLevel.value = hls.value.currentLevel = -1
+  } else {
+    const idx = levels.value.findIndex((i) => i === size)
+    if (idx !== -1) {
+      currentLevel.value = hls.value.currentLevel = idx
+      saveStatus()
+    }
   }
 }
 
@@ -53,6 +57,18 @@ function initPlayer() {
   hls.value.attachMedia(video.value)
 
   // eslint-disable-next-line import/no-named-as-default-member
+  hls.value.on(Hls.Events.LEVEL_SWITCHED, function (_e: string, data: Record<string, any>) {
+    const span = document.querySelector('.plyr__menu__container [data-plyr="quality"][value="-1"] span')
+    if (span) {
+      if (hls.value.autoLevelEnabled) {
+        span.innerHTML = `Auto (${hls.value.levels[data.level].height}p)`
+      } else {
+        span.innerHTML = 'Auto'
+      }
+    }
+  })
+
+  // eslint-disable-next-line import/no-named-as-default-member
   hls.value.on(Hls.Events.MANIFEST_PARSED, async () => {
     await loadStatus()
     const options: Record<string, any> = {
@@ -61,7 +77,7 @@ function initPlayer() {
         global: true,
       },
       storage: {
-        enabled: !user,
+        enabled: !user.value,
         key: 'plyr',
       },
       volume: status.value && status.value.volume !== undefined ? status.value.volume : 1,
@@ -72,8 +88,8 @@ function initPlayer() {
     }
     if (levels.value.length) {
       options.quality = {
-        default: status.value && status.value.quality ? status.value.quality : levels.value[0],
-        options: levels.value,
+        default: status.value && status.value.quality ? status.value.quality : -1,
+        options: [-1, ...levels.value],
         forced: true,
         onChange: selectLevel,
       }
@@ -127,10 +143,10 @@ function setStatus() {
 }
 
 async function saveStatus(_e?: Event) {
-  if (user.value && ready) {
+  if (user.value && ready && hls.value?.currentLevel) {
     const params = {
       time: Math.round(player.value.currentTime),
-      quality: levels.value[currentLevel.value],
+      quality: levels.value[hls.value.currentLevel],
       speed: player.value.speed,
       volume: player.value.volume,
     }

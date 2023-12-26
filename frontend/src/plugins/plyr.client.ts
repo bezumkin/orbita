@@ -11,6 +11,11 @@ export default defineNuxtPlugin(() => {
       selected: 1,
       options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
     },
+    i18n: {
+      qualityLabel: {
+        '-1': 'Auto',
+      },
+    },
   }
 
   function plyr(element: HTMLElement | string, options: Options = {}) {
