@@ -28,6 +28,7 @@ import ImageBlock from './blocks/image'
 import VideoBlock from './blocks/video'
 import EmbedBlock from './blocks/embed'
 import CodeBlock from './blocks/code'
+import Kbd from './blocks/kbd'
 
 const props = defineProps({
   modelValue: {
@@ -126,7 +127,8 @@ const allBlocks = [
     toolbar: true,
     config: {defaultStyle: 'unordered'},
   },
-  {type: 'embed', icon: undefined, class: EmbedBlock, click: undefined},
+  {type: 'embed', class: EmbedBlock},
+  {type: 'kbd', class: Kbd, shortcut: 'CMD+SHIFT+K'},
 ]
 const enabledBlocks = computed(() => {
   if (props.blocks.length) {
@@ -139,7 +141,7 @@ const tools: ComputedRef<Record<string, any>> = computed(() => {
   return Object.fromEntries(
     enabledBlocks.value.map((i) => [
       i.type,
-      {class: i.class, inlineToolbar: i.toolbar || false, config: i.config || {}},
+      {class: i.class, inlineToolbar: i.toolbar || false, config: i.config || {}, shortcut: i.shortcut},
     ]),
   )
 })
