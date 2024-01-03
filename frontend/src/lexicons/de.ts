@@ -1,4 +1,5 @@
 export default {
+  made_with: 'Hergestellt mit <b>Orbita</b>',
   project: 'Orbita',
   actions: {
     save: 'Speichern',

@@ -3,16 +3,14 @@
     <b-container class="text-muted small">
       <b-row align-v="center">
         <b-col md="3" class="font-weight-bold text-center text-md-start">
-          <a href="https://orbita.bezumkin.ru" target="_blank">
-            {{ $t('project') }}
-          </a>
+          {{ owner }} &copy; {{ Array.isArray(date) ? date.join(' &mdash; ') : date }}
         </b-col>
         <b-col md="6" :class="middleClasses">
           <app-pages position="footer" />
           <app-language v-if="locales.length > 1" />
         </b-col>
         <b-col md="3" class="text-center text-md-end">
-          {{ owner }} &copy; {{ Array.isArray(date) ? date.join(' &mdash; ') : date }}
+          <a href="https://github.com/bezumkin/orbita" target="_blank" v-html="$t('made_with')" />
         </b-col>
       </b-row>
     </b-container>

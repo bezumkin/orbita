@@ -1,4 +1,5 @@
 export default {
+  made_with: 'Made with <b>Orbita</b>',
   project: 'Orbita',
   actions: {
     save: 'Save',

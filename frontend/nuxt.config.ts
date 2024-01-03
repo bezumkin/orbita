@@ -90,5 +90,8 @@ export default defineNuxtConfig({
     defaultLocale: locales[0].code,
     langDir: 'lexicons',
     locales,
+    compilation: {
+      strictMessage: false,
+    },
   },
 })

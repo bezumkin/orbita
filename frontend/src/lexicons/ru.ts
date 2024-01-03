@@ -1,5 +1,6 @@
 export default {
   project: 'Орбита',
+  made_with: 'Сделано на <b>Орбите</b>',
   actions: {
     save: 'Сохранить',
     submit: 'Отправить',
