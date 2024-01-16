@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f47aacff26eee9c0b83d98fec210abfe",
+    "content-hash": "2a55e7cf605e3bec1246da88460e4c1b",
     "packages": [
         {
             "name": "akrabat/ip-address-middleware",
@@ -6392,7 +6392,7 @@
         },
         {
             "name": "vesp/core",
-            "version": "3.x-dev",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezumkin/vesp-core.git",
@@ -6445,7 +6445,7 @@
             "description": "Vesp core library to make backend simple",
             "support": {
                 "issues": "https://github.com/bezumkin/vesp-core/issues",
-                "source": "https://github.com/bezumkin/vesp-core/tree/3.x"
+                "source": "https://github.com/bezumkin/vesp-core/tree/3.0.0"
             },
             "time": "2023-11-07T10:19:20+00:00"
         },
@@ -6654,9 +6654,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "vesp/core": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
