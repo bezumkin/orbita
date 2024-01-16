@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+import type {NuxtConfig} from '@nuxt/schema'
+
 const enabledLocales = (process.env.LOCALES || 'ru,en,de').split(',')
 const locales = [
   {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru-RU'},
@@ -7,7 +9,7 @@ const locales = [
   {code: 'de', name: 'Deutsch', file: 'de.ts', iso: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
 
-export default defineNuxtConfig({
+const config: NuxtConfig = {
   telemetry: false,
   srcDir: 'src/',
   css: ['~/assets/scss/index.scss'],
@@ -49,13 +51,7 @@ export default defineNuxtConfig({
       PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
     },
   },
-  modules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/stylelint-module',
-    '@pinia/nuxt',
-    '@bootstrap-vue-next/nuxt',
-    '@nuxtjs/i18n',
-  ],
+  modules: ['@pinia/nuxt', '@bootstrap-vue-next/nuxt', '@nuxtjs/i18n'],
   app: {
     pageTransition: {name: 'page', mode: 'out-in'},
     layoutTransition: {name: 'page', mode: 'out-in'},
@@ -79,12 +75,6 @@ export default defineNuxtConfig({
   experimental: {
     inlineSSRStyles: false,
   },
-  eslint: {
-    lintOnStart: false,
-  },
-  stylelint: {
-    lintOnStart: false,
-  },
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: locales[0].code,
@@ -94,4 +84,16 @@ export default defineNuxtConfig({
       strictMessage: false,
     },
   },
-})
+}
+
+if (process.env.NODE_ENV === 'development') {
+  config.modules?.push('@nuxtjs/eslint-module', '@nuxtjs/stylelint-module')
+  config.eslint = {
+    lintOnStart: false,
+  }
+  config.stylelint = {
+    lintOnStart: false,
+  }
+}
+
+export default defineNuxtConfig(config)
