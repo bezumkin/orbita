@@ -22,8 +22,8 @@
         </app-login>
         <b-button v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">
           <transition name="fade" mode="out-in">
-            <fa v-if="!$sidebar" icon="bars" class="fa-fw" />
-            <fa v-else icon="times" class="fa-fw" />
+            <vesp-fa v-if="!$sidebar" icon="bars" class="fa-fw" />
+            <vesp-fa v-else icon="times" class="fa-fw" />
           </transition>
         </b-button>
       </b-navbar-nav>

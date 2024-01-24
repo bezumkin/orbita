@@ -7,22 +7,22 @@
     </div>
     <div class="topic-footer">
       <div class="d-flex gap-3">
-        <div><fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
+        <div><vesp-fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
         <div v-if="!isTopic">
           <b-link
             v-if="topic.access && commentsCount"
             :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
           >
-            <fa icon="comment" class="fa-fw" />
+            <vesp-fa icon="comment" class="fa-fw" />
             {{ commentsCount }}
             <span v-if="unseenCount" class="text-success">+{{ unseenCount }}</span>
           </b-link>
-          <template v-else> <fa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
+          <template v-else> <vesp-fa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
         </div>
       </div>
 
       <div v-if="topic.published_at" class="ms-auto">
-        <fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
+        <vesp-fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
       </div>
     </div>
   </div>

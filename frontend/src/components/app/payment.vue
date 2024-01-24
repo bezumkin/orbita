@@ -50,7 +50,7 @@
       <b-button v-if="!qr" variant="primary" :disabled="loading" @click="onSubmit">
         <b-spinner v-if="loading" small />
         <template v-if="canPay">
-          <fa icon="wallet" class="fa-fw" />
+          <vesp-fa icon="wallet" class="fa-fw" />
           {{ t('components.payment.actions.pay') }}
         </template>
         <template v-else>
@@ -59,7 +59,7 @@
       </b-button>
       <b-button v-else variant="primary" :disabled="loading" @click="onCheck">
         <b-spinner v-if="loading" small />
-        <fa v-else icon="check" class="fa-fw" />
+        <vesp-fa v-else icon="check" class="fa-fw" />
         {{ t('components.payment.actions.check') }}
       </b-button>
     </template>

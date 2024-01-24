@@ -7,7 +7,7 @@
         {{ $price(level.price) }} {{ t('models.level.per_month') }}
 
         <b-button variant="primary" class="mt-5" @click="onSubscribe">
-          <fa icon="lock-open" />
+          <vesp-fa icon="lock-open" />
           {{ $t('components.payment.level.subscribe') }}
         </b-button>
       </div>
@@ -18,7 +18,7 @@
         </div>
 
         <b-button variant="light" class="mt-5" @click="onPayment">
-          <fa icon="wallet" />
+          <vesp-fa icon="wallet" />
           {{ $t('components.payment.actions.pay') }}
         </b-button>
       </div>

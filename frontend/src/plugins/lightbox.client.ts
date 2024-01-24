@@ -1,3 +1,4 @@
+// @ts-ignore
 import Glightbox from 'glightbox'
 import 'glightbox/dist/css/glightbox.min.css'
 

@@ -10,8 +10,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const store = useVespStore()
   const {sidebar, login, isMobile, payment} = storeToRefs(store)
 
-  nuxtApp.provide('scope', hasScope)
-  nuxtApp.provide('image', getImageLink)
   nuxtApp.provide('file', getFileLink)
   nuxtApp.provide('contentPreview', contentPreview)
   nuxtApp.provide('contentClick', contentClick)

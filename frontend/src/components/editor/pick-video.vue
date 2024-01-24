@@ -4,7 +4,7 @@
       <b-input-group>
         <template #append>
           <b-button :disabled="!query" @click="onQueryClear">
-            <fa icon="times" />
+            <vesp-fa icon="times" />
           </b-button>
         </template>
         <b-form-input ref="input" v-model="query" :placeholder="$t('components.table.query')" />

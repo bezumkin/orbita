@@ -13,10 +13,10 @@
         <div class="comment-text">{{ $contentPreview(comment.content, 100) }}</div>
         <div v-if="comment.topic" class="comment-footer">
           <b-link v-if="showLink(comment)" :to="getCommentLink(comment)" class="me-2">
-            <fa icon="file" class="fa-fw" /> {{ comment.topic.title }}
+            <vesp-fa icon="file" class="fa-fw" /> {{ comment.topic.title }}
           </b-link>
-          <div v-else><fa icon="file" class="fa-fw" /> {{ comment.topic.title }}</div>
-          <div class="ms-auto text-nowrap"><fa icon="comments" /> {{ comment.topic.comments_count }}</div>
+          <div v-else><vesp-fa icon="file" class="fa-fw" /> {{ comment.topic.title }}</div>
+          <div class="ms-auto text-nowrap"><vesp-fa icon="comments" /> {{ comment.topic.comments_count }}</div>
         </div>
       </div>
     </b-overlay>

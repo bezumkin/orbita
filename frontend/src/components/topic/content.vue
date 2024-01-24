@@ -5,7 +5,7 @@
         <h1 class="mt-2">
           {{ myValue.title }}
           <b-button v-if="$scope('topics/get')" variant="link" class="ms-2 p-0" @click="onEdit">
-            <fa icon="edit" class="fa-fw" />
+            <vesp-fa icon="edit" class="fa-fw" />
           </b-button>
         </h1>
       </div>

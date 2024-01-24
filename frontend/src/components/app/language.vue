@@ -2,7 +2,7 @@
   <vesp-change-locale>
     <template #default="{locale, locales, setLocale}">
       <b-dropdown :variant="null" size="sm">
-        <template #button-content> <fa icon="globe" class="fa-fw" /> {{ locale.toUpperCase() }} </template>
+        <template #button-content> <vesp-fa icon="globe" class="fa-fw" /> {{ locale.toUpperCase() }} </template>
         <b-dropdown-item
           v-for="i in locales"
           :key="i.code"

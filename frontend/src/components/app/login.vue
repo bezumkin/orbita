@@ -12,7 +12,7 @@
             <slot name="user-menu" v-bind="{user}" />
             <b-dropdown-divider />
             <b-dropdown-item @click="onLogout">
-              <fa icon="power-off" class="fa-fw" />
+              <vesp-fa icon="power-off" class="fa-fw" />
               {{ $t('security.logout') }}
             </b-dropdown-item>
           </b-dropdown>
@@ -26,7 +26,7 @@
               <template v-else>{{ $t('security.login') }}</template>
             </span>
             <span class="d-md-none">
-              <fa icon="right-to-bracket" class="fa-fw" />
+              <vesp-fa icon="right-to-bracket" class="fa-fw" />
             </span>
           </b-button>
         </slot>

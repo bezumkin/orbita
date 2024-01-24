@@ -20,22 +20,22 @@
             <div class="d-flex gap-2">
               <template v-if="!item.finished && !item.error">
                 <b-button v-if="!item.paused" @click.stop="pauseUpload(item)">
-                  <fa icon="pause" />
+                  <vesp-fa icon="pause" />
                 </b-button>
                 <template v-else>
                   <b-button variant="success" @click.stop="continueUpload(item)">
-                    <fa icon="play" />
+                    <vesp-fa icon="play" />
                   </b-button>
                   <b-button variant="danger" @click.stop="cancelUpload(item)">
-                    <fa icon="times" />
+                    <vesp-fa icon="times" />
                   </b-button>
                 </template>
               </template>
               <b-button v-else-if="item.finished" variant="outline-secondary" @click.stop="removeUpload(item)">
-                <fa icon="check" />
+                <vesp-fa icon="check" />
               </b-button>
               <b-button v-else-if="item.error" variant="danger" @click.stop="cancelUpload(item)">
-                <fa icon="times" />
+                <vesp-fa icon="times" />
               </b-button>
             </div>
           </div>

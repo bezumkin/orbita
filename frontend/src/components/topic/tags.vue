@@ -14,7 +14,7 @@
       <b-badge v-for="(tag, idx) in record" :key="idx" class="px-2 py-1 d-flex align-items-center">
         {{ tag.title }}
         <b-button class="p-0 ms-1" size="sm" style="line-height: unset" @click="onTagRemove(idx)">
-          <fa icon="times" class="fa-fw" />
+          <vesp-fa icon="times" class="fa-fw" />
         </b-button>
       </b-badge>
     </div>

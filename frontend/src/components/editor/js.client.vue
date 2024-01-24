@@ -3,7 +3,7 @@
     <div v-if="!readOnly" class="actions">
       <template v-for="action in enabledBlocks" :key="action.type">
         <b-button v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
-          <fa :icon="action.icon" class="fa-fw" />
+          <vesp-fa :icon="action.icon" class="fa-fw" />
           {{ $t('actions.editor.' + action.type) }}
         </b-button>
       </template>

@@ -27,9 +27,9 @@
     </template>
     <template #cell(paid)="{item, value}">
       <template v-if="value">
-        <fa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
+        <vesp-fa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
       </template>
-      <fa v-else icon="hourglass-half" />
+      <vesp-fa v-else icon="hourglass-half" />
     </template>
   </vesp-table>
 </template>

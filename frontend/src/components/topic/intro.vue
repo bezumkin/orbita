@@ -17,12 +17,14 @@
             {{ levelRequired.title }}
           </div>
           <b-button variant="primary" @click="onSubscribe">
-            <fa icon="lock" />
+            <vesp-fa icon="lock" />
             {{ $t(myValue.price ? 'components.payment.teaser.buy' : 'components.payment.level.subscribe') }}
           </b-button>
         </div>
         <div v-else class="action">
-          <b-button variant="light" :to="link"> <fa icon="eye" /> {{ $t('components.payment.teaser.view') }} </b-button>
+          <b-button variant="light" :to="link">
+            <vesp-fa icon="eye" /> {{ $t('components.payment.teaser.view') }}
+          </b-button>
         </div>
       </div>
     </div>

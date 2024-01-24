@@ -21,5 +21,9 @@ export default defineNuxtModule({
     nuxt.hook('listen', (server) => {
       SocketMessage(server, nuxt.options.runtimeConfig.SOCKET_SECRET as string)
     })
+
+    nuxt.hook('modules:done', () => {
+      console.log('Socket.io module is ready')
+    })
   },
 })

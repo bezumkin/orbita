@@ -22,11 +22,11 @@
         <div v-if="user && record.id !== comment.id" class="comment-footer">
           <div v-if="comment.active">
             <b-button v-if="canReply && onReply && canReply(comment)" :variant="btnVariant" @click="onReply(comment)">
-              <fa icon="reply" class="fa-fw" />
+              <vesp-fa icon="reply" class="fa-fw" />
               <span class="action">{{ $t('actions.reply') }}</span>
             </b-button>
             <b-button v-if="canEdit && onEdit && canEdit(comment)" :variant="btnVariant" @click="onEdit(comment)">
-              <fa icon="edit" class="fa-fw" />
+              <vesp-fa icon="edit" class="fa-fw" />
               <span class="action">{{ $t('actions.edit') }}</span>
             </b-button>
           </div>
@@ -37,11 +37,11 @@
               :class="comment.active ? 'text-danger' : 'text-success'"
               @click="onDelete(comment)"
             >
-              <fa :icon="comment.active ? 'trash' : 'undo'" class="fa-fw" />
+              <vesp-fa :icon="comment.active ? 'trash' : 'undo'" class="fa-fw" />
               <span class="action">{{ $t('actions.' + (comment.active ? 'delete' : 'restore')) }}</span>
             </b-button>
             <b-button v-if="onDestroy" :variant="btnVariant" class="text-danger" @click="onDestroy(comment)">
-              <fa icon="times" class="fa-fw" />
+              <vesp-fa icon="times" class="fa-fw" />
               <span class="action">{{ $t('actions.destroy') }}</span>
             </b-button>
           </div>

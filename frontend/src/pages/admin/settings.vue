@@ -18,11 +18,11 @@
         <b-col cols="auto" class="text-md-end d-flex gap-1 flex-column">
           <template v-if="editing === setting.key">
             <b-button size="sm" :disabled="!canSave(setting)" variant="success" @click="saveSetting(setting)">
-              <fa icon="check" />
+              <vesp-fa icon="check" />
             </b-button>
-            <b-button size="sm" @click="cancelEdit(setting)"><fa icon="times" /></b-button>
+            <b-button size="sm" @click="cancelEdit(setting)"><vesp-fa icon="times" /></b-button>
           </template>
-          <b-button v-else size="sm" @click="startEdit(setting)"><fa icon="edit" /></b-button>
+          <b-button v-else size="sm" @click="startEdit(setting)"><vesp-fa icon="edit" /></b-button>
         </b-col>
       </b-row>
     </b-form-group>

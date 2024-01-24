@@ -4,7 +4,7 @@
       <h1 class="topic-header">
         {{ page.title }}
         <b-button v-if="$scope('pages/get')" variant="link" class="ms-2 p-0" @click="onEdit">
-          <fa icon="edit" class="fa-fw" />
+          <vesp-fa icon="edit" class="fa-fw" />
         </b-button>
       </h1>
       <editor-content :content="page.content" />

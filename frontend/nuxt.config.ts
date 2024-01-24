@@ -4,9 +4,9 @@ import type {NuxtConfig} from '@nuxt/schema'
 
 const enabledLocales = (process.env.LOCALES || 'ru,en,de').split(',')
 const locales = [
-  {code: 'ru', name: 'Русский', file: 'ru.ts', iso: 'ru-RU'},
-  {code: 'en', name: 'English', file: 'en.ts', iso: 'en-US'},
-  {code: 'de', name: 'Deutsch', file: 'de.ts', iso: 'de-DE'},
+  {code: 'ru', name: 'Русский', file: 'ru.js', iso: 'ru-RU'},
+  {code: 'en', name: 'English', file: 'en.js', iso: 'en-GB'},
+  {code: 'de', name: 'Deutsch', file: 'de.js', iso: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
 
 const config: NuxtConfig = {
@@ -28,11 +28,6 @@ const config: NuxtConfig = {
     '/admin/**': {ssr: false},
     '/user/**': {ssr: false},
   },
-  router: {
-    options: {
-      // scrollBehaviorType: undefined,
-    },
-  },
   runtimeConfig: {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
     public: {
@@ -51,7 +46,6 @@ const config: NuxtConfig = {
       PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
     },
   },
-  modules: ['@pinia/nuxt', '@bootstrap-vue-next/nuxt', '@nuxtjs/i18n'],
   app: {
     pageTransition: {name: 'page', mode: 'out-in'},
     layoutTransition: {name: 'page', mode: 'out-in'},
@@ -72,25 +66,57 @@ const config: NuxtConfig = {
       ],
     },
   },
-  experimental: {
-    inlineSSRStyles: false,
+  modules: ['@vesp/frontend'],
+  vesp: {
+    icons: {
+      solid: [
+        'faUser',
+        'faPowerOff',
+        'faGlobe',
+        'faFilter',
+        'faPause',
+        'faPlay',
+        'faUpload',
+        'faQuestion',
+        'faImage',
+        'faVideo',
+        'faFile',
+        'faMusic',
+        'faCode',
+        'faCalendar',
+        'faCloudArrowDown',
+        'faComment',
+        'faComments',
+        'faBars',
+        'faRightToBracket',
+        'faHashtag',
+        'faReply',
+        'faTrash',
+        'faUndo',
+        'faPaperPlane',
+        'faWallet',
+        'faHourglassHalf',
+        'faLock',
+        'faLockOpen',
+        'faHeading',
+        'faList',
+      ],
+    },
   },
   i18n: {
-    strategy: 'no_prefix',
     defaultLocale: locales[0].code,
     langDir: 'lexicons',
     locales,
-    compilation: {
-      strictMessage: false,
-    },
   },
 }
 
 if (process.env.NODE_ENV === 'development') {
   config.modules?.push('@nuxtjs/eslint-module', '@nuxtjs/stylelint-module')
+  // @ts-ignore
   config.eslint = {
     lintOnStart: false,
   }
+  // @ts-ignore
   config.stylelint = {
     lintOnStart: false,
   }
