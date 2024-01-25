@@ -28,9 +28,11 @@
             </b-col>
           </b-row>
         </div>
-        <slot v-else>
-          <nuxt-page />
-        </slot>
+        <div v-else>
+          <slot>
+            <nuxt-page />
+          </slot>
+        </div>
       </b-container>
 
       <app-sidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
