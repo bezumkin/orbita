@@ -2,19 +2,10 @@ import type {Options} from 'plyr'
 import Plyr from 'plyr'
 import {Socket} from 'socket.io-client'
 import i18n from '@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs'
+import { hasScope, getImageLink } from "@vesp/frontend";
 import { getFileLink } from "~/utils/vesp";
 
 declare global {
-  interface AuthStore {
-    user: Ref<VespUser | undefined>
-    token: Ref<string | undefined>
-    loggedIn: Ref<boolean>
-    loadUser: Function
-    login: Function
-    logout: Function
-    setToken: Function
-  }
-
   type VespUserRole = {
     id: number
     title: string

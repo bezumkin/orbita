@@ -100,6 +100,7 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
             'Heading 5': 'Заголовок 5',
           },
           list: {Ordered: 'Нумерованный', Unordered: 'Маркированный'},
+          image: {Width: 'Ширина', Height: 'Высота', Crop: 'Обрезка'},
         },
         ui: {inlineToolbar: {converter: {'Convert to': 'Конвертировать в'}}},
       }
