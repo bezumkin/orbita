@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+
+  mariadb:
+    restart: no
+    ports:
+      - ${MARIADB_PORT:-3333}:3306
+
+  nginx:
+    restart: no
+    ports:
+      - ${NODE_PORT_WS:-3001}:3001
+
+  php-fpm:
+    restart: no
+    environment:
+      - PHP_IDE_CONFIG=serverName=VespDocker
+    command: sh -c 'composer install && cron && php-fpm'
+
+  node:
+    restart: no
+    # command: sh -c 'rm -rf /tmp/* && yarn && yarn analyze'
+    command: sh -c 'rm -rf /tmp/* && yarn && yarn dev'
+
+  redis:
+    restart: no
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+
+  mailhog:
+    image: teawithfruit/mailhog
+    ports:
+      - ${MAILHOG_PORT:-8090}:8025
