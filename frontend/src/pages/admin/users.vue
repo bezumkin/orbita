@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type {VespTableAction} from '~/components/vesp/table.vue'
+import type {VespTableAction} from '@vesp/frontend'
 
 const {t, d} = useI18n()
 const table = ref()

@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import slugify from 'slugify'
-import type {VespTableAction} from '~/components/vesp/table.vue'
+import type {VespTableAction} from '@vesp/frontend'
 
 const {$price} = useNuxtApp()
 const table = ref()
