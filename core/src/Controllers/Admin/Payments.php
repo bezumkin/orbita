@@ -38,6 +38,7 @@ class Payments extends ModelController
     protected function afterCount(Builder $c): Builder
     {
         $c->with('user:id,role_id,avatar_id,username,fullname', 'user.avatar:id,uuid,updated_at');
+        $c->with('topic:id,uuid,title');
 
         return $c;
     }
