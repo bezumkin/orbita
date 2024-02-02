@@ -39,19 +39,21 @@ const maxWidth = computed(() => (props.type === 'topic' ? 800 : 400))
 const blocks = computed(() => {
   const items = []
   let images: any[] = []
-  props.content.blocks.forEach((item: any) => {
-    if (item.type === 'image') {
-      images.push(item)
-    } else {
-      if (images.length > 1) {
-        items.push({type: 'images', data: images, id: Math.random().toString(36).slice(2, 10)})
-        images = []
-      } else if (images.length) {
-        items.push(images.shift())
+  if (props.content.blocks && Array.isArray(props.content.blocks)) {
+    for (const item of props.content.blocks) {
+      if (item.type === 'image') {
+        images.push(item)
+      } else {
+        if (images.length > 1) {
+          items.push({type: 'images', data: images, id: Math.random().toString(36).slice(2, 10)})
+          images = []
+        } else if (images.length) {
+          items.push(images.shift())
+        }
+        items.push(item)
       }
-      items.push(item)
     }
-  })
+  }
   if (images.length > 1) {
     items.push({type: 'images', data: images, id: Math.random().toString(36).slice(2, 10)})
   } else if (images.length) {
