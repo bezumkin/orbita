@@ -90,6 +90,8 @@ export default {
       copyright_desc: 'Displayed in the copyright line in the footer',
       started: 'Project start date',
       started_desc: 'The project start date is used to form the copyright line in the footer',
+      reactions: 'Reactions',
+      reactions_desc: `Here you can manage the available reactions for topics and comments. Icons can be sorted by drag-and-drop.`,
     },
     level: {
       title_one: 'Subscription level',
@@ -177,6 +179,15 @@ export default {
       created_at: 'Created At',
       paid_at: 'Paid At',
       date: 'Date',
+    },
+    reaction: {
+      title_one: 'Reaction',
+      title_many: 'Reactions',
+      id: 'Id',
+      title: 'Title',
+      emoji: 'Emoji',
+      emoji_desc: 'Copy the emoji symbol into this field',
+      active: 'Active',
     },
   },
   components: {
@@ -361,6 +372,9 @@ export default {
       wrong_service: 'Error when initializing the payment service',
       wrong_level: 'Could not load subscription level',
       delete_paid: 'Paid transactions cannot be deleted',
+    },
+    reaction: {
+      title_exists: 'A reaction with this name already exists',
     },
     not_ready: 'This function is not ready yet',
   },

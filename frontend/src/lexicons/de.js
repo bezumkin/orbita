@@ -90,6 +90,8 @@ export default {
       copyright_desc: 'Wird in der copyright Zeile des Footers angezeigt.',
       started: 'Projekt gestartet am',
       started_desc: 'Das Projektdatum wird in der Copyright Zeile im Footer angezeigt.',
+      reactions: 'Reaktionen',
+      reactions_desc: `Hier können Sie die verfügbaren Reaktionen für Themen und Kommentare verwalten. Symbole können per Drag-and-Drop sortiert werden.`,
     },
     level: {
       title_one: 'Abo Ebene',
@@ -177,6 +179,15 @@ export default {
       created_at: 'Erstellt am',
       paid_at: 'Bezahlt am',
       date: 'Datum',
+    },
+    reaction: {
+      title_one: 'Reaktion',
+      title_many: 'Reaktionen',
+      id: 'Id',
+      title: 'Titel',
+      emoji: 'Emoji',
+      emoji_desc: 'Kopiere das Emoji-Symbol in dieses Feld',
+      active: 'Aktiv',
     },
   },
   components: {
@@ -361,6 +372,9 @@ export default {
       wrong_service: 'Fehler beim Starten des Bezahl Service.',
       wrong_level: 'Konnte das Abo Level nicht laden',
       delete_paid: 'Ageschlossene Transaktionen können nicht gelöscht werden.',
+    },
+    reaction: {
+      title_exists: 'Eine Reaktion mit diesem Namen existiert bereits',
     },
     not_ready: 'Diese Funktion ist noch nicht aufgeschaltet.',
   },

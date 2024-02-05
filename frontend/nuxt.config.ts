@@ -100,7 +100,9 @@ const config: NuxtConfig = {
         'faLockOpen',
         'faHeading',
         'faList',
+        'faFaceSmile',
       ],
+      regular: ['faFaceSmile'],
     },
   },
   i18n: {

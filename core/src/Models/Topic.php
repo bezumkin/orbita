@@ -25,6 +25,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $closed
  * @property int $comments_count
  * @property int $views_count
+ * @property int $reactions_count
  * @property ?int $last_comment_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -36,7 +37,9 @@ use Ramsey\Uuid\Uuid;
  * @property-read TopicFile[] $contentFiles
  * @property-read TopicView[] $views
  * @property-read TopicTag[] $topicTags
+ * @property-read TopicReaction[] $userReactions
  * @property-read Tag[] $tags
+ * @property-read Reaction[] $reactions
  * @property-read Comment $lastComment
  * @property-read Comment[] $comments
  */
@@ -92,9 +95,19 @@ class Topic extends Model
         return $this->hasMany(TopicTag::class);
     }
 
+    public function userReactions(): HasMany
+    {
+        return $this->hasMany(TopicReaction::class);
+    }
+
     public function tags(): HasManyThrough
     {
         return $this->hasManyThrough(Tag::class, TopicTag::class, 'topic_id', 'id', 'id', 'tag_id');
+    }
+
+    public function reactions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Reaction::class, TopicReaction::class, 'topic_id', 'id', 'id', 'reaction_id');
     }
 
     public function lastComment(): BelongsTo
@@ -178,9 +191,10 @@ class Topic extends Model
             'price',
             'closed',
             'views_count',
+            'reactions_count',
             'comments_count',
             'published_at',
-            'tags'
+            'tags',
         );
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');
@@ -197,6 +211,10 @@ class Topic extends Model
             if (!$listView) {
                 $array['content'] = $this->content;
             }
+        }
+
+        if ($user && $this->relationLoaded('userReactions') && count($this->userReactions)) {
+            $array['reaction'] = $this->userReactions[0]->reaction_id;
         }
 
         return $array;

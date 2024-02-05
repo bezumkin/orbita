@@ -20,6 +20,9 @@ class Topics extends ModelGetController
             $c->with('views', function (HasMany $c) {
                 $c->where('user_id', $this->user->id);
             });
+            $c->with('userReactions', function (HasMany $c) {
+                $c->where('user_id', $this->user->id);
+            });
         }
 
         return $c;
@@ -45,6 +48,9 @@ class Topics extends ModelGetController
         $c->with('tags');
         if ($this->user) {
             $c->with('views', function (HasMany $c) {
+                $c->where('user_id', $this->user->id);
+            });
+            $c->with('userReactions', function (HasMany $c) {
                 $c->where('user_id', $this->user->id);
             });
         }

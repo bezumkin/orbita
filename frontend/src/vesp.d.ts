@@ -2,8 +2,8 @@ import type {Options} from 'plyr'
 import Plyr from 'plyr'
 import {Socket} from 'socket.io-client'
 import i18n from '@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs'
-import { hasScope, getImageLink } from "@vesp/frontend";
-import { getFileLink } from "~/utils/vesp";
+import {getImageLink, hasScope} from '@vesp/frontend'
+import {getFileLink} from '~/utils/vesp'
 
 declare global {
   type VespUserRole = {
@@ -89,7 +89,9 @@ declare global {
     comments_count?: number
     views_count?: number
     unseen_comments_count?: number
+    reactions_count?: number
     tags?: VespTag[]
+    reaction?: number
     [key: string]: any
   }
 
@@ -102,6 +104,8 @@ declare global {
     created_at?: string
     user?: VespUser
     children?: VespComment[]
+    reactions_count?: number
+    reaction?: number
     [key: string]: any
   }
 
@@ -143,6 +147,14 @@ declare global {
     topics?: number
     [key: string]: any
   }
+
+  type VespReaction = {
+    id: number
+    title: string
+    emoji: string
+    rank?: number
+    active?: boolean
+  }
 }
 
 declare module '@vue/runtime-core' {
@@ -160,6 +172,7 @@ declare module '@vue/runtime-core' {
     $settings: Ref<Record<string, string | string[]>>
     $pages: Ref<VespPage[]>
     $levels: Ref<VespLevel[]>
+    $reactions: Ref<VespReaction[]>
     $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
@@ -184,6 +197,7 @@ declare module '#app' {
     $settings: Ref<Record<string, string | string[]>>
     $pages: Ref<Record<string, any>[]>
     $levels: Ref<VespLevel[]>
+    $reactions: Ref<VespReaction[]>
     $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
     $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr

@@ -18,7 +18,7 @@ final class Topics extends Migration
                 $table->json('content');
                 $table->text('teaser')->nullable();
                 $table->foreignId('user_id')
-                    ->constrained('users')->onDelete('cascade');
+                    ->constrained('users')->cascadeOnDelete();
                 $table->foreignId('cover_id')->nullable()
                     ->constrained('files')->nullOnDelete();
                 $table->foreignId('level_id')->nullable()
@@ -42,9 +42,9 @@ final class Topics extends Migration
             'topic_files',
             static function (Blueprint $table) {
                 $table->foreignId('topic_id')
-                    ->constrained('topics')->onDelete('cascade');
+                    ->constrained('topics')->cascadeOnDelete();
                 $table->foreignId('file_id')
-                    ->constrained('files')->onDelete('cascade');
+                    ->constrained('files')->cascadeOnDelete();
                 $table->string('type', 50);
 
                 $table->primary(['topic_id', 'file_id']);
@@ -55,9 +55,9 @@ final class Topics extends Migration
             'topic_views',
             static function (Blueprint $table) {
                 $table->foreignId('topic_id')
-                    ->constrained('topics')->onDelete('cascade');
+                    ->constrained('topics')->cascadeOnDelete();
                 $table->foreignId('user_id')
-                    ->constrained('users')->onDelete('cascade');
+                    ->constrained('users')->cascadeOnDelete();
                 $table->timestamp('timestamp');
 
                 $table->primary(['topic_id', 'user_id']);

@@ -45,6 +45,7 @@ $group = $app->group(
             $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
             $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
             $group->any('/tags', App\Controllers\Admin\Tags::class);
+            $group->any('/reactions', App\Controllers\Admin\Reactions::class);
         });
 
         $group->group(
@@ -55,13 +56,16 @@ $group = $app->group(
                 $group->any('/topics[/{uuid}]', App\Controllers\Web\Topics::class);
                 $group->any('/topics/{topic_uuid}/view', App\Controllers\Web\Topics\View::class);
                 $group->any('/topics/{topic_uuid}/comments[/{id:\d+}]', App\Controllers\Web\Comments::class);
+                $group->any('/topics/{topic_uuid}/reactions', App\Controllers\Web\Topics\Reactions::class);
                 $group->any(
                     '/topics/{topic_uuid}/comments/upload[/{uuid}]',
                     App\Controllers\Web\Comments\Upload::class
                 );
                 $group->any('/comments/latest', App\Controllers\Web\Comments\Latest::class);
+                $group->any('/comments/{id:\d+}/reactions', App\Controllers\Web\Comments\Reactions::class);
                 $group->any('/pages[/{alias}]', App\Controllers\Web\Pages::class);
                 $group->any('/tags', App\Controllers\Web\Tags::class);
+                $group->any('/reactions', App\Controllers\Web\Reactions::class);
             }
         );
     }

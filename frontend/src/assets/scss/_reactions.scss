@@ -1,0 +1,122 @@
+@use "sass:color";
+
+.user-reactions {
+  position: relative;
+
+  .button {
+    cursor: pointer;
+  }
+
+  .reactions {
+    position: absolute;
+    left: -1.25rem;
+    bottom: 1rem;
+    display: flex;
+    gap: 0.1rem;
+    width: max-content;
+    max-width: 50vw;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: 2rem;
+    background-color: $white;
+    transition: all 0.25s;
+    visibility: hidden;
+    opacity: 0;
+
+    .reaction {
+      position: relative;
+      width: 3rem;
+      height: 3rem;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.25s;
+      border-radius: 100%;
+      background-color: transparent;
+      cursor: pointer;
+
+      .emoji {
+        font-size: 2rem;
+        line-height: 1;
+        transition: all 0.25s;
+      }
+
+      .counter {
+        position: absolute;
+        transition: all 0.25s;
+        top: -0.5em;
+        right: -0.5em;
+        font-size: 0.5em;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: $white;
+        border: 1px solid $border-color;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: $gray-200;
+
+        .emoji {
+          transform: scale(1.25);
+        }
+
+        .counter {
+          top: -0.75rem;
+          right: -0.75em;
+          width: 1.75rem;
+          height: 1.75rem;
+          transform: scale(1.2);
+        }
+      }
+
+      &.selected {
+        background-color: $gray-300;
+
+        .counter {
+          background-color: color.adjust($primary, $lightness: 35%);
+        }
+      }
+    }
+  }
+
+  &.visible {
+    .reactions {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  &.small {
+    .reactions {
+      .reaction {
+        width: 2rem;
+        height: 2rem;
+
+        .emoji {
+          font-size: 1.5rem;
+        }
+
+        .counter {
+          top: -0.75em;
+          right: -0.75em;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    .reactions {
+      max-width: 75vw;
+      left: -0.5rem;
+    }
+  }
+}

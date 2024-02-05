@@ -30,9 +30,9 @@ final class Pages extends Migration
             'page_files',
             static function (Blueprint $table) {
                 $table->foreignId('page_id')
-                    ->constrained('pages')->onDelete('cascade');
+                    ->constrained('pages')->cascadeOnDelete();
                 $table->foreignId('file_id')
-                    ->constrained('files')->onDelete('cascade');
+                    ->constrained('files')->cascadeOnDelete();
                 $table->string('type', 50);
 
                 $table->primary(['page_id', 'file_id']);

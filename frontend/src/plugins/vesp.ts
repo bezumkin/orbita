@@ -59,6 +59,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     computed(() => store.levels.sort((a, b) => (a.price > b.price ? 1 : -1))),
   )
 
+  nuxtApp.provide(
+    'reactions',
+    // @ts-ignore
+    computed(() => store.reactions.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
+  )
+
   if ($socket) {
     // Listen for Settings update
     $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
@@ -101,6 +107,28 @@ export default defineNuxtPlugin((nuxtApp) => {
       } else if (level.active) {
         store.levels.push(level)
       }
+    })
+
+    // Listen for Reactions update
+    $socket.on('reaction-create', (reaction: VespReaction) => {
+      if (reaction.active) {
+        store.reactions.push(reaction)
+      }
+    })
+    $socket.on('reaction-update', (reaction: VespReaction) => {
+      const idx = store.reactions.findIndex((i: VespReaction) => i.id === reaction.id)
+      if (idx > -1) {
+        if (!reaction.active) {
+          store.reactions.splice(idx, 1)
+        } else {
+          store.reactions[idx] = reaction
+        }
+      } else if (reaction.active) {
+        store.reactions.push(reaction)
+      }
+    })
+    $socket.on('reactions', () => {
+      refreshNuxtData('web-reactions')
     })
   }
 })

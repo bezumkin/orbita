@@ -4,6 +4,7 @@ export const useVespStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
   const pages: Ref<VespPage[]> = ref([])
   const levels: Ref<VespLevel[]> = ref([])
+  const reactions: Ref<VespReaction[]> = ref([])
   const isMobile = ref(false)
   const sidebar = ref(false)
   const login = ref(false)
@@ -36,5 +37,14 @@ export const useVespStore = defineStore('settings', () => {
     },
   })
 
-  return {settings, pages, levels, isMobile, sidebar, payment, login}
+  useCustomFetch('web/reactions', {
+    onResponse({response}) {
+      reactions.value = []
+      response._data?.rows?.forEach((reaction: VespReaction) => {
+        reactions.value.push(reaction)
+      })
+    },
+  })
+
+  return {settings, pages, levels, reactions, isMobile, sidebar, payment, login}
 })

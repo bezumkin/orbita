@@ -26,6 +26,18 @@
         </b-col>
       </b-row>
     </b-form-group>
+
+    <b-form-group v-if="$scope('reactions/get')" class="bg-light p-3 border rounded">
+      <template #label>
+        <h5 class="mb-0 mt-4">
+          {{ $t('models.setting.reactions') }}
+        </h5>
+      </template>
+      <template #description>
+        <div class="mt-2">{{ $t('models.setting.reactions_desc') }}</div>
+      </template>
+      <forms-reactions />
+    </b-form-group>
   </div>
 </template>
 

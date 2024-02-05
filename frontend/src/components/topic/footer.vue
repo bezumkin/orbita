@@ -6,7 +6,12 @@
       </b-badge>
     </div>
     <div class="topic-footer">
-      <div class="d-flex gap-3">
+      <div class="d-flex flex-wrap gap-3">
+        <user-reactions :item="topic">
+          <template #default="{selected, total}">
+            <vesp-fa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
+          </template>
+        </user-reactions>
         <div><vesp-fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
         <div v-if="!isTopic">
           <b-link

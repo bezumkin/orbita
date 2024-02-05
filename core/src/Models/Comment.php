@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * @property int $id
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ?int $parent_id
  * @property array $content
  * @property bool $active
+ * @property int $reactions_count
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
@@ -24,12 +26,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read ?Comment $parent
  * @property-read Comment[] $children
  * @property-read CommentFile[] $contentFiles
+ * @property-read CommentReaction[] $userReactions
+ * @property-read Reaction[] $reactions
  */
 class Comment extends Model
 {
     use ContentFilesTrait;
 
-    protected $fillable = ['content', 'active'];
+    protected $fillable = ['content', 'active', 'reactions_count'];
     protected $casts = [
         'active' => 'boolean',
         'content' => 'array',
@@ -112,6 +116,16 @@ class Comment extends Model
         return $this->hasMany(CommentFile::class, 'comment_id');
     }
 
+    public function userReactions(): HasMany
+    {
+        return $this->hasMany(CommentReaction::class);
+    }
+
+    public function reactions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Reaction::class, CommentReaction::class, 'comment_id', 'id', 'id', 'reaction_id');
+    }
+
     public function getLink(): string
     {
         return $this->topic->getLink() . '#comment-' . $this->id;
@@ -120,14 +134,15 @@ class Comment extends Model
     public function prepareOutput(?User $user): array
     {
         $array = $this->toArray();
-        /*if (isset($array['user']['payments'])) {
-            $array['user']['paid'] = !empty($array['user']['payments']);
-            unset($array['user']['payments']);
-        }*/
         if (!$this->active && (!$user || !$user->hasScope('comments'))) {
             $array['user_id'] = null;
             $array['user'] = [];
             $array['content'] = '';
+        }
+
+        if ($user && $this->relationLoaded('userReactions') && count($this->userReactions)) {
+            $array['reaction'] = $this->userReactions[0]->reaction_id;
+            unset($array['user_reactions']);
         }
 
         return $array;

@@ -8,6 +8,7 @@ use App\Services\Socket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
 
@@ -57,11 +58,12 @@ class Comments extends ModelController
         $c->with('user', function (BelongsTo $c) {
             $c->select('id', 'username', 'fullname', 'role_id', 'avatar_id');
             $c->with('avatar:id,uuid,updated_at');
-            /*$c->with('payments', function (HasMany $c) {
-                $c->select('id', 'user_id');
-                $c->where(['paid' => true, 'section_id' => $this->topic->section_id]);
-            });*/
         });
+        if ($this->user) {
+            $c->with('userReactions', function (HasMany $c) {
+                $c->where('user_id', $this->user->id);
+            });
+        }
 
         return $c;
     }

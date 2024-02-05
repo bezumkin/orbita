@@ -21,6 +21,14 @@
 
         <div v-if="user && record.id !== comment.id" class="comment-footer">
           <div v-if="comment.active">
+            <user-reactions :item="comment" small>
+              <template #default="{selected, total}">
+                <b-button :variant="btnVariant">
+                  <vesp-fa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
+                </b-button>
+              </template>
+            </user-reactions>
+
             <b-button v-if="canReply && onReply && canReply(comment)" :variant="btnVariant" @click="onReply(comment)">
               <vesp-fa icon="reply" class="fa-fw" />
               <span class="action">{{ $t('actions.reply') }}</span>
