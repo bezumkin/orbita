@@ -2,7 +2,7 @@
   <div>
     <b-form-group v-for="(setting, idx) in settings" :key="idx" class="bg-light p-3 border rounded">
       <template #label>
-        <h5 :class="{'mb-0': true, 'mt-4': idx > 0}">
+        <h5 class="mb-0">
           {{ $t('models.setting.' + setting.key) }}
         </h5>
       </template>
@@ -29,7 +29,7 @@
 
     <b-form-group v-if="$scope('reactions/get')" class="bg-light p-3 border rounded">
       <template #label>
-        <h5 class="mb-0 mt-4">
+        <h5 class="mb-0">
           {{ $t('models.setting.reactions') }}
         </h5>
       </template>
