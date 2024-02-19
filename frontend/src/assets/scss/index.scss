@@ -53,6 +53,7 @@
 
 // App
 @import "@fortawesome/fontawesome-svg-core/styles.css";
+@import "@vesp/frontend/assets/components";
 @import "plyr/src/sass/plyr";
 @import "transitions";
 @import "toast";
@@ -64,3 +65,4 @@
 @import "payments";
 @import "topic";
 @import "reactions";
+@import "dark-mode";

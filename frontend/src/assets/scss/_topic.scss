@@ -15,7 +15,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: $light;
+      background-color: var(--bs-tertiary-bg);
       padding: 1rem;
       border-radius: $border-radius;
       margin: -1rem -1rem 1rem;
@@ -53,9 +53,9 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 2rem;
-      color: $white;
+      color: var(--bs-white);
       height: 100%;
-      background: rgba($black, 0.5);
+      background: rgba(var(--bs-black-rgb), 0.5);
 
       .text {
         white-space: pre-wrap;
@@ -78,12 +78,12 @@
     display: flex;
     padding-top: 1rem;
     margin-top: 1rem;
-    border-top: 1px solid $border-color;
+    border-top: 1px solid var(--bs-border-color);
   }
 
   &.teaser {
-    background: $white;
-    border: 1px solid $border-color;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
     border-radius: $border-radius;
     overflow: hidden;
 
@@ -93,7 +93,7 @@
         text-decoration: underline;
 
         &:hover {
-          color: $link-hover-color;
+          color: var(--bs-link-hover-color);
         }
       }
     }

@@ -1,13 +1,23 @@
+pre.highlighted {
+  background-color: var(--bs-tertiary-bg);
+  border-radius: $border-radius;
+}
+
+// stylelint-disable-next-line
+.codeflask__textarea {
+  caret-color: var(--bs-body-color) !important;
+}
+
 code {
-  color: $body-color;
+  color: var(--bs-body-color);
 
   .token {
     &.punctuation {
-      color: #4a4a4a;
+      color: var(--bs-secondary);
     }
 
     &.keyword {
-      color: $red;
+      color: var(--bs-danger);
     }
 
     /* &.operator {
@@ -15,47 +25,47 @@ code {
     } */
 
     &.string {
-      color: #0a3069;
+      color: var(--bs-blue);
     }
 
     &.comment {
-      color: $text-muted;
+      color: var(--bs-secondary)
     }
 
     &.function {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.boolean {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.number {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.selector {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.property {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.tag {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.package {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.class-name {
-      color: #953800;
+      color: var(--bs-orange);
     }
 
     &.attr-value {
-      color: #953800;
+      color: var(--bs-orange);
     }
   }
 }

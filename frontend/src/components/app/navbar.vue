@@ -1,13 +1,16 @@
 <template>
-  <b-navbar id="navbar" variant="light" sticky="top" :container="false">
+  <b-navbar id="navbar" sticky="top" :container="false">
     <b-container>
       <b-navbar-brand :to="{name: 'index'}" class="p-0" @click="hideSidebar">
-        <b-img :src="logo" height="40" />
+        <b-img :src="logo" class="logo" height="40" />
       </b-navbar-brand>
 
       <app-pages class="d-none d-md-flex" />
 
       <b-navbar-nav class="ms-auto">
+        <b-button variant="light" class="me-1" @click="changeColor">
+          <vesp-fa :icon="colorIcon" fixed-width />
+        </b-button>
         <app-login :btn-variant="btnVariant" @click="hideSidebar">
           <template #user-menu>
             <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
@@ -33,6 +36,7 @@
 
 <script setup lang="ts">
 import type {BaseButtonVariant} from 'bootstrap-vue-next/src/types'
+import {useColorMode, type BasicColorSchema} from '@vueuse/core'
 import logo from '~/assets/images/logo-orbita.svg'
 
 defineProps({
@@ -48,6 +52,14 @@ defineProps({
 
 const hasAdmin = computed(() => getAdminSections().length)
 const {$sidebar} = useNuxtApp()
+const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
+const saved: Ref<BasicColorSchema | undefined> = useCookie('colorMode')
+const colorIcon = computed(() => {
+  if (store.value === 'auto') {
+    return 'circle-half-stroke'
+  }
+  return ['far', store.value === 'light' ? 'sun' : 'moon']
+})
 
 function toggleSidebar() {
   $sidebar.value = !$sidebar.value
@@ -56,4 +68,17 @@ function toggleSidebar() {
 function hideSidebar() {
   $sidebar.value = false
 }
+
+function changeColor() {
+  if (store.value === 'auto') {
+    store.value = system.value === 'light' ? 'dark' : 'light'
+  } else if (store.value === 'light') {
+    store.value = system.value === 'light' ? 'auto' : 'dark'
+  } else if (store.value === 'dark') {
+    store.value = system.value === 'dark' ? 'auto' : 'light'
+  }
+  saved.value = store.value
+}
+
+store.value = saved.value || 'auto'
 </script>

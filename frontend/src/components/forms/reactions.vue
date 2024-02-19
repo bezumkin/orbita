@@ -13,11 +13,11 @@
               </template>
               <template #footer>
                 <div class="d-flex w-100 justify-content-between">
-                  <b-button size="sm" variant="light" @click.prevent="onEdit(element)">
-                    <vesp-fa icon="edit" />
+                  <b-button size="sm" :variant="null" @click.prevent="onEdit(element)">
+                    <vesp-fa icon="edit" fixed-width />
                   </b-button>
-                  <b-button size="sm" variant="light" @click.prevent="onDelete(element)">
-                    <vesp-fa icon="times" class="text-danger" />
+                  <b-button size="sm" :variant="null" @click.prevent="onDelete(element)">
+                    <vesp-fa icon="times" fixed-width class="text-danger" />
                   </b-button>
                 </div>
               </template>

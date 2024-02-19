@@ -1,0 +1,27 @@
+body[data-bs-theme="dark"] {
+  .logo {
+    filter: invert(100%);
+  }
+
+  .table {
+    .b-table-busy-slot {
+      background: rgba(var(--bs-dark-rgb), 0.5);
+
+      > td {
+        background: transparent;
+      }
+    }
+  }
+
+  .btn-light {
+    --bs-btn-color: var(--bs-tertiary);
+    --bs-btn-border-color: var(--bs-tertiary-bg);
+    --bs-btn-bg: var(--bs-tertiary-bg);
+    --bs-btn-hover-color: var(--bs-body);
+    --bs-btn-hover-bg: var(--bs-secondary-bg);
+    --bs-btn-hover-border-color: var(--bs-secondary-bg);
+    --bs-btn-active-color: var(--bs-tertiary);
+    --bs-btn-active-border-color: var(--bs-tertiary-bg);
+    --bs-btn-active-bg: var(--bs-tertiary-bg);
+  }
+}

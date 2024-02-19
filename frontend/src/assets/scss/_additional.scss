@@ -39,9 +39,9 @@ fieldset {
 .upload-box {
   overflow: hidden;
   position: relative;
-  background: $light url('~/assets/icons/upload.svg') no-repeat center;
+  background: var(--bs-tertiary-bg) url('~/assets/icons/upload.svg') no-repeat center;
   background-size: 1.5rem;
-  border: 1px solid color.adjust($light, $blackness: 10%);
+  border: 1px solid var(--bs-border-color);
   transition: background $transition;
   cursor: pointer;
   min-height: 6rem;
@@ -60,13 +60,11 @@ fieldset {
   }
 
   &:hover {
-    background-color: color.adjust($light, $blackness: 10%);
-    border-color: 1px solid $secondary;
+    background-color: var(--bs-secondary-bg);
     background-size: 2rem;
   }
 
   &::after {
-    outline: 1px solid red;
     content: '';
     background-color: rgba($success, 0.25);
     opacity: 0;
@@ -93,17 +91,18 @@ fieldset {
 
 #navbar, #footer {
   transition: all 0.25s;
+  background-color: var(--bs-secondary-bg);
 
   .pages {
     .nav-link {
-      color: $secondary;
+      color: var(--bs-secondary-color);
 
       &:not(.active):hover {
-        color: $body-color;
+        color: var(--bs-tertiary-color);
       }
 
       &.active {
-        color: $body-color;
+        color: var(--bs-tertiary-color);
       }
     }
   }
@@ -118,6 +117,14 @@ fieldset {
 }
 
 #layout {
+  &.columns {
+    background-color: var(--bs-secondary-bg);
+
+    #navbar, #footer {
+      background-color: var(--bs-body-bg);
+    }
+  }
+
   .main-background {
     position: relative;
     transition: height $transition-speed;
@@ -149,8 +156,8 @@ fieldset {
     }
 
     .column {
-      background: $white;
-      border: 1px solid $border-color;
+      background: var(--bs-body-bg);
+      border: 1px solid var(--bs-border-color);
       border-radius: $border-radius;
       padding: 1rem;
     }
@@ -184,7 +191,7 @@ footer {
   .widget-title {
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid var(--bs-border-color);
   }
 
   .widget-body {
@@ -194,7 +201,20 @@ footer {
   }
 }
 
+.table-responsive {
+  border-radius: $border-radius;
+}
+
 // Glightbox
+body.glightbox-open {
+  overflow: visible;
+}
+
 .goverlay {
-  background: rgba($modal-backdrop-bg, $modal-backdrop-opacity) !important;
+  background: rgba(var(--bs-dark-rgb), 0.85) !important;
+}
+
+// Plyr
+.plyr {
+  border-radius: $border-radius;
 }

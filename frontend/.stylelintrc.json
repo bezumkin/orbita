@@ -2,6 +2,7 @@
   "extends": ["stylelint-config-standard-scss", "stylelint-config-recommended-vue"],
   "rules": {
     "at-rule-no-unknown": null,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "color-function-notation": false
   }
 }

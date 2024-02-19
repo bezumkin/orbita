@@ -22,6 +22,7 @@ $widget-items-gap: 1.5rem;
 @import "bootstrap-scss/variables";
 @import "bootstrap-scss/variables-dark";
 
+$kbd-bg: var(--bs-tertiary-bg);
+$kbd-color: var(--bs-body);
 $plyr-color-main: $primary;
-$kbd-bg: $gray-200;
-$kbd-color: $body-color;
+$plyr-audio-controls-background: var(--bs-tertiary-bg);

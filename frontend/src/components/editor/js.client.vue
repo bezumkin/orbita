@@ -55,7 +55,7 @@ const props = defineProps({
   },
   btnVariant: {
     type: String as PropType<keyof BaseButtonVariant>,
-    default: 'outline-secondary',
+    default: 'light',
   },
   btnSize: {
     type: String as PropType<keyof BaseSize>,

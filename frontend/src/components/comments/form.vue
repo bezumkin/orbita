@@ -8,7 +8,6 @@
         :autofocus="autofocus"
         :min-height="50"
         :upload-url="uploadUrl"
-        btn-variant="light"
       />
     </b-form-group>
 

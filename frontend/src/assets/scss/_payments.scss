@@ -1,21 +1,21 @@
 #payment {
   .subscription {
     padding: 1rem;
-    border: 1px solid $border-color;
+    border: 1px solid var(--bs-border-color);
     border-radius: $border-radius;
   }
 
   .item {
-    background-color: $white;
-    border: 1px solid $border-color;
+    background-color: var(--bs-secondary-bg);
+    border: 1px solid var(--bs-border-color);
     border-radius: $border-radius;
     padding: 0.75rem;
     cursor: pointer;
     transition: background-color 0.25s, border 0.25s;
 
     &.active {
-      background-color: rgba($primary, 0.125);
-      border-color: $primary;
+      background-color: rgba(var(--bs-primary-rgb), 0.125);
+      border-color: var(--bs-primary);
       cursor: default;
     }
   }
@@ -75,7 +75,7 @@
 
     &:not(:last-child) {
       padding-bottom: $widget-items-gap;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid var(--bs-border-color);
     }
 
     .title {

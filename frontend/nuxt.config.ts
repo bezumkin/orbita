@@ -101,8 +101,9 @@ const config: NuxtConfig = {
         'faHeading',
         'faList',
         'faFaceSmile',
+        'faCircleHalfStroke',
       ],
-      regular: ['faFaceSmile'],
+      regular: ['faFaceSmile', 'faSun', 'faMoon'],
     },
   },
   i18n: {

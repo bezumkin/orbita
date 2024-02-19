@@ -1,7 +1,7 @@
 $vt-namespace: "Vue-Toastification";
-$vt-color-info: rgba($info, 0.9);
-$vt-color-success: rgba($success, 0.9);
-$vt-color-error: rgba($danger, 0.9);
+$vt-color-info: rgba(var(--bs-info-rgb), 0.9);
+$vt-color-success: rgba(var(--bs-success-rgb), 0.9);
+$vt-color-error: rgba(var(--bs-danger-rgb), 0.9);
 $vt-font-family: $font-family-base;
 $vt-mobile: "only screen and (max-width : 575px)" !default;
 $vt-not-mobile: "only screen and (min-width : 576px)" !default;

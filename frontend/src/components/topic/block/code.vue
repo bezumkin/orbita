@@ -1,5 +1,5 @@
 <template>
-  <pre><code v-html="$prism(block.data.code, block.data.language)" /></pre>
+  <pre class="highlighted"><code v-html="$prism(block.data.code, block.data.language)" /></pre>
 </template>
 
 <script setup lang="ts">

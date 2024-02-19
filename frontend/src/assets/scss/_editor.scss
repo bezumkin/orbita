@@ -12,8 +12,8 @@
   }
 
   blockquote {
-    background: $light;
-    border-left: 3px solid $secondary;
+    background: var(--bs-tertiary-bg);
+    border-left: 3px solid var(--bs-secondary);
     padding: 0.25rem 0.5rem;
 
     p {
@@ -42,6 +42,75 @@
   &.form-control {
     max-height: 600px;
     overflow: scroll;
+
+    ::selection {
+      color: var(--bs-body-color);
+      background: var(--bs-secondary-bg);
+    }
+  }
+
+
+  .ce-block--selected {
+    .ce-block__content {
+      color: var(--bs-body-color);
+      background: var(--bs-secondary-bg);
+    }
+  }
+
+  .ce-toolbar {
+    &__settings-btn {
+      background-color: var(--bs-secondary-bg);
+      color: var(--bs-body-color);
+    }
+  }
+
+  .ce-popover {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+
+    &-item {
+      color: var(--bs-body-color);
+
+      &__icon {
+        background-color: var(--bs-tertiary-bg);
+        box-shadow: 0 0 0 1px var(--bs-secondary) !important;
+      }
+
+      &:hover {
+        &:not(.ce-popover-item--confirmation) {
+          background-color: var(--bs-secondary-bg);
+        }
+      }
+    }
+  }
+
+  .ce-inline-toolbar {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+
+    .ce-inline-toolbar__dropdown,
+    .ce-inline-tool {
+      &:hover {
+        background-color: var(--bs-secondary-bg);
+      }
+    }
+  }
+
+  .ce-conversion-toolbar {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+
+    .ce-conversion-tool {
+      &__icon {
+        background-color: var(--bs-tertiary-bg);
+        box-shadow: 0 0 0 1px var(--bs-secondary);
+      }
+
+      &:hover {
+        background-color: var(--bs-secondary-bg);
+      }
+    }
+
   }
 
   .codex-editor__redactor {

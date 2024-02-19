@@ -3,7 +3,7 @@
     <nuxt-loading-indicator color="var(--bs-primary)" :throttle="0" />
 
     <div id="layout" :class="mainClasses">
-      <app-navbar :class="navbarClasses" :sidebar="!isAdmin" />
+      <app-navbar class="border-bottom" :sidebar="!isAdmin" />
 
       <div v-if="isColumns" class="main-background">
         <b-img :src="background" height="240" />
@@ -36,7 +36,7 @@
       </b-container>
 
       <app-sidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
-      <app-footer :class="footerClasses" />
+      <app-footer class="border-top" />
       <app-payment />
     </div>
   </div>
@@ -61,22 +61,12 @@ const showOnline = useRuntimeConfig().public.COMMENTS_SHOW_ONLINE === '1'
 const mainClasses = computed(() => {
   const arr = ['d-flex', 'flex-column', 'min-vh-100']
   if (isColumns.value) {
-    arr.push('bg-light')
+    arr.push('columns')
   }
   if (route.name === 'index') {
     arr.push('main-page')
   }
   return arr
-})
-const navbarClasses = computed(() => {
-  const arr = ['border-bottom']
-  if (isColumns.value) {
-    arr.push('bg-white')
-  }
-  return arr
-})
-const footerClasses = computed(() => {
-  return ['border-top', isColumns.value ? 'bg-white' : 'bg-light']
 })
 
 function handleResize() {

@@ -21,7 +21,7 @@
         .comment-date {
           a {
             font-size: 0.8em;
-            color: $gray-600;
+            color: var(--bs-secondary);
           }
         }
 
@@ -35,8 +35,8 @@
         margin-top: 0.25rem;
         padding: 0.75rem 0.5rem;
         border-radius: $border-radius;
-        border: 1px solid $border-color;
-        box-shadow: $light 0 0 0.75rem;
+        border: 1px solid var(--bs-border-color);
+        box-shadow: 0 0 $border-radius var(--bs-secondary-bg);
         word-break: break-word;
         transition: all 0.25s;
 
@@ -69,15 +69,15 @@
 
       &.admin {
         .comment-user {
-          color: color.adjust($danger, $lightness: -20%);
+          color: var(--bs-danger-rgb);
         }
       }
 
       &.deleted {
         .comment-text {
-          color: color.adjust($warning, $lightness: -25%);
-          border-color: $warning;
-          background-color: rgba($warning, 0.25);
+          color: var(--bs-warning-text-emphasis);
+          border-color: var(--bs-warning-border-subtle);
+          background-color: rgba(var(--bs-warning-rgb), 0.25);
         }
       }
 
@@ -89,7 +89,7 @@
 
       &.paid {
         .comment-user {
-          color: rgba($success, 0.1);
+          color: var(--bs-success);
         }
       }
     }
@@ -165,7 +165,7 @@
     &-footer {
       display: flex;
       align-items: center;
-      color: $gray-600;
+      color: var(--bs-secondary);
     }
 
     &-text {
