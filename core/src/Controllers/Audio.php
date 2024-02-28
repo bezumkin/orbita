@@ -14,6 +14,10 @@ class Audio extends Controller
 
     public function checkScope(string $method): ?ResponseInterface
     {
+        if ($method === 'options') {
+            return null;
+        }
+
         $uuid = $this->getProperty('uuid');
         $this->file = File::query()
             ->where('type', 'LIKE', 'audio/%')

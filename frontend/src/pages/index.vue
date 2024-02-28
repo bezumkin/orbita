@@ -1,5 +1,9 @@
 <template>
   <div>
+    <b-button v-if="$scope('topics/put')" :to="{name: 'topics-create'}" variant="primary" class="mb-3">
+      <vesp-fa icon="plus" fixed-width /> {{ $t('actions.create') }}
+    </b-button>
+
     <b-overlay :show="pending" opacity="0.5" class="topics">
       <template v-if="topics.length">
         <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" />

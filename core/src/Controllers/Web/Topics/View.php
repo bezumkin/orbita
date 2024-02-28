@@ -10,9 +10,11 @@ class View extends Controller
 {
     public function post(): ResponseInterface
     {
+        $isAdmin = $this->user && $this->user->hasScope('topics/patch');
+
         /** @var Topic $topic */
         $topic = Topic::query()->where('uuid', $this->getProperty('topic_uuid'))->first();
-        if (!$topic || !$topic->active) {
+        if (!$topic || (!$topic->active && !$isAdmin)) {
             return $this->failure('Not Found', 404);
         }
 

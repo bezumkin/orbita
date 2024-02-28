@@ -12,7 +12,7 @@ const record = ref({
   title: '',
   price: 0,
   content: {},
-  active: true,
+  active: false,
   closed: false,
   tags: [],
 })

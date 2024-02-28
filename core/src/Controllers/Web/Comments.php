@@ -23,6 +23,10 @@ class Comments extends ModelController
 
     public function checkScope(string $method): ?ResponseInterface
     {
+        if ($method === 'options') {
+            return null;
+        }
+
         $this->isAdmin = $this->user && $this->user->hasScope('comments/delete');
         $uuid = $this->getProperty('topic_uuid');
 

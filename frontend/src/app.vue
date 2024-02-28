@@ -47,7 +47,8 @@ const {$settings, $image, $isMobile} = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const isColumns = computed(() => {
-  return ['index', 'topics-uuid'].includes(router.currentRoute.value?.name as string)
+  const route = router.currentRoute.value?.name as string
+  return route === 'index' || route.startsWith('topics-')
 })
 const isAdmin = computed(() => {
   return router.currentRoute.value?.name && (router.currentRoute.value?.name as string).startsWith('admin')

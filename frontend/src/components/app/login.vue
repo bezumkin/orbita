@@ -34,7 +34,7 @@
     </transition>
 
     <b-modal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
-      <b-overlay :show="loading" :opacity="0.5">
+      <b-overlay :show="loading" opacity="0.5">
         <b-tabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
           <b-tab :title="$t('security.login')">
             <b-form @submit.prevent="onLogin">

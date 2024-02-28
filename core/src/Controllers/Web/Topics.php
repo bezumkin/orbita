@@ -15,7 +15,9 @@ class Topics extends ModelGetController
 
     protected function beforeGet(Builder $c): Builder
     {
-        $c->where('active', true);
+        if (!$this->user || !$this->user->hasScope('topics/patch')) {
+            $c->where('active', true);
+        }
         if ($this->user) {
             $c->with('views', function (HasMany $c) {
                 $c->where('user_id', $this->user->id);
@@ -30,7 +32,9 @@ class Topics extends ModelGetController
 
     protected function beforeCount(Builder $c): Builder
     {
-        $c->where('active', true);
+        if (!$this->user || !$this->user->hasScope('topics/patch')) {
+            $c->where('active', true);
+        }
         if ($tags = $this->getProperty('tags')) {
             $tags = explode(',', $tags);
             $c->whereHas('topicTags', static function (Builder $c) use ($tags){
@@ -60,7 +64,7 @@ class Topics extends ModelGetController
 
     protected function addSorting(Builder $c): Builder
     {
-        $c->orderByDesc('published_at');
+        $c->orderByRaw('-published_at, id DESC');
 
         return $c;
     }

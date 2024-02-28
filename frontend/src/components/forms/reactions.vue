@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-overlay :show="pending || loading" :opacity="0.5">
+    <b-overlay :show="pending || loading" opacity="0.5">
       <draggable :list="reactions" item-key="id" class="row g-2" @end="onSort">
         <template #item="{element}">
           <b-col cols="6" md="auto">

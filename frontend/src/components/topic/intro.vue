@@ -1,5 +1,5 @@
 <template>
-  <div class="topic teaser">
+  <div :class="{'topic teaser': true, inactive: !topic.active}">
     <div class="topic-cover">
       <b-img v-if="topic.cover" v-bind="imageProps" class="background" lazy />
       <div class="wrapper">

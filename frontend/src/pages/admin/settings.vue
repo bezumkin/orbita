@@ -11,7 +11,7 @@
       </template>
       <b-row class="align-items-center justify-content-end">
         <b-col class="flex-grow-1">
-          <b-overlay :show="saving === setting.key" :opacity="0.5">
+          <b-overlay :show="saving === setting.key" opacity="0.5">
             <forms-setting v-model="settings[idx]" :editing="editing === setting.key" @submit="saveSetting(setting)" />
           </b-overlay>
         </b-col>

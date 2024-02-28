@@ -12,7 +12,8 @@
       <editor-content v-if="myValue.content?.blocks" :content="myValue.content" />
       <topic-footer :topic="myValue" />
     </div>
-    <b-form v-else-if="$scope('topics/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+    <b-form v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+      <forms-topic v-model="record" />
       <div class="topic-buttons">
         <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
         <b-button variant="primary" type="submit" :disabled="loading">
@@ -20,7 +21,6 @@
           {{ $t('actions.save') }}
         </b-button>
       </div>
-      <forms-topic v-model="record" />
     </b-form>
   </b-overlay>
 </template>

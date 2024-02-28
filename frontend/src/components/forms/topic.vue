@@ -1,18 +1,19 @@
 <template>
   <div>
+    <b-form-group :label="$t('models.topic.title')">
+      <b-form-input v-model.trim="record.title" required autofocus />
+    </b-form-group>
+    <b-form-group :label="$t('models.topic.content')">
+      <editor-js v-model="record.content" :blocks="editorBlocks" />
+    </b-form-group>
+
     <b-row>
-      <b-col md="8">
-        <b-form-group :label="$t('models.topic.title')">
-          <b-form-input v-model.trim="record.title" required autofocus />
-        </b-form-group>
-        <b-form-group :label="$t('models.topic.content')">
-          <editor-js v-model="record.content" :blocks="editorBlocks" />
+      <b-col md="6">
+        <b-form-group :label="$t('models.topic.access.title')">
+          <b-form-radio-group v-model="accessLevel" :options="accessOptions" stacked />
         </b-form-group>
       </b-col>
-      <b-col md="4">
-        <b-form-group :label="$t('models.topic.access.title')">
-          <b-form-radio-group v-model="accessLevel" :options="accessOptions" />
-        </b-form-group>
+      <b-col md="6">
         <b-form-group v-if="['subscribers', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.level')">
           <b-form-select v-model="record.level_id" :options="levelOptions" required />
         </b-form-group>
@@ -90,12 +91,14 @@ const levelOptions = computed(() => {
   })
   return options
 })
-const accessOptions = [
-  {value: 'free', text: t('models.topic.access.free')},
-  {value: 'subscribers', text: t('models.topic.access.subscribers')},
-  {value: 'sub_payments', text: t('models.topic.access.sub_payments')},
-  {value: 'payments', text: t('models.topic.access.payments')},
-]
+const accessOptions = computed(() => {
+  return [
+    {value: 'free', text: t('models.topic.access.free')},
+    {value: 'subscribers', text: t('models.topic.access.subscribers')},
+    {value: 'sub_payments', text: t('models.topic.access.sub_payments')},
+    {value: 'payments', text: t('models.topic.access.payments')},
+  ]
+})
 const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS).split(',') || []
 
 const accessLevel = ref('free')

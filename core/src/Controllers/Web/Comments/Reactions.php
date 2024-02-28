@@ -13,6 +13,10 @@ class Reactions extends Controller
 
     public function checkScope(string $method): ?ResponseInterface
     {
+        if ($method === 'options') {
+            return null;
+        }
+
         /** @var Comment $comment */
         $comment = Comment::query()->find($this->getProperty('id'));
         if (!$comment || !$comment->active) {

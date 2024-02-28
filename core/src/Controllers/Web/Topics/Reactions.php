@@ -13,6 +13,10 @@ class Reactions extends Controller
 
     public function checkScope(string $method): ?ResponseInterface
     {
+        if ($method === 'options') {
+            return null;
+        }
+
         /** @var Topic $topic */
         $topic = Topic::query()->where('uuid', $this->getProperty('topic_uuid'))->first();
         if (!$topic || !$topic->active) {

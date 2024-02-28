@@ -195,6 +195,7 @@ class Topic extends Model
             'comments_count',
             'published_at',
             'tags',
+            'active',
         );
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');

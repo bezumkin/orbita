@@ -89,11 +89,9 @@ const onSubmit = inject<(comment: VespComment) => void>('onSubmit')
 const onCancel = inject<() => void>('onCancel')
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.metaKey || e.ctrlKey) {
-    if (e.key === 'Enter' || e.key === 's') {
-      e.preventDefault()
-      submit()
-    }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault()
+    submit()
   }
 }
 
