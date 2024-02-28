@@ -5,13 +5,20 @@
     margin-left: 1.5rem;
 
     .comment {
-      margin-top: 2rem;
+      position: relative;
+      border-radius: var(--bs-border-radius);
+      margin: 2rem -0.25rem -0.25rem;
+      padding: 0.25rem;
+      transition: background-color 0.25s;
+      background-color: var(--bs-body-bg);
 
       &-header {
         display: flex;
         flex-flow: wrap column;
         line-height: 1.5rem;
         transition: background-color 0.25s;
+        padding-bottom: 0.25rem;
+        border-bottom: 1px solid var(--bs-border-color);
 
         .comment-user {
           display: flex;
@@ -20,25 +27,21 @@
 
         .comment-date {
           a {
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: var(--bs-secondary);
           }
         }
 
         .comment-link {
-          font-size: 0.8em;
+          font-size: 0.85em;
           margin-left: 1rem;
         }
       }
 
       &-text {
-        margin-top: 0.25rem;
-        padding: 0.75rem 0.5rem;
-        border-radius: $border-radius;
-        border: 1px solid var(--bs-border-color);
-        box-shadow: 0 0 $border-radius var(--bs-secondary-bg);
+        padding: 0.25rem 0;
+        border-radius: var(--bs-border-radius);
         word-break: break-word;
-        transition: all 0.25s;
 
         .comment-content {
           @extend %editor-content;
@@ -48,7 +51,8 @@
       &-footer {
         display: flex;
         align-items: center;
-        margin-top: 0.5rem;
+        padding-top: 0.25rem;
+        border-top: 1px solid var(--bs-border-color);
 
         & > div {
           display: flex;
@@ -61,33 +65,27 @@
         }
       }
 
-      &.author {
-        .comment-header {
-          background-color: #f5fbe5;
-        }
+      &.deleted {
+        --bs-border-color: var(--bs-warning-border-subtle);
+
+        color: var(--bs-warning-text-emphasis);
+        background-color: rgba(var(--bs-warning-rgb), 0.25);
+      }
+
+      &.unseen {
+        --bs-border-color: var(--bs-primary-border-subtle);
+
+        background-color: var(--bs-primary-bg-subtle);
       }
 
       &.admin {
         .comment-user {
-          color: var(--bs-danger-rgb);
+          color: var(--bs-danger);
         }
       }
 
-      &.deleted {
-        .comment-text {
-          color: var(--bs-warning-text-emphasis);
-          border-color: var(--bs-warning-border-subtle);
-          background-color: rgba(var(--bs-warning-rgb), 0.25);
-        }
-      }
-
-      &.unseen {
-        .comment-header {
-          background-color: #e7f3ff;
-        }
-      }
-
-      &.paid {
+      &.paid,
+      &.author {
         .comment-user {
           color: var(--bs-success);
         }
@@ -159,8 +157,6 @@
 
 .widget {
   .comment {
-    font-size: 90%;
-
     &-header,
     &-footer {
       display: flex;
