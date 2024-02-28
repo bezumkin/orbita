@@ -13,7 +13,7 @@ export default class extends Parent {
     if (!this.data.uuid) {
       return
     }
-    if (!this.data.crop) {
+    if (!this.data.crop || Array.isArray(this.data.crop)) {
       this.data.crop = {}
     }
 
