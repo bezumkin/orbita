@@ -13,6 +13,29 @@ const props = defineProps({
 })
 
 const html = computed(() => {
-  return props.block.data?.text === '---' ? '<hr class="my-3" />' : props.block.data.text
+  if (!props.block.data?.text) {
+    return ''
+  }
+
+  const text = props.block.data.text
+
+  const quote = /^(&gt;|>)(&nbsp;|\s)/
+  if (text.match(quote)) {
+    return '<blockquote>' + text.replace(quote, '').replace(/<.*?>/g, '') + '</blockquote>'
+  }
+
+  if (text === '-') {
+    return '<div class="my-1" />'
+  }
+
+  if (text === '--') {
+    return '<div class="my-2" />'
+  }
+
+  if (text === '---') {
+    return '<hr class="my-3" />'
+  }
+
+  return text
 })
 </script>
