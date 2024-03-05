@@ -23,7 +23,7 @@ export default defineNuxtModule({
     })
 
     nuxt.hook('modules:done', () => {
-      console.log('Socket.io module is ready')
+      console.info('Socket.io module is ready')
     })
   },
 })

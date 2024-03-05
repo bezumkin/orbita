@@ -1828,10 +1828,10 @@
     node-gyp-build "^4.2.2"
     resolve-from "^5.0.0"
 
-"@vesp/frontend@^3.0.0":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@vesp/frontend/-/frontend-3.0.2.tgz#fe4693d68ccd04b291173144b8c83a302ffe91db"
-  integrity sha512-TU3c6lRl0yYc1CLN8zW+v219evvUYTnf8u0Oc2e+j6FcritxYM9FIq+0FP2qM7HydBXebkUF2kyswiPU+5N6/Q==
+"@vesp/frontend@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@vesp/frontend/-/frontend-3.1.3.tgz#2dc3dd0ca4324fa800c6a14b12250858fe9953c3"
+  integrity sha512-4weTBKmxSqeocQ6xZfC8OJOUGNZMEZnOk21GiVP51RTEnfRBJ0XxhYmmI1GKkukVihvZaUQfqvp1+MUkujnYfg==
   dependencies:
     "@bootstrap-vue-next/nuxt" "0.14.10"
     "@fortawesome/fontawesome-svg-core" "^6.5.1"
@@ -1842,6 +1842,7 @@
     bootstrap-scss "^5.3.2"
     bootstrap-vue-next "0.14.10"
     date-fns "^2.4.1"
+    nuxt3-fontawesome "^1.0.1"
     pinia "^2.1.7"
     slugify "^1.6.6"
     text-mask-core "^5.1.2"
@@ -5737,6 +5738,14 @@ nuxi@^3.10.0:
   integrity sha512-veZXw2NuaQ1PrpvHrnQ1dPgkAjv0WqPlvFReg5Iubum0QVGWdJJvGuNsltDQyPcZ7X7mhMXq9SLIpokK4kpvKA==
   optionalDependencies:
     fsevents "~2.3.3"
+
+nuxt3-fontawesome@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/nuxt3-fontawesome/-/nuxt3-fontawesome-1.0.2.tgz#cb62a18c91b68833eb0d8a5a5442a2a354921a37"
+  integrity sha512-RyOkQGZMCWVi6qt4ys/R2gFX18FxWZA6iJ264BMVFwcOdEOtNA6SZJlkw/iO0nhGwJo/YcqHuuX6tWbtHRkrSA==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.5.1"
+    "@nuxt/kit" "^3.9.1"
 
 nuxt@^3.9.0:
   version "3.9.3"
