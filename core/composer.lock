@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a55e7cf605e3bec1246da88460e4c1b",
+    "content-hash": "846bad12b5cf75f7207f82e6edaf6182",
     "packages": [
         {
             "name": "akrabat/ip-address-middleware",
@@ -6392,24 +6392,24 @@
         },
         {
             "name": "vesp/core",
-            "version": "3.0.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezumkin/vesp-core.git",
-                "reference": "c36e7817e550f862785fd2d74b462a7989d19eac"
+                "reference": "5dafa4cdcbbbefbc64172426b52f35c6476cffa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/c36e7817e550f862785fd2d74b462a7989d19eac",
-                "reference": "c36e7817e550f862785fd2d74b462a7989d19eac",
+                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/5dafa4cdcbbbefbc64172426b52f35c6476cffa6",
+                "reference": "5dafa4cdcbbbefbc64172426b52f35c6476cffa6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "firebase/php-jwt": "^v6.8.1",
+                "firebase/php-jwt": "v5.5.1|^v6.8.1",
                 "illuminate/database": "^v10.15.0",
                 "illuminate/events": "^v10.15.0",
-                "league/flysystem": "^3.14.0",
+                "league/flysystem": "^2.5.0|^3.14.0",
                 "league/glide": "^2.3.0",
                 "php": ">=8.1",
                 "php-di/slim-bridge": "^3.4.0",
@@ -6420,7 +6420,7 @@
             },
             "require-dev": {
                 "itsgoingd/clockwork": "^v5.1.12",
-                "phpunit/phpunit": "^10.2.6",
+                "phpunit/phpunit": "^9.6.17|^10.2.6",
                 "squizlabs/php_codesniffer": "^3.7.2"
             },
             "suggest": {
@@ -6445,9 +6445,9 @@
             "description": "Vesp core library to make backend simple",
             "support": {
                 "issues": "https://github.com/bezumkin/vesp-core/issues",
-                "source": "https://github.com/bezumkin/vesp-core/tree/3.0.0"
+                "source": "https://github.com/bezumkin/vesp-core/tree/4.0.0"
             },
-            "time": "2023-11-07T10:19:20+00:00"
+            "time": "2024-03-14T04:32:58+00:00"
         },
         {
             "name": "voku/portable-ascii",
