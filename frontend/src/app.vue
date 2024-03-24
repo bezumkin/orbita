@@ -48,13 +48,14 @@ const router = useRouter()
 const route = useRoute()
 const isColumns = computed(() => {
   const route = router.currentRoute.value?.name as string
-  return route === 'index' || route.startsWith('topics-')
+  return route && (route === 'index' || route.startsWith('topics-'))
 })
 const isAdmin = computed(() => {
-  return router.currentRoute.value?.name && (router.currentRoute.value?.name as string).startsWith('admin')
+  const route = router.currentRoute.value?.name as string
+  return route && route.startsWith('admin')
 })
 const background = computed(() => {
-  const bg = $settings.value.background
+  const bg = $settings.value.background as VespFile
   return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
 })
 const showOnline = useRuntimeConfig().public.COMMENTS_SHOW_ONLINE === '1'
@@ -90,7 +91,7 @@ useSeoMeta({
   ogTitle: $settings.value.title as string,
   description,
   ogDescription: description,
-  ogImage: $settings.value.poster ? $image($settings.value.poster) : undefined,
+  ogImage: $settings.value.poster ? $image($settings.value.poster as VespFile) : undefined,
   twitterCard: 'summary_large_image',
 })
 </script>
