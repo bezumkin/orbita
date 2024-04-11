@@ -15,12 +15,15 @@ Payments from subscribers will be sent directly to your payment gateway.
 
 ### How to run
 
-Download source code, copy `.env.dist` into `.env`, specify correct `SITE_URL` and maybe other settings.
+```
+git clone https://github.com/bezumkin/orbita.git
+cd orbita
+cp .env.dist .env
+docker compose up --build
+```
 
-Then `docker-compose up` and wait when all images will be downloaded and built.
-
-I assume you will use some web proxy with TLS certificate to handle connections, so by default Orbita listen only localhost port `8080`.
-You can change the host by adding `NGINX_HOST=0.0.0.0` into `.env`.
+I assume you will use some web proxy with TLS certificate to handle connections, so by default Orbita listen only 
+`http://127.0.0.1:8080`. You can change the host by adding `NGINX_HOST=0.0.0.0` in the `.env`.
 
 Admin panel is available under `your-site-url.com/admin`, login with user `admin` and password `admin`.
 

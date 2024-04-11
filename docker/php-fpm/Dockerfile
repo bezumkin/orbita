@@ -16,6 +16,7 @@ RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
 
 ARG TZ
+ENV TZ=${TZ}
 RUN echo "date.timezone=${TZ}" > /usr/local/etc/php/conf.d/docker-php-ext-timezone.ini
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/docker-php-ext-memory.ini
 RUN echo "max_file_uploads=256M" > /usr/local/etc/php/conf.d/docker-php-ext-upload.ini \
