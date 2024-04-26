@@ -69,7 +69,7 @@ const props = defineProps({
   },
   wrapperClass: {
     type: [String, Array],
-    default: 'upload-avatar',
+    default: '',
   },
   titleCancel: {
     type: String,
