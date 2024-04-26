@@ -31,7 +31,7 @@
     </div>
     <div v-else key="display">
       <template v-if="jsonTypes.includes(type) && typeof record === 'object'">
-        <div v-for="code in Object.keys(record)" :key="code" class="d-flex gap-2 align-items-center">
+        <div v-for="code in localeCodes" :key="code" class="d-flex gap-2 align-items-center">
           <b-img :src="getIcon(code)" height="16" />
           <div v-html="record[code]" />
         </div>
