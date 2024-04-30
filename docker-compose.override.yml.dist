@@ -12,8 +12,6 @@ services:
 
   php-fpm:
     restart: no
-    environment:
-      - PHP_IDE_CONFIG=serverName=VespDocker
     command: sh -c 'composer install && cron && php-fpm'
 
   node:

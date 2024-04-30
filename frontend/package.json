@@ -18,7 +18,7 @@
     "@editorjs/header": "^2.8.1",
     "@editorjs/list": "^1.9.0",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@vesp/frontend": "^3.1.4",
+    "@vesp/frontend": "^3.2.0",
     "codeflask": "^1.4.1",
     "glightbox": "^3.2.0",
     "hls.js": "^1.4.12",

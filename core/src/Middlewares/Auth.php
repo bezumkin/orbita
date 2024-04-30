@@ -26,7 +26,9 @@ class Auth extends \Vesp\Middlewares\Auth
                     /** @var User $user */
                     if ($user = $userToken->user()->where('active', true)->first()) {
                         $user->active_at = $now;
-                        $user->lang = $_COOKIE['i18n_redirected'] ?? 'ru';
+                        if ($lang = $request->getHeaderLine('Content-Language')) {
+                            $user->lang = $lang;
+                        }
                         $user->timestamps = false;
                         $user->save();
 

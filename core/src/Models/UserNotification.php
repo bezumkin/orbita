@@ -68,7 +68,7 @@ class UserNotification extends Model
 
         $mail = new Mail();
         $data = [
-            'lang' => $this->user->lang ?? 'ru',
+            'lang' => $this->user->lang ?? 'en',
             'author' => $this->topic->user->toArray(),
             'topic' => $this->topic->toArray(),
         ];

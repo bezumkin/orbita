@@ -49,8 +49,9 @@ services:
     depends_on:
       - mariadb
     environment:
-      - COMPOSER_ALLOW_SUPERUSER=1
       - TZ=${TZ}
+      - COMPOSER_ALLOW_SUPERUSER=1
+      - PHP_IDE_CONFIG=serverName=VespDocker
     restart: unless-stopped
     working_dir: /vesp/core
     command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'

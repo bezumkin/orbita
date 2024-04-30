@@ -141,7 +141,7 @@ class Subscription extends Model
 
     protected function sendEmail(string $type): ?string
     {
-        $lang = $this->user->lang ?? 'ru';
+        $lang = $this->user->lang ?? 'en';
         $service = $this->getService();
         $data = [
             'lang' => $lang,

@@ -17,7 +17,7 @@ class Register extends Controller
             return $this->failure($e->getMessage());
         }
 
-        $lang = $_COOKIE['i18n_redirected'] ?? $this->request->getHeaderLine('Content-Language') ?: 'ru';
+        $lang = $this->request->getHeaderLine('Content-Language') ?: 'en';
         $subject = getenv('EMAIL_REGISTER_' . strtoupper($lang));
         $data = ['user' => $user->toArray(), 'code' => $user->resetPassword(), 'lang' => $lang];
         if ($error = $user->sendEmail($subject, 'user-register', $data)) {

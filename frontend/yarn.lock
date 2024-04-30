@@ -1828,10 +1828,10 @@
     node-gyp-build "^4.2.2"
     resolve-from "^5.0.0"
 
-"@vesp/frontend@^3.1.4":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@vesp/frontend/-/frontend-3.1.4.tgz#33c14aafce875718c416f84a18343756daa163bc"
-  integrity sha512-8TFAm7Rr0TfL3AGIX8kjG1vX+SS5SQUwjNGaP/uMdDATjNb0QKgCaMp1QD9nUvNJ07iTixvcnUg/CgBSe/ERyQ==
+"@vesp/frontend@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@vesp/frontend/-/frontend-3.2.0.tgz#57f652363722dc9319460d9cd4013dea7289a302"
+  integrity sha512-GTOzO5Lbhd3gxifx3y4DuGvyTiDahmBvgA0vMiPKYfpf2NA272V/t/Xd46+Zyc3d7cH01Igdqt5/nrRvkOlXyw==
   dependencies:
     "@bootstrap-vue-next/nuxt" "0.14.10"
     "@fortawesome/fontawesome-svg-core" "^6.5.1"

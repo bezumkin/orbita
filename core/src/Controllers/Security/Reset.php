@@ -26,7 +26,7 @@ class Reset extends Controller
                 return $this->failure('errors.user.no_email');
             }
 
-            $lang = $user->lang ?? $this->request->getHeaderLine('Content-Language') ?: 'ru';
+            $lang = $user->lang ?? $this->request->getHeaderLine('Content-Language') ?: 'en';
             $subject = getenv('EMAIL_RESET_' . strtoupper($lang));
             $data = ['user' => $user->toArray(), 'code' => $user->resetPassword(10), 'lang' => $lang];
             if ($error = $user->sendEmail($subject, 'user-reset', $data)) {

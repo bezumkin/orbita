@@ -1,16 +1,16 @@
 {extends 'email.tpl'}
 
 {block 'content'}
-    {var $link = $.env.SITE_URL ~ 'user/confirm/' ~ $user.username ~ '/' ~ $code}
-    {if $lang === 'en'}
-        <h2>Confirm registration</h2>
-        <p>
-            <a href="{$link}">{$link}</a>
-        </p>
-    {else}
+    {if $lang === 'de'}
+        <h2>Registrierung bestätigen</h2>
+    {elseif $lang === 'ru'}
         <h2>Подтверждение регистрации</h2>
-        <p>
-            <a href="{$link}">{$link}</a>
-        </p>
+    {else}
+        <h2>Confirm registration</h2>
     {/if}
+
+    {var $link = $.env.SITE_URL ~ 'user/confirm/' ~ $user.username ~ '/' ~ $code}
+    <p>
+        <a href="{$link}">{$link}</a>
+    </p>
 {/block}
