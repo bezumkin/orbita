@@ -19,7 +19,7 @@
     "aminyazdanpanah/php-ffmpeg-video-streaming": "^1.2",
     "bacon/bacon-qr-code": "^2.0",
     "doctrine/dbal": "^3.7",
-    "fenom/fenom": "^3.0",
+    "fenom/fenom": "^2.12",
     "guzzlehttp/guzzle": "^7.8",
     "k-samuel/faceted-search": "^3.2",
     "league/flysystem-aws-s3-v3": "^3.16",
