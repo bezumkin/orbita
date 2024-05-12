@@ -17,6 +17,6 @@ try {
     $app->run();
 } catch (Throwable $e) {
     App\Services\Log::error($e);
-    http_response_code($e->getCode() ?: 500);
-    echo json_encode($e->getMessage());
+    http_response_code(500);
+    echo json_encode('Internal Server Error');
 }
