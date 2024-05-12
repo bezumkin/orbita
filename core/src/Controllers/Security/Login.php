@@ -14,7 +14,7 @@ class Login extends Controller
         $password = trim($this->getProperty('password', ''));
 
         /** @var User $user */
-        $user = User::query()->where('username', $username)->first();
+        $user = User::query()->where('username', $username)->orWhere('email', $username)->first();
         if (!$user || !$user->verifyPassword($password)) {
             return $this->failure('errors.login.wrong');
         }
