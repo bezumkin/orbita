@@ -16,6 +16,8 @@ export function getEmbedLink(service?: string, id?: string, autoplay: boolean = 
     } else if (service === 'vk') {
       const parts = id.split('_')
       url = 'https://vk.com/video_ext.php?oid=' + parts[0] + '&id=' + parts[1]
+    } else if (service === 'peertube') {
+      url = 'https://peertube.tv/videos/embed/' + id
     }
 
     if (url && autoplay) {

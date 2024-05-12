@@ -74,6 +74,7 @@ export default class implements BlockTool {
         vimeo: /https?:\/\/(?:player\.)?vimeo\.com\/(?:video\/)?(\d+).*/,
         rutube: /https?:\/\/rutube\.ru\/(?:video|play\/embed)\/(\w+).*/,
         vk: /https?:\/\/vk\.com\/video(?:\?z=video)?(-?\d+_\d+).*/,
+        peertube: /https?:\/\/peertube\.tv\/(?:w|videos\/embed)\/([\w-]+).*/,
         youtube:
           /(?:https?:\/\/)?(?:www\.)?(?:(youtu\.be\/)|(youtube\.com)\/(?:v\/|u\/\w\/|embed\/|watch))(?:(?:\?v=)?([^#&?=]*))?((?:[?&]\w*=\w*)*)/,
       },

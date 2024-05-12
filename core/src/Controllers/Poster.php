@@ -62,6 +62,10 @@ class Poster extends Image
             if ($meta = $this->getOgTags('https://vk.com/video' . $key)) {
                 $url = $meta['image'];
             }
+        } elseif ($service === 'peertube') {
+            if ($meta = $this->getOgTags('https://peertube.tv/w/' . $key)) {
+                $url = $meta['image'];
+            }
         }
 
         if ($url) {
