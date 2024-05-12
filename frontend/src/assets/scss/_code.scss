@@ -1,4 +1,5 @@
 pre.highlighted {
+  padding: $input-padding-y $input-padding-x;
   background-color: var(--bs-tertiary-bg);
   border-radius: var(--bs-border-radius);
 }
