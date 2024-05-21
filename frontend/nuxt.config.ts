@@ -24,6 +24,11 @@ const config: NuxtConfig = {
       },
     },
   },
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
   routeRules: {
     '/admin/**': {ssr: false},
     '/user/**': {ssr: false},

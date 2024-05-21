@@ -68,7 +68,7 @@ services:
     network_mode: 'service:nginx'
     restart: unless-stopped
     working_dir: /vesp/frontend
-    command: sh -c 'rm -rf /tmp/* && yarn --prod && yarn build && node ./.output/server/index.mjs'
+    command: sh -c 'rm -rf /tmp/* && npm i --omit=dev && npm run build && node ./.output/server/index.mjs'
 
   redis:
     image: redis:${REDIS_VERSION}
