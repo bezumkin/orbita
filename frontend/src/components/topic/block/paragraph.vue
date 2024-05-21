@@ -25,11 +25,11 @@ const html = computed(() => {
   }
 
   if (text === '-') {
-    return '<div class="my-1" />'
+    return '<div class="my-1"></div>'
   }
 
   if (text === '--') {
-    return '<div class="my-2" />'
+    return '<div class="my-2"></div>'
   }
 
   if (text === '---') {
