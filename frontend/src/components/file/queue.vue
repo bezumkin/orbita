@@ -55,7 +55,7 @@ import ru from 'date-fns/locale/ru/index.js'
 import de from 'date-fns/locale/de/index.js'
 import {DetailedError, Upload} from 'tus-js-client'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
-import type {BaseColorVariant} from 'bootstrap-vue-next/src/types'
+import type {BaseColorVariant} from 'bootstrap-vue-next'
 
 const props = defineProps({
   accept: {

@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import type {BaseButtonVariant} from 'bootstrap-vue-next/src/types'
+import type {BaseButtonVariant} from 'bootstrap-vue-next'
 
 defineProps({
   btnVariant: {

@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import type {BaseColorVariant} from 'bootstrap-vue-next/src/types'
+import type {BaseColorVariant} from 'bootstrap-vue-next'
 
 const props = defineProps({
   size: {

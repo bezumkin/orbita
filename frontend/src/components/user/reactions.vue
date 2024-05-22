@@ -1,6 +1,6 @@
 <template>
-  <div ref="wrapper" :class="wrapperClass" v-on="!$isMobile ? {mouseenter: onEnter, mouseleave: onLeave} : undefined">
-    <div class="button" v-on="$isMobile ? {click: onClick} : undefined">
+  <div ref="wrapper" :class="wrapperClass" v-on="!$isMobile ? {mouseenter: onEnter, mouseleave: onLeave} : {}">
+    <div class="button" v-on="$isMobile ? {click: onClick} : {}">
       <slot name="default" v-bind="{total, selected}">
         {{ total }}
       </slot>

@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import type {BaseSize} from 'bootstrap-vue-next/src/types'
+import type {BaseSize} from 'bootstrap-vue-next'
 import slugify from 'slugify'
 
 const {t} = useI18n()

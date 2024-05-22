@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type {BaseButtonVariant} from 'bootstrap-vue-next/src/types'
+import type {BaseButtonVariant} from 'bootstrap-vue-next'
 import {useColorMode, type BasicColorSchema} from '@vueuse/core'
 import logo from '~/assets/images/logo-orbita.svg'
 

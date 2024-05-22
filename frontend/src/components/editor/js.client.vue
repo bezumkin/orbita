@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import type {OutputData, LogLevels, I18nDictionary} from '@editorjs/editorjs'
-import type {BaseButtonVariant, BaseSize} from 'bootstrap-vue-next/src/types'
+import type {BaseButtonVariant, BaseSize} from 'bootstrap-vue-next'
 import EditorJS from '@editorjs/editorjs'
 // @ts-ignore
 import Header from '@editorjs/header'

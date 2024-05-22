@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nuxt-loading-indicator color="var(--bs-primary)" :throttle="0" />
+    <nuxt-loading-indicator color="var(--bs-primary)" />
 
     <div id="layout" :class="mainClasses">
       <app-navbar class="border-bottom" :sidebar="!isAdmin" />

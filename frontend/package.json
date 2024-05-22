@@ -18,13 +18,13 @@
     "@editorjs/header": "^2.8.1",
     "@editorjs/list": "^1.9.0",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@vesp/frontend": "^3.2.0",
+    "@vesp/frontend": "^3.3.0",
     "codeflask": "^1.4.1",
     "glightbox": "^3.2.0",
     "hls.js": "^1.4.12",
     "nuxt": "3.11.2",
-    "plyr": "^3.7.8",
     "pinia": "^2.1.7",
+    "plyr": "^3.7.8",
     "pretty-bytes": "^6.1.1",
     "prismjs": "^1.29.0",
     "redis": "^4.6.10",
@@ -34,10 +34,10 @@
     "socket.io-client": "^4.7.2",
     "tus-js-client": "^3.1.1",
     "typescript": "^5.2.2",
-    "vuedraggable": "^4.1.0",
     "vite": "^5.0.12",
     "vue": "^3.3.4",
-    "vue-tsc": "^1.8.15"
+    "vue-tsc": "^1.8.15",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
