@@ -1,9 +1,9 @@
 <template>
   <div>
-    <vesp-table v-bind="{url, sort, dir, fields, rowClass}">
+    <VespTable v-bind="{url, sort, dir, fields, rowClass}">
       <template #cell(type)="{item}: any">
         <div v-if="item.topic">
-          <b-link :to="{name: 'topics-uuid', params: {uuid: item.topic.uuid}}">{{ item.topic.title }}</b-link>
+          <BLink :to="{name: 'topics-uuid', params: {uuid: item.topic.uuid}}">{{ item.topic.title }}</BLink>
         </div>
         <div v-else-if="item.metadata && item.metadata.until">
           {{
@@ -15,16 +15,16 @@
         </div>
       </template>
       <template #cell(service)="{value}">
-        <b-img :src="formatService(value)" style="max-height: 25px; max-width: 75px" />
+        <BImg :src="formatService(value)" style="max-height: 25px; max-width: 75px" />
       </template>
       <template #cell(paid)="{item, value}">
         <template v-if="value">
-          <vesp-fa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
+          <VespFa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
         </template>
-        <vesp-fa v-else icon="hourglass-half" />
+        <VespFa v-else icon="hourglass-half" />
       </template>
-    </vesp-table>
-    <nuxt-page />
+    </VespTable>
+    <NuxtPage />
   </div>
 </template>
 

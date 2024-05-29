@@ -1,14 +1,14 @@
 <template>
   <div>
-    <vesp-table ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
+    <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
       <template #cell(title)="{item, value}">
         <div>{{ value }}</div>
         <div class="small text-nowrap">
-          <b-link :to="{name: 'pages-alias', params: {alias: String(item.alias)}}">{{ item.alias }}</b-link>
+          <BLink :to="{name: 'pages-alias', params: {alias: String(item.alias)}}">{{ item.alias }}</BLink>
         </div>
       </template>
-    </vesp-table>
-    <nuxt-page />
+    </VespTable>
+    <NuxtPage />
   </div>
 </template>
 

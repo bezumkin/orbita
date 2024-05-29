@@ -6,10 +6,10 @@
         <div class="fw-bold py-1">{{ level.title }}</div>
         {{ $price(level.price) }} {{ t('models.level.per_month') }}
 
-        <b-button variant="primary" class="mt-5" @click="onSubscribe">
-          <vesp-fa icon="lock-open" />
+        <BButton variant="primary" class="mt-5" @click="onSubscribe">
+          <VespFa icon="lock-open" />
           {{ $t('components.payment.level.subscribe') }}
-        </b-button>
+        </BButton>
       </div>
       <div class="item">
         <div>
@@ -17,10 +17,10 @@
           <span class="fw-bold py-1">{{ $price($payment.price) }}</span>
         </div>
 
-        <b-button variant="light" class="mt-5" @click="onPayment">
-          <vesp-fa icon="wallet" />
+        <BButton variant="light" class="mt-5" @click="onPayment">
+          <VespFa icon="wallet" />
           {{ $t('components.payment.actions.pay') }}
-        </b-button>
+        </BButton>
       </div>
     </div>
   </div>

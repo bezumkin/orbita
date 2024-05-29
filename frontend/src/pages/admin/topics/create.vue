@@ -1,9 +1,9 @@
 <template>
-  <vesp-modal v-model="record" url="admin/topics" method="put" :title="$t('models.topic.title_one')" size="xl">
+  <VespModal v-model="record" url="admin/topics" method="put" :title="$t('models.topic.title_one')" size="xl">
     <template #form-fields>
-      <forms-topic v-model="record" />
+      <FormsTopic v-model="record" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

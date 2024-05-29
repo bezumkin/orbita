@@ -1,17 +1,17 @@
 <template>
   <div class="column">
-    <b-overlay :show="loading" opacity="0.5" class="topic">
-      <b-form class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
-        <forms-topic v-model="record" />
+    <BOverlay :show="loading" opacity="0.5" class="topic">
+      <BForm class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+        <FormsTopic v-model="record" />
         <div class="topic-buttons mb-0 mt-2">
-          <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
-          <b-button variant="primary" type="submit" :disabled="loading">
-            <b-spinner v-if="loading" small />
+          <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
+          <BButton variant="primary" type="submit" :disabled="loading">
+            <BSpinner v-if="loading" small />
             {{ $t('actions.save') }}
-          </b-button>
+          </BButton>
         </div>
-      </b-form>
-    </b-overlay>
+      </BForm>
+    </BOverlay>
   </div>
 </template>
 

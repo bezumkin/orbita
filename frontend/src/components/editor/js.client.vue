@@ -2,15 +2,15 @@
   <div class="content-editor">
     <div v-if="!readOnly" class="actions">
       <template v-for="action in enabledBlocks" :key="action.type">
-        <b-button v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
-          <vesp-fa :icon="action.icon" class="fa-fw" />
+        <BButton v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
+          <VespFa :icon="action.icon" class="fa-fw" />
           {{ $t('actions.editor.' + action.type) }}
-        </b-button>
+        </BButton>
       </template>
     </div>
     <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
 
-    <editor-pick-video v-if="showVideos" @hidden="showVideos = false" />
+    <EditorPickVideo v-if="showVideos" @hidden="showVideos = false" />
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
-  <vesp-modal :title="record.title" :cancel-title="$t('actions.close')">
-    <b-form-group :label="$t('models.video.error')">
-      <b-form-textarea v-model="record.error" disabled rows="10" />
-    </b-form-group>
-  </vesp-modal>
+  <VespModal :title="record.title" :cancel-title="$t('actions.close')">
+    <BFormGroup :label="$t('models.video.error')">
+      <BFormTextarea v-model="record.error" disabled rows="10" />
+    </BFormGroup>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <file-queue accept="video/*" @success="onSuccess" />
+    <FileQueue accept="video/*" @success="onSuccess" />
 
-    <vesp-table ref="table" class="mt-4" v-bind="{url, filters, fields, tableActions, rowClass, sort, dir}">
+    <VespTable ref="table" class="mt-4" v-bind="{url, filters, fields, tableActions, rowClass, sort, dir}">
       <template #cell(image)="{value}: any">
-        <b-img
+        <BImg
           v-if="value?.id"
           :src="$image(value, {w: 100, h: 50, fit: 'crop'})"
           :srcset="$image(value, {w: 200, h: 100, fit: 'crop'}) + ' 2x'"
@@ -24,9 +24,9 @@
       <template #cell(dimension)="{item}">
         <div v-if="item.width && item.height">{{ item.width }}x{{ item.height }}</div>
       </template>
-    </vesp-table>
+    </VespTable>
 
-    <nuxt-page />
+    <NuxtPage />
   </div>
 </template>
 

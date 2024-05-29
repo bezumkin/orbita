@@ -1,7 +1,7 @@
 <template>
-  <b-form @submit.prevent="submit" @keydown="onKeydown">
-    <b-form-group>
-      <editor-js
+  <BForm @submit.prevent="submit" @keydown="onKeydown">
+    <BFormGroup>
+      <EditorJs
         ref="editor"
         v-model="record.content"
         :blocks="editorBlocks"
@@ -9,19 +9,19 @@
         :min-height="50"
         :upload-url="uploadUrl"
       />
-    </b-form-group>
+    </BFormGroup>
 
     <div class="d-flex justify-content-between align-items-center">
-      <b-button v-if="onCancel && (record.id || record.parent_id)" @click="onCancel">
+      <BButton v-if="onCancel && (record.id || record.parent_id)" @click="onCancel">
         {{ $t('actions.cancel') }}
-      </b-button>
+      </BButton>
       <div class="timer">{{ editingTime }}</div>
-      <b-button variant="primary" type="submit" :disabled="!canSubmit || !canSubmit(record)">
+      <BButton variant="primary" type="submit" :disabled="!canSubmit || !canSubmit(record)">
         {{ $t('actions.submit') }}
-        <b-spinner v-if="loading" small />
-      </b-button>
+        <BSpinner v-if="loading" small />
+      </BButton>
     </div>
-  </b-form>
+  </BForm>
 </template>
 
 <script setup lang="ts">

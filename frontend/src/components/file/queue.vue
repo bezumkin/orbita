@@ -8,42 +8,42 @@
     @click="onUpload"
   >
     <div class="upload-items">
-      <transition-group name="fade">
+      <TransitionGroup name="fade">
         <div v-for="item in uploading" :key="item.id" class="p-3 bg-white border rounded">
           <div class="fw-bold">{{ item.filename }}</div>
           <div class="d-flex align-items-center gap-2">
-            <b-progress class="w-100">
-              <b-progress-bar :value="item.progress" v-bind="getProgressParams(item)">
+            <BProgress class="w-100">
+              <BProgressBar :value="item.progress" v-bind="getProgressParams(item)">
                 {{ item.progress }}%
-              </b-progress-bar>
-            </b-progress>
+              </BProgressBar>
+            </BProgress>
             <div class="d-flex gap-2">
               <template v-if="!item.finished && !item.error">
-                <b-button v-if="!item.paused" @click.stop="pauseUpload(item)">
-                  <vesp-fa icon="pause" />
-                </b-button>
+                <BButton v-if="!item.paused" @click.stop="pauseUpload(item)">
+                  <VespFa icon="pause" />
+                </BButton>
                 <template v-else>
-                  <b-button variant="success" @click.stop="continueUpload(item)">
-                    <vesp-fa icon="play" />
-                  </b-button>
-                  <b-button variant="danger" @click.stop="cancelUpload(item)">
-                    <vesp-fa icon="times" />
-                  </b-button>
+                  <BButton variant="success" @click.stop="continueUpload(item)">
+                    <VespFa icon="play" />
+                  </BButton>
+                  <BButton variant="danger" @click.stop="cancelUpload(item)">
+                    <VespFa icon="times" />
+                  </BButton>
                 </template>
               </template>
-              <b-button v-else-if="item.finished" variant="outline-secondary" @click.stop="removeUpload(item)">
-                <vesp-fa icon="check" />
-              </b-button>
-              <b-button v-else-if="item.error" variant="danger" @click.stop="cancelUpload(item)">
-                <vesp-fa icon="times" />
-              </b-button>
+              <BButton v-else-if="item.finished" variant="outline-secondary" @click.stop="removeUpload(item)">
+                <VespFa icon="check" />
+              </BButton>
+              <BButton v-else-if="item.error" variant="danger" @click.stop="cancelUpload(item)">
+                <VespFa icon="times" />
+              </BButton>
             </div>
           </div>
           <div class="small">
             {{ getStatus(item) }}
           </div>
         </div>
-      </transition-group>
+      </TransitionGroup>
     </div>
   </div>
 </template>

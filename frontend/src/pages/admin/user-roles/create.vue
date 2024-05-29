@@ -1,9 +1,9 @@
 <template>
-  <vesp-modal v-model="record" url="admin/user-roles" method="put" :title="$t('models.user_role.title_one')">
+  <VespModal v-model="record" url="admin/user-roles" method="put" :title="$t('models.user_role.title_one')">
     <template #form-fields>
-      <forms-user-role v-model="record" />
+      <FormsUserRole v-model="record" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

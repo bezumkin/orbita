@@ -1,5 +1,5 @@
 <template>
-  <vesp-modal
+  <VespModal
     v-model="record"
     v-bind="{url}"
     method="patch"
@@ -8,9 +8,9 @@
     size="xl"
   >
     <template #form-fields>
-      <forms-topic v-model="record" />
+      <FormsTopic v-model="record" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

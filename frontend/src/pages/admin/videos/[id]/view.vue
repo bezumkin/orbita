@@ -1,9 +1,9 @@
 <template>
-  <vesp-modal :title="record.title" size="lg" :cancel-title="$t('actions.close')">
+  <VespModal :title="record.title" size="lg" :cancel-title="$t('actions.close')">
     <template #form-fields>
-      <player-video :uuid="record.id" :autoplay="true" class="my-2" />
+      <PlayerVideo :uuid="record.id" :autoplay="true" class="my-2" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

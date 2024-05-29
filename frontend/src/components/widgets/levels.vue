@@ -6,7 +6,7 @@
         <div class="title">{{ level.title }}</div>
         <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
         <div v-if="level.cover" class="cover">
-          <b-img
+          <BImg
             :src="$image(level.cover, {h: 150, fit: 'crop'})"
             :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
             class="rounded"
@@ -14,7 +14,7 @@
           />
         </div>
         <div v-if="level.content" class="content">{{ level.content }}</div>
-        <b-button v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</b-button>
+        <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
       </div>
     </div>
   </div>

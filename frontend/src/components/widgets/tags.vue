@@ -2,10 +2,10 @@
   <div v-if="tags.length" class="widget">
     <h5 class="widget-title">{{ $t('widgets.tags') }}</h5>
     <div class="d-flex flex-wrap gap-1">
-      <b-badge v-for="(tag, idx) in tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1 d-flex">
+      <BBadge v-for="(tag, idx) in tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1 d-flex">
         {{ tag.title }}
         <span class="ms-2 ps-2 border-start">{{ tag.topics }}</span>
-      </b-badge>
+      </BBadge>
     </div>
   </div>
 </template>

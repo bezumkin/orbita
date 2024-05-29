@@ -1,69 +1,69 @@
 <template>
   <div>
-    <transition name="fade" mode="out-in">
+    <Transition name="fade" mode="out-in">
       <div v-if="user" key="user">
         <slot name="default" v-bind="{user, logout: onLogout}">
-          <b-dropdown v-if="user" :variant="btnVariant">
+          <BDropdown v-if="user" :variant="btnVariant">
             <template #button-content>
               <slot name="button" v-bind="{user}">
-                <user-avatar :user="user" size="25" />
+                <UserAvatar :user="user" size="25" />
               </slot>
             </template>
             <slot name="user-menu" v-bind="{user}" />
-            <b-dropdown-divider />
-            <b-dropdown-item @click="onLogout">
-              <vesp-fa icon="power-off" class="fa-fw" />
+            <BDropdownDivider />
+            <BDropdownItem @click="onLogout">
+              <VespFa icon="power-off" class="fa-fw" />
               {{ $t('security.logout') }}
-            </b-dropdown-item>
-          </b-dropdown>
+            </BDropdownItem>
+          </BDropdown>
         </slot>
       </div>
       <div v-else key="guest">
         <slot name="guest">
-          <b-button @click="showModal = true">
+          <BButton @click="showModal = true">
             <span class="d-none d-md-inline">
               <template v-if="registerEnabled">{{ $t('security.login') }} / {{ $t('security.register') }}</template>
               <template v-else>{{ $t('security.login') }}</template>
             </span>
             <span class="d-md-none">
-              <vesp-fa icon="right-to-bracket" class="fa-fw" />
+              <VespFa icon="right-to-bracket" class="fa-fw" />
             </span>
-          </b-button>
+          </BButton>
         </slot>
       </div>
-    </transition>
+    </Transition>
 
-    <b-modal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
-      <b-overlay :show="loading" opacity="0.5">
-        <b-tabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
-          <b-tab :title="$t('security.login')">
-            <b-form @submit.prevent="onLogin">
-              <forms-login v-model="formLogin" />
+    <BModal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
+      <BOverlay :show="loading" opacity="0.5">
+        <BTabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
+          <BTab :title="$t('security.login')">
+            <BForm @submit.prevent="onLogin">
+              <FormsLogin v-model="formLogin" />
               <div class="text-center">
-                <b-button variant="primary" type="submit">{{ $t('actions.submit') }}</b-button>
+                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
               </div>
-            </b-form>
-          </b-tab>
-          <b-tab v-if="registerEnabled" :title="$t('security.register')">
-            <b-form @submit.prevent="onRegister">
-              <forms-register v-model="formRegister" />
+            </BForm>
+          </BTab>
+          <BTab v-if="registerEnabled" :title="$t('security.register')">
+            <BForm @submit.prevent="onRegister">
+              <FormsRegister v-model="formRegister" />
               <div class="text-center">
-                <b-button variant="primary" type="submit">{{ $t('actions.submit') }}</b-button>
+                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
               </div>
-            </b-form>
-          </b-tab>
-          <b-tab :title="$t('security.reset')">
-            <b-form @submit.prevent="onReset">
-              <forms-reset v-model="formReset" />
+            </BForm>
+          </BTab>
+          <BTab :title="$t('security.reset')">
+            <BForm @submit.prevent="onReset">
+              <FormsReset v-model="formReset" />
               <div class="alert alert-light">{{ $t('security.reset_desc') }}</div>
               <div class="text-center">
-                <b-button variant="primary" type="submit">{{ $t('actions.submit') }}</b-button>
+                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
               </div>
-            </b-form>
-          </b-tab>
-        </b-tabs>
-      </b-overlay>
-    </b-modal>
+            </BForm>
+          </BTab>
+        </BTabs>
+      </BOverlay>
+    </BModal>
   </div>
 </template>
 

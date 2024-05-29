@@ -1,37 +1,37 @@
 <template>
-  <b-navbar id="navbar" sticky="top" :container="false">
-    <b-container>
-      <b-navbar-brand :to="{name: 'index'}" class="p-0" @click="hideSidebar">
-        <b-img :src="logo" class="logo" height="40" />
-      </b-navbar-brand>
+  <BNavbar id="navbar" sticky="top" :container="false">
+    <BContainer>
+      <BNavbarBrand :to="{name: 'index'}" class="p-0" @click="hideSidebar">
+        <BImg :src="logo" class="logo" height="40" />
+      </BNavbarBrand>
 
-      <app-pages class="d-none d-md-flex" />
+      <AppPages class="d-none d-md-flex" />
 
-      <b-navbar-nav class="ms-auto">
-        <b-button variant="light" class="me-1" @click="changeColor">
-          <vesp-fa :icon="colorIcon" fixed-width />
-        </b-button>
-        <app-login :btn-variant="btnVariant" @click="hideSidebar">
+      <BNavbarNav class="ms-auto">
+        <BButton variant="light" class="me-1" @click="changeColor">
+          <VespFa :icon="colorIcon" fixed-width />
+        </BButton>
+        <AppLogin :btn-variant="btnVariant" @click="hideSidebar">
           <template #user-menu>
-            <b-dropdown-item v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
+            <BDropdownItem v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
               {{ $t('pages.admin.title') }}
-            </b-dropdown-item>
+            </BDropdownItem>
             <!--<b-dropdown-item v-if="user && user.subscription" :to="{name: 'user-subscription'}">
               {{ $t('pages.user.subscription') }}
             </b-dropdown-item>-->
-            <b-dropdown-item :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</b-dropdown-item>
-            <b-dropdown-item :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</b-dropdown-item>
+            <BDropdownItem :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</BDropdownItem>
+            <BDropdownItem :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</BDropdownItem>
           </template>
-        </app-login>
-        <b-button v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">
-          <transition name="fade" mode="out-in">
-            <vesp-fa v-if="!$sidebar" icon="bars" class="fa-fw" />
-            <vesp-fa v-else icon="times" class="fa-fw" />
-          </transition>
-        </b-button>
-      </b-navbar-nav>
-    </b-container>
-  </b-navbar>
+        </AppLogin>
+        <BButton v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">
+          <Transition name="fade" mode="out-in">
+            <VespFa v-if="!$sidebar" icon="bars" class="fa-fw" />
+            <VespFa v-else icon="times" class="fa-fw" />
+          </Transition>
+        </BButton>
+      </BNavbarNav>
+    </BContainer>
+  </BNavbar>
 </template>
 
 <script setup lang="ts">

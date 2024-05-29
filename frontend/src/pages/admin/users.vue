@@ -1,18 +1,18 @@
 <template>
   <div>
-    <vesp-table ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
+    <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
       <template #cell(fullname)="{item}: any">
         <div class="d-flex align-items-center">
-          <user-avatar :user="item" size="40" />
+          <UserAvatar :user="item" size="40" />
           <div class="ms-2">
             <div class="text-nowrap">{{ item.fullname }}</div>
             <div class="small text-muted">{{ item.username }}</div>
           </div>
         </div>
       </template>
-    </vesp-table>
+    </VespTable>
 
-    <nuxt-page />
+    <NuxtPage />
   </div>
 </template>
 

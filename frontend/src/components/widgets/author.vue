@@ -1,6 +1,6 @@
 <template>
   <div v-if="$settings.poster || $settings.description" class="widget">
-    <b-img v-if="$settings.poster" v-bind="posterProps" fluid />
+    <BImg v-if="$settings.poster" v-bind="posterProps" fluid />
 
     <div class="mt-4 mx-auto text-center col-lg-9">
       <h5 class="widget-title">{{ $settings.title }}</h5>

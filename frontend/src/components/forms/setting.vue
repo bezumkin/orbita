@@ -1,12 +1,12 @@
 <template>
-  <transition name="fade" mode="out-in">
+  <Transition name="fade" mode="out-in">
     <div v-if="editing" key="editing">
-      <b-form @submit.prevent="emit('submit')">
+      <BForm @submit.prevent="emit('submit')">
         <template v-if="jsonTypes.includes(type) && typeof record === 'object'">
-          <b-form-input v-if="type === 'string'" v-model="record[lang]" autofocus />
-          <b-form-textarea v-if="type === 'text'" v-model="record[lang]" rows="3" autofocus />
+          <BFormInput v-if="type === 'string'" v-model="record[lang]" autofocus />
+          <BFormTextarea v-if="type === 'text'" v-model="record[lang]" rows="3" autofocus />
           <div class="d-flex mt-1 gap-2">
-            <b-button
+            <BButton
               v-for="code in localeCodes"
               :key="code"
               :active="lang === code"
@@ -15,29 +15,29 @@
               class="px-2 py-0"
               @click="onLang(code)"
             >
-              <b-img :src="getIcon(code)" height="16" />
-            </b-button>
+              <BImg :src="getIcon(code)" height="16" />
+            </BButton>
           </div>
         </template>
-        <file-upload
+        <FileUpload
           v-else-if="type === 'image'"
           v-model="record"
           v-bind="imageProps"
           :placeholder="typeof record === 'object' ? {...record} : null"
           :placeholder-params="typeof record === 'object' ? imageParams : null"
         />
-        <b-form-input v-else-if="type === 'date' && typeof record === 'string'" v-model="record" type="date" />
-      </b-form>
+        <BFormInput v-else-if="type === 'date' && typeof record === 'string'" v-model="record" type="date" />
+      </BForm>
     </div>
     <div v-else key="display">
       <template v-if="jsonTypes.includes(type) && typeof record === 'object'">
         <div v-for="code in localeCodes" :key="code" class="d-flex gap-2 align-items-center">
-          <b-img :src="getIcon(code)" height="16" />
+          <BImg :src="getIcon(code)" height="16" />
           <div v-html="record[code]" />
         </div>
       </template>
       <div v-else-if="type === 'image' && typeof record === 'object'" :class="'image image-' + key">
-        <b-img :src="$image(record, imageParams)" fluid />
+        <BImg :src="$image(record, imageParams)" fluid />
       </div>
       <template v-else-if="type === 'date' && typeof record === 'string'">
         {{ formatDate(record) }}
@@ -46,7 +46,7 @@
         {{ record }}
       </template>
     </div>
-  </transition>
+  </Transition>
 </template>
 
 <script setup lang="ts">

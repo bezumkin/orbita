@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex align-items-center rounded border p-3">
-    <b-button variant="light" size="lg" class="fa-2x me-3" @click="startDownload">
-      <vesp-fa icon="cloud-arrow-down" class="fa-fw" />
-    </b-button>
+    <BButton variant="light" size="lg" class="fa-2x me-3" @click="startDownload">
+      <VespFa icon="cloud-arrow-down" class="fa-fw" />
+    </BButton>
     <div class="d-flex flex-column">
       <div class="fw-medium text-break">
         {{ block.data.title }}

@@ -1,12 +1,12 @@
 <template>
   <div :class="{'topic teaser': true, inactive: !topic.active}">
     <div class="topic-cover">
-      <b-img v-if="topic.cover" v-bind="imageProps" class="background" lazy />
+      <BImg v-if="topic.cover" v-bind="imageProps" class="background" lazy />
       <div class="wrapper">
         <div class="text">
           <h2>
             <template v-if="isTopic || !myValue.access">{{ myValue.title }}</template>
-            <b-link v-else :to="link">{{ myValue.title }}</b-link>
+            <BLink v-else :to="link">{{ myValue.title }}</BLink>
           </h2>
           <div v-if="topic.teaser">{{ topic.teaser }}</div>
         </div>
@@ -16,20 +16,20 @@
             <span class="fw-bold">{{ $t('components.payment.teaser.required') }}</span>
             {{ levelRequired.title }}
           </div>
-          <b-button variant="primary" @click="onSubscribe">
-            <vesp-fa icon="lock" />
+          <BButton variant="primary" @click="onSubscribe">
+            <VespFa icon="lock" />
             {{ $t(myValue.price ? 'components.payment.teaser.buy' : 'components.payment.level.subscribe') }}
-          </b-button>
+          </BButton>
         </div>
         <div v-else class="action">
-          <b-button variant="light" :to="link">
-            <vesp-fa icon="eye" /> {{ $t('components.payment.teaser.view') }}
-          </b-button>
+          <BButton variant="light" :to="link">
+            <VespFa icon="eye" /> {{ $t('components.payment.teaser.view') }}
+          </BButton>
         </div>
       </div>
     </div>
 
-    <topic-footer :topic="myValue" />
+    <TopicFooter :topic="myValue" />
   </div>
 </template>
 

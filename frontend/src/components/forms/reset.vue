@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-form-group :label="$t('models.user.username') + ' / ' + $t('models.user.email')">
-      <b-form-input v-model.trim="record.username" required autofocus />
-    </b-form-group>
+    <BFormGroup :label="$t('models.user.username') + ' / ' + $t('models.user.email')">
+      <BFormInput v-model.trim="record.username" required autofocus />
+    </BFormGroup>
   </div>
 </template>
 

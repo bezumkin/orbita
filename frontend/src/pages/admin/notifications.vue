@@ -1,24 +1,24 @@
 <template>
-  <vesp-table ref="table" v-bind="{url, fields, tableActions, rowClass, sort, dir}">
+  <VespTable ref="table" v-bind="{url, fields, tableActions, rowClass, sort, dir}">
     <template #cell(user)="{value}: any">
-      <b-link v-if="$scope('users/get')" :to="getUserLink(value)">{{ value.fullname }}</b-link>
+      <BLink v-if="$scope('users/get')" :to="getUserLink(value)">{{ value.fullname }}</BLink>
       <template v-else>{{ value.fullname }}</template>
     </template>
     <template #cell(topic)="{value}: any">
-      <b-link :to="getTopicLink(value)" target="_blank">{{ value.title }}</b-link>
+      <BLink :to="getTopicLink(value)" target="_blank">{{ value.title }}</BLink>
     </template>
     <template #cell(preview)="{item}: any">
-      <b-link v-if="item.comment" :to="getCommentLink(item.topic, item.comment)" class="small" target="_blank">
+      <BLink v-if="item.comment" :to="getCommentLink(item.topic, item.comment)" class="small" target="_blank">
         {{ $contentPreview(item.comment.content, 50) }}
-      </b-link>
+      </BLink>
       <div v-else-if="item.topic">
-        <b-link :to="getTopicLink(item.topic)" target="_blank">
+        <BLink :to="getTopicLink(item.topic)" target="_blank">
           {{ item.topic.title }}
-        </b-link>
+        </BLink>
         <div class="small">{{ $contentPreview(item.topic.content, 30) }}</div>
       </div>
     </template>
-  </vesp-table>
+  </VespTable>
 </template>
 
 <script setup lang="ts">

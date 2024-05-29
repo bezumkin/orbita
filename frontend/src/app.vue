@@ -1,43 +1,43 @@
 <template>
   <div>
-    <nuxt-loading-indicator color="var(--bs-primary)" />
+    <NuxtLoadingIndicator color="var(--bs-primary)" />
 
     <div id="layout" :class="mainClasses">
-      <app-navbar class="border-bottom" :sidebar="!isAdmin" />
+      <AppNavbar class="border-bottom" :sidebar="!isAdmin" />
 
       <div v-if="isColumns" class="main-background">
-        <b-img :src="background" height="240" />
+        <BImg :src="background" height="240" />
       </div>
 
-      <b-container class="pt-4 flex-grow-1">
+      <BContainer class="pt-4 flex-grow-1">
         <div v-if="isColumns">
-          <b-row class="main-columns">
-            <b-col md="8" :class="{offset: $isMobile}">
+          <BRow class="main-columns">
+            <BCol md="8" :class="{offset: $isMobile}">
               <slot>
-                <nuxt-page />
+                <NuxtPage />
               </slot>
-            </b-col>
-            <b-col v-if="!$isMobile" md="4" class="offset">
+            </BCol>
+            <BCol v-if="!$isMobile" md="4" class="offset">
               <div class="column">
-                <widgets-author />
+                <WidgetsAuthor />
               </div>
 
-              <widgets-online v-if="showOnline" class="column mt-4" />
-              <widgets-levels class="column mt-4" />
-              <widgets-tags class="column mt-4" />
-            </b-col>
-          </b-row>
+              <WidgetsOnline v-if="showOnline" class="column mt-4" />
+              <WidgetsLevels class="column mt-4" />
+              <WidgetsTags class="column mt-4" />
+            </BCol>
+          </BRow>
         </div>
         <div v-else>
           <slot>
-            <nuxt-page />
+            <NuxtPage />
           </slot>
         </div>
-      </b-container>
+      </BContainer>
 
-      <app-sidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
-      <app-footer class="border-top" />
-      <app-payment />
+      <AppSidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
+      <AppFooter class="border-top" />
+      <AppPayment />
     </div>
   </div>
 </template>

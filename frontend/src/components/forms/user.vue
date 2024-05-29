@@ -1,65 +1,65 @@
 <template>
   <div>
-    <b-row>
-      <b-col md="8" class="order-1 order-md-0">
-        <b-form-group :label="$t('models.user.username')">
-          <b-form-input v-model.trim="record.username" required autofocus />
-        </b-form-group>
-        <b-form-group :label="$t('models.user.password')">
-          <vesp-input-password v-model.trim="record.password" :required="!record.id" />
-        </b-form-group>
-      </b-col>
-      <b-col md="4" class="d-flex justify-content-center justify-content-md-end order-0 order-md-1">
-        <b-form-group>
-          <file-upload
+    <BRow>
+      <BCol md="8" class="order-1 order-md-0">
+        <BFormGroup :label="$t('models.user.username')">
+          <BFormInput v-model.trim="record.username" required autofocus />
+        </BFormGroup>
+        <BFormGroup :label="$t('models.user.password')">
+          <VespInputPassword v-model.trim="record.password" :required="!record.id" />
+        </BFormGroup>
+      </BCol>
+      <BCol md="4" class="d-flex justify-content-center justify-content-md-end order-0 order-md-1">
+        <BFormGroup>
+          <FileUpload
             v-model="record.new_avatar"
             :placeholder="record.avatar"
             :height="150"
             :width="150"
             wrapper-class="rounded-circle"
           />
-        </b-form-group>
-      </b-col>
-    </b-row>
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-form-group :label="$t('models.user.fullname')">
-      <b-form-input v-model="record.fullname" required />
-    </b-form-group>
+    <BFormGroup :label="$t('models.user.fullname')">
+      <BFormInput v-model="record.fullname" required />
+    </BFormGroup>
 
-    <b-row>
-      <b-col md="6">
-        <b-form-group :label="$t('models.user.email')">
-          <b-form-input v-model="record.email" type="email" />
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group :label="$t('models.user.phone')">
-          <b-form-input v-model="record.phone" />
-        </b-form-group>
-      </b-col>
-    </b-row>
+    <BRow>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.user.email')">
+          <BFormInput v-model="record.email" type="email" />
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.user.phone')">
+          <BFormInput v-model="record.phone" />
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-form-group v-if="showGroup" :label="$t('models.user.role')">
-      <vesp-input-combo-box v-model="record.role_id" url="admin/user-roles" required />
-    </b-form-group>
+    <BFormGroup v-if="showGroup" :label="$t('models.user.role')">
+      <VespInputComboBox v-model="record.role_id" url="admin/user-roles" required />
+    </BFormGroup>
 
-    <b-row v-if="showStatus || showNotify" class="flex-md-nowrap justify-content-md-between">
-      <b-form-group v-if="showStatus" class="col-md-auto">
-        <b-form-checkbox v-model="record.active">
+    <BRow v-if="showStatus || showNotify" class="flex-md-nowrap justify-content-md-between">
+      <BFormGroup v-if="showStatus" class="col-md-auto">
+        <BFormCheckbox v-model="record.active">
           {{ $t('models.user.active') }}
-        </b-form-checkbox>
-      </b-form-group>
-      <b-form-group v-if="showStatus" class="col-md-auto">
-        <b-form-checkbox v-model="record.blocked">
+        </BFormCheckbox>
+      </BFormGroup>
+      <BFormGroup v-if="showStatus" class="col-md-auto">
+        <BFormCheckbox v-model="record.blocked">
           {{ $t('models.user.blocked') }}
-        </b-form-checkbox>
-      </b-form-group>
-      <b-form-group v-if="showNotify" class="col-md-auto">
-        <b-form-checkbox v-model="record.notify">
+        </BFormCheckbox>
+      </BFormGroup>
+      <BFormGroup v-if="showNotify" class="col-md-auto">
+        <BFormCheckbox v-model="record.notify">
           {{ $t('models.user.notify') }}
-        </b-form-checkbox>
-      </b-form-group>
-    </b-row>
+        </BFormCheckbox>
+      </BFormGroup>
+    </BRow>
   </div>
 </template>
 

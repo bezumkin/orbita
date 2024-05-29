@@ -1,33 +1,33 @@
 <template>
-  <vesp-modal ref="modal" :title="$t('actions.editor.pick_video')" size="lg" @shown="onShown" @hidden="onHidden">
-    <b-form-group>
-      <b-input-group>
+  <VespModal ref="modal" :title="$t('actions.editor.pick_video')" size="lg" @shown="onShown" @hidden="onHidden">
+    <BFormGroup>
+      <BInputGroup>
         <template #append>
-          <b-button :disabled="!query" @click="onQueryClear">
-            <vesp-fa icon="times" />
-          </b-button>
+          <BButton :disabled="!query" @click="onQueryClear">
+            <VespFa icon="times" />
+          </BButton>
         </template>
-        <b-form-input ref="input" v-model="query" :placeholder="$t('components.table.query')" />
-      </b-input-group>
-    </b-form-group>
+        <BFormInput ref="input" v-model="query" :placeholder="$t('components.table.query')" />
+      </BInputGroup>
+    </BFormGroup>
 
     <div class="grid">
-      <b-card v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
+      <BCard v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
         <template #img>
-          <b-img v-if="video.image" :src="$image(video.image, {w: 1024})" />
+          <BImg v-if="video.image" :src="$image(video.image, {w: 1024})" />
         </template>
         <template #default>
           <div class="fw-medium">{{ video.title }}</div>
-          <b-card-text class="small mt-auto pt-2 d-flex flex-column gap-1">
+          <BCardText class="small mt-auto pt-2 d-flex flex-column gap-1">
             <div v-if="video.created_at">{{ d(video.created_at, 'long') }}</div>
             <div v-if="video.processed_qualities">
               {{ video.processed_qualities.map((i: number) => i + 'p').join(', ') }}
             </div>
-          </b-card-text>
+          </BCardText>
         </template>
-      </b-card>
+      </BCard>
     </div>
-    <b-pagination
+    <BPagination
       v-if="total > limit"
       v-model="page"
       :total-rows="total"
@@ -42,10 +42,10 @@
     </div>
 
     <template #footer="{hide}">
-      <b-button variant="secondary" @click="hide">{{ $t('actions.close') }}</b-button>
-      <b-button variant="primary" :disabled="!picked" @click="useVideo">{{ $t('actions.pick') }}</b-button>
+      <BButton variant="secondary" @click="hide">{{ $t('actions.close') }}</BButton>
+      <BButton variant="primary" :disabled="!picked" @click="useVideo">{{ $t('actions.pick') }}</BButton>
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

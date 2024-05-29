@@ -14,12 +14,12 @@
     </div>
     <slot name="actions" v-bind="{select: onSelect, remove: onRemove, cancel: onCancel, value: record, placeholder}">
       <div class="text-center">
-        <b-button v-if="record && record.file" variant="link" class="text-danger" @click="onCancel">
+        <BButton v-if="record && record.file" variant="link" class="text-danger" @click="onCancel">
           {{ titleCancel }}
-        </b-button>
-        <b-button v-else-if="canRemove" variant="link" class="text-danger" @click="onRemove">
+        </BButton>
+        <BButton v-else-if="canRemove" variant="link" class="text-danger" @click="onRemove">
           {{ titleRemove }}
-        </b-button>
+        </BButton>
       </div>
     </slot>
   </section>

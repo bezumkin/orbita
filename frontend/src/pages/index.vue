@@ -1,19 +1,19 @@
 <template>
   <div>
-    <b-button v-if="$scope('topics/put')" :to="{name: 'topics-create'}" variant="primary" class="mb-3">
-      <vesp-fa icon="plus" fixed-width /> {{ $t('actions.create') }}
-    </b-button>
+    <BButton v-if="$scope('topics/put')" :to="{name: 'topics-create'}" variant="primary" class="mb-3">
+      <VespFa icon="plus" fixed-width /> {{ $t('actions.create') }}
+    </BButton>
 
-    <b-overlay :show="pending" opacity="0.5" class="topics">
+    <BOverlay :show="pending" opacity="0.5" class="topics">
       <template v-if="topics.length">
-        <topic-intro v-for="topic in topics" :key="topic.id" :topic="topic" />
+        <TopicIntro v-for="topic in topics" :key="topic.id" :topic="topic" />
       </template>
       <div v-else class="alert alert-info">
         {{ $t(tags.length ? 'components.table.no_results' : 'components.table.no_data') }}
       </div>
-    </b-overlay>
+    </BOverlay>
 
-    <b-pagination
+    <BPagination
       v-if="total > limit"
       v-model="page"
       :total-rows="total"

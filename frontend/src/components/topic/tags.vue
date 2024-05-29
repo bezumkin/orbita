@@ -11,12 +11,12 @@
       <option v-for="tag in availableTags" :key="tag.id" :value="tag.title" />
     </datalist>
     <div class="d-flex flex-wrap gap-1 mt-2">
-      <b-badge v-for="(tag, idx) in record" :key="idx" class="px-2 py-1 d-flex align-items-center">
+      <BBadge v-for="(tag, idx) in record" :key="idx" class="px-2 py-1 d-flex align-items-center">
         {{ tag.title }}
-        <b-button class="p-0 ms-1" size="sm" style="line-height: unset" @click="onTagRemove(idx)">
-          <vesp-fa icon="times" class="fa-fw" />
-        </b-button>
-      </b-badge>
+        <BButton class="p-0 ms-1" size="sm" style="line-height: unset" @click="onTagRemove(idx)">
+          <VespFa icon="times" class="fa-fw" />
+        </BButton>
+      </BBadge>
     </div>
   </div>
 </template>

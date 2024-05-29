@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group v-for="(setting, idx) in settings" :key="idx" class="p-3 border rounded">
+    <BFormGroup v-for="(setting, idx) in settings" :key="idx" class="p-3 border rounded">
       <template #label>
         <h5 class="mb-0">
           {{ $t('models.setting.' + setting.key) }}
@@ -9,25 +9,25 @@
       <template #description>
         <div class="mt-2">{{ $t('models.setting.' + setting.key + '_desc') }}</div>
       </template>
-      <b-row class="align-items-center justify-content-end">
-        <b-col class="flex-grow-1">
-          <b-overlay :show="saving === setting.key" opacity="0.5">
-            <forms-setting v-model="settings[idx]" :editing="editing === setting.key" @submit="saveSetting(setting)" />
-          </b-overlay>
-        </b-col>
-        <b-col cols="auto" class="text-md-end d-flex gap-1 flex-column">
+      <BRow class="align-items-center justify-content-end">
+        <BCol class="flex-grow-1">
+          <BOverlay :show="saving === setting.key" opacity="0.5">
+            <FormsSetting v-model="settings[idx]" :editing="editing === setting.key" @submit="saveSetting(setting)" />
+          </BOverlay>
+        </BCol>
+        <BCol cols="auto" class="text-md-end d-flex gap-1 flex-column">
           <template v-if="editing === setting.key">
-            <b-button size="sm" :disabled="!canSave(setting)" variant="success" @click="saveSetting(setting)">
-              <vesp-fa icon="check" />
-            </b-button>
-            <b-button size="sm" @click="cancelEdit(setting)"><vesp-fa icon="times" /></b-button>
+            <BButton size="sm" :disabled="!canSave(setting)" variant="success" @click="saveSetting(setting)">
+              <VespFa icon="check" />
+            </BButton>
+            <BButton size="sm" @click="cancelEdit(setting)"><VespFa icon="times" /></BButton>
           </template>
-          <b-button v-else size="sm" @click="startEdit(setting)"><vesp-fa icon="edit" /></b-button>
-        </b-col>
-      </b-row>
-    </b-form-group>
+          <BButton v-else size="sm" @click="startEdit(setting)"><VespFa icon="edit" /></BButton>
+        </BCol>
+      </BRow>
+    </BFormGroup>
 
-    <b-form-group v-if="$scope('reactions/get')" class="p-3 border rounded">
+    <BFormGroup v-if="$scope('reactions/get')" class="p-3 border rounded">
       <template #label>
         <h5 class="mb-0">
           {{ $t('models.setting.reactions') }}
@@ -36,8 +36,8 @@
       <template #description>
         <div class="mt-2">{{ $t('models.setting.reactions_desc') }}</div>
       </template>
-      <forms-reactions />
-    </b-form-group>
+      <FormsReactions />
+    </BFormGroup>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <main-page>
+  <MainPage>
     <div class="col-md-9 m-auto py-5">
       <h1>{{ error.statusCode }} {{ error.statusMessage }}</h1>
       <h2 v-if="error.message && error.message !== error.statusMessage" class="mt-4">{{ error.message }}</h2>
@@ -7,7 +7,7 @@
         {{ error.stack }}
       </div>
     </div>
-  </main-page>
+  </MainPage>
 </template>
 
 <script setup lang="ts">

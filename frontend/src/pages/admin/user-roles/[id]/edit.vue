@@ -1,5 +1,5 @@
 <template>
-  <vesp-modal
+  <VespModal
     v-model="record"
     v-bind="{url}"
     method="patch"
@@ -7,9 +7,9 @@
     :title="$t('models.user_role.title_one')"
   >
     <template #form-fields>
-      <forms-user-role v-model="record" />
+      <FormsUserRole v-model="record" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

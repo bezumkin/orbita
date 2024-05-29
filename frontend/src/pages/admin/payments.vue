@@ -1,17 +1,17 @@
 <template>
-  <vesp-table ref="table" v-bind="{url, sort, dir, fields, tableActions, rowClass}">
+  <VespTable ref="table" v-bind="{url, sort, dir, fields, tableActions, rowClass}">
     <template #cell(user)="{value}: any">
-      <b-link :to="{name: 'admin-users-id-edit', params: {id: value.id}}" class="d-flex align-items-center">
-        <user-avatar :user="value" size="40" />
+      <BLink :to="{name: 'admin-users-id-edit', params: {id: value.id}}" class="d-flex align-items-center">
+        <UserAvatar :user="value" size="40" />
         <div class="ms-2">
           <div class="text-nowrap">{{ value.fullname }}</div>
           <div class="small text-muted">{{ value.username }}</div>
         </div>
-      </b-link>
+      </BLink>
     </template>
     <template #cell(type)="{item}: any">
       <div v-if="item.topic">
-        <b-link :to="{name: 'topics-uuid', params: {uuid: item.topic.uuid}}">{{ item.topic.title }}</b-link>
+        <BLink :to="{name: 'topics-uuid', params: {uuid: item.topic.uuid}}">{{ item.topic.title }}</BLink>
       </div>
       <div v-else-if="item.metadata && item.metadata.until">
         {{
@@ -23,15 +23,15 @@
       </div>
     </template>
     <template #cell(service)="{value}">
-      <b-img :src="formatService(value)" style="max-height: 25px; max-width: 75px" />
+      <BImg :src="formatService(value)" style="max-height: 25px; max-width: 75px" />
     </template>
     <template #cell(paid)="{item, value}">
       <template v-if="value">
-        <vesp-fa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
+        <VespFa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
       </template>
-      <vesp-fa v-else icon="hourglass-half" />
+      <VespFa v-else icon="hourglass-half" />
     </template>
-  </vesp-table>
+  </VespTable>
 </template>
 
 <script setup lang="ts">

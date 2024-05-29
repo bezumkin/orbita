@@ -1,8 +1,8 @@
 <template>
   <div>
-    <vesp-table ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
+    <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
       <template #cell(cover)="{value}: any">
-        <b-img
+        <BImg
           v-if="value?.id"
           :src="$image(value, {w: 100, h: 50, fit: 'crop'})"
           :srcset="$image(value, {w: 200, h: 100, fit: 'crop'}) + ' 2x'"
@@ -11,8 +11,8 @@
           class="rounded"
         />
       </template>
-    </vesp-table>
-    <nuxt-page />
+    </VespTable>
+    <NuxtPage />
   </div>
 </template>
 

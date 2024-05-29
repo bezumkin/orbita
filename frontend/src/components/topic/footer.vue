@@ -1,33 +1,33 @@
 <template>
   <div>
     <div v-if="topic.tags?.length" class="topic-tags">
-      <b-badge v-for="(tag, idx) in topic.tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1">
+      <BBadge v-for="(tag, idx) in topic.tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1">
         <div>{{ tag.title }}</div>
-      </b-badge>
+      </BBadge>
     </div>
     <div class="topic-footer">
       <div class="d-flex flex-wrap gap-3">
-        <user-reactions :item="topic">
+        <UserReactions :item="topic">
           <template #default="{selected, total}">
-            <vesp-fa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
+            <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
           </template>
-        </user-reactions>
-        <div><vesp-fa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
+        </UserReactions>
+        <div><VespFa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
         <div v-if="!isTopic">
-          <b-link
+          <BLink
             v-if="topic.access && commentsCount"
             :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
           >
-            <vesp-fa icon="comment" class="fa-fw" />
+            <VespFa icon="comment" class="fa-fw" />
             {{ commentsCount }}
             <span v-if="unseenCount" class="text-success">+{{ unseenCount }}</span>
-          </b-link>
-          <template v-else> <vesp-fa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
+          </BLink>
+          <template v-else> <VespFa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
         </div>
       </div>
 
       <div v-if="topic.published_at" class="ms-auto">
-        <vesp-fa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
+        <VespFa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
       </div>
     </div>
   </div>

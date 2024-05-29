@@ -1,35 +1,35 @@
 <template>
   <div>
-    <b-form-group :label="$t('models.page.title')">
-      <b-form-input v-model.trim="record.title" required autofocus />
-    </b-form-group>
+    <BFormGroup :label="$t('models.page.title')">
+      <BFormInput v-model.trim="record.title" required autofocus />
+    </BFormGroup>
 
-    <b-form-group :label="$t('models.page.alias')">
-      <vesp-input-alias v-model.trim="record.alias" :watch="record.title" required />
-    </b-form-group>
+    <BFormGroup :label="$t('models.page.alias')">
+      <VespInputAlias v-model.trim="record.alias" :watch="record.title" required />
+    </BFormGroup>
 
-    <b-row>
-      <b-col md="6">
-        <b-form-group :label="$t('models.page.position')">
-          <b-form-select v-model="record.position" :options="positionOptions" />
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group :label="$t('models.page.rank')">
-          <b-form-input v-model="record.rank" type="number" min="0" />
-        </b-form-group>
-      </b-col>
-    </b-row>
+    <BRow>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.page.position')">
+          <BFormSelect v-model="record.position" :options="positionOptions" />
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.page.rank')">
+          <BFormInput v-model="record.rank" type="number" min="0" />
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-form-group :label="$t('models.page.content')">
-      <editor-js v-model="record.content" :blocks="editorBlocks" />
-    </b-form-group>
+    <BFormGroup :label="$t('models.page.content')">
+      <EditorJs v-model="record.content" :blocks="editorBlocks" />
+    </BFormGroup>
 
-    <b-form-group>
-      <b-form-checkbox v-model="record.active">
+    <BFormGroup>
+      <BFormCheckbox v-model="record.active">
         {{ $t('models.page.active') }}
-      </b-form-checkbox>
-    </b-form-group>
+      </BFormCheckbox>
+    </BFormGroup>
   </div>
 </template>
 

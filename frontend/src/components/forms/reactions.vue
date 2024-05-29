@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-overlay :show="pending || loading" opacity="0.5">
-      <draggable :list="reactions" item-key="id" class="row g-2" @end="onSort">
+    <BOverlay :show="pending || loading" opacity="0.5">
+      <Draggable :list="reactions" item-key="id" class="row g-2" @end="onSort">
         <template #item="{element}">
-          <b-col cols="6" md="auto">
-            <b-card footer-class="p-1">
+          <BCol cols="6" md="auto">
+            <BCard footer-class="p-1">
               <template #default>
                 <div :class="{'text-center': true, 'opacity-25': !element.active}">
                   <div :style="{'font-size': emojiSize, 'min-width': colSize}">{{ element.emoji }}</div>
@@ -13,39 +13,39 @@
               </template>
               <template #footer>
                 <div class="d-flex w-100 justify-content-between">
-                  <b-button size="sm" :variant="null" @click.prevent="onEdit(element)">
-                    <vesp-fa icon="edit" fixed-width />
-                  </b-button>
-                  <b-button size="sm" :variant="null" @click.prevent="onDelete(element)">
-                    <vesp-fa icon="times" fixed-width class="text-danger" />
-                  </b-button>
+                  <BButton size="sm" :variant="null" @click.prevent="onEdit(element)">
+                    <VespFa icon="edit" fixed-width />
+                  </BButton>
+                  <BButton size="sm" :variant="null" @click.prevent="onDelete(element)">
+                    <VespFa icon="times" fixed-width class="text-danger" />
+                  </BButton>
                 </div>
               </template>
-            </b-card>
-          </b-col>
+            </BCard>
+          </BCol>
         </template>
         <template #footer>
-          <b-col cols="6" md="auto">
-            <b-card class="h-100">
+          <BCol cols="6" md="auto">
+            <BCard class="h-100">
               <template #default>
                 <div :style="{'min-width': colSize}" class="h-100 d-flex align-items-center justify-content-center">
-                  <b-button
+                  <BButton
                     variant="success"
                     class="rounded-circle p-0 text-center"
                     :style="{width: emojiSize, height: emojiSize}"
                     @click="onCreate"
                   >
-                    <vesp-fa icon="plus" size="3x" />
-                  </b-button>
+                    <VespFa icon="plus" size="3x" />
+                  </BButton>
                 </div>
               </template>
-            </b-card>
-          </b-col>
+            </BCard>
+          </BCol>
         </template>
-      </draggable>
-    </b-overlay>
+      </Draggable>
+    </BOverlay>
 
-    <vesp-modal
+    <VespModal
       v-if="form"
       v-model="form"
       :url="url"
@@ -55,21 +55,21 @@
       @hidden="onHide"
     >
       <template #form-fields>
-        <b-form-group :label="$t('models.reaction.title')">
-          <b-form-input v-model="form.title" />
-        </b-form-group>
+        <BFormGroup :label="$t('models.reaction.title')">
+          <BFormInput v-model="form.title" />
+        </BFormGroup>
 
-        <b-form-group :label="$t('models.reaction.emoji')" :description="$t('models.reaction.emoji_desc')">
-          <b-form-input v-model="form.emoji" required maxlength="2" />
-        </b-form-group>
+        <BFormGroup :label="$t('models.reaction.emoji')" :description="$t('models.reaction.emoji_desc')">
+          <BFormInput v-model="form.emoji" required maxlength="2" />
+        </BFormGroup>
 
         <!--<b-form-checkbox v-model="form.active">
           {{ $t('models.reaction.active') }}
         </b-form-checkbox>-->
       </template>
-    </vesp-modal>
+    </VespModal>
 
-    <vesp-modal
+    <VespModal
       v-else-if="deleting"
       v-model="deleting"
       :url="url"
@@ -82,7 +82,7 @@
       @hidden="onHide"
     >
       {{ $t('components.table.delete.confirm') }}
-    </vesp-modal>
+    </VespModal>
   </div>
 </template>
 

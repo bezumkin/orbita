@@ -2,7 +2,7 @@
   <div class="py-3 border rounded">
     <div class="px-4 fw-medium text-break">{{ block.data.title }}</div>
     <div class="px-2">
-      <player-audio :uuid="block.data.uuid" />
+      <PlayerAudio :uuid="block.data.uuid" />
     </div>
   </div>
 </template>

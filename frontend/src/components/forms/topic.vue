@@ -1,66 +1,66 @@
 <template>
   <div>
-    <b-form-group :label="$t('models.topic.title')">
-      <b-form-input v-model.trim="record.title" required autofocus />
-    </b-form-group>
-    <b-form-group :label="$t('models.topic.content')">
-      <editor-js v-model="record.content" :blocks="editorBlocks" />
-    </b-form-group>
+    <BFormGroup :label="$t('models.topic.title')">
+      <BFormInput v-model.trim="record.title" required autofocus />
+    </BFormGroup>
+    <BFormGroup :label="$t('models.topic.content')">
+      <EditorJs v-model="record.content" :blocks="editorBlocks" />
+    </BFormGroup>
 
-    <b-row>
-      <b-col md="6">
-        <b-form-group :label="$t('models.topic.access.title')">
-          <b-form-radio-group v-model="accessLevel" :options="accessOptions" stacked />
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group v-if="['subscribers', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.level')">
-          <b-form-select v-model="record.level_id" :options="levelOptions" required />
-        </b-form-group>
-        <b-form-group v-if="['payments', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.price')">
-          <b-input-group>
+    <BRow>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.topic.access.title')">
+          <BFormRadioGroup v-model="accessLevel" :options="accessOptions" stacked />
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <BFormGroup v-if="['subscribers', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.level')">
+          <BFormSelect v-model="record.level_id" :options="levelOptions" required />
+        </BFormGroup>
+        <BFormGroup v-if="['payments', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.price')">
+          <BInputGroup>
             <template #prepend>
-              <b-input-group-text>{{ $price(1).replace('1', '').trim() }}</b-input-group-text>
+              <BInputGroupText>{{ $price(1).replace('1', '').trim() }}</BInputGroupText>
             </template>
-            <b-form-input v-model="record.price" type="number" min="1" required />
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-    </b-row>
+            <BFormInput v-model="record.price" type="number" min="1" required />
+          </BInputGroup>
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-row>
-      <b-col md="6">
-        <b-form-group :label="$t('models.topic.cover')">
-          <file-upload v-model="record.new_cover" :placeholder="record.cover" :height="200" />
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group :label="$t('models.topic.teaser')">
-          <b-form-textarea v-model="record.teaser" no-resize style="height: 200px" />
-        </b-form-group>
-      </b-col>
-    </b-row>
+    <BRow>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.topic.cover')">
+          <FileUpload v-model="record.new_cover" :placeholder="record.cover" :height="200" />
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <BFormGroup :label="$t('models.topic.teaser')">
+          <BFormTextarea v-model="record.teaser" no-resize style="height: 200px" />
+        </BFormGroup>
+      </BCol>
+    </BRow>
 
-    <b-form-group :label="$t('models.topic.tags')">
-      <topic-tags v-model="record.tags" />
-    </b-form-group>
+    <BFormGroup :label="$t('models.topic.tags')">
+      <TopicTags v-model="record.tags" />
+    </BFormGroup>
 
-    <b-row>
-      <b-col md="6">
-        <b-form-group>
-          <b-form-checkbox v-model="record.active">
+    <BRow>
+      <BCol md="6">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.active">
             {{ $t('models.topic.active') }}
-          </b-form-checkbox>
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group>
-          <b-form-checkbox v-model="record.closed">
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.closed">
             {{ $t('models.topic.closed') }}
-          </b-form-checkbox>
-        </b-form-group>
-      </b-col>
-    </b-row>
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+    </BRow>
   </div>
 </template>
 

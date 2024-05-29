@@ -1,12 +1,12 @@
 <template>
   <div>
-    <b-form-group :label="$t('models.user_role.title')">
-      <b-form-input v-model.trim="record.title" required autofocus />
-    </b-form-group>
+    <BFormGroup :label="$t('models.user_role.title')">
+      <BFormInput v-model.trim="record.title" required autofocus />
+    </BFormGroup>
 
-    <b-form-group :label="$t('models.user_role.scope')">
-      <b-form-tags v-model.trim="record.scope" remove-on-delete placeholder="" :add-button-text="$t('actions.add')" />
-    </b-form-group>
+    <BFormGroup :label="$t('models.user_role.scope')">
+      <BFormTags v-model.trim="record.scope" remove-on-delete placeholder="" :add-button-text="$t('actions.add')" />
+    </BFormGroup>
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
-  <vesp-modal v-model="record" v-bind="{url}" method="patch" update-key="admin-videos" :title="record.title" size="lg">
+  <VespModal v-model="record" v-bind="{url}" method="patch" update-key="admin-videos" :title="record.title" size="lg">
     <template #form-fields>
-      <forms-video v-model="record" />
+      <FormsVideo v-model="record" />
     </template>
-  </vesp-modal>
+  </VespModal>
 </template>
 
 <script setup lang="ts">

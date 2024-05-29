@@ -1,13 +1,13 @@
 <template>
-  <b-offcanvas id="sidebar" v-model="$sidebar" placement="end" no-header @click="onClick">
+  <BOffcanvas id="sidebar" v-model="$sidebar" placement="end" no-header @click="onClick">
     <div class="d-grid gap-4 align-items-center">
-      <app-pages v-if="showPages" position="header" vertical pills class="w-100" />
-      <widgets-author v-if="showAuthor" />
-      <widgets-online v-if="showOnline" />
-      <widgets-levels v-if="showLevels" />
-      <widgets-tags v-if="showTags" />
+      <AppPages v-if="showPages" position="header" vertical pills class="w-100" />
+      <WidgetsAuthor v-if="showAuthor" />
+      <WidgetsOnline v-if="showOnline" />
+      <WidgetsLevels v-if="showLevels" />
+      <WidgetsTags v-if="showTags" />
     </div>
-  </b-offcanvas>
+  </BOffcanvas>
 </template>
 
 <script setup lang="ts">

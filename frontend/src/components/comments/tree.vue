@@ -1,12 +1,12 @@
 <template>
   <div class="column">
-    <b-overlay id="topic-comments" ref="tree" :show="pending" opacity="0.5">
+    <BOverlay id="topic-comments" ref="tree" :show="pending" opacity="0.5">
       <h4>{{ t('components.comments.title', {total}, total) }}</h4>
 
-      <comments-thread v-model="commentForm" :comments="commentsTree" :topic="topic" :loading-form="submitting">
+      <CommentsThread v-model="commentForm" :comments="commentsTree" :topic="topic" :loading-form="submitting">
         <template #form="{comment}">
-          <client-only>
-            <comments-form
+          <ClientOnly>
+            <CommentsForm
               v-if="replying?.id === comment.id || editing?.id === comment.id"
               v-model="commentForm"
               :topic="topic"
@@ -15,17 +15,17 @@
               class="mt-1"
               autofocus
             />
-          </client-only>
+          </ClientOnly>
         </template>
-      </comments-thread>
-    </b-overlay>
+      </CommentsThread>
+    </BOverlay>
 
-    <client-only>
+    <ClientOnly>
       <div v-if="topic.closed && !isAdmin" class="alert alert-info mt-5">
         {{ t('components.comments.info.closed') }}
       </div>
       <template v-else-if="$scope('comments/put') || isAdmin">
-        <comments-form
+        <CommentsForm
           v-if="!replying && !editing"
           ref="form"
           v-model="commentForm"
@@ -38,17 +38,17 @@
         {{ user ? t('components.comments.info.no_scope') : t('components.comments.info.guest') }}
       </div>
 
-      <b-modal v-if="isAdmin" :model-value="Boolean(destroying)" centered @hidden="destroying = 0">
+      <BModal v-if="isAdmin" :model-value="Boolean(destroying)" centered @hidden="destroying = 0">
         <template #title>
           {{ t('components.comments.destroy.title') }}
         </template>
         <div v-html="t('components.comments.destroy.text')" />
         <template #footer="{hide}">
-          <b-button @click="() => hide()">{{ t('actions.cancel') }}</b-button>
-          <b-button variant="danger" @click="destroy">{{ t('actions.delete') }}</b-button>
+          <BButton @click="() => hide()">{{ t('actions.cancel') }}</BButton>
+          <BButton variant="danger" @click="destroy">{{ t('actions.delete') }}</BButton>
         </template>
-      </b-modal>
-    </client-only>
+      </BModal>
+    </ClientOnly>
   </div>
 </template>
 

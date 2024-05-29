@@ -1,7 +1,7 @@
 <template>
   <div v-if="!activated" class="plyr plyr--full-ui plyr--video">
     <div v-bind="wrapperProps">
-      <b-img :src="posterUrl" />
+      <BImg :src="posterUrl" />
     </div>
     <button class="plyr__control plyr__control--overlaid" @click.prevent="onActivate">
       <svg aria-hidden="true" focusable="false">
@@ -10,7 +10,7 @@
     </button>
   </div>
   <div v-else v-bind="wrapperProps">
-    <player-video :uuid="block.data.uuid" :autoplay="true" :poster="posterUrl" />
+    <PlayerVideo :uuid="block.data.uuid" :autoplay="true" :poster="posterUrl" />
   </div>
 </template>
 

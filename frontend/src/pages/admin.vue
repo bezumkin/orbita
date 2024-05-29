@@ -1,13 +1,13 @@
 <template>
   <div>
     <div v-if="user">
-      <b-nav :tabs="!$isMobile" :pills="$isMobile" class="mt-4 justify-content-between justify-content-md-start">
-        <b-nav-item v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
+      <BNav :tabs="!$isMobile" :pills="$isMobile" class="mt-4 justify-content-between justify-content-md-start">
+        <BNavItem v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
           {{ $t('pages.admin.' + section.title) }}
-        </b-nav-item>
-      </b-nav>
+        </BNavItem>
+      </BNav>
       <div class="mt-4">
-        <nuxt-page />
+        <NuxtPage />
       </div>
     </div>
   </div>

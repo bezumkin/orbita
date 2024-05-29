@@ -1,20 +1,20 @@
 <template>
-  <vesp-change-locale>
+  <VespChangeLocale>
     <template #default="{locale, locales, setLocale}">
-      <b-dropdown :variant="null" size="sm">
-        <template #button-content> <vesp-fa icon="globe" class="fa-fw" /> {{ locale.toUpperCase() }} </template>
-        <b-dropdown-item
+      <BDropdown :variant="null" size="sm">
+        <template #button-content> <VespFa icon="globe" class="fa-fw" /> {{ locale.toUpperCase() }} </template>
+        <BDropdownItem
           v-for="i in locales"
           :key="i.code"
           link-class="d-flex align-items-center"
           @click="setLocale(i.code)"
         >
-          <b-img :src="getIcon(i.code)" height="16" class="me-1" />
+          <BImg :src="getIcon(i.code)" height="16" class="me-1" />
           {{ i.name }}
-        </b-dropdown-item>
-      </b-dropdown>
+        </BDropdownItem>
+      </BDropdown>
     </template>
-  </vesp-change-locale>
+  </VespChangeLocale>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <b-img v-bind="imageProps" fluid rounded lazy />
+  <BImg v-bind="imageProps" fluid rounded lazy />
 </template>
 
 <script setup lang="ts">

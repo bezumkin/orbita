@@ -1,25 +1,25 @@
 <template>
-  <b-overlay :show="loading" opacity="0.5" class="col-md-9 m-auto topic">
+  <BOverlay :show="loading" opacity="0.5" class="col-md-9 m-auto topic">
     <div v-if="!record">
       <h1 class="topic-header">
         {{ page.title }}
-        <b-button v-if="$scope('pages/get')" variant="link" class="ms-2 p-0" @click="onEdit">
-          <vesp-fa icon="edit" class="fa-fw" />
-        </b-button>
+        <BButton v-if="$scope('pages/get')" variant="link" class="ms-2 p-0" @click="onEdit">
+          <VespFa icon="edit" class="fa-fw" />
+        </BButton>
       </h1>
-      <editor-content :content="page.content" />
+      <EditorContent :content="page.content" />
     </div>
-    <b-form v-else-if="$scope('pages/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+    <BForm v-else-if="$scope('pages/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
-        <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
-        <b-button variant="primary" type="submit" :disabled="loading">
-          <b-spinner v-if="loading" small />
+        <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
+        <BButton variant="primary" type="submit" :disabled="loading">
+          <BSpinner v-if="loading" small />
           {{ $t('actions.save') }}
-        </b-button>
+        </BButton>
       </div>
-      <forms-page v-model="record" />
-    </b-form>
-  </b-overlay>
+      <FormsPage v-model="record" />
+    </BForm>
+  </BOverlay>
 </template>
 
 <script setup lang="ts">

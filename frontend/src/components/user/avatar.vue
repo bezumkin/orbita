@@ -1,7 +1,7 @@
 <template>
-  <b-img v-if="imgProps.src" v-bind="imgProps" lazy />
+  <BImg v-if="imgProps.src" v-bind="imgProps" lazy />
   <div v-else v-bind="imgProps">
-    <vesp-fa icon="user" class="fa-fw m-auto" v-bind="iconProps" />
+    <VespFa icon="user" class="fa-fw m-auto" v-bind="iconProps" />
   </div>
 </template>
 

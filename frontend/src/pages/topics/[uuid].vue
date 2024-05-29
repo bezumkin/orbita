@@ -1,11 +1,11 @@
 <template>
   <div>
-    <b-link :to="{name: 'index'}" class="d-block mb-2">&larr; {{ $t('actions.back') }}</b-link>
+    <BLink :to="{name: 'index'}" class="d-block mb-2">&larr; {{ $t('actions.back') }}</BLink>
     <template v-if="topic?.access">
-      <topic-content :topic="topic" class="column" />
-      <comments-tree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
+      <TopicContent :topic="topic" class="column" />
+      <CommentsTree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
     </template>
-    <topic-intro v-else :topic="topic" />
+    <TopicIntro v-else :topic="topic" />
   </div>
 </template>
 

@@ -1,31 +1,31 @@
 <template>
-  <b-modal id="payment" v-model="showModal" v-bind="{title, size, hideFooter: isVariants}" @hidden="onCancel">
+  <BModal id="payment" v-model="showModal" v-bind="{title, size, hideFooter: isVariants}" @hidden="onCancel">
     <div v-if="$payment && !qr">
-      <transition name="fade" mode="out-in">
-        <payment-variants v-if="isVariants" v-model="paymentProperties" @title="(v: string) => (title = v)" />
-        <payment-topic v-else-if="isTopic" v-model="paymentProperties" @title="(v: string) => (title = v)" />
-        <payment-subscription v-else v-model="paymentProperties" @title="(v: string) => (title = v)" />
-      </transition>
+      <Transition name="fade" mode="out-in">
+        <PaymentVariants v-if="isVariants" v-model="paymentProperties" @title="(v: string) => (title = v)" />
+        <PaymentTopic v-else-if="isTopic" v-model="paymentProperties" @title="(v: string) => (title = v)" />
+        <PaymentSubscription v-else v-model="paymentProperties" @title="(v: string) => (title = v)" />
+      </Transition>
     </div>
 
-    <transition name="fade" mode="out-in">
+    <Transition name="fade" mode="out-in">
       <div v-if="qr" class="qr">
         <div class="text-center">{{ t('components.payment.service.scan_qr') }}</div>
-        <b-img :src="qr.image" alt="QR" width="250" height="250" class="d-block m-auto" fluid />
+        <BImg :src="qr.image" alt="QR" width="250" height="250" class="d-block m-auto" fluid />
       </div>
       <div v-else-if="canPay">
         <div v-if="services.length" class="mt-4">
           <div class="fw-bold">{{ t('components.payment.service.title') }}</div>
           <div class="services mt-1">
             <div v-for="i in services" :key="i" :class="serviceClass(i)" @click="onService(i)">
-              <b-img :src="'/payments/' + i + '.svg'" height="50" />
+              <BImg :src="'/payments/' + i + '.svg'" height="50" />
             </div>
           </div>
-          <transition name="fade" mode="out-in">
+          <Transition name="fade" mode="out-in">
             <div v-if="subscriptionWarning" class="alert alert-warning mt-2 small p-2">
               {{ t('components.payment.service.no_subscription') }}
             </div>
-          </transition>
+          </Transition>
         </div>
 
         <div class="mt-4">
@@ -43,27 +43,27 @@
           </template>
         </div>
       </div>
-    </transition>
+    </Transition>
 
     <template #footer>
-      <b-button variant="light" @click="onCancel">{{ t('actions.cancel') }}</b-button>
-      <b-button v-if="!qr" variant="primary" :disabled="loading" @click="onSubmit">
-        <b-spinner v-if="loading" small />
+      <BButton variant="light" @click="onCancel">{{ t('actions.cancel') }}</BButton>
+      <BButton v-if="!qr" variant="primary" :disabled="loading" @click="onSubmit">
+        <BSpinner v-if="loading" small />
         <template v-if="canPay">
-          <vesp-fa icon="wallet" class="fa-fw" />
+          <VespFa icon="wallet" class="fa-fw" />
           {{ t('components.payment.actions.pay') }}
         </template>
         <template v-else>
           {{ t('actions.submit') }}
         </template>
-      </b-button>
-      <b-button v-else variant="primary" :disabled="loading" @click="onCheck">
-        <b-spinner v-if="loading" small />
-        <vesp-fa v-else icon="check" class="fa-fw" />
+      </BButton>
+      <BButton v-else variant="primary" :disabled="loading" @click="onCheck">
+        <BSpinner v-if="loading" small />
+        <VespFa v-else icon="check" class="fa-fw" />
         {{ t('components.payment.actions.check') }}
-      </b-button>
+      </BButton>
     </template>
-  </b-modal>
+  </BModal>
 </template>
 
 <script setup lang="ts">

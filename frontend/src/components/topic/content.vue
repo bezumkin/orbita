@@ -1,28 +1,28 @@
 <template>
-  <b-overlay :show="loading" opacity="0.5" class="topic">
+  <BOverlay :show="loading" opacity="0.5" class="topic">
     <div v-if="!record">
       <div class="topic-header">
         <h1 class="mt-2">
           {{ myValue.title }}
-          <b-button v-if="$scope('topics/get')" variant="link" class="ms-2 p-0" @click="onEdit">
-            <vesp-fa icon="edit" class="fa-fw" />
-          </b-button>
+          <BButton v-if="$scope('topics/get')" variant="link" class="ms-2 p-0" @click="onEdit">
+            <VespFa icon="edit" class="fa-fw" />
+          </BButton>
         </h1>
       </div>
-      <editor-content v-if="myValue.content?.blocks" :content="myValue.content" />
-      <topic-footer :topic="myValue" />
+      <EditorContent v-if="myValue.content?.blocks" :content="myValue.content" />
+      <TopicFooter :topic="myValue" />
     </div>
-    <b-form v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
-      <forms-topic v-model="record" />
+    <BForm v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+      <FormsTopic v-model="record" />
       <div class="topic-buttons">
-        <b-button :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</b-button>
-        <b-button variant="primary" type="submit" :disabled="loading">
-          <b-spinner v-if="loading" small />
+        <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
+        <BButton variant="primary" type="submit" :disabled="loading">
+          <BSpinner v-if="loading" small />
           {{ $t('actions.save') }}
-        </b-button>
+        </BButton>
       </div>
-    </b-form>
-  </b-overlay>
+    </BForm>
+  </BOverlay>
 </template>
 
 <script setup lang="ts">

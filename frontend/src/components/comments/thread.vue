@@ -5,60 +5,60 @@
         <template v-if="comment.active || isAdmin">
           <div class="comment-header">
             <div v-if="comment.user" class="comment-user">
-              <user-avatar :user="comment.user" class="me-1" /> {{ comment.user.fullname }}
+              <UserAvatar :user="comment.user" class="me-1" /> {{ comment.user.fullname }}
             </div>
             <div v-if="comment.created_at" class="comment-date">
-              <b-link :href="getCommentLink(comment)" @click="(e) => (onLink ? onLink(e, comment) : {})">
+              <BLink :href="getCommentLink(comment)" @click="(e) => (onLink ? onLink(e, comment) : {})">
                 {{ d(comment.created_at, 'long') }}
-              </b-link>
+              </BLink>
             </div>
           </div>
           <div v-if="record.id !== comment.id" class="comment-text">
-            <editor-content :content="comment.content" type="comment" />
+            <EditorContent :content="comment.content" type="comment" />
           </div>
         </template>
         <div v-else class="comment-text" v-text="$t('components.comments.info.deleted')" />
 
         <div v-if="user && record.id !== comment.id" class="comment-footer">
           <div v-if="comment.active">
-            <user-reactions :item="comment" small>
+            <UserReactions :item="comment" small>
               <template #default="{selected, total}">
-                <b-button :variant="btnVariant">
-                  <vesp-fa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
-                </b-button>
+                <BButton :variant="btnVariant">
+                  <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
+                </BButton>
               </template>
-            </user-reactions>
+            </UserReactions>
 
-            <b-button v-if="canReply && onReply && canReply(comment)" :variant="btnVariant" @click="onReply(comment)">
-              <vesp-fa icon="reply" class="fa-fw" />
+            <BButton v-if="canReply && onReply && canReply(comment)" :variant="btnVariant" @click="onReply(comment)">
+              <VespFa icon="reply" class="fa-fw" />
               <span class="action">{{ $t('actions.reply') }}</span>
-            </b-button>
-            <b-button v-if="canEdit && onEdit && canEdit(comment)" :variant="btnVariant" @click="onEdit(comment)">
-              <vesp-fa icon="edit" class="fa-fw" />
+            </BButton>
+            <BButton v-if="canEdit && onEdit && canEdit(comment)" :variant="btnVariant" @click="onEdit(comment)">
+              <VespFa icon="edit" class="fa-fw" />
               <span class="action">{{ $t('actions.edit') }}</span>
-            </b-button>
+            </BButton>
           </div>
           <div v-if="canDelete && canDelete(comment)" class="ms-auto">
-            <b-button
+            <BButton
               v-if="onDelete"
               :variant="btnVariant"
               :class="comment.active ? 'text-danger' : 'text-success'"
               @click="onDelete(comment)"
             >
-              <vesp-fa :icon="comment.active ? 'trash' : 'undo'" class="fa-fw" />
+              <VespFa :icon="comment.active ? 'trash' : 'undo'" class="fa-fw" />
               <span class="action">{{ $t('actions.' + (comment.active ? 'delete' : 'restore')) }}</span>
-            </b-button>
-            <b-button v-if="onDestroy" :variant="btnVariant" class="text-danger" @click="onDestroy(comment)">
-              <vesp-fa icon="times" class="fa-fw" />
+            </BButton>
+            <BButton v-if="onDestroy" :variant="btnVariant" class="text-danger" @click="onDestroy(comment)">
+              <VespFa icon="times" class="fa-fw" />
               <span class="action">{{ $t('actions.destroy') }}</span>
-            </b-button>
+            </BButton>
           </div>
         </div>
       </div>
 
       <slot name="form" v-bind="{comment}" />
 
-      <comments-thread
+      <CommentsThread
         v-if="comment.children?.length"
         :key="'children-' + comment.id"
         v-model="record"
@@ -68,7 +68,7 @@
         <template #form="slotProps">
           <slot name="form" v-bind="slotProps" />
         </template>
-      </comments-thread>
+      </CommentsThread>
     </template>
   </div>
 </template>
