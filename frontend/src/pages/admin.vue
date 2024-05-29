@@ -2,9 +2,14 @@
   <div>
     <div v-if="user">
       <BNav :tabs="!$isMobile" :pills="$isMobile" class="mt-4 justify-content-between justify-content-md-start">
-        <BNavItem v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
-          {{ $t('pages.admin.' + section.title) }}
-        </BNavItem>
+        <template v-for="(section, idx) in sections">
+          <BNavItem v-if="section.disabled" :key="'d' + idx" class="d-none d-md-flex align-items-center" disabled>
+            <span class="border-end" style="height: 1.25rem"></span>
+          </BNavItem>
+          <BNavItem v-else :key="'e' + idx" :to="{name: section.route}" :class="section.class">
+            {{ $t('pages.admin.' + section.title) }}
+          </BNavItem>
+        </template>
       </BNav>
       <div class="mt-4">
         <NuxtPage />

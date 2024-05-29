@@ -49,6 +49,7 @@ const config: NuxtConfig = {
       EDITOR_COMMENT_BLOCKS: process.env.EDITOR_COMMENT_BLOCKS || '',
       PAYMENT_SERVICES: process.env.PAYMENT_SERVICES || '',
       PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
+      ADMIN_SECTIONS: process.env.ADMIN_SECTIONS || '',
     },
   },
   app: {

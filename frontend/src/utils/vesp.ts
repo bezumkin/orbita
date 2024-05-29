@@ -121,17 +121,33 @@ export function translateServerMessage(message: string) {
 }
 
 export function getAdminSections() {
-  const items = [
-    {scope: 'payments/get', title: 'payments', route: 'admin-payments'},
-    {scope: 'topics/get', title: 'topics', route: 'admin-topics'},
-    {scope: 'levels/get', title: 'levels', route: 'admin-levels'},
-    {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
-    {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
-    {scope: 'notifications/get', title: 'notifications', route: 'admin-notifications'},
-    {scope: 'pages/get', title: 'pages', route: 'admin-pages'},
-    {scope: 'users/get', title: 'users', route: 'admin-users'},
-    {scope: 'roles/get', title: 'user_roles', route: 'admin-user-roles'},
-  ]
+  const userSections = useRuntimeConfig().public.ADMIN_SECTIONS || ''
+  const allSections: Record<string, any> = {
+    payments: {scope: 'payments/get', title: 'payments', route: 'admin-payments'},
+    topics: {scope: 'topics/get', title: 'topics', route: 'admin-topics'},
+    levels: {scope: 'levels/get', title: 'levels', route: 'admin-levels'},
+    settings: {scope: 'settings/get', title: 'settings', route: 'admin-settings'},
+    videos: {scope: 'videos/get', title: 'videos', route: 'admin-videos'},
+    notifications: {scope: 'notifications/get', title: 'notifications', route: 'admin-notifications'},
+    pages: {scope: 'pages/get', title: 'pages', route: 'admin-pages'},
+    users: {scope: 'users/get', title: 'users', route: 'admin-users'},
+    roles: {scope: 'roles/get', title: 'user_roles', route: 'admin-user-roles'},
+  }
 
-  return items.filter((i) => hasScope(i.scope))
+  let sections: Record<string, any>[] = []
+  if (userSections) {
+    const allKeys = Object.keys(allSections)
+    const userKeys = userSections.split(',').map((key) => key.toLowerCase().trim())
+    userKeys.forEach((key) => {
+      if (key === '-' || key === '') {
+        sections.push({disabled: true})
+      } else if (allKeys.includes(key)) {
+        sections.push(allSections[key])
+      }
+    })
+  } else {
+    sections = Object.values(allSections)
+  }
+
+  return sections.filter((i) => !i.scope || hasScope(i.scope))
 }
