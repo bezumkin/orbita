@@ -46,6 +46,7 @@ $group = $app->group(
             $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
             $group->any('/tags', App\Controllers\Admin\Tags::class);
             $group->any('/reactions', App\Controllers\Admin\Reactions::class);
+            $group->any('/redirects[/{id:\d+}]', App\Controllers\Admin\Redirects::class);
         });
 
         $group->group(
@@ -66,6 +67,7 @@ $group = $app->group(
                 $group->any('/pages[/{alias}]', App\Controllers\Web\Pages::class);
                 $group->any('/tags', App\Controllers\Web\Tags::class);
                 $group->any('/reactions', App\Controllers\Web\Reactions::class);
+                $group->any('/locate/{uri:.+}', App\Controllers\Web\Redirects::class);
             }
         );
     }

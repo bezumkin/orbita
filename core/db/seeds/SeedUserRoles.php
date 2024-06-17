@@ -22,6 +22,7 @@ class SeedUserRoles extends AbstractSeed
                     'pages',
                     'payments',
                     'reactions',
+                    'redirects',
                 ],
             ],
             'Moderator' => [

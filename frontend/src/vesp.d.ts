@@ -155,6 +155,16 @@ declare global {
     rank?: number
     active?: boolean
   }
+
+  type VespRedirect = {
+    id: number
+    title?: string
+    from: string
+    to: string
+    code?: number
+    message?: string
+    active?: boolean
+  }
 }
 
 declare module '@vue/runtime-core' {

@@ -189,6 +189,20 @@ export default {
       emoji_desc: 'Copy the emoji symbol into this field',
       active: 'Active',
     },
+    redirect: {
+      title_one: 'Redirect',
+      title_many: 'Redirects',
+      description: `If you are moving content from the old site to the new engine, then you can specify the redirection rules according to the documentation of <b>nikic/fastroute</b>.<br/><br/>If you are specifying the <kbd>&lcub;id&rcub;</kbd> parameter, the service will try to load topic with this id, and set the <kbd>&lcub;uuid&rcub;</kbd> placeholder.`,
+      id: 'Id',
+      title: 'Title',
+      from: 'From',
+      from_desc: `Examples: <kbd>/sections/&lcub;section&rcub;/&lcub;id&rcub;</kbd>, <kbd>/about</kbd> или <kbd>/lessons/course3</kbd>`,
+      to: 'To',
+      to_desc: `Examples: <kbd>/topics/&lcub;uuid&rcub;</kbd>, <kbd>/pages/about</kbd> или <kbd>/tags?id=3</kbd>`,
+      code: 'Redirect Code',
+      rank: 'Priority',
+      active: 'Active',
+    },
   },
   components: {
     table: {
@@ -288,6 +302,7 @@ export default {
       notifications: 'Notifications',
       pages: 'Pages',
       payments: 'Payments',
+      redirects: 'Redirects',
     },
     user: {
       title: 'Account',

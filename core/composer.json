@@ -1,6 +1,7 @@
 {
   "name": "bezumkin/orbita",
   "license": "MIT",
+  "version": "1.0.0",
   "description": "The Orbita project",
   "authors": [
     {

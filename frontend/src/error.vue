@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import MainPage from './app.vue'
 const isDev = process.dev
+const {fullPath} = useRoute()
 
 const props = defineProps({
   error: {
@@ -20,6 +21,15 @@ const props = defineProps({
     required: true,
   },
 })
+
+if (props.error.statusCode === 404 && process.server) {
+  try {
+    const data = await useGet('web/locate' + fullPath)
+    if (data.location) {
+      navigateTo(data.location, {redirectCode: data.code || 302})
+    }
+  } catch (e) {}
+}
 
 useHead({
   title: props.error.statusMessage,

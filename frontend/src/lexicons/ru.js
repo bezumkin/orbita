@@ -189,6 +189,20 @@ export default {
       emoji_desc: 'Скопируйте символ эмодзи в это поле',
       active: 'Активно',
     },
+    redirect: {
+      title_one: 'Редирект',
+      title_many: 'Редиректы',
+      description: `Если вы переносите заметки со старого сайта на новый движок, то здесь можно указать правила перенаправления согласно документации <b>nikic/fastroute</b>.<br/><br/>При указании параметра <kbd>&lcub;id&rcub;</kbd> сервис попытается загрузить заметку с таким id, и выставить плейсхолдер <kbd>&lcub;uuid&rcub;</kbd>.`,
+      id: 'Id',
+      title: 'Название',
+      from: 'Откуда',
+      from_desc: `Примеры: <kbd>/sections/&lcub;section&rcub;/&lcub;id&rcub;</kbd>, <kbd>/about</kbd> или <kbd>/lessons/course3</kbd>`,
+      to: 'Куда',
+      to_desc: `Примеры: <kbd>/topics/&lcub;uuid&rcub;</kbd>, <kbd>/pages/about</kbd> или <kbd>/tags?id=3</kbd>`,
+      code: 'Код редиректа',
+      rank: 'Приоритет',
+      active: 'Активно',
+    },
   },
   components: {
     table: {
@@ -288,6 +302,7 @@ export default {
       notifications: 'Уведомления',
       pages: 'Страницы',
       payments: 'Платежи',
+      redirects: 'Редиректы',
     },
     user: {
       title: 'Аккаунт',

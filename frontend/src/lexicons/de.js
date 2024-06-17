@@ -189,6 +189,20 @@ export default {
       emoji_desc: 'Kopiere das Emoji-Symbol in dieses Feld',
       active: 'Aktiv',
     },
+    redirect: {
+      title_one: 'Umleitung',
+      title_many: 'Umleitungen',
+      description: `Wenn Sie Notizen von einer alten Website auf eine neue Engine übertragen, können Sie hier die Umleitungsregeln gemäß der Dokumentation von <b>nikic/fastroute</b> angeben.<br/><br/>Wenn Sie den Parameter <kbd>{id}</kbd> angeben, versucht der Service, eine Notiz mit dieser ID zu laden und den Playsholder <kbd>{uuid}</kbd> zu setzen.`,
+      id: 'Id',
+      title: 'Titel',
+      from: 'Von',
+      from_desc: `Beispiel: <kbd>/sections/&lcub;section&rcub;/&lcub;id&rcub;</kbd>, <kbd>/about</kbd> или <kbd>/lessons/course3</kbd>`,
+      to: 'Zu',
+      to_desc: `Beispiel: <kbd>/topics/&lcub;uuid&rcub;</kbd>, <kbd>/pages/about</kbd> или <kbd>/tags?id=3</kbd>`,
+      code: 'Weiterleitungscode',
+      rank: 'Priorität',
+      active: 'Aktiv',
+    },
   },
   components: {
     table: {
@@ -288,6 +302,7 @@ export default {
       notifications: 'Benachrichtigungen',
       pages: 'Seiten',
       payments: 'Zahlungen',
+      redirects: 'Umleitungen',
     },
     user: {
       title: 'Konto',

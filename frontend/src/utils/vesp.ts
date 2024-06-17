@@ -132,6 +132,7 @@ export function getAdminSections() {
     pages: {scope: 'pages/get', title: 'pages', route: 'admin-pages'},
     users: {scope: 'users/get', title: 'users', route: 'admin-users'},
     roles: {scope: 'roles/get', title: 'user_roles', route: 'admin-user-roles'},
+    redirects: {scope: 'redirects/get', title: 'redirects', route: 'admin-redirects'},
   }
 
   let sections: Record<string, any>[] = []
