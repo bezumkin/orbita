@@ -12,6 +12,14 @@ services:
 
   php-fpm:
     restart: no
+    build:
+      context: ./docker/php-fpm
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+        - PHP_XDEBUG=${PHP_XDEBUG:-0}
+        - TZ=${TZ}
+    environment:
+        - PHP_IDE_CONFIG=serverName=VespDocker
     command: sh -c 'composer install && cron && php-fpm'
 
   node:

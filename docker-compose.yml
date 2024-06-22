@@ -30,12 +30,7 @@ services:
       - mariadb
 
   php-fpm:
-    build:
-      context: ./docker/php-fpm
-      args:
-        - PHP_VERSION=${PHP_VERSION}
-        - PHP_XDEBUG=${PHP_XDEBUG:-0}
-        - TZ=${TZ}
+    image: bezumkin/orbita-php
     volumes:
       - ./.env:/vesp/.env
       - ./core:/vesp/core
@@ -51,7 +46,6 @@ services:
     environment:
       - TZ=${TZ}
       - COMPOSER_ALLOW_SUPERUSER=1
-      - PHP_IDE_CONFIG=serverName=VespDocker
     restart: unless-stopped
     working_dir: /vesp/core
     command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'
