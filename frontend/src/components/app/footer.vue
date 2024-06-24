@@ -33,7 +33,7 @@ const date = computed(() => {
   return year
 })
 const owner = computed(() => {
-  const owner = $settings.value.owner
+  const owner = $settings.value.copyright
   if (owner) {
     return owner
   }
