@@ -62,10 +62,8 @@ const props = defineProps({
     default: 'sm',
   },
   blocks: {
-    type: Array as PropType<string[]>,
-    default() {
-      return []
-    },
+    type: String,
+    default: '',
   },
 })
 const emit = defineEmits(['update:modelValue'])
@@ -133,7 +131,7 @@ const allBlocks = [
 ]
 const enabledBlocks = computed(() => {
   if (props.blocks.length) {
-    const types = props.blocks.map((i: string) => i.toLowerCase())
+    const types = props.blocks.split(',').map((i) => i.trim().toLowerCase())
     return allBlocks.filter((i) => types.includes(i.type))
   }
   return allBlocks

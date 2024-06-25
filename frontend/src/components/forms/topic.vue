@@ -99,7 +99,7 @@ const accessOptions = computed(() => {
     {value: 'payments', text: t('models.topic.access.payments')},
   ]
 })
-const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS).split(',') || []
+const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS)
 
 const accessLevel = ref('free')
 if (record.value.id) {
