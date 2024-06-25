@@ -8,6 +8,7 @@ const locales = [
   {code: 'en', name: 'English', file: 'en.js', iso: 'en-GB'},
   {code: 'de', name: 'Deutsch', file: 'de.js', iso: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
+const SITE_URL = process.env.SITE_URL || 'http://127.0.0.1:8080/'
 
 const config: NuxtConfig = {
   telemetry: false,
@@ -37,7 +38,7 @@ const config: NuxtConfig = {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
     public: {
       TZ: process.env.TZ || 'Europe/Moscow',
-      SITE_URL: process.env.SITE_URL || 'http://127.0.0.1:8080/',
+      SITE_URL,
       API_URL: process.env.API_URL || '/api/',
       JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
       CURRENCY: process.env.CURRENCY || 'RUB',
@@ -72,7 +73,7 @@ const config: NuxtConfig = {
       ],
     },
   },
-  modules: ['@vesp/frontend'],
+  modules: ['@vesp/frontend', '@nuxtjs/sitemap'],
   vesp: {
     icons: {
       solid: [
@@ -116,6 +117,13 @@ const config: NuxtConfig = {
     defaultLocale: locales[0].code,
     langDir: 'lexicons',
     locales,
+  },
+  sitemap: {
+    enabled: true,
+    excludeAppSources: true,
+    autoI18n: false,
+    xslTips: false,
+    sources: [SITE_URL + 'api/web/sitemap'],
   },
 }
 

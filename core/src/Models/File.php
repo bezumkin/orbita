@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\CloudStorage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -13,6 +14,7 @@ use Ramsey\Uuid\Uuid;
  * @property-read TopicFile[] $topicFiles
  * @property-read CommentFile[] $commentFiles
  * @property-read PageFile[] $pageFiles
+ * @property-read Video $video
  */
 class File extends \Vesp\Models\File
 {
@@ -52,5 +54,10 @@ class File extends \Vesp\Models\File
     public function pageFiles(): HasMany
     {
         return $this->hasMany(PageFile::class);
+    }
+
+    public function video(): HasOne
+    {
+        return $this->hasOne(Video::class);
     }
 }
