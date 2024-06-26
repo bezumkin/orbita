@@ -32,6 +32,10 @@ class Pages extends ModelController
         $c = Page::query();
 
         /** @var Page $record */
+        $content = $record->content;
+        $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
+        $record->content = $content;
+
         if ($this->isNew = !$record->exists) {
             if (!$record->rank) {
                 $record->rank = Page::query()->count();

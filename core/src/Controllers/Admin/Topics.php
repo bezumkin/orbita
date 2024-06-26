@@ -49,6 +49,10 @@ class Topics extends ModelController
     protected function beforeSave(Model $record): ?ResponseInterface
     {
         /** @var Topic $record */
+        $content = $record->content;
+        $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
+        $record->content = $content;
+
         if (!$record->user_id) {
             $record->user_id = $this->user->id;
         }

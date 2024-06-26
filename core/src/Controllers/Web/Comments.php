@@ -84,6 +84,10 @@ class Comments extends ModelController
         }
 
         /** @var Comment $record */
+        $content = $record->content;
+        $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
+        $record->content = $content;
+
         if (!$this->isAdmin && $record->isDirty('active')) {
             return $this->failure('errors.no_scope');
         }
