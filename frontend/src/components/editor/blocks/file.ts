@@ -26,6 +26,8 @@ export default class implements BlockTool {
   block?: BlockAPI
   upload?: Upload
   config?: ToolConfig
+  title?: string
+  type: string = 'file'
 
   constructor({api, data, block, config}: BlockToolConstructorOptions) {
     this.api = api
@@ -35,13 +37,36 @@ export default class implements BlockTool {
     this.html = document.createElement('div')
   }
 
+  static get toolbox() {
+    return {
+      title: 'File',
+      icon: '<svg class="svg-inline--fa fa-fw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128z"></path></svg>',
+    }
+  }
+
   render() {
-    if (this.data) {
+    if (this.data && Object.keys(this.data).length) {
       if (this.data.file && this.data.file instanceof File) {
         this.startUpload(this.data.file)
       } else {
         this.showPreview()
       }
+    } else {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.multiple = false
+      if (this.type === 'image') {
+        input.accept = 'image/*'
+      } else if (this.type === 'audio') {
+        input.accept = 'audio/*'
+      }
+      input.onchange = ({target}: Event) => {
+        const files: FileList | null = (target as HTMLInputElement).files
+        if (files) {
+          this.api.blocks.insert(this.type, {file: files[0]})
+        }
+      }
+      input.click()
     }
 
     return this.html

@@ -2,8 +2,8 @@
   <div class="content-editor">
     <div v-if="!readOnly" class="actions">
       <template v-for="action in enabledBlocks" :key="action.type">
-        <BButton v-if="action.click" :variant="btnVariant" :size="btnSize" @click="() => action.click()">
-          <VespFa :icon="action.icon" class="fa-fw" />
+        <BButton v-if="action.config?.click" :variant="btnVariant" :size="btnSize" @click="action.config.click">
+          <VespFa :icon="action.icon || action.type" class="fa-fw" />
           {{ $t('actions.editor.' + action.type) }}
         </BButton>
       </template>
@@ -88,7 +88,16 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
           moveUp: {'Move up': 'Наверх'},
           moveDown: {'Move down': 'Вниз'},
         },
-        toolNames: {Text: 'Текст', Heading: 'Заголовок', List: 'Список'},
+        toolNames: {
+          Text: 'Текст',
+          Heading: 'Заголовок',
+          List: 'Список',
+          File: 'Файл',
+          Image: 'Фото',
+          Audio: 'Аудио',
+          Video: 'Видео',
+          Code: 'Код',
+        },
         tools: {
           link: {'Add a link': 'Вставьте ссылку'},
           header: {
@@ -100,7 +109,14 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
           list: {Ordered: 'Нумерованный', Unordered: 'Маркированный'},
           image: {Width: 'Ширина', Height: 'Высота', Crop: 'Обрезка'},
         },
-        ui: {inlineToolbar: {converter: {'Convert to': 'Конвертировать в'}}},
+        ui: {
+          inlineToolbar: {converter: {'Convert to': 'Конвертировать в'}},
+          popover: {
+            Filter: 'Поиск',
+            'Nothing found': 'Не найдено',
+            'Convert to': 'Конвертировать',
+          },
+        },
       }
     : undefined
 })
@@ -109,23 +125,20 @@ const allBlocks = [
     type: 'header',
     icon: 'heading',
     class: Header,
-    click: () => insert('header'),
     toolbar: true,
-    config: {placeholder: t('actions.editor.header'), levels: [2, 3, 4, 5], defaultLevel: 3},
+    config: {
+      placeholder: t('actions.editor.header'),
+      levels: [2, 3, 4, 5],
+      defaultLevel: 3,
+      click: () => insert('header'),
+    },
   },
-  {type: 'audio', icon: 'music', class: AudioBlock, click: insertAudio, config: {uploadUrl: props.uploadUrl}},
-  {type: 'file', icon: 'file', class: FileBlock, click: insertFile, config: {uploadUrl: props.uploadUrl}},
-  {type: 'image', icon: 'image', class: ImageBlock, click: insertImage, config: {uploadUrl: props.uploadUrl}},
-  {type: 'video', icon: 'video', class: VideoBlock, click: insertVideo, config: {uploadUrl: props.uploadUrl}},
-  {type: 'code', icon: 'code', class: CodeBlock, click: () => insert('code')},
-  {
-    type: 'list',
-    icon: 'list',
-    class: List,
-    click: () => insert('list'),
-    toolbar: true,
-    config: {defaultStyle: 'unordered'},
-  },
+  {type: 'audio', icon: 'music', class: AudioBlock, config: {uploadUrl: props.uploadUrl, click: () => insert('audio')}},
+  {type: 'file', class: FileBlock, config: {uploadUrl: props.uploadUrl, click: () => insert('file')}},
+  {type: 'image', class: ImageBlock, config: {uploadUrl: props.uploadUrl, click: () => insert('image')}},
+  {type: 'video', class: VideoBlock, config: {click: insertVideo}},
+  {type: 'code', class: CodeBlock, config: {click: () => insert('code')}},
+  {type: 'list', class: List, toolbar: true, config: {defaultStyle: 'unordered', click: () => insert('list')}},
   {type: 'embed', class: EmbedBlock},
   {type: 'kbd', class: Kbd, shortcut: 'CMD+SHIFT+K'},
 ]
@@ -154,32 +167,6 @@ async function onChange() {
   } catch (e) {
     console.error(e)
   }
-}
-
-function insertFile(type: string = 'file') {
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.multiple = false
-  if (type === 'image') {
-    input.accept = 'image/*'
-  } else if (type === 'audio') {
-    input.accept = 'audio/*'
-  }
-  input.onchange = ({target}: Event) => {
-    const files: FileList | null = (target as HTMLInputElement).files
-    if (files) {
-      editor.value.blocks.insert(type, {file: files[0]})
-    }
-  }
-  input.click()
-}
-
-function insertAudio() {
-  insertFile('audio')
-}
-
-function insertImage() {
-  insertFile('image')
 }
 
 function insertVideo() {
