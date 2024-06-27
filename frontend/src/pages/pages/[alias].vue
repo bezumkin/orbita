@@ -3,13 +3,13 @@
     <div v-if="!record">
       <h1 class="topic-header">
         {{ page.title }}
-        <BButton v-if="$scope('pages/get')" variant="link" class="ms-2 p-0" @click="onEdit">
+        <BButton v-if="$scope('pages/patch')" variant="link" class="ms-2 p-0" @click="onEdit">
           <VespFa icon="edit" class="fa-fw" />
         </BButton>
       </h1>
       <EditorContent :content="page.content" />
     </div>
-    <BForm v-else-if="$scope('pages/get')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
+    <BForm v-else-if="$scope('pages/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
         <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
         <BButton variant="primary" type="submit" :disabled="loading">

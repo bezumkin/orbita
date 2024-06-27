@@ -4,7 +4,7 @@
       <div class="topic-header">
         <h1 class="mt-2">
           {{ myValue.title }}
-          <BButton v-if="$scope('topics/get')" variant="link" class="ms-2 p-0" @click="onEdit">
+          <BButton v-if="$scope('topics/patch')" variant="link" class="ms-2 p-0" @click="onEdit">
             <VespFa icon="edit" class="fa-fw" />
           </BButton>
         </h1>
