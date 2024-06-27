@@ -58,6 +58,7 @@ const config: NuxtConfig = {
     layoutTransition: {name: 'page', mode: 'out-in'},
     head: {
       title: process.env.SITE_NAME,
+      viewport: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0',
       meta: [
         {name: 'msapplication-TileColor', content: '#ffffff'},
         {name: 'msapplication-config', content: '/favicons/browserconfig.xml'},
