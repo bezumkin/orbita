@@ -225,13 +225,22 @@ function resetEditor() {
 }
 
 onMounted(() => {
+  document.onselectionchange = fixLinkInput
   nextTick(initEditor)
 })
 
 onUnmounted(() => {
+  document.onselectionchange = null
   if (editor.value.destroy) {
     editor.value.destroy()
   }
 })
 defineExpose({reset: resetEditor})
+
+function fixLinkInput() {
+  const elem = document.querySelector('.ce-inline-toolbar__actions .ce-inline-tool-input') as HTMLInputElement
+  if (elem && !elem.enterKeyHint) {
+    elem.enterKeyHint = 'done'
+  }
+}
 </script>
