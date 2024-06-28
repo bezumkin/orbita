@@ -20,5 +20,11 @@ $notifications = UserNotification::query()
 
 /** @var UserNotification $notification */
 foreach ($notifications->cursor() as $notification) {
-    $notification->sendEmail();
+    if ($notification->sendEmail()) {
+        $notification->active = false;
+        $notification->save();
+
+        $notification->user->notify = false;
+        $notification->user->save();
+    }
 }
