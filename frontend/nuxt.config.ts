@@ -140,4 +140,14 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
+if (process.env.YANDEX_METRIKA_ID && Number(process.env.YANDEX_METRIKA_ID) > 0) {
+  let options = {}
+  if (process.env.YANDEX_METRIKA_OPTIONS) {
+    try {
+      options = JSON.parse(process.env.YANDEX_METRIKA_OPTIONS)
+    } catch (e) {}
+  }
+  config.modules?.push(['yandex-metrika-module-nuxt3', {...options, id: process.env.YANDEX_METRIKA_ID}])
+}
+
 export default defineNuxtConfig(config)
