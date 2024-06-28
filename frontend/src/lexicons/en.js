@@ -124,8 +124,14 @@ export default {
         sub_payments: 'Subscribers and one time payment',
         payments: 'One time payment',
       },
-      tags: 'Topic tags',
-      tags_desc: 'Specify topic tags with Enter',
+      tags: {
+        title: 'Topic tags',
+        placeholder: 'Specify topic tags with comma',
+        available: 'Available tags',
+        add: 'Add',
+        duplicate: 'This tag has already been added',
+        invalid: 'Wrong tag',
+      },
     },
     comment: {
       title_one: 'Comment',

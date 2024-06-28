@@ -124,8 +124,14 @@ export default {
         sub_payments: 'Für Abonennten und Einmalzahlungen',
         payments: 'Einmalzahlung',
       },
-      tags: 'Topic Tags',
-      tags_desc: 'Geben Sie Themen-Tags mit Enter an',
+      tags: {
+        title: 'Topic Tags',
+        placeholder: 'Geben Sie Themen-Tags mit Komma an',
+        available: 'Verfügbare Tags',
+        add: 'Hinzufügen',
+        duplicate: 'Dieses Tag wurde bereits hinzugefügt',
+        invalid: 'Falscher Tag',
+      },
     },
     comment: {
       title_one: 'Kommentar',

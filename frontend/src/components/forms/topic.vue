@@ -41,7 +41,7 @@
       </BCol>
     </BRow>
 
-    <BFormGroup :label="$t('models.topic.tags')">
+    <BFormGroup :label="$t('models.topic.tags.title')">
       <TopicTags v-model="record.tags" />
     </BFormGroup>
 

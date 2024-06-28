@@ -124,8 +124,14 @@ export default {
         sub_payments: 'Подписчики и разовая оплата',
         payments: 'Только разовая оплата',
       },
-      tags: 'Теги заметки',
-      tags_desc: 'Укажите теги через Enter',
+      tags: {
+        title: 'Теги заметки',
+        placeholder: 'Укажите теги через запятую',
+        available: 'Доступные теги',
+        add: 'Добавить',
+        duplicate: 'Этот тег уже добавлен',
+        invalid: 'Неправильный тег',
+      },
     },
     comment: {
       title_one: 'Комментарий',

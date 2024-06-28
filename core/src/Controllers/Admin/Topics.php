@@ -126,6 +126,7 @@ class Topics extends ModelController
         }
         // ---
 
+        $record = $this->beforeGet($record->newQuery())->find($record->id);
         if ($this->isNew) {
             Socket::send('topic-create', $this->prepareRow($record));
         } else {
