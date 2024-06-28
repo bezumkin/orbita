@@ -331,6 +331,7 @@ export default {
   },
   errors: {
     scope: 'There are not enough permissions for this action, "{scope}" is required',
+    index: 'Go back to the main page',
     user: {
       no_username: 'Username is required',
       no_fullname: 'Fullname is required',

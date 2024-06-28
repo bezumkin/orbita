@@ -331,6 +331,7 @@ export default {
   },
   errors: {
     scope: 'Du hast nicht genug Rechte für diese Aktion. "{scope}" ist notwendig',
+    index: 'Gehen Sie zurück zur Hauptseite',
     user: {
       no_username: 'Benutzername erforderlich',
       no_fullname: 'Voller Name erforderlich',

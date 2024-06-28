@@ -3,6 +3,9 @@
     <div class="col-md-9 m-auto py-5">
       <h1>{{ error.statusCode }} {{ error.statusMessage }}</h1>
       <h2 v-if="error.message && error.message !== error.statusMessage" class="mt-4">{{ error.message }}</h2>
+      <div class="my-4">
+        <BLink :to="{name: 'index'}">&larr; {{ $t('errors.index') }}</BLink>
+      </div>
       <div v-if="isDev && error.stack" class="mt-4 alert alert-info" style="white-space: pre-line">
         {{ error.stack }}
       </div>
