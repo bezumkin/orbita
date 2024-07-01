@@ -12,7 +12,7 @@
     />
     <div v-if="availableTags.length" class="mt-1 mb-3">
       <div class="form-label bv-no-focus-ring col-form-label">
-        {{ $t('models.tags.available') }}
+        {{ $t('models.tag.available') }}
       </div>
       <div class="d-flex flex-wrap gap-2 mt-1">
         <BBadge
