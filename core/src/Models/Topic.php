@@ -211,6 +211,9 @@ class Topic extends Model
             }
             if (!$listView) {
                 $array['content'] = $this->content;
+                $array['content']['blocks'] = !empty($array['content']['blocks'])
+                    ? array_values($array['content']['blocks'])
+                    : [];
             }
         }
 
