@@ -110,6 +110,7 @@ const config: NuxtConfig = {
         'list',
         'face-smile',
         'circle-half-stroke',
+        'tags',
       ],
       regular: ['face-smile', 'sun', 'moon'],
     },

@@ -3,16 +3,16 @@
     <BFormTags
       v-model="record"
       :separator="[',', ';', '.']"
-      :placeholder="$t('models.topic.tags.placeholder')"
-      :add-button-text="$t('models.topic.tags.add')"
-      :duplicate-tag-text="$t('models.topic.tags.duplicate')"
-      :invalid-tag-text="$t('models.topic.tags.invalid')"
+      :placeholder="$t('models.tag.placeholder')"
+      :add-button-text="$t('models.tag.add')"
+      :duplicate-tag-text="$t('models.tag.duplicate')"
+      :invalid-tag-text="$t('models.tag.invalid')"
       remove-on-delete
       @keydown="onKeydown"
     />
     <div v-if="availableTags.length" class="mt-1 mb-3">
       <div class="form-label bv-no-focus-ring col-form-label">
-        {{ $t('models.topic.tags.available') }}
+        {{ $t('models.tags.available') }}
       </div>
       <div class="d-flex flex-wrap gap-2 mt-1">
         <BBadge

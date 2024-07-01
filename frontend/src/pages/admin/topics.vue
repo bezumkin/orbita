@@ -34,6 +34,7 @@ const fields = computed(() => [
 ])
 const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-topics-create'}, icon: 'plus', title: t('actions.create')},
+  {route: {name: 'admin-topics-tags'}, icon: 'tags', title: t('models.tag.title_many')},
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-topics-id-edit'}, icon: 'edit', title: t('actions.edit')},

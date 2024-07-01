@@ -124,14 +124,20 @@ export default {
         sub_payments: 'Für Abonennten und Einmalzahlungen',
         payments: 'Einmalzahlung',
       },
-      tags: {
-        title: 'Topic Tags',
-        placeholder: 'Geben Sie Themen-Tags mit Komma an',
-        available: 'Verfügbare Tags',
-        add: 'Hinzufügen',
-        duplicate: 'Dieses Tag wurde bereits hinzugefügt',
-        invalid: 'Falscher Tag',
-      },
+    },
+    topic_view: {
+      title_one: 'Sicht',
+      title_many: 'Ansichten',
+    },
+    tags: {
+      title_one: 'Topic Tag',
+      title_many: 'Topics Tags',
+      id: 'Id',
+      placeholder: 'Geben Sie Themen-Tags mit Komma an',
+      available: 'Verfügbare Tags',
+      add: 'Hinzufügen',
+      duplicate: 'Dieses Tag wurde bereits hinzugefügt',
+      invalid: 'Falscher Tag',
     },
     comment: {
       title_one: 'Kommentar',
@@ -397,6 +403,10 @@ export default {
     },
     reaction: {
       title_exists: 'Eine Reaktion mit diesem Namen existiert bereits',
+    },
+    tag: {
+      no_title: 'Sie haben vergessen, das Tag anzugeben',
+      title_exists: 'Dieses Tag existiert bereits',
     },
     not_ready: 'Diese Funktion ist noch nicht aufgeschaltet.',
   },

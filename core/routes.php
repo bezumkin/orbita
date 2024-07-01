@@ -44,7 +44,7 @@ $group = $app->group(
             $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
             $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
             $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
-            $group->any('/tags', App\Controllers\Admin\Tags::class);
+            $group->any('/tags[/{id}]', App\Controllers\Admin\Tags::class);
             $group->any('/reactions', App\Controllers\Admin\Reactions::class);
             $group->any('/redirects[/{id:\d+}]', App\Controllers\Admin\Redirects::class);
         });

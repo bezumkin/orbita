@@ -124,14 +124,20 @@ export default {
         sub_payments: 'Subscribers and one time payment',
         payments: 'One time payment',
       },
-      tags: {
-        title: 'Topic tags',
-        placeholder: 'Specify topic tags with comma',
-        available: 'Available tags',
-        add: 'Add',
-        duplicate: 'This tag has already been added',
-        invalid: 'Wrong tag',
-      },
+    },
+    topic_view: {
+      title_one: 'View',
+      title_many: 'Views',
+    },
+    tag: {
+      title_one: 'Topic tag',
+      title_many: 'Topics tags',
+      id: 'Id',
+      placeholder: 'Specify topic tags with comma',
+      available: 'Available tags',
+      add: 'Add',
+      duplicate: 'This tag has already been added',
+      invalid: 'Wrong tag',
     },
     comment: {
       title_one: 'Comment',
@@ -397,6 +403,10 @@ export default {
     },
     reaction: {
       title_exists: 'A reaction with this name already exists',
+    },
+    tag: {
+      no_title: 'You forgot to specify the tag',
+      title_exists: 'This tag already exists',
     },
     not_ready: 'This function is not ready yet',
   },

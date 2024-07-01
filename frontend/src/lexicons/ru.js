@@ -124,14 +124,20 @@ export default {
         sub_payments: 'Подписчики и разовая оплата',
         payments: 'Только разовая оплата',
       },
-      tags: {
-        title: 'Теги заметки',
-        placeholder: 'Укажите теги через запятую',
-        available: 'Доступные теги',
-        add: 'Добавить',
-        duplicate: 'Этот тег уже добавлен',
-        invalid: 'Неправильный тег',
-      },
+    },
+    topic_view: {
+      title_one: 'Просмотр',
+      title_many: 'Просмотры',
+    },
+    tag: {
+      title_one: 'Тег заметки',
+      title_many: 'Теги заметок',
+      id: 'Id',
+      placeholder: 'Укажите теги через запятую',
+      available: 'Доступные теги',
+      add: 'Добавить',
+      duplicate: 'Этот тег уже добавлен',
+      invalid: 'Неправильный тег',
     },
     comment: {
       title_one: 'Комментарий',
@@ -397,6 +403,10 @@ export default {
     },
     reaction: {
       title_exists: 'Реакция с таким названием уже существует',
+    },
+    tag: {
+      no_title: 'Вы забыли указать тег',
+      title_exists: 'Такой тег уже существует',
     },
     not_ready: 'Эта функция еще не готова',
   },
