@@ -2,3 +2,4 @@ User-agent: *
 Sitemap: /sitemap.xml
 Disallow: /admin
 Disallow: /user
+Disallow: /?tags=
