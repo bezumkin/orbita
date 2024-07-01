@@ -1,5 +1,5 @@
 <template>
-  <VespTable ref="table" v-bind="{url, headerActions, tableActions, fields, sort, dir, rowClass}">
+  <VespTable ref="table" v-bind="{url, headerActions, tableActions, fields, filters, sort, dir, rowClass}">
     <NuxtPage />
   </VespTable>
 </template>
@@ -28,6 +28,8 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-redirects-id'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
+
+const filters = ref({query: ''})
 
 function rowClass(item: any) {
   return item && !item.active ? 'inactive' : ''

@@ -15,7 +15,7 @@ class Payments extends ModelController
 
     protected function beforeCount(Builder $c): Builder
     {
-        if ($query = $this->getProperty('query')) {
+        if ($query = trim($this->getProperty('query', ''))) {
             $c->whereHas('user', static function (Builder $c) use ($query) {
                 $c->where('username', 'LIKE', "%$query%");
                 $c->orWhere('fullname', 'LIKE', "%$query%");

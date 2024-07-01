@@ -27,7 +27,7 @@ class Videos extends ModelController
 
     protected function beforeCount(Builder $c): Builder
     {
-        if ($query = $this->getProperty('query')) {
+        if ($query = trim($this->getProperty('query', ''))) {
             $c->where(
                 static function (Builder $c) use ($query) {
                     $c->where('title', 'LIKE', "%$query%");
