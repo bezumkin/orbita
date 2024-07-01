@@ -36,6 +36,7 @@ const config: NuxtConfig = {
   },
   runtimeConfig: {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
+    YANDEX_METRIKA_ID: process.env.YANDEX_METRIKA_ID,
     locales,
     public: {
       TZ: process.env.TZ || 'Europe/Moscow',
@@ -76,7 +77,7 @@ const config: NuxtConfig = {
       ],
     },
   },
-  modules: ['@vesp/frontend', '@nuxtjs/sitemap', 'nuxt-module-feed'],
+  modules: ['@vesp/frontend', '@nuxtjs/sitemap'],
   vesp: {
     icons: {
       solid: [
@@ -128,9 +129,6 @@ const config: NuxtConfig = {
     autoI18n: false,
     xslTips: false,
     sources: [SITE_URL + 'api/web/sitemap'],
-  },
-  feed: {
-    sources: [{path: '/rss.xml', type: 'rss2', cacheTime: 60 * 15}],
   },
 }
 
