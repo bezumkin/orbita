@@ -23,15 +23,16 @@ const filters = ref({query: ''})
 const sort = 'rank'
 const dir = 'asc'
 const fields = computed(() => [
-  {key: 'title', label: t('models.page.title')},
+  {key: 'title', label: t('models.page.title'), sortable: true},
   {key: 'content', label: t('models.page.content'), formatter: formatContent},
   {key: 'position', label: t('models.page.position'), formatter: formatPosition},
-  {key: 'rank', label: t('models.page.rank')},
+  {key: 'rank', label: t('models.page.rank'), sortable: true},
 ])
 const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-pages-create'}, icon: 'plus', title: t('actions.create')},
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
+  {route: {name: 'pages-alias'}, map: {alias: 'alias'}, icon: 'eye', title: t('actions.view')},
   {route: {name: 'admin-pages-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
