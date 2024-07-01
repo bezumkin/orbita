@@ -69,6 +69,7 @@ $group = $app->group(
                 $group->any('/reactions', App\Controllers\Web\Reactions::class);
                 $group->any('/locate/{uri:.+}', App\Controllers\Web\Redirects::class);
                 $group->any('/sitemap', App\Controllers\Web\Sitemap::class);
+                $group->any('/rss', App\Controllers\Web\Rss::class);
             }
         );
     }

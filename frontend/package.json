@@ -25,6 +25,7 @@
     "glightbox": "^3.2.0",
     "hls.js": "^1.4.12",
     "nuxt": "3.11.2",
+    "nuxt-module-feed": "^1.1.4",
     "pinia": "^2.1.7",
     "plyr": "^3.7.8",
     "pretty-bytes": "^6.1.1",

@@ -59,7 +59,7 @@ export function contentPreview(content: OutputData, length: number = 100) {
     }
   })
 
-  let text = blocks.join('\n\n').replace(/<\/?[^>]+(>|$)/g, '')
+  let text = stripTags(blocks.join('\n\n'))
   const entities = [
     ['amp', '&'],
     ['apos', "'"],
@@ -151,4 +151,8 @@ export function getAdminSections() {
   }
 
   return sections.filter((i) => !i.scope || hasScope(i.scope))
+}
+
+export function stripTags(str: string): string {
+  return str.replace(/(<([^>]+)>)/g, '')
 }

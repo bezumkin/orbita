@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import {stripTags} from '~/utils/vesp'
+
 const {$settings, $image, $isMobile} = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
@@ -85,7 +87,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
 
-const description = String($settings.value.description).replace(/<\/?[^>]+(>|$)/g, '')
+const description = stripTags(String($settings.value.description))
 useSeoMeta({
   title: $settings.value.title as string,
   ogTitle: $settings.value.title as string,

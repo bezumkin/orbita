@@ -36,6 +36,7 @@ const config: NuxtConfig = {
   },
   runtimeConfig: {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
+    locales,
     public: {
       TZ: process.env.TZ || 'Europe/Moscow',
       SITE_URL,
@@ -71,10 +72,11 @@ const config: NuxtConfig = {
         {rel: 'manifest', href: '/favicons/site.webmanifest', color: '#fff'},
         {rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg'},
         {rel: 'shortcut icon', href: '/favicons/favicon.ico'},
+        {rel: 'alternate', type: 'application/rss+xml', title: 'RSS', href: '/rss.xml'},
       ],
     },
   },
-  modules: ['@vesp/frontend', '@nuxtjs/sitemap'],
+  modules: ['@vesp/frontend', '@nuxtjs/sitemap', 'nuxt-module-feed'],
   vesp: {
     icons: {
       solid: [
@@ -126,6 +128,9 @@ const config: NuxtConfig = {
     autoI18n: false,
     xslTips: false,
     sources: [SITE_URL + 'api/web/sitemap'],
+  },
+  feed: {
+    sources: [{path: '/rss.xml', type: 'rss2', cacheTime: 60 * 15}],
   },
 }
 
