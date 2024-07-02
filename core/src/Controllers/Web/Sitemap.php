@@ -39,12 +39,12 @@ class Sitemap extends Controller
             $row = [
                 'loc' => $this->baseUrl . 'topics/' . $topic->uuid,
                 'lastmod' => $topic->published_at->toIso8601String(),
-                'images' => $this->addImages($topic->contentFiles),
+                'image:image' => $this->addImages($topic->contentFiles),
             ];
             if ($topic->cover) {
                 array_unshift(
-                    $row['images'],
-                    ['loc' => $this->apiUrl . 'image/' . $topic->cover->uuid . '?t=' . $topic->cover->updated_at->timestamp]
+                    $row['image:image'],
+                    ['image:loc' => $this->apiUrl . 'image/' . $topic->cover->uuid . '?t=' . $topic->cover->updated_at->timestamp]
                 );
             }
             $rows[] = $row;
@@ -60,7 +60,7 @@ class Sitemap extends Controller
             $row = [
                 'loc' => $this->baseUrl . 'pages/' . $page->alias,
                 'lastmod' => $page->updated_at->toIso8601String(),
-                'images' => $this->addImages($page->contentFiles),
+                'image:image' => $this->addImages($page->contentFiles),
             ];
             $rows[] = $row;
         }
@@ -75,9 +75,9 @@ class Sitemap extends Controller
         foreach ($contentFiles as $contentFile) {
             $time = $contentFile->file->updated_at->timestamp;
             if ($contentFile->type === 'image') {
-                $rows[] = ['loc' => $this->apiUrl . 'image/' . $contentFile->file->uuid . '?t=' . $time];
+                $rows[] = ['image:loc' => $this->apiUrl . 'image/' . $contentFile->file->uuid . '?t=' . $time];
             } elseif ($contentFile->type === 'video' && $contentFile->file->video) {
-                $rows[] = ['loc' => $this->apiUrl . 'poster/' . $contentFile->file->video->id . '?t=' . $time];
+                $rows[] = ['image:loc' => $this->apiUrl . 'poster/' . $contentFile->file->video->id . '?t=' . $time];
             }
         }
 
