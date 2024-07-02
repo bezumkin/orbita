@@ -73,6 +73,7 @@ const config: NuxtConfig = {
         {rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg'},
         {rel: 'shortcut icon', href: '/favicons/favicon.ico'},
         {rel: 'alternate', type: 'application/rss+xml', title: 'RSS', href: '/rss.xml'},
+        {rel: 'alternate', type: 'application/atom+xml', title: 'Atom', href: '/atom.xml'},
       ],
     },
   },

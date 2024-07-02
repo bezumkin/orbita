@@ -13,8 +13,9 @@ class Rss extends Sitemap
 
         $topics = Topic::query()
             ->where('active', true)
-            ->select('uuid', 'title', 'content', 'teaser', 'cover_id', 'published_at')
+            ->select('uuid', 'title', 'content', 'teaser', 'cover_id', 'user_id', 'published_at')
             ->with('cover:id,uuid,type,updated_at')
+            ->with('user:id,fullname')
             ->limit($this->getProperty('limit', 20))
             ->orderByDesc('published_at');
         foreach ($topics->get() as $topic) {
@@ -25,6 +26,9 @@ class Rss extends Sitemap
                 'description' => $topic->teaser,
                 'content' => '',
                 'date' => $topic->published_at->toIso8601String(),
+                'author' => [
+                    ['name' => $topic->user->fullname]
+                ],
             ];
             if ($topic->cover) {
                 $row['image'] = [
