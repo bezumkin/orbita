@@ -81,4 +81,25 @@ function changeColor() {
 }
 
 store.value = saved.value || 'auto'
+
+function changeThemeColor(newValue: string) {
+  const elem = document.querySelector('meta[name="theme-color"]')
+  if (elem) {
+    elem.setAttribute('content', newValue === 'dark' ? '#000' : '#fff')
+  }
+}
+
+watch(system, (newValue) => {
+  if (store.value === 'auto') {
+    changeThemeColor(newValue)
+  }
+})
+
+watch(store, (newValue) => {
+  if (newValue === 'auto') {
+    changeThemeColor(system.value)
+  } else {
+    changeThemeColor(newValue)
+  }
+})
 </script>

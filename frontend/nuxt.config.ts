@@ -62,15 +62,14 @@ const config: NuxtConfig = {
       title: process.env.SITE_NAME,
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0',
       meta: [
-        {name: 'msapplication-TileColor', content: '#ffffff'},
         {name: 'msapplication-config', content: '/favicons/browserconfig.xml'},
-        {name: 'theme-color', content: '#ffffff'},
+        {name: 'theme-color', content: '#000'},
       ],
       link: [
         {rel: 'apple-touch-icon', sizes: '180x180', href: '/favicons/apple-touch-icon.png'},
         {rel: 'icon', sizes: '32x32', href: '/favicons/favicon-32x32.png', type: 'image/png'},
         {rel: 'icon', sizes: '16x16', href: '/favicons/favicon-16x16.png', type: 'image/png'},
-        {rel: 'manifest', href: '/favicons/site.webmanifest', color: '#fff'},
+        {rel: 'manifest', href: '/favicons/site.webmanifest'},
         {rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg'},
         {rel: 'shortcut icon', href: '/favicons/favicon.ico'},
         {rel: 'alternate', type: 'application/rss+xml', title: 'RSS', href: '/rss.xml'},
