@@ -60,7 +60,8 @@ const background = computed(() => {
   const bg = $settings.value.background as VespFile
   return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
 })
-const showOnline = useRuntimeConfig().public.COMMENTS_SHOW_ONLINE === '1'
+const {SITE_URL, COMMENTS_SHOW_ONLINE} = useRuntimeConfig().public
+const showOnline = COMMENTS_SHOW_ONLINE === '1'
 
 const mainClasses = computed(() => {
   const arr = ['d-flex', 'flex-column', 'min-vh-100']
@@ -86,6 +87,10 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
+
+useHead(() => ({
+  link: [{rel: 'canonical', href: SITE_URL + route.path.slice(1)}],
+}))
 
 const description = stripTags(String($settings.value.description))
 useSeoMeta({
