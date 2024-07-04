@@ -49,4 +49,8 @@ const middleClasses = [
   'justify-content-center',
   'justify-content-md-between',
 ]
+
+if (!locales.value.filter((i) => i.code === locale.value).length) {
+  locale.value = locales.value[0].code
+}
 </script>
