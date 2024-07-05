@@ -29,7 +29,6 @@ import VideoBlock from './blocks/video'
 import EmbedBlock from './blocks/embed'
 import CodeBlock from './blocks/code'
 import Kbd from './blocks/kbd'
-import Paragraph from './blocks/paragraph'
 
 const props = defineProps({
   modelValue: {
@@ -122,7 +121,6 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
     : undefined
 })
 const allBlocks = [
-  {type: 'paragraph', class: Paragraph, toolbar: true},
   {
     type: 'header',
     icon: 'heading',
@@ -147,7 +145,6 @@ const allBlocks = [
 const enabledBlocks = computed(() => {
   if (props.blocks.length) {
     const types = props.blocks.split(',').map((i) => i.trim().toLowerCase())
-    types.push('paragraph')
     return allBlocks.filter((i) => types.includes(i.type))
   }
   return allBlocks
