@@ -9,11 +9,15 @@
 <script setup lang="ts">
 const record = ref({
   id: 0,
+  name: '',
   title: '',
   content: {},
   alias: '',
   position: 'both',
   active: true,
   rank: 0,
+  external: false,
+  link: '',
+  blank: true,
 })
 </script>

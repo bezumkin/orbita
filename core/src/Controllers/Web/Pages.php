@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Vesp\Controllers\ModelGetController;
 
 class Pages extends ModelGetController
@@ -21,13 +22,26 @@ class Pages extends ModelGetController
         return $c->where('active', true);
     }
 
-    protected function afterCount(Builder $c): Builder
-    {
-        return $c->select('id', 'title', 'alias', 'position', 'rank');
-    }
-
     protected function addSorting(Builder $c): Builder
     {
         return $c->orderBy('rank');
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        $columns = ['id', 'rank', 'position', 'name', 'external'];
+        /** @var Page $object */
+        if ($object->external) {
+            $columns[] = 'link';
+            $columns[] = 'blank';
+        } else {
+            $columns[] = 'alias';
+            $columns[] = 'title';
+            if ($this->getPrimaryKey()) {
+                $columns[] = 'content';
+            }
+        }
+
+        return $object->only($columns);
     }
 }

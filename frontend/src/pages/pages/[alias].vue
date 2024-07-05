@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const route = useRoute()
 const {$settings, $socket} = useNuxtApp()
 const {data, error} = await useCustomFetch('web/pages/' + route.params.alias)
@@ -47,8 +48,12 @@ async function onEdit() {
 async function onSubmit() {
   try {
     loading.value = true
-    await usePatch('admin/pages/' + page.value.id, {...record.value})
-    onCancel()
+    const data = await usePatch('admin/pages/' + page.value.id, {...record.value})
+    if (data.external) {
+      await router.push({name: 'index', replace: true})
+    } else {
+      onCancel()
+    }
   } catch (e) {
   } finally {
     loading.value = false

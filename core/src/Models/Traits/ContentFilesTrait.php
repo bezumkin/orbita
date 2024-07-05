@@ -16,23 +16,25 @@ trait ContentFilesTrait
 {
     public function processUploadedFiles(): void
     {
-        $content = $this->content;
-        $blocks = $content['blocks'];
-        $fileTypes = ['image', 'file', 'audio', 'video'];
         $files = [];
-        foreach ($blocks as $idx => $block) {
-            $type = $block['type'];
-            if (in_array($type, $fileTypes, true)) {
-                if (empty($block['data']['id'])) {
-                    unset($blocks[$idx]);
-                } else {
-                    $files[$block['data']['id']] = $type;
+        $content = $this->content;
+        if ($content && !empty($content['blocks'])) {
+            $blocks = $content['blocks'];
+            $fileTypes = ['image', 'file', 'audio', 'video'];
+            foreach ($blocks as $idx => $block) {
+                $type = $block['type'];
+                if (in_array($type, $fileTypes, true)) {
+                    if (empty($block['data']['id'])) {
+                        unset($blocks[$idx]);
+                    } else {
+                        $files[$block['data']['id']] = $type;
+                    }
                 }
             }
+            $content['blocks'] = $blocks;
+            $this->content = $content;
+            $this->save();
         }
-        $content['blocks'] = $blocks;
-        $this->content = $content;
-        $this->save();
 
         // Save files
         foreach ($files as $id => $type) {

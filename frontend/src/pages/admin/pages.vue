@@ -1,11 +1,22 @@
 <template>
   <div>
     <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
-      <template #cell(title)="{item, value}">
-        <div>{{ value }}</div>
-        <div class="small text-nowrap">
-          <BLink :to="{name: 'pages-alias', params: {alias: String(item.alias)}}">{{ item.alias }}</BLink>
-        </div>
+      <template #cell(name)="{item, value}">
+        <template v-if="item.external">
+          <a :href="item.link" :target="item.blank ? '_blank' : '_self'">
+            {{ value }}&nbsp;<sup><VespFa icon="external-link" size="sm" /></sup>
+          </a>
+        </template>
+        <BLink v-else :to="{name: 'pages-alias', params: {alias: item.alias}}">{{ value }}</BLink>
+      </template>
+      <template #cell(content)="{item, value}">
+        <template v-if="item.external">
+          {{ item.link }}
+        </template>
+        <template v-else>
+          <div>{{ item.title }}</div>
+          <div class="small">{{ $contentPreview(value, 150) }}</div>
+        </template>
       </template>
     </VespTable>
     <NuxtPage />
@@ -23,8 +34,8 @@ const filters = ref({query: ''})
 const sort = 'rank'
 const dir = 'asc'
 const fields = computed(() => [
-  {key: 'title', label: t('models.page.title'), sortable: true},
-  {key: 'content', label: t('models.page.content'), formatter: formatContent},
+  {key: 'name', label: t('models.page.name'), sortable: true},
+  {key: 'content', label: t('models.page.content')},
   {key: 'position', label: t('models.page.position'), formatter: formatPosition},
   {key: 'rank', label: t('models.page.rank'), sortable: true},
 ])
@@ -32,17 +43,9 @@ const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-pages-create'}, icon: 'plus', title: t('actions.create')},
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
-  {route: {name: 'pages-alias'}, map: {alias: 'alias'}, icon: 'eye', title: t('actions.view')},
   {route: {name: 'admin-pages-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
-
-function formatContent(value: any) {
-  if (!value || !value.blocks) {
-    return ''
-  }
-  return $contentPreview(value, 200)
-}
 
 function formatPosition(value: any) {
   return t('models.page.position_' + String(value))

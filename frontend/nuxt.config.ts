@@ -114,6 +114,7 @@ const config: NuxtConfig = {
         'face-smile',
         'circle-half-stroke',
         'tags',
+        'external-link',
       ],
       regular: ['face-smile', 'sun', 'moon'],
     },

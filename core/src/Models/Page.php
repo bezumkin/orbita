@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
- * @property string $title
- * @property array $content
- * @property string $alias
+ * @property string $name
+ * @property ?string $title
+ * @property bool $external
+ * @property ?array $content
+ * @property ?string $alias
  * @property ?string $position
+ * @property ?string $link
+ * @property ?string $target
+ * @property bool $blank
  * @property int $rank
  * @property bool $active
  * @property Carbon $created_at
@@ -27,6 +32,8 @@ class Page extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $casts = [
         'content' => 'array',
+        'external' => 'bool',
+        'blank' => 'bool',
         'active' => 'bool',
     ];
 

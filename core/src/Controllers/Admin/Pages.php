@@ -33,7 +33,19 @@ class Pages extends ModelController
 
         /** @var Page $record */
         $content = $record->content;
-        $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
+        if ($record->external) {
+            $record->alias = null;
+            if (!$record->title) {
+                $record->title = null;
+            }
+            if (!$content || empty($content['blocks'])) {
+                $content = null;
+            }
+        } elseif (!$content) {
+            $content = ['blocks' => []];
+        } else {
+            $content['blocks'] = array_values($content['blocks']);
+        }
         $record->content = $content;
 
         if ($this->isNew = !$record->exists) {
@@ -44,12 +56,12 @@ class Pages extends ModelController
             $c->where('id', '!=', $record->id);
         }
 
-        if ((clone $c)->where('alias', $record->alias)->count()) {
+        if ($record->alias && (clone $c)->where('alias', $record->alias)->count()) {
             return $this->failure('errors.page.alias_exists');
         }
 
-        if ((clone $c)->where('title', $record->title)->count()) {
-            return $this->failure('errors.page.title_exists');
+        if ((clone $c)->where('name', $record->title)->count()) {
+            return $this->failure('errors.page.name_exists');
         }
 
         return null;
@@ -71,5 +83,15 @@ class Pages extends ModelController
         }
 
         return $record;
+    }
+
+    protected function beforeDelete(Model $record): ?ResponseInterface
+    {
+        $array = $this->prepareRow($record);
+        $array['active'] = false;
+
+        Socket::send('page-update', $array);
+
+        return null;
     }
 }
