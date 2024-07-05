@@ -8,7 +8,7 @@
         </BButton>
       </template>
     </div>
-    <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
+    <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}" @click="onClick"></div>
 
     <EditorPickVideo v-if="showVideos" @hidden="showVideos = false" />
   </div>
@@ -225,22 +225,19 @@ function resetEditor() {
 }
 
 onMounted(() => {
-  document.onselectionchange = fixLinkInput
   nextTick(initEditor)
 })
 
 onUnmounted(() => {
-  document.onselectionchange = null
   if (editor.value.destroy) {
     editor.value.destroy()
   }
 })
 defineExpose({reset: resetEditor})
 
-function fixLinkInput() {
-  const elem = document.querySelector('.ce-inline-toolbar__actions .ce-inline-tool-input') as HTMLInputElement
-  if (elem && !elem.enterKeyHint) {
-    elem.enterKeyHint = 'done'
-  }
+function onClick(e: Event) {
+  // Prevent the form from being sent
+  // when clicking on the button on the toolbar
+  e.preventDefault()
 }
 </script>

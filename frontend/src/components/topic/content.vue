@@ -13,7 +13,6 @@
       <TopicFooter :topic="myValue" />
     </div>
     <BForm v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
-      <FormsTopic v-model="record" />
       <div class="topic-buttons">
         <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
         <BButton variant="primary" type="submit" :disabled="loading">
@@ -21,6 +20,7 @@
           {{ $t('actions.save') }}
         </BButton>
       </div>
+      <FormsTopic v-model="record" />
     </BForm>
   </BOverlay>
 </template>
