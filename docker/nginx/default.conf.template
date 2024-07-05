@@ -13,6 +13,7 @@ server {
     charset utf-8;
     root /vesp/www/;
     client_max_body_size 0;
+    proxy_max_temp_file_size 0;
     fastcgi_buffering off;
     fastcgi_request_buffering off;
 
