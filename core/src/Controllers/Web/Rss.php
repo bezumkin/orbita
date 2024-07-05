@@ -27,7 +27,7 @@ class Rss extends Sitemap
                 'content' => '',
                 'date' => $topic->published_at->toIso8601String(),
                 'author' => [
-                    ['name' => $topic->user->fullname]
+                    ['name' => $topic->user->fullname],
                 ],
             ];
             if ($topic->cover) {
@@ -64,6 +64,12 @@ class Rss extends Sitemap
 
     protected function getImageUrl(array $file): string
     {
-        return $this->apiUrl . 'image/' . $file['uuid'] . '?t=' . strtotime($file['updated_at']);
+        $params = [
+            't' => strtotime($file['updated_at']),
+            'fit' => 'max',
+            'w' => getenv('RSS_MAX_IMAGE_WIDTH') ?: '800',
+        ];
+
+        return $this->apiUrl . 'image/' . $file['uuid'] . '?' . http_build_query($params);
     }
 }
