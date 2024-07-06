@@ -16,7 +16,8 @@ $notifications = UserNotification::query()
     ->with('user')
     ->with('topic', 'topic.user')
     ->with('comment', 'comment.user')
-    ->limit($limit);
+    ->limit($limit)
+    ->orderBy('created_at');
 
 /** @var UserNotification $notification */
 foreach ($notifications->cursor() as $notification) {
