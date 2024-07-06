@@ -49,4 +49,11 @@ function onKeydown(e: KeyboardEvent) {
     onSubmit()
   }
 }
+
+const {user} = useAuth()
+if (!user.value) {
+  showError({statusCode: 401, statusMessage: 'Unauthorized'})
+} else if (!hasScope('topics/put')) {
+  showError({statusCode: 403, statusMessage: 'Access Denied'})
+}
 </script>
