@@ -30,6 +30,7 @@ use Ramsey\Uuid\Uuid;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property ?Carbon $published_at
+ * @property ?Carbon $publish_at
  *
  * @property-read User $user
  * @property-read File $cover
@@ -54,6 +55,7 @@ class Topic extends Model
         'active' => 'bool',
         'closed' => 'bool',
         'published_at' => 'datetime',
+        'publish_at' => 'datetime',
     ];
 
     protected static function booted(): void

@@ -124,6 +124,7 @@ export default {
         sub_payments: 'Подписчики и разовая оплата',
         payments: 'Только разовая оплата',
       },
+      delayed: 'Отложенная публикация',
     },
     topic_view: {
       title_one: 'Просмотр',

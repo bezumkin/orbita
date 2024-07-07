@@ -83,6 +83,9 @@ class Topics extends ModelController
         if (!$record->level_id) {
             $record->level_id = null;
         }
+        if ($record->active) {
+            $record->publish_at = null;
+        }
         $this->isNew = !$record->exists;
 
         return null;
@@ -135,8 +138,19 @@ class Topics extends ModelController
 
         if ($this->notifyUsers) {
             $record->notifyUsers();
+            Socket::send('topics-refresh');
         }
 
         return $record;
+    }
+
+    public function delete(): ResponseInterface
+    {
+        $response = parent::delete();
+        if ($response->getStatusCode() === 200) {
+            Socket::send('topics-refresh');
+        }
+
+        return $response;
     }
 }

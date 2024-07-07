@@ -61,6 +61,25 @@
         </BFormGroup>
       </BCol>
     </BRow>
+
+    <BRow v-if="!record.published_at" class="align-items-center">
+      <BCol md="6">
+        <BFormGroup class="py-md-2">
+          <BFormCheckbox v-model="delayed" :disabled="record.active">
+            {{ $t('models.topic.delayed') }}
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+      <BCol md="6">
+        <Transition name="fade">
+          <BFormGroup v-if="delayed">
+            <VespInputDatePicker v-model="record.publish_at" type="datetime" required>
+              {{ $t('models.topic.publish_at') }}
+            </VespInputDatePicker>
+          </BFormGroup>
+        </Transition>
+      </BCol>
+    </BRow>
   </div>
 </template>
 
@@ -99,6 +118,7 @@ const accessOptions = computed(() => {
     {value: 'payments', text: t('models.topic.access.payments')},
   ]
 })
+const delayed = ref(props.modelValue.publish_at !== null)
 const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS)
 
 const accessLevel = ref('free')
@@ -145,4 +165,13 @@ onUnmounted(() => {
   $socket.off('level-create', loadLevels)
   $socket.off('level-update', loadLevels)
 })
+
+watch(
+  () => record.value.active,
+  (newValue) => {
+    if (newValue) {
+      delayed.value = false
+    }
+  },
+)
 </script>

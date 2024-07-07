@@ -124,6 +124,7 @@ export default {
         sub_payments: 'Subscribers and one time payment',
         payments: 'One time payment',
       },
+      delayed: 'Delayed publishing',
     },
     topic_view: {
       title_one: 'View',

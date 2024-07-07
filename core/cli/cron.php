@@ -20,6 +20,11 @@ $scheduler->php(__DIR__ . '/send-notifications.php', null, [], 'send_notificatio
     ->inForeground()
     ->onlyOne();
 
+$scheduler->php(__DIR__ . '/publish-topics.php', null, [], 'publish_topics')
+    ->everyMinute(5)
+    ->inForeground()
+    ->onlyOne();
+
 $scheduler->php(__DIR__ . '/subscriptions.php', null, [], 'subscriptions')
     ->hourly()
     ->inForeground()

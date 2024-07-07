@@ -124,6 +124,7 @@ export default {
         sub_payments: 'Für Abonennten und Einmalzahlungen',
         payments: 'Einmalzahlung',
       },
+      delayed: 'Verzögerte Veröffentlichung',
     },
     topic_view: {
       title_one: 'Sicht',

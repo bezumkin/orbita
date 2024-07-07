@@ -14,6 +14,9 @@ const record = ref({
   content: {},
   active: false,
   closed: false,
+  delayed: false,
+  publish_at: null,
+  published_at: null,
   tags: [],
 })
 </script>

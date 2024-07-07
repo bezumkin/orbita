@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 const {t} = useI18n()
-const {$settings} = useNuxtApp()
+const {$settings, $socket} = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
 const page = ref(Number(route.query.page) || 1)
@@ -68,6 +68,11 @@ onMounted(() => {
       navigateTo({name: 'index', query: {...route.query, tags: undefined}})
     }
   }
+  $socket.on('topics-refresh', refresh)
+})
+
+onUnmounted(() => {
+  $socket.off('topics-refresh')
 })
 
 useHead({
