@@ -57,6 +57,12 @@
         white-space: pre-wrap;
         max-height: 300px;
         overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .action {
