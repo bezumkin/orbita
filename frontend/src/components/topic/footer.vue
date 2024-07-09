@@ -6,10 +6,10 @@
       </BBadge>
     </div>
     <div class="topic-footer">
-      <div class="d-flex flex-wrap gap-3">
+      <div class="d-flex flex-wrap gap-3 order-0 me-auto">
         <UserReactions :item="topic">
           <template #default="{selected, total}">
-            <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}
+            <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ total }}
           </template>
         </UserReactions>
         <div><VespFa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
@@ -25,9 +25,17 @@
           <template v-else> <VespFa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
         </div>
       </div>
-
-      <div v-if="topic.published_at" class="ms-auto">
-        <VespFa icon="calendar" class="fa-fw" /> {{ d(topic.published_at, 'long') }}
+      <div class="col-12 col-md-auto order-3 order-md-1">
+        <template v-if="topic.user">
+          <VespFa icon="user" class="fa-fw" />
+          {{ topic.user.fullname }}
+        </template>
+      </div>
+      <div class="ms-md-auto order-2 order-md-3">
+        <template v-if="topic.published_at">
+          <VespFa icon="calendar" class="fa-fw" />
+          {{ d(topic.published_at, 'long') }}
+        </template>
       </div>
     </div>
   </div>

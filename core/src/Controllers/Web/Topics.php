@@ -26,6 +26,9 @@ class Topics extends ModelGetController
                 $c->where('user_id', $this->user->id);
             });
         }
+        if (getenv('TOPICS_SHOW_AUTHOR')) {
+            $c->with('user:id,fullname');
+        }
 
         return $c;
     }
@@ -57,6 +60,9 @@ class Topics extends ModelGetController
             $c->with('userReactions', function (HasMany $c) {
                 $c->where('user_id', $this->user->id);
             });
+        }
+        if (getenv('TOPICS_SHOW_AUTHOR')) {
+            $c->with('user:id,fullname');
         }
 
         return $c;

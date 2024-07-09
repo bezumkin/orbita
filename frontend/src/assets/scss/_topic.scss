@@ -80,6 +80,8 @@
 
   .topic-footer {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     padding-top: 1rem;
     margin-top: 1rem;
     border-top: 1px solid var(--bs-border-color);

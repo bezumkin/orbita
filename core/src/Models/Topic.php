@@ -223,6 +223,10 @@ class Topic extends Model
             $array['reaction'] = $this->userReactions[0]->reaction_id;
         }
 
+        if (getenv('TOPICS_SHOW_AUTHOR')) {
+            $array['user'] = $this->user->only('id', 'fullname');
+        }
+
         return $array;
     }
 
