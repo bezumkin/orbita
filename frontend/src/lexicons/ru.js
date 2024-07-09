@@ -26,6 +26,7 @@ export default {
     reply: 'Ответить',
     restore: 'Восстановить',
     destroy: 'Уничтожить',
+    scrollTop: 'Наверх',
   },
   security: {
     login: 'Вход',

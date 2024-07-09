@@ -26,6 +26,7 @@ export default {
     reply: 'Antworten',
     restore: 'Wiederherstellen',
     destroy: 'Löschen',
+    scrollTop: 'Geh hinauf',
   },
   security: {
     login: 'Login',

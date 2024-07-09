@@ -4,7 +4,7 @@
       <VespFa icon="plus" fixed-width /> {{ $t('actions.create') }}
     </BButton>
 
-    <BOverlay :show="pending" opacity="0.5" class="topics">
+    <BOverlay :show="loading" opacity="0.5" class="topics">
       <template v-if="topics.length">
         <TopicIntro v-for="topic in topics" :key="topic.id" :topic="topic" />
       </template>
@@ -13,30 +13,26 @@
       </div>
     </BOverlay>
 
-    <BPagination
-      v-if="total > limit"
-      v-model="page"
-      :total-rows="total"
-      :per-page="limit"
-      :limit="5"
-      :hide-goto-end-buttons="true"
-      align="center"
-      class="mt-4"
-    />
+    <div v-show="canFetch" ref="spinner" class="mt-5 text-center">
+      <BSpinner />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const store = useTopicsStore()
+const {page, topics, total, loading} = storeToRefs(store)
+const {fetch, refresh} = store
 const {t} = useI18n()
 const {$settings, $socket} = useNuxtApp()
+const {loggedIn} = useAuth()
 const route = useRoute()
-const router = useRouter()
-const page = ref(Number(route.query.page) || 1)
 const limit = 12
 const tags = computed(() => route.query.tags || [])
-const {data, refresh, pending} = await useCustomFetch('web/topics', {query: {page, limit, tags}, watch: false})
-const topics = computed(() => data.value?.rows || [])
-const total = computed(() => data.value?.total || 0)
+const canFetch = computed(() => {
+  return total.value >= page.value * limit
+})
+const spinner = ref()
 
 function onScroll() {
   window.scrollTo({
@@ -45,30 +41,24 @@ function onScroll() {
   })
 }
 
-watch(page, (newValue) => {
-  router.push({name: 'index', query: {...route.query, page: newValue > 1 ? String(newValue) : undefined}})
-  refresh()
-  onScroll()
-})
-
-watch(tags, (newValue, oldValue) => {
-  if (newValue.length !== oldValue.length) {
-    page.value = 1
-    refresh()
-    onScroll()
-  }
-})
+function initObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    const {isIntersecting} = entries[0]
+    if (isIntersecting && canFetch.value && !loading.value) {
+      page.value++
+      fetch()
+    }
+  })
+  observer.observe(spinner.value)
+}
 
 onMounted(() => {
-  setTimeout(onScroll, 100)
-  if (!topics.value.length) {
-    if (page.value > 1) {
-      navigateTo({name: 'index', query: {...route.query, page: undefined}})
-    } else if (tags.value.length) {
-      navigateTo({name: 'index', query: {...route.query, tags: undefined}})
+  initObserver()
+  $socket.on('topics-refresh', () => {
+    if (page.value === 1) {
+      fetch()
     }
-  }
-  $socket.on('topics-refresh', refresh)
+  })
 })
 
 onUnmounted(() => {
@@ -78,4 +68,23 @@ onUnmounted(() => {
 useHead({
   title: () => [t('pages.index'), $settings.value.title].join(' / '),
 })
+
+watch([tags, loggedIn], async () => {
+  await refresh(tags.value as string)
+  await nextTick(() => {
+    setTimeout(onScroll, 100)
+  })
+})
+
+if (route.query.page) {
+  await navigateTo({name: 'index'}, {redirectCode: 301})
+}
+
+if (!total.value) {
+  await fetch()
+}
+
+if (!topics.value.length && tags.value.length) {
+  navigateTo({name: 'index'})
+}
 </script>

@@ -155,6 +155,8 @@ fieldset {
 
     .offset {
       position: relative;
+      display: flex;
+      flex-direction: column;
       margin-top: 0;
       transition: margin-top $transition-speed;
     }
@@ -164,6 +166,10 @@ fieldset {
       border: 1px solid var(--bs-border-color);
       border-radius: var(--bs-border-radius);
       padding: 1rem;
+
+      & > .widget {
+        margin-top: 0;
+      }
     }
   }
 
@@ -192,6 +198,8 @@ footer {
 }
 
 .widget {
+  margin-top: 1.5rem;
+
   .widget-title {
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
@@ -202,6 +210,19 @@ footer {
     display: flex;
     flex-flow: column nowrap;
     row-gap: $widget-items-gap;
+  }
+
+  &.scroll-top {
+    display: flex;
+    flex-grow: 1;
+
+    .btn {
+      position: sticky;
+      margin-top: auto;
+      bottom: 1rem;
+      opacity: 0;
+      transition: opacity $transition-speed;
+    }
   }
 }
 

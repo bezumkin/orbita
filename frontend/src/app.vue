@@ -21,10 +21,10 @@
               <div class="column">
                 <WidgetsAuthor />
               </div>
-
-              <WidgetsOnline v-if="showOnline" class="column mt-4" />
-              <WidgetsLevels class="column mt-4" />
-              <WidgetsTags class="column mt-4" />
+              <WidgetsOnline v-if="showOnline" class="column" />
+              <WidgetsLevels class="column" />
+              <WidgetsTags class="column" />
+              <WidgetsScrollTop />
             </BCol>
           </BRow>
         </div>
@@ -35,7 +35,7 @@
         </div>
       </BContainer>
 
-      <AppSidebar v-if="$isMobile" :show-online="isColumns && showOnline" />
+      <AppSidebar v-if="$isMobile" :show-online="Boolean(isColumns && showOnline)" />
       <AppFooter class="border-top" />
       <AppPayment />
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BLink :to="{name: 'index'}" class="d-block mb-2">&larr; {{ $t('actions.back') }}</BLink>
+    <BButton variant="link" class="d-block mb-2" @click="router.back()">&larr; {{ $t('actions.back') }}</BButton>
     <template v-if="topic?.access">
       <TopicContent :topic="topic" class="column" />
       <CommentsTree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const route = useRoute()
 const {$settings, $image} = useNuxtApp()
 const {t} = useI18n()
