@@ -30,6 +30,11 @@ $scheduler->php(__DIR__ . '/subscriptions.php', null, [], 'subscriptions')
     ->inForeground()
     ->onlyOne();
 
+$scheduler->php(__DIR__ . '/search-index.php', null, [], 'search_index')
+    ->daily()
+    ->inForeground()
+    ->onlyOne();
+
 $executed = $scheduler->run();
 /** @var Job $job */
 foreach ($executed as $job) {

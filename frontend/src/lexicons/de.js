@@ -27,6 +27,7 @@ export default {
     restore: 'Wiederherstellen',
     destroy: 'Löschen',
     scrollTop: 'Geh hinauf',
+    search: 'Suchen',
   },
   security: {
     login: 'Login',
@@ -331,11 +332,21 @@ export default {
       payments: 'Zahlungen',
       subscription: 'Abos',
     },
+    search: {
+      title: 'Suche',
+      placeholder: 'Suche...',
+      no_results: 'Leider wurde nichts gefunden.',
+      results: 'Es wurde nichts gefunden | {total} Datensatz gefunden | {total} Datensätze gefunden',
+      sort: 'Sortieren:',
+      sort_default: 'Nach Relevanz',
+      sort_date: 'Nach Datum',
+    },
   },
   widgets: {
     comments: 'Online',
     levels: 'Abos',
     tags: 'Tags',
+    search: 'Suche',
   },
   success: {
     profile: 'Profil erfolgreich gespeichert.',

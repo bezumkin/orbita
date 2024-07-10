@@ -8,6 +8,7 @@ User-agent: *
 
 Disallow: /admin
 Disallow: /user
+Disallow: /search
 Disallow: /?tags=
 
 Sitemap: ${SITE_URL}sitemap.xml

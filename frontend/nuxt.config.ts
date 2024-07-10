@@ -33,6 +33,7 @@ const config: NuxtConfig = {
   routeRules: {
     '/admin/**': {ssr: false},
     '/user/**': {ssr: false},
+    '/search': {ssr: false},
   },
   runtimeConfig: {
     SOCKET_SECRET: process.env.SOCKET_SECRET,
@@ -115,6 +116,7 @@ const config: NuxtConfig = {
         'circle-half-stroke',
         'tags',
         'external-link',
+        'magnifying-glass',
       ],
       regular: ['face-smile', 'sun', 'moon'],
     },

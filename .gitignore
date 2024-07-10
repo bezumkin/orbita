@@ -2,6 +2,7 @@
 /.local
 /core/vendor
 /docker/mariadb
+/docker/manticore
 /frontend/.nuxt
 /frontend/.eslintcache
 /frontend/.stylelintcache

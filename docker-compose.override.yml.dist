@@ -32,6 +32,11 @@ services:
     ports:
       - ${REDIS_PORT:-6379}:6379
 
+  manticore:
+    restart: no
+    ports:
+      - ${MANTICORE_PORT:-9308}:9308
+
   mailhog:
     image: teawithfruit/mailhog
     ports:

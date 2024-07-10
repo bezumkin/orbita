@@ -27,6 +27,7 @@ export default {
     restore: 'Восстановить',
     destroy: 'Уничтожить',
     scrollTop: 'Наверх',
+    search: 'Искать',
   },
   security: {
     login: 'Вход',
@@ -331,11 +332,21 @@ export default {
       payments: 'Платежи',
       subscription: 'Подписка',
     },
+    search: {
+      title: 'Поиск',
+      placeholder: 'Поиск...',
+      no_results: 'Ничего не найдено, увы.',
+      results: 'Ничего не найдено | Найдена {total} запись | Найдено {total} записи | Найдено {total} записей',
+      sort: 'Сортировка:',
+      sort_default: 'по релевантности',
+      sort_date: 'по дате',
+    },
   },
   widgets: {
     comments: 'Прямой эфир',
     levels: 'Уровни подписки',
     tags: 'Теги',
+    search: 'Поиск',
   },
   success: {
     profile: 'Профиль успешно сохранён',

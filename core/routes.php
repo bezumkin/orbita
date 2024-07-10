@@ -70,6 +70,7 @@ $group = $app->group(
                 $group->any('/locate/{uri:.+}', App\Controllers\Web\Redirects::class);
                 $group->any('/sitemap', App\Controllers\Web\Sitemap::class);
                 $group->any('/rss', App\Controllers\Web\Rss::class);
+                $group->any('/search', App\Controllers\Web\Search::class);
             }
         );
     }

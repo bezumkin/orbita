@@ -16,7 +16,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $uuid
  * @property string $title
  * @property array $content
- * @property ?array $teaser
+ * @property ?string $teaser
  * @property int $user_id
  * @property ?int $cover_id
  * @property ?int $level_id
@@ -161,7 +161,7 @@ class Topic extends Model
         return $view;
     }
 
-    public function hasAccess(?User $user): bool
+    public function hasAccess(?User $user = null): bool
     {
         $allow = false;
         // Free topic
@@ -296,5 +296,34 @@ class Topic extends Model
                 'type' => 'topic-new',
             ]);
         }
+    }
+
+    public function getSearchData(): array
+    {
+        $content = [];
+        if ($this->content && $this->content['blocks'] && $this->hasAccess()) {
+            foreach ($this->content['blocks'] as $block) {
+                if ($block['type'] === 'header') {
+                    $tag = 'h' . $block['data']['level'];
+                    $content[] = '<' . $tag . '>' . $block['data']['text'] . '</' . $tag . '>';
+                } elseif ($block['type'] === 'paragraph') {
+                    $content[] = '<p>' . $block['data']['text'] . '</p>';
+                }
+            }
+        }
+
+        $tags = [];
+        foreach ($this->tags as $tag) {
+            $tags[] = $tag->title;
+        }
+
+        return [
+            'uuid' => $this->uuid,
+            'title' => $this->title,
+            'teaser' => $this->teaser ?? '',
+            'content' => implode(PHP_EOL, $content),
+            'tags' => implode(PHP_EOL, $tags),
+            'published_at' => $this->published_at->timestamp,
+        ];
     }
 }

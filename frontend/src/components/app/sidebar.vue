@@ -3,6 +3,7 @@
     <div class="d-grid gap-4 align-items-center">
       <AppPages v-if="showPages" position="header" vertical pills class="w-100" />
       <WidgetsAuthor v-if="showAuthor" />
+      <WidgetsSearch v-if="showSearch && route.name !== 'search'" />
       <WidgetsOnline v-if="showOnline" />
       <WidgetsLevels v-if="showLevels" />
       <WidgetsTags v-if="showTags" />
@@ -20,6 +21,10 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  showSearch: {
+    type: Boolean,
+    default: true,
+  },
   showOnline: {
     type: Boolean,
     default: true,
@@ -34,6 +39,7 @@ defineProps({
   },
 })
 const {$sidebar} = useNuxtApp()
+const route = useRoute()
 
 function onClick(e: MouseEvent) {
   const elem = e.target as HTMLElement

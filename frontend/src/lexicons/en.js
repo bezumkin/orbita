@@ -27,6 +27,7 @@ export default {
     restore: 'Restore',
     destroy: 'Destroy',
     scrollTop: 'Go Up',
+    search: 'Search',
   },
   security: {
     login: 'Login',
@@ -331,11 +332,21 @@ export default {
       payments: 'Payments',
       subscription: 'Subscription',
     },
+    search: {
+      title: 'Search',
+      placeholder: 'Search...',
+      no_results: 'Nothing was found, unfortunately.',
+      results: 'Nothing was found | Found {total} record | Found {total} records',
+      sort: 'Sort:',
+      sort_default: 'by relevancy',
+      sort_date: 'by date',
+    },
   },
   widgets: {
     comments: 'Online',
     levels: 'Subscriptions',
     tags: 'Tags',
+    search: 'Search',
   },
   success: {
     profile: 'Profile saved successfully',

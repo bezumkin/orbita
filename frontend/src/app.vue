@@ -21,6 +21,7 @@
               <div class="column">
                 <WidgetsAuthor />
               </div>
+              <WidgetsSearch class="column" />
               <WidgetsOnline v-if="showOnline" class="column" />
               <WidgetsLevels class="column" />
               <WidgetsTags class="column" />
@@ -35,7 +36,7 @@
         </div>
       </BContainer>
 
-      <AppSidebar v-if="$isMobile" :show-online="Boolean(isColumns && showOnline)" />
+      <AppSidebar v-if="$isMobile" :show-online="showOnline" />
       <AppFooter class="border-top" />
       <AppPayment />
     </div>

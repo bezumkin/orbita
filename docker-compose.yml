@@ -68,3 +68,22 @@ services:
     image: redis:${REDIS_VERSION}
     environment:
       - TZ=${TZ}
+    restart: unless-stopped
+
+  manticore:
+    image: manticoresearch/manticore
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./docker/manticore:/var/lib/manticore/
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+      memlock:
+        soft: -1
+        hard: -1
+    depends_on:
+      - mariadb
+    restart: unless-stopped

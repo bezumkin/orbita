@@ -6,7 +6,9 @@ use App\Controllers\Traits\FileModelController;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\TopicTag;
+use App\Services\Manticore;
 use App\Services\Socket;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -16,11 +18,18 @@ class Topics extends ModelController
 {
     use FileModelController;
 
+    protected Manticore $manticore;
     protected string $model = Topic::class;
     protected string|array $scope = 'topics';
     public array $attachments = ['cover'];
     private bool $isNew = false;
     private bool $notifyUsers = false;
+
+    public function __construct(Manager $eloquent, Manticore $manticore)
+    {
+        parent::__construct($eloquent);
+        $this->manticore = $manticore;
+    }
 
     protected function beforeGet(Builder $c): Builder
     {
@@ -127,8 +136,8 @@ class Topics extends ModelController
                 Socket::send('tags');
             }
         }
-        // ---
 
+        // Send data to socket.io
         $record = $this->beforeGet($record->newQuery())->find($record->id);
         if ($this->isNew) {
             Socket::send('topic-create', $this->prepareRow($record));
@@ -136,9 +145,18 @@ class Topics extends ModelController
             Socket::send('topic-update', $this->prepareRow($record));
         }
 
+        // Create notifications
         if ($this->notifyUsers) {
             $record->notifyUsers();
             Socket::send('topics-refresh');
+        }
+
+        // Update search index
+        $index = $this->manticore->getIndex();
+        if ($record->active) {
+            $index->replaceDocument($record->getSearchData(), $record->id);
+        } else {
+            $index->deleteDocument($record->id);
         }
 
         return $record;
@@ -149,6 +167,7 @@ class Topics extends ModelController
         $response = parent::delete();
         if ($response->getStatusCode() === 200) {
             Socket::send('topics-refresh');
+            ($this->manticore->getIndex())->deleteDocument($this->getPrimaryKey());
         }
 
         return $response;
