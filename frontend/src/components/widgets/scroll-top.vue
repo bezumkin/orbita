@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-const opacity = ref('1')
+const opacity = ref('0')
 
 function scrollTop() {
   window.scrollTo({
