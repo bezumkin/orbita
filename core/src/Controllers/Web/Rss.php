@@ -56,6 +56,13 @@ class Rss extends Sitemap
                 $blocks[] = "<p>" . $block['data']['text'] . '</p>';
             } elseif ($block['type'] === 'image') {
                 $blocks[] = '<img src="' . $this->getImageUrl($block['data']) . '" alt="" />';
+            } elseif ($block['type'] === 'list') {
+                $tag = $block['data']['style'] === 'unordered' ? 'ul' : 'ol';
+                $items = [];
+                foreach ($block['data']['items'] as $item) {
+                    $items[] = '<li>' . $item . '</li>';
+                }
+                $blocks[] = "<$tag>" . implode(PHP_EOL, $items) . "</$tag>";
             }
         }
 
