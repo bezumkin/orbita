@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import type {OutputData, LogLevels, I18nDictionary} from '@editorjs/editorjs'
+import type {I18nDictionary, LogLevels, OutputData} from '@editorjs/editorjs'
 import type {BaseButtonVariant, BaseSize} from 'bootstrap-vue-next'
 import EditorJS from '@editorjs/editorjs'
 // @ts-ignore
@@ -101,10 +101,12 @@ const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
         tools: {
           link: {'Add a link': 'Вставьте ссылку'},
           header: {
+            'Heading 1': 'Заголовок 1',
             'Heading 2': 'Заголовок 2',
             'Heading 3': 'Заголовок 3',
             'Heading 4': 'Заголовок 4',
             'Heading 5': 'Заголовок 5',
+            'Heading 6': 'Заголовок 6',
           },
           list: {Ordered: 'Нумерованный', Unordered: 'Маркированный'},
           image: {Width: 'Ширина', Height: 'Высота', Crop: 'Обрезка'},
@@ -128,7 +130,7 @@ const allBlocks = [
     toolbar: true,
     config: {
       placeholder: t('actions.editor.header'),
-      levels: [2, 3, 4, 5],
+      levels: [1, 2, 3, 4, 5, 6],
       defaultLevel: 3,
       click: () => insert('header'),
     },

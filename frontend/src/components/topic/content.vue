@@ -3,14 +3,14 @@
     <div v-if="!record">
       <div class="topic-header">
         <h1 class="mt-2">
-          {{ myValue.title }}
+          <span @click="$contentClick" v-html="title" />
           <BButton v-if="$scope('topics/patch')" variant="link" class="ms-2 p-0" @click="onEdit">
             <VespFa icon="edit" class="fa-fw" />
           </BButton>
         </h1>
       </div>
-      <EditorContent v-if="myValue.content?.blocks" :content="myValue.content" />
-      <TopicFooter :topic="myValue" />
+      <EditorContent v-if="blocks" :content="{blocks}" />
+      <TopicFooter :topic="topic" />
     </div>
     <BForm v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
@@ -36,10 +36,19 @@ const props = defineProps({
 })
 
 const {$socket} = useNuxtApp()
-const myValue: Ref<VespTopic> = ref(props.topic)
-
+const topic: Ref<VespTopic> = ref(props.topic)
 const loading = ref(false)
 const record: Ref<undefined | VespTopic> = ref()
+
+const title = computed(() => {
+  const header = topic.value.content?.blocks?.find((i: any) => i.type === 'header' && i.data.level === 1)
+  return header?.data.text || props.topic.title
+})
+const blocks = computed(() => {
+  const blocks = topic.value.content?.blocks || []
+  const headerIdx = blocks.findIndex((i: any) => i.type === 'header' && i.data.level === 1)
+  return headerIdx > -1 ? blocks.toSpliced(headerIdx, 1) : blocks
+})
 
 async function onEdit() {
   try {
@@ -66,11 +75,11 @@ function onCancel() {
   record.value = undefined
 }
 
-function onTopicUpdate(topic: VespTopic) {
-  if (topic.uuid === myValue.value.uuid) {
-    Object.keys(myValue.value).forEach((key: string) => {
-      if (topic[key] !== undefined) {
-        myValue.value[key] = topic[key]
+function onTopicUpdate(newValue: VespTopic) {
+  if (newValue.uuid === topic.value.uuid) {
+    Object.keys(topic.value).forEach((key: string) => {
+      if (newValue[key] !== undefined) {
+        topic.value[key] = newValue[key]
       }
     })
   }

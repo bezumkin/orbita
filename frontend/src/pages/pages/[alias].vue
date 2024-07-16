@@ -2,12 +2,12 @@
   <BOverlay :show="loading" opacity="0.5" class="col-md-9 m-auto topic">
     <div v-if="!record">
       <h1 class="topic-header">
-        {{ page.title }}
+        <span @click="$contentClick" v-html="title" />
         <BButton v-if="$scope('pages/patch')" variant="link" class="ms-2 p-0" @click="onEdit">
           <VespFa icon="edit" class="fa-fw" />
         </BButton>
       </h1>
-      <EditorContent :content="page.content" />
+      <EditorContent v-if="blocks" :content="{blocks}" />
     </div>
     <BForm v-else-if="$scope('pages/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <div class="topic-buttons">
@@ -31,9 +31,18 @@ if (error.value) {
   showError({statusCode: error.value.statusCode || 500, statusMessage: error.value.statusMessage || 'Server Error'})
 }
 const page: ComputedRef<VespPage> = computed(() => data.value || {})
-
 const loading = ref(false)
 const record: Ref<undefined | VespPage> = ref()
+
+const title = computed(() => {
+  const header = page.value.content?.blocks?.find((i: any) => i.type === 'header' && i.data.level === 1)
+  return header?.data.text || page.value.title
+})
+const blocks = computed(() => {
+  const blocks = page.value.content?.blocks || []
+  const headerIdx = blocks.findIndex((i: any) => i.type === 'header' && i.data.level === 1)
+  return headerIdx > -1 ? blocks.toSpliced(headerIdx, 1) : blocks
+})
 
 async function onEdit() {
   try {
