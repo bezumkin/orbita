@@ -4,9 +4,9 @@ import type {NuxtConfig} from '@nuxt/schema'
 
 const enabledLocales = (process.env.LOCALES || 'ru,en,de').split(',')
 const locales = [
-  {code: 'ru', name: 'Русский', file: 'ru.js', iso: 'ru-RU'},
-  {code: 'en', name: 'English', file: 'en.js', iso: 'en-GB'},
-  {code: 'de', name: 'Deutsch', file: 'de.js', iso: 'de-DE'},
+  {code: 'ru', name: 'Русский', file: 'lexicons/ru.js', iso: 'ru-RU'},
+  {code: 'en', name: 'English', file: 'lexicons/en.js', iso: 'en-GB'},
+  {code: 'de', name: 'Deutsch', file: 'lexicons/de.js', iso: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
 const SITE_URL = process.env.SITE_URL || 'http://127.0.0.1:8080/'
 
@@ -123,7 +123,6 @@ const config: NuxtConfig = {
   },
   i18n: {
     defaultLocale: locales[0].code,
-    langDir: 'lexicons',
     locales,
   },
 }

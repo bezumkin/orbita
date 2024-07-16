@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import type {I18nDictionary, LogLevels, OutputData} from '@editorjs/editorjs'
+import type {LogLevels, OutputData} from '@editorjs/editorjs'
 import type {BaseButtonVariant, BaseSize} from 'bootstrap-vue-next'
 import EditorJS from '@editorjs/editorjs'
 // @ts-ignore
@@ -29,6 +29,7 @@ import VideoBlock from './blocks/video'
 import EmbedBlock from './blocks/embed'
 import CodeBlock from './blocks/code'
 import Kbd from './blocks/kbd'
+import ruEditor from '~/lexicons/ru-editor'
 
 const props = defineProps({
   modelValue: {
@@ -80,48 +81,7 @@ const holder = ref()
 const editor = ref()
 const {locale, t} = useI18n()
 const currentBlockIdx = ref(0)
-const messages: ComputedRef<I18nDictionary | undefined> = computed(() => {
-  return locale.value === 'ru'
-    ? {
-        blockTunes: {
-          delete: {Delete: 'Удалить', 'Click to delete': 'Вы уверены?'},
-          moveUp: {'Move up': 'Наверх'},
-          moveDown: {'Move down': 'Вниз'},
-        },
-        toolNames: {
-          Text: 'Текст',
-          Heading: 'Заголовок',
-          List: 'Список',
-          File: 'Файл',
-          Image: 'Фото',
-          Audio: 'Аудио',
-          Video: 'Видео',
-          Code: 'Код',
-        },
-        tools: {
-          link: {'Add a link': 'Вставьте ссылку'},
-          header: {
-            'Heading 1': 'Заголовок 1',
-            'Heading 2': 'Заголовок 2',
-            'Heading 3': 'Заголовок 3',
-            'Heading 4': 'Заголовок 4',
-            'Heading 5': 'Заголовок 5',
-            'Heading 6': 'Заголовок 6',
-          },
-          list: {Ordered: 'Нумерованный', Unordered: 'Маркированный'},
-          image: {Width: 'Ширина', Height: 'Высота', Crop: 'Обрезка'},
-        },
-        ui: {
-          inlineToolbar: {converter: {'Convert to': 'Конвертировать в'}},
-          popover: {
-            Filter: 'Поиск',
-            'Nothing found': 'Не найдено',
-            'Convert to': 'Конвертировать',
-          },
-        },
-      }
-    : undefined
-})
+const messages = computed(() => (locale.value === 'ru' ? ruEditor : undefined))
 const allBlocks = [
   {
     type: 'header',
