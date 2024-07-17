@@ -1,5 +1,5 @@
 <template>
-  <div @click="$contentClick" v-html="html" />
+  <div class="paragraph" @click="$contentClick" v-html="html" />
 </template>
 
 <script setup lang="ts">
