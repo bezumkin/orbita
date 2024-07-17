@@ -5,17 +5,25 @@
   flex-flow: column nowrap;
   gap: 0.5rem;
 
-  div.paragraph + div.paragraph {
-    margin-top: 1rem;
+  h2, h3 {
+    margin: 1rem 0 0 0
+  }
+
+  h4, h5 {
+    margin: 0.5rem 0 0 0;
+  }
+
+  h6 {
+    margin: 0.25rem 0 0 0;
   }
 
   ul, ol {
-    padding: 0 0 0 1rem;
     margin: 0;
+    padding: 0 0 0 1rem;
   }
 
   pre {
-    margin-bottom: 0;
+    margin: 0;
   }
 
   blockquote {
@@ -23,6 +31,10 @@
     border-left: 3px solid var(--bs-secondary);
     padding: 0.25rem 0.5rem;
     margin: 0;
+  }
+
+  .paragraph + .paragraph {
+    margin-top: 1rem;
   }
 }
 

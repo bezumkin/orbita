@@ -1,5 +1,7 @@
 <template>
-  <component :is="'h' + block.data.level" @click="$contentClick" v-html="block.data.text"></component>
+  <component :is="'h' + block.data.level" class="header">
+    <span @click="$contentClick" v-html="block.data.text" />
+  </component>
 </template>
 
 <script setup lang="ts">
