@@ -5,11 +5,16 @@ export const useTopicsStore = defineStore('topics', () => {
   const topics: Ref<VespTopic[]> = ref([])
   const loading = ref(false)
   const page = ref(1)
+  const query = ref({tags: '', limit: 12, page: 1})
 
   async function fetch(tags: string = '', limit: number = 12) {
     loading.value = true
     try {
-      const data = await useGet('web/topics', {page: page.value, limit, tags})
+      query.value.tags = tags
+      query.value.limit = limit
+      query.value.page = page.value
+
+      const data = await useGet('web/topics', query.value)
       total.value = data.total
       if (page.value === 1) {
         topics.value = data.rows
@@ -29,5 +34,5 @@ export const useTopicsStore = defineStore('topics', () => {
     await fetch(tags, limit)
   }
 
-  return {page, topics, total, loading, fetch, refresh}
+  return {page, topics, total, loading, query, fetch, refresh}
 })

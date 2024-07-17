@@ -21,16 +21,16 @@
 
 <script setup lang="ts">
 const store = useTopicsStore()
-const {page, topics, total, loading} = storeToRefs(store)
+const {page, topics, total, loading, query} = storeToRefs(store)
 const {fetch, refresh} = store
 const {t} = useI18n()
 const {$settings, $socket} = useNuxtApp()
 const {loggedIn} = useAuth()
 const route = useRoute()
 const limit = 12
-const tags = computed(() => route.query.tags || [])
+const tags = computed(() => route.query.tags as string)
 const canFetch = computed(() => {
-  return total.value >= page.value * limit
+  return total.value > page.value * limit
 })
 const spinner = ref()
 
@@ -46,7 +46,7 @@ function initObserver() {
     const {isIntersecting} = entries[0]
     if (isIntersecting && canFetch.value && !loading.value) {
       page.value++
-      fetch()
+      fetch(tags.value)
     }
   })
   observer.observe(spinner.value)
@@ -56,7 +56,7 @@ onMounted(() => {
   initObserver()
   $socket.on('topics-refresh', () => {
     if (page.value === 1) {
-      fetch()
+      fetch(tags.value)
     }
   })
 })
@@ -80,11 +80,11 @@ if (route.query.page) {
   await navigateTo({name: 'index'}, {redirectCode: 301})
 }
 
-if (!total.value) {
-  await fetch()
+if (!total.value || query.value.tags !== tags.value) {
+  await fetch(tags.value)
 }
 
-if (!topics.value.length && tags.value.length) {
+if (!total.value && tags.value.length) {
   navigateTo({name: 'index'})
 }
 </script>
