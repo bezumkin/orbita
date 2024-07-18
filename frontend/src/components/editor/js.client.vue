@@ -8,7 +8,7 @@
         </BButton>
       </template>
     </div>
-    <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}" @click="onClick"></div>
+    <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
 
     <EditorPickVideo v-if="showVideos" @hidden="showVideos = false" />
   </div>
@@ -193,10 +193,4 @@ onUnmounted(() => {
   }
 })
 defineExpose({reset: resetEditor})
-
-function onClick(e: Event) {
-  // Prevent the form from being sent
-  // when clicking on the button on the toolbar
-  e.preventDefault()
-}
 </script>
