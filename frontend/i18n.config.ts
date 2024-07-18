@@ -45,4 +45,5 @@ export default defineI18nConfig(() => ({
     en: dateFormat,
     de: dateFormat,
   },
+  warnHtmlMessage: false,
 }))
