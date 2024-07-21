@@ -97,7 +97,7 @@ export function contentClick(e: MouseEvent) {
     e.preventDefault()
     const href = (target as HTMLLinkElement).href
     const local = useRuntimeConfig().public.SITE_URL
-    if (!/:\/\//.test(href) || href.startsWith(local)) {
+    if (!/:/.test(href) || href.startsWith(local)) {
       const router = useRouter()
       const route = router.resolve(href.replace(local, '/'))
       if (route) {
