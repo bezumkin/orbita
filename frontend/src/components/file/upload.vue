@@ -118,7 +118,7 @@ const styles = computed(() => {
 })
 
 const placeholderUrl = computed(() => {
-  if (!props.placeholder) {
+  if (!props.placeholder || !props.placeholder.uuid) {
     return undefined
   }
   const params: {[key: string]: string | number} = {fit: 'crop'}

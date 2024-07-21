@@ -67,7 +67,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'submit'])
 const type = computed(() => props.modelValue.type)
 const key = computed(() => props.modelValue.key)
-const record: Ref<string | Record<string, any>> = computed({
+const record = computed<string | Record<string, any>>({
   get() {
     return props.modelValue.value || ''
   },

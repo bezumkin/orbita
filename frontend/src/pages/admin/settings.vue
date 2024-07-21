@@ -45,10 +45,14 @@
 const editing = ref('')
 const saving = ref('')
 const save = ref('')
-const settings: Ref<VespSetting[]> = ref([])
+const settings = ref<VespSetting[]>([])
 
-const {data, refresh} = await useCustomFetch('admin/settings')
-settings.value = data.value.rows
+async function fetch() {
+  try {
+    const data = await useGet('admin/settings')
+    settings.value = data.rows
+  } catch (e) {}
+}
 
 function startEdit(setting: VespSetting) {
   save.value = JSON.parse(JSON.stringify(setting.value))
@@ -74,10 +78,12 @@ async function saveSetting(setting: VespSetting) {
     await usePatch('admin/settings/' + setting.key, {value: setting.value})
     save.value = ''
     editing.value = ''
-    refresh()
+    await fetch()
   } catch (e) {
   } finally {
     saving.value = ''
   }
 }
+
+onMounted(fetch)
 </script>
