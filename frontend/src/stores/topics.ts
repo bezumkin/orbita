@@ -4,19 +4,19 @@ export const useTopicsStore = defineStore('topics', () => {
   const total = ref(0)
   const topics: Ref<VespTopic[]> = ref([])
   const loading = ref(false)
-  const page = ref(1)
-  const query = ref({tags: '', limit: 12, page: 1})
+  const query: Record<string, any> = ref({tags: '', reverse: false, page: 1, limit: 12})
 
-  async function fetch(tags: string = '', limit: number = 12) {
+  async function fetch() {
     loading.value = true
     try {
-      query.value.tags = tags
-      query.value.limit = limit
-      query.value.page = page.value
-
-      const data = await useGet('web/topics', query.value)
+      const data = await useGet('web/topics', {
+        tags: query.value.tags,
+        reverse: Number(query.value.reverse),
+        page: query.value.page,
+        limit: query.value.limit,
+      })
       total.value = data.total
-      if (page.value === 1) {
+      if (query.value.page === 1) {
         topics.value = data.rows
       } else {
         data.rows.forEach((i: VespTopic) => {
@@ -29,10 +29,10 @@ export const useTopicsStore = defineStore('topics', () => {
     }
   }
 
-  async function refresh(tags: string = '', limit: number = 12) {
-    page.value = 1
-    await fetch(tags, limit)
+  async function refresh() {
+    query.value.page = 1
+    await fetch()
   }
 
-  return {page, topics, total, loading, query, fetch, refresh}
+  return {query, topics, total, loading, fetch, refresh}
 })

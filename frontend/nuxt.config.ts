@@ -117,6 +117,8 @@ const config: NuxtConfig = {
         'tags',
         'external-link',
         'magnifying-glass',
+        'arrow-up-wide-short',
+        'arrow-down-short-wide',
       ],
       regular: ['face-smile', 'sun', 'moon'],
     },

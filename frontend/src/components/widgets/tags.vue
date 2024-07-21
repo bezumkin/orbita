@@ -37,7 +37,7 @@ function getTagParams(tag: VespTag) {
     values.splice(idx, 1)
   }
   if (tag.topics) {
-    params.to = {name: 'index', query: values.length ? {tags: values.join(',')} : undefined}
+    params.to = {name: 'index', query: {...route.query, tags: values.length ? values.join(',') : undefined}}
   } else {
     params.disabled = true
     params.class = 'opacity-75'

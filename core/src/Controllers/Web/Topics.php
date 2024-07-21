@@ -70,7 +70,12 @@ class Topics extends ModelGetController
 
     protected function addSorting(Builder $c): Builder
     {
-        $c->orderByRaw('-published_at, id DESC');
+        if ($this->getProperty('reverse')) {
+            $c->orderByRaw('+published_at, id ASC');
+        } else {
+            $c->orderByRaw('-published_at, id DESC');
+        }
+
 
         return $c;
     }

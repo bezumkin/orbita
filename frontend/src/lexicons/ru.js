@@ -28,6 +28,7 @@ export default {
     destroy: 'Уничтожить',
     scrollTop: 'Наверх',
     search: 'Искать',
+    load_more: 'Загрузить еще',
   },
   security: {
     login: 'Вход',

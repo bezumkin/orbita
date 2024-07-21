@@ -106,7 +106,7 @@ function getTagParams(tag: VespTag) {
     const idx = values.findIndex((i: string) => i === id)
     values.splice(idx, 1)
   }
-  params.to = {name: 'index', query: values.length ? {tags: values.join(',')} : undefined}
+  params.to = {name: 'index', query: {...route.query, tags: values.length ? values.join(',') : undefined}}
 
   return params
 }

@@ -9,7 +9,7 @@ User-agent: *
 Disallow: /admin
 Disallow: /user
 Disallow: /search
-Disallow: /?tags=
+Disallow: /? 
 
 Sitemap: ${SITE_URL}sitemap.xml
 `).trim()
