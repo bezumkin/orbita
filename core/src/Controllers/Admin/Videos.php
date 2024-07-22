@@ -44,7 +44,7 @@ class Videos extends ModelController
 
     protected function afterCount(Builder $c): Builder
     {
-        $c->with('file:id,uuid,width,height,size', 'image:id,uuid,width,height,size');
+        $c->with('file:id,uuid,width,height,size,updated_at', 'image:id,uuid,width,height,size,updated_at');
 
         return $c;
     }
