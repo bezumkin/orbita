@@ -9,7 +9,7 @@
   >
     <div class="upload-items">
       <TransitionGroup name="fade">
-        <div v-for="item in uploading" :key="item.id" class="p-3 bg-white border rounded">
+        <div v-for="item in uploading" :key="item.id" class="p-3 bg-body border rounded">
           <div class="fw-bold">{{ item.filename }}</div>
           <div class="d-flex align-items-center gap-2">
             <BProgress class="w-100">

@@ -116,6 +116,12 @@
     background-color: var(--bs-body-bg);
     border-color: var(--bs-border-color);
 
+    .ce-inline-tool-input {
+      color: var(--bs-body-color);
+      background: var(--bs-body-bg);
+      border-color: var(--bs-border-color);
+    }
+
     .ce-inline-toolbar__dropdown,
     .ce-inline-tool {
       &:hover {

@@ -131,8 +131,8 @@ function formatDate(date: string) {
     height: 100%;
     object-fit: cover;
     width: 100%;
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
   }
 
   &.image-poster {
