@@ -40,7 +40,7 @@ class Manticore
         $index = $this->client->index($this->indexName);
         $index->create([
             'uuid' => ['type' => 'string'],
-            'title' => ['type' => 'string'],
+            'title' => ['type' => 'text'],
             'teaser' => ['type' => 'text'],
             'content' => ['type' => 'text'],
             'tags' => ['type' => 'text'],
@@ -67,7 +67,12 @@ class Manticore
     {
         $index = $this->getIndex();
         try {
-            $index->status();
+            $schema = $index->describe();
+            // Migrate from old wrong index
+            if ($schema['title']['Type'] !== 'text') {
+                $index->drop(true);
+                $this->createIndex();
+            }
         } catch (ResponseException $e) {
             $index = $this->createIndex();
         }
