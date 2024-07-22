@@ -24,11 +24,12 @@ const h = crop && crop.height > 0 ? crop.height : Math.round(Math.min(w / delimi
 const fit = crop && crop.fit ? crop.fit : 'crop'
 
 const imageProps = computed(() => {
+  const fm = props.block.data.type === 'image/gif' ? 'gif' : 'webp'
   const data: Record<string, any> = {
     src: $image(props.block.data, {w, h, fit}),
     width: w,
     height: h,
-    'data-url': $image(props.block.data),
+    'data-url': $image(props.block.data, {fm}),
   }
 
   if (width > w * 1.25 || height > h * 1.25) {
@@ -52,7 +53,7 @@ const imageProps = computed(() => {
       } else {
         elements.push({href: data['data-url'], type: 'image'})
       }
-
+      // @ts-ignore
       $lightbox({elements, startAt}).open()
     }
   }

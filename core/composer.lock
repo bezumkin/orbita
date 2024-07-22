@@ -6468,16 +6468,16 @@
         },
         {
             "name": "vesp/core",
-            "version": "4.0.0",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezumkin/vesp-core.git",
-                "reference": "5dafa4cdcbbbefbc64172426b52f35c6476cffa6"
+                "reference": "df72256c9c6eb3c151b735f3140fded8feebc621"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/5dafa4cdcbbbefbc64172426b52f35c6476cffa6",
-                "reference": "5dafa4cdcbbbefbc64172426b52f35c6476cffa6",
+                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/df72256c9c6eb3c151b735f3140fded8feebc621",
+                "reference": "df72256c9c6eb3c151b735f3140fded8feebc621",
                 "shasum": ""
             },
             "require": {
@@ -6521,9 +6521,9 @@
             "description": "Vesp core library to make backend simple",
             "support": {
                 "issues": "https://github.com/bezumkin/vesp-core/issues",
-                "source": "https://github.com/bezumkin/vesp-core/tree/4.0.0"
+                "source": "https://github.com/bezumkin/vesp-core/tree/4.0.4"
             },
-            "time": "2024-03-14T04:32:58+00:00"
+            "time": "2024-07-22T05:16:46+00:00"
         },
         {
             "name": "voku/portable-ascii",
