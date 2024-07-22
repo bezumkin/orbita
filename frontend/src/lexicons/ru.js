@@ -29,6 +29,7 @@ export default {
     scrollTop: 'Наверх',
     search: 'Искать',
     load_more: 'Загрузить еще',
+    download: 'Скачать',
   },
   security: {
     login: 'Вход',
@@ -79,6 +80,18 @@ export default {
       created_at: 'Загружено',
       qualities: 'Версии',
       error: 'Ошибка обработки',
+    },
+    video_quality: {
+      title_one: 'Версия',
+      title_many: 'Версии',
+      status: 'Состояние',
+      quality: 'Разрешение',
+      progress: 'Обработано',
+      processed: 'Готово',
+      moved: 'Перемещено',
+      created_at: 'Дата создания',
+      processed_at: 'Дата обработки',
+      moved_at: 'Дата перемещения',
     },
     setting: {
       title: 'Название',

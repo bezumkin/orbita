@@ -22,13 +22,13 @@ class Video extends Controller
         }
 
         // Check permissions
-        $allow = true;
-        if (!$this->user || !$this->user->hasScope('videos/patch')) {
+        $allow = !(!$this->user || !$this->user->hasScope('videos/patch'));
+        if (!$allow) {
             $topicFiles = $this->video->topicFiles();
             /** @var TopicFile $topicFile */
             foreach ($topicFiles->cursor() as $topicFile) {
-                if (!$topicFile->topic->hasAccess($this->user)) {
-                    $allow = false;
+                if ($topicFile->topic->hasAccess($this->user)) {
+                    $allow = true;
                     break;
                 }
             }

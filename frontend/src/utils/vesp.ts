@@ -1,4 +1,6 @@
 import type {OutputData} from '@editorjs/editorjs'
+import ru from 'date-fns/locale/ru/index.js'
+import de from 'date-fns/locale/de/index.js'
 
 export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
   return getImageLink(file, options, prefix || 'file')
@@ -155,4 +157,17 @@ export function getAdminSections() {
 
 export function stripTags(str: string): string {
   return str.replace(/(<([^>]+)>)/g, '')
+}
+
+export function useDateLocale() {
+  return computed(() => {
+    const code = useI18n().locale.value
+    if (code === 'ru') {
+      return ru
+    }
+    if (code === 'de') {
+      return de
+    }
+    return undefined
+  })
 }

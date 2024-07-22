@@ -59,6 +59,20 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
     isActive: (item: any) => item && item.processed_qualities.length > 0,
   },
   {
+    route: {name: 'admin-videos-id-qualities'},
+    icon: 'list',
+    title: t('models.video_quality.title'),
+    isActive: (item: any) => item && item.progress !== null,
+  },
+  {
+    function(item: VespVideo) {
+      window.location.href = getApiUrl() + 'admin/videos/download/' + item.id
+    },
+    icon: 'download',
+    title: t('actions.download'),
+    isActive: (item: any) => item && item.moved,
+  },
+  {
     route: {name: 'admin-videos-id-edit'},
     icon: 'edit',
     title: t('actions.edit'),

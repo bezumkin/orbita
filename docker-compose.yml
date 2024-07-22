@@ -66,9 +66,12 @@ services:
 
   redis:
     image: redis:${REDIS_VERSION}
+    volumes:
+      - ./docker/redis:/data
     environment:
       - TZ=${TZ}
     restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel nothing
 
   manticore:
     image: manticoresearch/manticore

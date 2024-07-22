@@ -41,6 +41,17 @@ declare global {
     id: string
     title?: string
     description?: string
+    qualities?: VespVideoQuality[]
+    [key: string]: any
+  }
+
+  type VespVideoQuality = {
+    quality: string
+    video_id: string
+    file_id?: string
+    progress?: string
+    processed?: boolean
+    moved?: boolean
     [key: string]: any
   }
 

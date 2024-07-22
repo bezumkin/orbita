@@ -29,6 +29,7 @@ export default {
     scrollTop: 'Geh hinauf',
     search: 'Suchen',
     load_more: 'Mehr laden',
+    download: 'Herunterladen',
   },
   security: {
     login: 'Login',
@@ -79,6 +80,18 @@ export default {
       created_at: 'Erstellt am',
       qualities: 'Versionen',
       error: 'Fehler verarbeiten',
+    },
+    video_quality: {
+      titel_one: 'Version',
+      title_many: 'Versionen',
+      status: 'Status',
+      quality: 'Qualität',
+      progress: 'Fortschritt',
+      processed: 'Verarbeitet',
+      moved: 'Verschoben',
+      created_at: 'Erstellt am',
+      processed_at: 'Verarbeitet am',
+      moved_at: 'Verschoben um',
     },
     setting: {
       title: 'Titel',

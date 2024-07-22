@@ -278,7 +278,11 @@ class Video extends Model
     protected function sendInfoToSocket(): void
     {
         $data = $this
-            ->fresh('file:id,uuid,width,height,size', 'image:id,uuid,width,height,size')
+            ->fresh([
+                'file:id,uuid,width,height,size,updated_at',
+                'image:id,uuid,width,height,size,updated_at',
+                'qualities',
+            ])
             ?->toArray();
 
         Socket::send('transcode', $data);

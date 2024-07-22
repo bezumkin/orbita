@@ -119,6 +119,7 @@ const config: NuxtConfig = {
         'magnifying-glass',
         'arrow-up-wide-short',
         'arrow-down-short-wide',
+        'download',
       ],
       regular: ['face-smile', 'sun', 'moon'],
     },
