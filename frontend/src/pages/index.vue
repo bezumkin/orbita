@@ -39,7 +39,7 @@ const store = useTopicsStore()
 const {topics, total, loading, query} = storeToRefs(store)
 const {fetch, refresh} = store
 const {t} = useI18n()
-const {$settings, $socket} = useNuxtApp()
+const {$settings} = useNuxtApp()
 const {loggedIn} = useAuth()
 const canFetch = computed(() => {
   return total.value > query.value.page * query.value.limit
@@ -73,18 +73,6 @@ async function onScroll() {
   await fetch()
   initObserver()
 }
-
-onMounted(() => {
-  $socket.on('topics-refresh', () => {
-    if (query.value.page === 1) {
-      fetch()
-    }
-  })
-})
-
-onUnmounted(() => {
-  $socket.off('topics-refresh')
-})
 
 useHead({
   title: () => [t('pages.index'), $settings.value.title].join(' / '),

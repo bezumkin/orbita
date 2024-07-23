@@ -137,39 +137,46 @@ class Topics extends ModelController
             }
         }
 
+        /** @var Topic $topic */
+        $topic = $this->beforeGet($record->newQuery())->find($record->id);
+        $data = $this->prepareRow($topic);
+
         // Send data to socket.io
-        $record = $this->beforeGet($record->newQuery())->find($record->id);
         if ($this->isNew) {
-            Socket::send('topic-create', $this->prepareRow($record));
+            Socket::send('topic-create', $data);
         } else {
-            Socket::send('topic-update', $this->prepareRow($record));
+            Socket::send('topic-update', $data);
         }
 
         // Create notifications
         if ($this->notifyUsers) {
-            $record->notifyUsers();
-            Socket::send('topics-refresh');
+            $topic->notifyUsers();
+            Socket::send('topic-publish', $data);
         }
 
         // Update search index
         $index = $this->manticore->getIndex();
-        if ($record->active) {
-            $index->replaceDocument($record->getSearchData(), $record->id);
+        if ($topic->active) {
+            $index->replaceDocument($topic->getSearchData(), $topic->id);
         } else {
-            $index->deleteDocument($record->id);
+            $index->deleteDocument($topic->id);
         }
 
-        return $record;
+        return $topic;
     }
 
     public function delete(): ResponseInterface
     {
-        $response = parent::delete();
-        if ($response->getStatusCode() === 200) {
-            Socket::send('topics-refresh');
-            ($this->manticore->getIndex())->deleteDocument($this->getPrimaryKey());
+        $key = $this->getPrimaryKey();
+        /** @var Topic $record */
+        if (!$key || !$record = Topic::query()->find($key)) {
+            return $this->failure('Not Found', 404);
         }
+        $record->delete();
 
-        return $response;
+        Socket::send('topic-delete', $record->toArray());
+        ($this->manticore->getIndex())->deleteDocument($record->id);
+
+        return $this->success();
     }
 }

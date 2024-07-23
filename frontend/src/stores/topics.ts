@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 
 export const useTopicsStore = defineStore('topics', () => {
+  const {$socket, $scope} = useNuxtApp()
   const total = ref(0)
   const topics: Ref<VespTopic[]> = ref([])
   const loading = ref(false)
@@ -32,6 +33,43 @@ export const useTopicsStore = defineStore('topics', () => {
   async function refresh() {
     query.value.page = 1
     await fetch()
+  }
+
+  if ($socket) {
+    function remove({uuid}: VespTopic) {
+      topics.value = topics.value.filter((topic: VespTopic) => topic.uuid !== uuid)
+    }
+    function update(topic: VespTopic) {
+      const idx = topics.value.findIndex(({uuid}: VespTopic) => uuid === topic.uuid)
+      if (idx > -1) {
+        Object.keys(topic).forEach((k) => {
+          if (topics.value[idx][k] !== undefined) {
+            topics.value[idx][k] = topic[k]
+          }
+        })
+      } else {
+        refresh()
+      }
+    }
+
+    $socket.on('topic-create', () => {
+      if ($scope('topics/patch')) {
+        refresh()
+      }
+    })
+    $socket.on('topic-publish', () => {
+      if (!$scope('topics/patch')) {
+        refresh()
+      }
+    })
+    $socket.on('topic-update', (topic: VespTopic) => {
+      if (!topic.active && !$scope('topics/patch')) {
+        remove(topic)
+      } else {
+        update(topic)
+      }
+    })
+    $socket.on('topic-delete', remove)
   }
 
   return {query, topics, total, loading, fetch, refresh}
