@@ -38,7 +38,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.12",
     "vue": "^3.3.4",
-    "vue-tsc": "^1.8.15",
+    "vue-tsc": "^2.0.29",
     "vuedraggable": "^4.1.0",
     "yandex-metrika-module-nuxt3": "^1.5.3"
   },
