@@ -6,6 +6,7 @@
 /frontend/.nuxt
 /frontend/.eslintcache
 /frontend/.stylelintcache
+/docker/redis/dump.rdb
 /frontend/.output
 /frontend/node_modules
 /tmp/
