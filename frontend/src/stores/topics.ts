@@ -31,6 +31,7 @@ export const useTopicsStore = defineStore('topics', () => {
   }
 
   async function refresh() {
+    topics.value = []
     query.value.page = 1
     await fetch()
   }
