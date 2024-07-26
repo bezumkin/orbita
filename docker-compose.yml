@@ -1,5 +1,4 @@
 services:
-
   mariadb:
     image: mariadb:${MARIADB_VERSION}
     environment:
@@ -28,6 +27,7 @@ services:
     depends_on:
       - php-fpm
       - mariadb
+      - node
 
   php-fpm:
     image: bezumkin/orbita-php
@@ -51,18 +51,12 @@ services:
     command: sh -c 'composer install --no-dev && composer db:migrate && cron && php-fpm'
 
   node:
-    image: node:${NODE_VERSION}
-    volumes:
-      - ./.env:/vesp/.env
-      - ./frontend:/vesp/frontend
-    depends_on:
-      - nginx
+    build:
+      context: ./frontend
     environment:
       - TZ=${TZ}
-    network_mode: 'service:nginx'
+    network_mode: "service:nginx"
     restart: unless-stopped
-    working_dir: /vesp/frontend
-    command: sh -c 'rm -rf /tmp/* && npm i --omit=dev && npm run build && node ./.output/server/index.mjs'
 
   redis:
     image: redis:${REDIS_VERSION}
