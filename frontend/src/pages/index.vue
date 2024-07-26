@@ -58,7 +58,6 @@ function initObserver() {
       fetch()
     }
   })
-  console.log(spinner.value)
   observer.observe(spinner.value)
 }
 
