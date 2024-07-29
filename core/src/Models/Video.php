@@ -39,6 +39,7 @@ use Throwable;
  * @property-read VideoQuality[] $qualities
  * @property-read VideoUser[] $videoUsers
  * @property-read TopicFile[] $topicFiles
+ * @property-read PageFile[] $pageFiles
  */
 class Video extends Model
 {
@@ -77,6 +78,11 @@ class Video extends Model
     public function topicFiles(): HasMany
     {
         return $this->hasMany(TopicFile::class, 'file_id', 'file_id');
+    }
+
+    public function pageFiles(): HasMany
+    {
+        return $this->hasMany(PageFile::class, 'file_id', 'file_id');
     }
 
     public function transcode(): void

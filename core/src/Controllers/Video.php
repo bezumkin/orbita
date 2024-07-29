@@ -22,7 +22,12 @@ class Video extends Controller
         }
 
         // Check permissions
-        $allow = !(!$this->user || !$this->user->hasScope('videos/patch'));
+        $isAdmin = $this->user && $this->user->hasScope('videos/patch');
+        if (!$isAdmin && !$this->video->active) {
+            return $this->failure('Not Found', 404);
+        }
+
+        $allow = $isAdmin || $this->video->pageFiles()->count();
         if (!$allow) {
             $topicFiles = $this->video->topicFiles();
             /** @var TopicFile $topicFile */
