@@ -289,13 +289,15 @@ export default {
         month_3: 'Billing once every three months, next charge {date}.',
         month_6: 'Billing once every six months, next charge {date}.',
         month_12: 'Billing once a year, next charge {date}.',
-        cancel: 'You can unsubscribe at any time.',
+        can_cancel: 'You can unsubscribe at any time.',
         free: 'Now you pay nothing and you can unsubscribe at any time.',
         level: {
           current: 'Current level',
           new: 'New level',
         },
         paid_until: 'Paid until',
+        cancel_confirm: 'Are you sure you want to cancel your automatic subscription renewal?',
+        cancel_change: 'Are you sure you want to cancel your subscription level change?',
       },
       topic: {
         title: 'Unlock this topic only',

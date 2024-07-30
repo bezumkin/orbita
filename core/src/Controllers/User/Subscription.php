@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Models\Level;
 use App\Models\User;
+use App\Services\Socket;
 use Carbon\Carbon;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
@@ -65,6 +66,7 @@ class Subscription extends Controller
         } else {
             return $this->failure('Not Found', 404);
         }
+        Socket::send('profile', ['id' => $user->id]);
 
         return $this->success();
     }

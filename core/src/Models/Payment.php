@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\PaymentService;
+use App\Services\Socket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -92,12 +93,14 @@ class Payment extends Model
                     $this->subscription->service = $this->service;
                     $this->subscription->activate();
                 }
+                Socket::send('profile', ['id' => $this->user_id]);
             } elseif ($status === false || $this->created_at->addHours(6) < Carbon::now()) {
                 $this->paid = false;
                 if ($this->subscription && !$this->subscription->next_level_id) {
                     $this->subscription->next_period = null;
                 }
                 $this->save();
+                Socket::send('profile', ['id' => $this->user_id]);
             }
         }
 

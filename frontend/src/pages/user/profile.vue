@@ -16,7 +16,7 @@ const {t} = useI18n()
 const {$settings} = useNuxtApp()
 const {loadUser} = useAuth()
 const loading = ref(false)
-const form: Ref<VespUser> = ref({id: 0, username: '', ...useAuth().user.value})
+const form = ref<VespUser>({id: 0, username: '', ...useAuth().user.value})
 
 async function onSubmit() {
   try {

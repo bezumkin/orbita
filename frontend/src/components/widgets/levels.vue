@@ -2,27 +2,38 @@
   <div v-if="$levels.length" class="widget">
     <h5 class="widget-title">{{ $t('widgets.levels') }}</h5>
     <div class="widget-body subscriptions">
-      <div v-for="level in $levels" :key="level.id" class="level">
-        <div class="title">{{ level.title }}</div>
-        <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
-        <div v-if="level.cover" class="cover">
-          <BImg
-            :src="$image(level.cover, {h: 150, fit: 'crop'})"
-            :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
-            class="rounded"
-            height="150"
-          />
+      <BOverlay opacity="0.5" :show="loading">
+        <div v-for="level in $levels" :key="level.id" class="level">
+          <div class="title">{{ level.title }}</div>
+          <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
+          <div v-if="level.cover" class="cover">
+            <BImg
+              :src="$image(level.cover, {h: 150, fit: 'crop'})"
+              :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
+              class="rounded"
+              height="150"
+            />
+          </div>
+          <div v-if="level.content" class="content">{{ level.content }}</div>
+          <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
         </div>
-        <div v-if="level.content" class="content">{{ level.content }}</div>
-        <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
-      </div>
+      </BOverlay>
     </div>
+
+    <VespConfirm v-if="confirmVisible" :on-ok="cancelAction" ok-title="actions.ok" @hidden="confirmVisible = false">
+      <div v-html="cancelText" />
+    </VespConfirm>
   </div>
 </template>
 
 <script setup lang="ts">
 const {$levels, $payment, $i18n} = useNuxtApp()
-const {user, loadUser} = useAuth()
+const {user} = useAuth()
+
+const loading = ref(false)
+const confirmVisible = ref(false)
+const cancelText = ref('')
+const cancelAction = ref(() => {})
 
 function getBtnParams(level: VespLevel) {
   const params: Record<string, any> = {}
@@ -33,13 +44,13 @@ function getBtnParams(level: VespLevel) {
     // Cancel change level from next date
     if (level.id === user.value.subscription.next_level_id) {
       params.variant = 'outline-secondary'
-      params.onClick = onCancelChange
+      params.onClick = confirmCancelChange
     }
     // Unsubscribe or renew
     else if (level.id === user.value.subscription.level_id) {
       params.variant = 'outline-secondary'
       // params.disabled = true
-      params.onClick = user.value.subscription.cancelled ? onRenew : onUnsubscribe
+      params.onClick = user.value.subscription.cancelled ? onRenew : confirmUnsubscribe
     }
   }
 
@@ -74,18 +85,45 @@ function onSubscribe(level: VespLevel) {
   }
 }
 
+function confirmCancelChange() {
+  confirmVisible.value = true
+  cancelText.value = $i18n.t('components.payment.subscription.cancel_change')
+  cancelAction.value = onCancelChange
+}
+
+function confirmUnsubscribe() {
+  confirmVisible.value = true
+  cancelText.value = $i18n.t('components.payment.subscription.cancel_confirm')
+  cancelAction.value = onUnsubscribe
+}
+
 async function onCancelChange() {
-  await usePost('user/subscription/cancel-next')
-  await loadUser()
+  loading.value = true
+  try {
+    await usePost('user/subscription/cancel-next')
+  } catch (e) {
+  } finally {
+    loading.value = false
+  }
 }
 
 async function onUnsubscribe() {
-  await usePost('user/subscription/cancel')
-  await loadUser()
+  loading.value = true
+  try {
+    await usePost('user/subscription/cancel')
+  } catch (e) {
+  } finally {
+    loading.value = false
+  }
 }
 
 async function onRenew() {
-  await usePost('user/subscription/renew')
-  await loadUser()
+  loading.value = true
+  try {
+    await usePost('user/subscription/renew')
+  } catch (e) {
+  } finally {
+    loading.value = false
+  }
 }
 </script>

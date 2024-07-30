@@ -289,13 +289,15 @@ export default {
         month_3: 'Wird alle 3 Monate verrechnet. Nächste Zahlung am {date}.',
         month_6: 'Wird alle 6 Monate verrechnet. Nächste Zahlungen am {date}.',
         month_12: 'Wird jährlich verrechnet. Nächste Zahlung am {date}.',
-        cancel: 'Du kannst das Abo jederzeit künden.',
+        can_cancel: 'Du kannst das Abo jederzeit künden.',
         free: 'Du bist auf dem Gratis-Abo. Du kannst jederzeit künden',
         level: {
           current: 'Aktuelles Level',
           new: 'Neues Level',
         },
         paid_until: 'Bezahlt bis am',
+        cancel_confirm: 'Sind Sie sicher, dass Sie Ihre automatische Abonnementverlängerung kündigen möchten?',
+        cancel_change: 'Sind Sie sicher, dass Sie die Änderung Ihrer Abonnementstufe stornieren möchten?',
       },
       topic: {
         title: 'Dieses Topic entsperren',

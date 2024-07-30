@@ -76,7 +76,7 @@ const description = computed(() => {
   if (downgrading.value || upgrading.value) {
     parts.push(t('components.payment.subscription.free'))
   } else {
-    parts.push(t('components.payment.subscription.cancel'))
+    parts.push(t('components.payment.subscription.can_cancel'))
   }
 
   return parts.join('\n')

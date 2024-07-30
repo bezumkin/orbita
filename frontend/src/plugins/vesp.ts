@@ -130,5 +130,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     $socket.on('reactions', () => {
       refreshNuxtData('web-reactions')
     })
+
+    // Listen for user profile update
+    $socket.on('profile', ({id}: VespUser) => {
+      const {user, loadUser} = useAuth()
+      if (user.value?.id === id) {
+        loadUser()
+      }
+    })
   }
 })
