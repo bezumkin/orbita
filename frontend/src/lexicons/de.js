@@ -69,6 +69,7 @@ export default {
       id: 'Uuid',
       title: 'Titel',
       description: 'Beschreibung',
+      chapters: 'Preisschilder',
       image: 'Vorschau',
       progress: 'Verarbeitet',
       size: 'Grösse',

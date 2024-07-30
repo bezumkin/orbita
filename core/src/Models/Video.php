@@ -48,6 +48,7 @@ class Video extends Model
     protected $fillable = ['title', 'description', 'duration', 'progress', 'active', 'processed_at'];
     protected $casts = [
         'active' => 'boolean',
+        'chapters' => 'array',
         'processed' => 'boolean',
         'moved' => 'boolean',
         'processed_at' => 'datetime',

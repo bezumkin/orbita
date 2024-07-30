@@ -51,10 +51,16 @@ class Videos extends ModelController
 
     protected function beforeSave(Model $record): ?ResponseInterface
     {
+        /** @var Video $record */
         foreach ($this->attachments as $attachment) {
             if ($this->getProperty("new_$attachment") === false) {
                 return $this->failure('errors.video.no_image');
             }
+        }
+
+        if ($chapters = $this->getProperty('chapters')) {
+            preg_match_all('#([\d:]+)\s+(.*)#', $chapters, $matches);
+            $record->chapters = $matches ? array_combine($matches[1], $matches[2]) : null;
         }
 
         if ($error = $this->processFiles($record)) {

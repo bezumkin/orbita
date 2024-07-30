@@ -5,7 +5,7 @@
     </BFormGroup>
 
     <BFormGroup :label="$t('models.video.description')">
-      <BFormTextarea v-model.trim="record.description" />
+      <BFormTextarea v-model.trim="record.description" :rows="record.description ? 6 : 3" />
     </BFormGroup>
 
     <BFormGroup :label="$t('models.video.image')">
@@ -13,11 +13,15 @@
         <FileUpload
           v-model="record.new_image"
           :placeholder="record.image"
-          :height="400"
+          :height="265"
           :allow-removing="false"
           wrapper-class="rounded border"
         />
       </BFormGroup>
+    </BFormGroup>
+
+    <BFormGroup :label="$t('models.video.chapters')">
+      <BFormTextarea v-model.trim="record.chapters" :rows="record.chapters ? 6 : 3" />
     </BFormGroup>
 
     <BFormGroup>
@@ -35,10 +39,19 @@ const props = defineProps({
     required: true,
   },
 })
+
 const emit = defineEmits(['update:modelValue'])
 const record = computed({
   get() {
-    return props.modelValue
+    const value = props.modelValue
+    const chapters: string[] = []
+    if (value.chapters && typeof value.chapters === 'object') {
+      Object.keys(value.chapters).forEach((k: string) => {
+        chapters.push(k + ' ' + props.modelValue.chapters[k])
+      })
+      value.chapters = chapters.join('\n')
+    }
+    return reactive(value) as VespVideo
   },
   set(newValue) {
     emit('update:modelValue', newValue)

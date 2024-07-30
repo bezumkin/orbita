@@ -6,7 +6,7 @@ use Slim\Routing\RouteCollectorProxy;
 $group = $app->group(
     '/api',
     function (RouteCollectorProxy $group) {
-        $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}[/{quality:\d+}]', App\Controllers\Video::class);
+        $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}[/{quality}]', App\Controllers\Video::class);
         $group->map(['OPTIONS', 'GET', 'POST'], '/audio/{uuid}', App\Controllers\Audio::class);
         $group->get('/image/{uuid}', App\Controllers\Image::class);
         $group->get('/file/{uuid}', App\Controllers\File::class);

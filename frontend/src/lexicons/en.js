@@ -69,6 +69,7 @@ export default {
       id: 'Uuid',
       title: 'Title',
       description: 'Description',
+      chapters: 'Timecodes',
       image: 'Preview',
       progress: 'Processed',
       size: 'Size',

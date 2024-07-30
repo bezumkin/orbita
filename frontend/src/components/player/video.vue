@@ -29,11 +29,13 @@ const status = ref()
 let ready = false
 const {$plyr} = useNuxtApp()
 const sourceUrl = getApiUrl() + 'video/' + props.uuid
+const chaptersUrl = getApiUrl() + 'video/' + props.uuid + '/chapters'
 const statusUrl = getApiUrl() + 'user/video/' + props.uuid
 const currentLevel = ref(0)
-const levels: Ref<number[]> = computed(() => {
+const levels = computed<number[]>(() => {
   return hls.value && hls.value.levels ? hls.value.levels.map((i: Record<string, any>) => i.height) : []
 })
+const chapters = ref<null | Record<string, string>>(null)
 
 function selectLevel(size: number) {
   if (size < 0) {
@@ -70,7 +72,7 @@ function initPlayer() {
 
   // eslint-disable-next-line import/no-named-as-default-member
   hls.value.on(Hls.Events.MANIFEST_PARSED, async () => {
-    await loadStatus()
+    await Promise.all([loadStatus(), loadChapters()])
     const options: Record<string, any> = {
       keyboard: {
         focused: true,
@@ -93,6 +95,19 @@ function initPlayer() {
         forced: true,
         onChange: selectLevel,
       }
+    }
+    if (chapters.value) {
+      options.markers = {
+        enabled: true,
+        points: [],
+      }
+      Object.keys(chapters.value).forEach((time: string) => {
+        options.markers.points.push({
+          // @ts-ignore
+          time: time.split(':').reduce((a, b) => Number(a) * 60 + Number(b)),
+          label: chapters.value ? chapters.value[time] : '',
+        })
+      })
     }
 
     player.value = $plyr(video.value, options)
@@ -121,6 +136,12 @@ async function loadStatus() {
     if (user.value) {
       status.value = await useGet(statusUrl)
     }
+  } catch (e) {}
+}
+
+async function loadChapters() {
+  try {
+    chapters.value = await useGet(chaptersUrl)
   } catch (e) {}
 }
 

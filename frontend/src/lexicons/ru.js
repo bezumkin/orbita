@@ -70,6 +70,7 @@ export default {
       title: 'Название',
       description: 'Описание',
       image: 'Превью',
+      chapters: 'Таймкоды',
       progress: 'Обработано',
       size: 'Размер',
       width: 'Ширина',

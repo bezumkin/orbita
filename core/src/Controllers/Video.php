@@ -44,13 +44,16 @@ class Video extends Controller
         // ---
 
         if ($quality = $this->getProperty('quality')) {
+            if ($quality === 'chapters') {
+                return $this->success($this->video->chapters);
+            }
             if ($range = $this->request->getHeaderLine('Range')) {
                 $range = explode('=', $range);
                 [$start, $end] = explode('-', end($range), 2);
                 if ($response = $this->getRange($quality, (int)$start, (int)$end)) {
                     return $response;
                 }
-            } elseif ($response = $this->getQuality($quality)) {
+            } elseif ($response = $this->getQuality((int)$quality)) {
                 return $response;
             }
         } elseif ($response = $this->getManifest()) {
@@ -82,7 +85,7 @@ class Video extends Controller
             );
     }
 
-    public function getQuality(string $quality): ?ResponseInterface
+    protected function getQuality(int $quality): ?ResponseInterface
     {
         /** @var VideoQuality $videoQuality */
         if (!$videoQuality = $this->video->qualities()->where('quality', $quality)->first()) {

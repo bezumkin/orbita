@@ -1,5 +1,5 @@
 <template>
-  <VespModal v-model="record" v-bind="{url}" method="patch" update-key="admin-videos" :title="record.title" size="lg">
+  <VespModal v-model="record" v-bind="{url}" method="patch" update-key="admin-videos" :title="record.title">
     <template #form-fields>
       <FormsVideo v-model="record" />
     </template>
