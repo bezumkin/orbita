@@ -4,14 +4,15 @@
 
     <VespTable ref="table" class="mt-4" v-bind="{url, filters, fields, tableActions, rowClass, sort, dir}">
       <template #cell(image)="{value}: any">
-        <BImg
-          v-if="value?.id"
-          :src="$image(value, {w: 100, h: 50, fit: 'crop'})"
-          :srcset="$image(value, {w: 200, h: 100, fit: 'crop'}) + ' 2x'"
-          width="100"
-          height="50"
-          class="rounded"
-        />
+        <a v-if="value?.id" :href="$file(value)" target="_blank">
+          <BImg
+            :src="$image(value, {w: 100, h: 50, fit: 'crop'})"
+            :srcset="$image(value, {w: 200, h: 100, fit: 'crop'}) + ' 2x'"
+            width="100"
+            height="50"
+            class="rounded"
+          />
+        </a>
       </template>
       <template #cell(title)="{item, value}">
         <div>{{ value }}</div>
