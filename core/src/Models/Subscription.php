@@ -149,6 +149,7 @@ class Subscription extends Model
             'level' => $this->level->toArray(),
             'subscription' => $this->toArray(),
             'renew' => $service->canSubscribe(),
+            'active_until' => $this->active_until,
         ];
         $subject = getenv('EMAIL_SUBSCRIPTION_' . strtoupper($type) . '_' . strtoupper($lang));
 
