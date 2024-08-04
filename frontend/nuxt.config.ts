@@ -43,6 +43,7 @@ const config: NuxtConfig = {
       TZ: process.env.TZ || 'Europe/Moscow',
       SITE_URL,
       API_URL: process.env.API_URL || '/api/',
+      JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
       CURRENCY: process.env.CURRENCY || 'RUB',
       REGISTER_ENABLED: process.env.REGISTER_ENABLED || '1',
       COMMENTS_SHOW_ONLINE: process.env.COMMENTS_SHOW_ONLINE || '1',
