@@ -3,6 +3,7 @@
 /core/vendor
 /docker/mariadb
 /docker/manticore
+/docker/redis
 /frontend/.nuxt
 /frontend/.eslintcache
 /frontend/.stylelintcache
