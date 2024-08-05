@@ -77,6 +77,7 @@ export default {
       height: 'Höhe',
       active: 'Aktiv',
       streams: 'Streams',
+      duration: 'Dauer',
       dimension: 'Dimension',
       created_at: 'Erstellt am',
       qualities: 'Versionen',
@@ -93,6 +94,7 @@ export default {
       created_at: 'Erstellt am',
       processed_at: 'Verarbeitet am',
       moved_at: 'Verschoben um',
+      size: 'Dateigröße',
     },
     setting: {
       title: 'Titel',

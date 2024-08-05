@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
 import type {VespTableAction} from '@vesp/frontend'
+import {intervalToDuration} from 'date-fns'
 
 const {t, d} = useI18n()
 const {$socket} = useNuxtApp()
@@ -46,11 +47,12 @@ const fields = computed(() => [
   // {key: 'id', label: t('models.video.id'), sortable: true},
   {key: 'image', label: t('models.video.image')},
   {key: 'title', label: t('models.video.title'), sortable: true},
-  {key: 'progress', label: t('models.video.progress'), sortable: true},
   {key: 'file.size', label: t('models.video.size'), sortable: true, formatter: formatSize},
-  {key: 'file.width', label: t('models.video.dimension'), formatter: formatDimension},
-  {key: 'processed_qualities', label: t('models.video.qualities'), formatter: formatQualities},
+  {key: 'file.width', label: t('models.video.dimension'), sortable: true, formatter: formatDimension},
+  {key: 'duration', label: t('models.video.duration'), sortable: true, formatter: formatDuration},
   {key: 'created_at', label: t('models.video.created_at'), sortable: true, formatter: formatDate},
+  {key: 'progress', label: t('models.video.progress'), sortable: true},
+  {key: 'processed_qualities', label: t('models.video.qualities'), formatter: formatQualities},
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {
@@ -108,6 +110,15 @@ function formatDimension(_value: any, _field: any, item: any) {
 
 function formatQualities(value: any) {
   return value ? value.map((i: number) => i + 'p').join(', ') : ''
+}
+
+function formatDuration(value: any) {
+  if (!value) {
+    return ''
+  }
+  const {hours, minutes, seconds} = intervalToDuration({start: 0, end: value * 1000})
+
+  return [hours, minutes, seconds].map((num) => String(num).padStart(2, '0')).join(':')
 }
 
 function rowClass(item: any) {

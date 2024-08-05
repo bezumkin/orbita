@@ -70,6 +70,19 @@ class Videos extends ModelController
         return null;
     }
 
+    protected function addSorting(Builder $c): Builder
+    {
+        if (($sort = $this->getProperty('sort')) && str_starts_with($sort, 'file.')) {
+            $sort = substr($sort, 5);
+            $c->join('files', 'videos.file_id', '=', 'files.id');
+            $c->orderBy($sort, $this->getProperty('dir') === 'desc' ? 'desc' : 'asc');
+
+            return $c->select('videos.*');
+        }
+
+        return parent::addSorting($c);
+    }
+
     public function prepareRow(Model $object): array
     {
         /** @var Video $object */

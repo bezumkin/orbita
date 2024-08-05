@@ -22,6 +22,10 @@
               <BCol md="3" class="fw-medium">{{ t('models.video_quality.moved_at') }}:</BCol>
               <BCol md="8">{{ formatDate(item.moved_at) }}{{ getDateDiff(item.processed_at, item.moved_at) }}</BCol>
             </BRow>
+            <BRow v-if="item.file" no-gutters>
+              <BCol md="3" class="fw-medium">{{ t('models.video_quality.size') }}:</BCol>
+              <BCol md="8">{{ prettyBytes(item.file.size) }}</BCol>
+            </BRow>
           </div>
         </template>
       </BTable>
@@ -31,6 +35,7 @@
 
 <script setup lang="ts">
 import {formatDuration, intervalToDuration, parseISO} from 'date-fns'
+import prettyBytes from 'pretty-bytes'
 
 const {$socket} = useNuxtApp()
 const {t, d} = useI18n()

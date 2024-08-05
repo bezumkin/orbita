@@ -77,6 +77,7 @@ export default {
       height: 'Высота',
       active: 'Активно',
       streams: 'Версии',
+      duration: 'Время',
       dimension: 'Разрешение',
       created_at: 'Загружено',
       qualities: 'Версии',
@@ -93,6 +94,7 @@ export default {
       created_at: 'Дата создания',
       processed_at: 'Дата обработки',
       moved_at: 'Дата перемещения',
+      size: 'Размер файла',
     },
     setting: {
       title: 'Название',

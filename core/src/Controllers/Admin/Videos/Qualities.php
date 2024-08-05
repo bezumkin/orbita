@@ -33,4 +33,9 @@ class Qualities extends ModelGetController
     {
         return $c->orderBy('quality');
     }
+
+    protected function afterCount(Builder $c): Builder
+    {
+        return $c->with('File');
+    }
 }
