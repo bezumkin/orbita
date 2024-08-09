@@ -23,6 +23,12 @@ RUN echo "max_file_uploads=256M" > /usr/local/etc/php/conf.d/docker-php-ext-uplo
   && echo "post_max_size=256M" >> /usr/local/etc/php/conf.d/docker-php-ext-upload.ini \
   && echo "upload_max_filesize=256M" >> /usr/local/etc/php/conf.d/docker-php-ext-upload.ini
 
+RUN echo "pm = dynamic" >> /usr/local/etc/php-fpm.d/zz-docker.conf \
+    && echo "pm.max_children = 16" >> /usr/local/etc/php-fpm.d/zz-docker.conf \
+    && echo "pm.start_servers = 8" >> /usr/local/etc/php-fpm.d/zz-docker.conf \
+    && echo "pm.min_spare_servers = 4" >> /usr/local/etc/php-fpm.d/zz-docker.conf \
+    && echo "pm.max_spare_servers = 8" >> /usr/local/etc/php-fpm.d/zz-docker.conf
+
 RUN echo "* * * * * www-data /usr/local/bin/php /vesp/core/cli/cron.php" >> /etc/crontab
 
 ARG PHP_XDEBUG
