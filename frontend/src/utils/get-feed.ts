@@ -2,13 +2,13 @@ import {Feed} from 'feed'
 import {ofetch} from 'ofetch'
 import {stripTags} from '~/utils/vesp'
 
-const {public: config, locales} = useRuntimeConfig()
-const SITE_URL = String(config.SITE_URL)
-// @ts-ignore
-const locale = locales.length > 0 ? locales[0].code : 'en'
-const baseURL = getApiUrl()
-
 export async function getRssFeed() {
+  const {public: config, locales} = useRuntimeConfig()
+  const SITE_URL = String(config.SITE_URL)
+  // @ts-ignore
+  const locale = locales.length > 0 ? locales[0].code : 'en'
+  const baseURL = getApiUrl()
+
   const feed = new Feed({
     title: '',
     description: '',
