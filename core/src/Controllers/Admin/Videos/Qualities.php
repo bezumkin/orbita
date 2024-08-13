@@ -36,6 +36,6 @@ class Qualities extends ModelGetController
 
     protected function afterCount(Builder $c): Builder
     {
-        return $c->with('File');
+        return $c->with('file');
     }
 }

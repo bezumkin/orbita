@@ -288,7 +288,7 @@ class Video extends Model
             ->fresh([
                 'file:id,uuid,width,height,size,updated_at',
                 'image:id,uuid,width,height,size,updated_at',
-                'qualities',
+                'qualities', 'qualities.file:id,uuid,width,height,size,updated_at',
             ])
             ?->toArray();
 
