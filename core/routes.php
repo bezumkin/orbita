@@ -16,18 +16,17 @@ $group = $app->group(
         $group->group('/security', static function (RouteCollectorProxy $group) {
             $group->any('/login', App\Controllers\Security\Login::class);
             $group->any('/logout', App\Controllers\Security\Logout::class);
-            $group->any('/register', App\Controllers\Security\Register::class);
+            if (getenv('REGISTER_ENABLED')) {
+                $group->any('/register', App\Controllers\Security\Register::class);
+                $group->any('/activate', App\Controllers\Security\Activate::class);
+            }
             $group->any('/reset', App\Controllers\Security\Reset::class);
-            $group->any('/activate', App\Controllers\Security\Activate::class);
         });
 
         $group->group('/user', static function (RouteCollectorProxy $group) {
             $group->any('/profile', App\Controllers\User\Profile::class);
             $group->any('/logout', App\Controllers\Security\Logout::class);
             $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}', App\Controllers\User\Videos::class);
-            if (getenv('REGISTER_ENABLED')) {
-                $group->any('/register', App\Controllers\Security\Register::class);
-            }
             $group->any('/payments[/{id}]', App\Controllers\User\Payments::class);
             $group->any('/subscription/{action}[/{level:\d+}]', App\Controllers\User\Subscription::class);
         });
