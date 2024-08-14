@@ -31,7 +31,7 @@
     "phpmailer/phpmailer": "^6.8",
     "predis/predis": "^2.2",
     "ramsey/uuid": "^4.7",
-    "vesp/core": "^4.0"
+    "vesp/core": "^4.1"
   },
   "require-dev": {
     "itsgoingd/clockwork": "^5.1"

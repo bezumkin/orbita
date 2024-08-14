@@ -6,6 +6,7 @@ use App\Services\CloudStorage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Ramsey\Uuid\Uuid;
+use Vesp\Services\Filesystem;
 
 /**
  * @property string $uuid
@@ -33,12 +34,13 @@ class File extends \Vesp\Models\File
         });
     }
 
-    public function __construct(array $attributes = [])
+    public function getFilesystem(): Filesystem
     {
-        parent::__construct($attributes);
-        if (getenv('S3_ENABLED')) {
+        if (!$this->filesystem && getenv('S3_ENABLED')) {
             $this->filesystem = new CloudStorage();
         }
+
+        return parent::getFilesystem();
     }
 
     public function topicFiles(): HasMany

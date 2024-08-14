@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a57cf53da3ea29e3a788fe1d0289a4c",
+    "content-hash": "357d880f22990a5c4b4ea7c3e4c193b3",
     "packages": [
         {
             "name": "akrabat/ip-address-middleware",
@@ -6468,16 +6468,16 @@
         },
         {
             "name": "vesp/core",
-            "version": "4.0.4",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezumkin/vesp-core.git",
-                "reference": "df72256c9c6eb3c151b735f3140fded8feebc621"
+                "reference": "9a8db0f8b4fca9d653ed4fa1cb1eef67f3688431"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/df72256c9c6eb3c151b735f3140fded8feebc621",
-                "reference": "df72256c9c6eb3c151b735f3140fded8feebc621",
+                "url": "https://api.github.com/repos/bezumkin/vesp-core/zipball/9a8db0f8b4fca9d653ed4fa1cb1eef67f3688431",
+                "reference": "9a8db0f8b4fca9d653ed4fa1cb1eef67f3688431",
                 "shasum": ""
             },
             "require": {
@@ -6521,9 +6521,9 @@
             "description": "Vesp core library to make backend simple",
             "support": {
                 "issues": "https://github.com/bezumkin/vesp-core/issues",
-                "source": "https://github.com/bezumkin/vesp-core/tree/4.0.4"
+                "source": "https://github.com/bezumkin/vesp-core/tree/4.1.0"
             },
-            "time": "2024-07-22T05:16:46+00:00"
+            "time": "2024-08-14T09:22:17+00:00"
         },
         {
             "name": "voku/portable-ascii",
