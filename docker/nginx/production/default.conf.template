@@ -1,5 +1,4 @@
 gzip on;
-
 gzip_vary on;
 gzip_proxied any;
 gzip_comp_level 6;
@@ -41,5 +40,12 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         fastcgi_pass php-fpm:9000;
+    }
+
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|bmp|ttf|woff|woff2|svg)$ {
+        root /vesp/frontend/.output/public/;
+        access_log off;
+        expires 1y;
+        break;
     }
 }

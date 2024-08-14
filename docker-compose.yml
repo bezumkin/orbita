@@ -19,7 +19,7 @@ services:
       - NODE_PORT=${NODE_PORT}
       - TZ=${TZ}
     volumes:
-      - ./docker/nginx:/etc/nginx/templates
+      - ./docker/nginx/production:/etc/nginx/templates
       - ./frontend:/vesp/frontend
       - ./www:/vesp/www
     ports:
