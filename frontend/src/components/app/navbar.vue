@@ -8,7 +8,7 @@
       <AppPages class="d-none d-md-flex" />
 
       <BNavbarNav class="ms-auto">
-        <BButton variant="light" class="me-1" @click="changeColor">
+        <BButton variant="light" class="me-1" @click="() => changeColorTheme()">
           <VespFa :icon="colorIcon" fixed-width />
         </BButton>
         <AppLogin :btn-variant="btnVariant" @click="hideSidebar">
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import type {BaseButtonVariant} from 'bootstrap-vue-next'
-import {useColorMode, type BasicColorSchema} from '@vueuse/core'
+import {type BasicColorSchema, useColorMode} from '@vueuse/core'
 
 defineProps({
   sidebar: {
@@ -52,11 +52,8 @@ defineProps({
 const hasAdmin = computed(() => getAdminSections().length)
 const {$sidebar} = useNuxtApp()
 const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
-const saved: Ref<BasicColorSchema | undefined> = useCookie('colorMode')
+const saved = useCookie<BasicColorSchema | undefined>('colorMode')
 const colorIcon = computed(() => {
-  if (store.value === 'auto') {
-    return 'circle-half-stroke'
-  }
   return ['far', store.value === 'light' ? 'sun' : 'moon']
 })
 
@@ -68,37 +65,35 @@ function hideSidebar() {
   $sidebar.value = false
 }
 
-function changeColor() {
-  if (store.value === 'auto') {
-    store.value = system.value === 'light' ? 'dark' : 'light'
-  } else if (store.value === 'light') {
-    store.value = system.value === 'light' ? 'auto' : 'dark'
-  } else if (store.value === 'dark') {
-    store.value = system.value === 'dark' ? 'auto' : 'light'
+function changeColorTheme(newValue: BasicColorSchema | undefined = undefined) {
+  if (newValue) {
+    store.value = newValue
+  } else {
+    store.value = store.value === 'light' ? 'dark' : 'light'
   }
   saved.value = store.value
-}
 
-store.value = saved.value || 'auto'
-
-function changeThemeColor(newValue: string) {
-  const elem = document.querySelector('meta[name="theme-color"]')
-  if (elem) {
-    elem.setAttribute('content', newValue === 'dark' ? '#000' : '#fff')
+  if (process.client) {
+    const elem = document.querySelector('meta[name="theme-color"]')
+    if (elem) {
+      elem.setAttribute('content', store.value === 'dark' ? '#000' : '#fff')
+    }
   }
 }
 
-watch(system, (newValue) => {
-  if (store.value === 'auto') {
-    changeThemeColor(newValue)
+store.value = 'light'
+if (saved.value) {
+  if (saved.value === 'auto') {
+    saved.value = 'light'
   }
-})
+  store.value = saved.value
+  useHead({
+    bodyAttrs: {
+      'data-bs-theme': saved.value,
+    },
+    meta: [{name: 'theme-color', content: saved.value === 'dark' ? '#000' : '#fff'}],
+  })
+}
 
-watch(store, (newValue) => {
-  if (newValue === 'auto') {
-    changeThemeColor(system.value)
-  } else {
-    changeThemeColor(newValue)
-  }
-})
+watch(system, changeColorTheme)
 </script>

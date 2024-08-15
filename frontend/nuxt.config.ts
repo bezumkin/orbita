@@ -62,10 +62,7 @@ const config: NuxtConfig = {
     head: {
       title: process.env.SITE_NAME,
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0',
-      meta: [
-        {name: 'msapplication-config', content: '/favicons/browserconfig.xml'},
-        {name: 'theme-color', content: '#000'},
-      ],
+      meta: [{name: 'msapplication-config', content: '/favicons/browserconfig.xml'}],
       link: [
         {rel: 'apple-touch-icon', sizes: '180x180', href: '/favicons/apple-touch-icon.png'},
         {rel: 'icon', sizes: '32x32', href: '/favicons/favicon-32x32.png', type: 'image/png'},
@@ -113,7 +110,6 @@ const config: NuxtConfig = {
         'heading',
         'list',
         'face-smile',
-        'circle-half-stroke',
         'tags',
         'external-link',
         'magnifying-glass',
