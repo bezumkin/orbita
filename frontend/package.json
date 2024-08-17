@@ -19,7 +19,7 @@
     "@editorjs/list": "^1.9.0",
     "@editorjs/paragraph": "^2.11.5",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@vesp/frontend": "^3.4.2",
+    "@vesp/frontend": "^3.5.1",
     "codeflask": "^1.4.1",
     "feed": "^4.2.2",
     "glightbox": "^3.2.0",
