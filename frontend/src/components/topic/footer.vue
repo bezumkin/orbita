@@ -12,17 +12,17 @@
             <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ total }}
           </template>
         </UserReactions>
-        <div><VespFa icon="eye" class="fa-fw" /> {{ topic.views_count }}</div>
+        <div><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(topic.views_count) }}</div>
         <div v-if="!isTopic">
           <BLink
             v-if="topic.access && commentsCount"
             :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
           >
             <VespFa icon="comment" class="fa-fw" />
-            {{ commentsCount }}
-            <span v-if="unseenCount" class="text-success">+{{ unseenCount }}</span>
+            {{ formatBigNumber(commentsCount) }}
+            <span v-if="unseenCount" class="text-success">+{{ formatBigNumber(unseenCount) }}</span>
           </BLink>
-          <template v-else> <VespFa icon="comment" class="fa-fw" /> {{ commentsCount }} </template>
+          <template v-else> <VespFa icon="comment" class="fa-fw" /> {{ formatBigNumber(commentsCount) }} </template>
         </div>
       </div>
       <div class="col-12 col-md-auto order-3 order-md-1">

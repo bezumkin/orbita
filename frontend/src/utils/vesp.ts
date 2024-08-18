@@ -171,3 +171,7 @@ export function useDateLocale() {
     return undefined
   })
 }
+
+export function formatBigNumber(views: undefined | number | string) {
+  return views ? String(views).replace(/(\d)(?=(\d{3})+$)/g, '$1 ') : '0'
+}
