@@ -29,6 +29,9 @@
       <template v-if="value">
         <VespFa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
       </template>
+      <template v-else-if="value === false">
+        <VespFa icon="times" class="text-danger" />
+      </template>
       <VespFa v-else icon="hourglass-half" />
     </template>
   </VespTable>
