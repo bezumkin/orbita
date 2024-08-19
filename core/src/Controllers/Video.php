@@ -2,65 +2,103 @@
 
 namespace App\Controllers;
 
+use App\Models\File;
 use App\Models\TopicFile;
 use App\Models\Video as VideoFile;
 use App\Models\VideoQuality;
 use App\Services\Log;
+use App\Services\Redis;
+use App\Services\VideoCache;
+use Illuminate\Database\Capsule\Manager;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Psr7\Stream;
 use Throwable;
 use Vesp\Controllers\Controller;
 
 class Video extends Controller
 {
     protected ?VideoFile $video = null;
+    protected VideoCache $cache;
+    protected Redis $redis;
 
-    public function get(): ResponseInterface
+    public function __construct(Manager $eloquent, VideoCache $cache, Redis $redis)
+    {
+        parent::__construct($eloquent);
+        $this->cache = $cache;
+        $this->redis = $redis;
+    }
+
+    public function checkScope(string $method): ?ResponseInterface
+    {
+        if ($method === 'options') {
+            return parent::checkScope('options');
+        }
+
+        return $this->loadFile();
+    }
+
+    protected function loadFile(): ?ResponseInterface
     {
         $uuid = $this->getProperty('uuid');
         if (!$this->video = VideoFile::query()->find($uuid)) {
             return $this->failure('Not Found', 404);
         }
 
-        // Check permissions
-        $isAdmin = $this->user && $this->user->hasScope('videos/patch');
-        if (!$isAdmin && !$this->video->active) {
-            return $this->failure('Not Found', 404);
-        }
+        $cacheTTL = (int)getenv('CACHE_MEDIA_ACCESS_TIME') ?: 3600;
+        $key = implode(':', ['video', $uuid, $this->user?->id ?: 'null']);
 
-        $allow = $isAdmin || $this->video->pageFiles()->count();
-        if (!$allow) {
-            $topicFiles = $this->video->topicFiles();
-            /** @var TopicFile $topicFile */
-            foreach ($topicFiles->cursor() as $topicFile) {
-                if ($topicFile->topic->hasAccess($this->user)) {
-                    $allow = true;
-                    break;
+        $allow = $this->redis->get($key);
+        if ($allow === null) {
+            // Check permissions
+            $isAdmin = $this->user && $this->user->hasScope('videos/patch');
+            if (!$isAdmin && !$this->video->active) {
+                return $this->failure('Not Found', 404);
+            }
+
+            $allow = $isAdmin || $this->video->pageFiles()->count();
+            if (!$allow) {
+                $topicFiles = $this->video->topicFiles();
+                /** @var TopicFile $topicFile */
+                foreach ($topicFiles->cursor() as $topicFile) {
+                    if ($topicFile->topic->hasAccess($this->user)) {
+                        $allow = true;
+                        break;
+                    }
                 }
             }
+            $this->redis->set($key, $allow, 'EX', $cacheTTL);
         }
         if (!$allow) {
             return $this->failure('Access Denied', 403);
         }
-        // ---
 
+        return null;
+    }
+
+    public function get(): ResponseInterface
+    {
         if ($quality = $this->getProperty('quality')) {
             if ($quality === 'chapters') {
                 return $this->success($this->video->chapters);
             }
-            if ($range = $this->request->getHeaderLine('Range')) {
-                $range = explode('=', $range);
-                [$start, $end] = explode('-', end($range), 2);
-                if ($response = $this->getRange($quality, (int)$start, (int)$end)) {
-                    return $response;
+
+            if ($quality === 'download' && getenv('DOWNLOAD_MEDIA_ENABLED')) {
+                return $this->download($this->video->file, $this->video->title);
+            }
+
+            /** @var VideoQuality $videoQuality */
+            if ($videoQuality = $this->video->qualities()->where('quality', $quality)->first()) {
+                if ($range = $this->request->getHeaderLine('Range')) {
+                    return $this->getRange($videoQuality->file, $range);
                 }
-            } elseif ($response = $this->getQuality((int)$quality)) {
-                return $response;
+
+                return $this->getQuality($videoQuality);
             }
         } elseif ($response = $this->getManifest()) {
             return $response;
         }
 
-        return $this->failure('', 404);
+        return $this->failure('Not Found', 404);
     }
 
     public function getManifest(): ?ResponseInterface
@@ -72,8 +110,7 @@ class Video extends Controller
             return null;
         }
 
-        $this->response->getBody()
-            ->write($manifest);
+        $this->response->getBody()->write($manifest);
 
         return $this->response
             ->withHeader('Accept-Ranges', 'bytes')
@@ -85,12 +122,8 @@ class Video extends Controller
             );
     }
 
-    protected function getQuality(int $quality): ?ResponseInterface
+    protected function getQuality(VideoQuality $videoQuality): ResponseInterface
     {
-        /** @var VideoQuality $videoQuality */
-        if (!$videoQuality = $this->video->qualities()->where('quality', $quality)->first()) {
-            return null;
-        }
         $this->response->getBody()->write($videoQuality->manifest);
 
         return $this->response
@@ -103,20 +136,33 @@ class Video extends Controller
             );
     }
 
-    public function getRange(string $quality, int $start, int $end): ?ResponseInterface
+    protected function getRange(File $file, string $ranges): ResponseInterface
     {
-        /** @var VideoQuality $videoQuality */
-        if (!$videoQuality = $this->video->qualities()->where('quality', $quality)->first()) {
-            return null;
+        $range = explode('=', $ranges);
+        [$start, $end] = array_map('intval', explode('-', end($range), 2));
+        if (!$end) {
+            $tmp = $start + 1048576; // 1 Mb
+            $end = $tmp + 1 >= $file->size ? $file->size - 1 : $tmp;
+        }
+        if ($end - $start >= 1073741824) {
+            return $this->failure('Range Not Satisfiable', 416);
         }
 
         try {
-            $file = $videoQuality->file;
             $fs = $file->getFilesystem();
             if (method_exists($fs, 'readRangeStream')) {
-                $body = $fs->readRangeStream($file->getFilePathAttribute(), $start, $end);
-                $this->response = $this->response->withBody($body);
-                $length = $body->getSize();
+                if (!getenv('CACHE_S3_SIZE') || !$data = $this->cache->get($file->uuid, $start, $end)) {
+                    /** @var \Psr\Http\Message\StreamInterface $body */
+                    $body = $fs->readRangeStream($file->getFilePathAttribute(), $start, $end);
+                    $this->response = $this->response->withBody($body);
+                    $length = $body->getSize();
+                    if (getenv('CACHE_S3_SIZE')) {
+                        $this->cache->set($file->uuid, $start, $end, $body->__toString());
+                    }
+                } else {
+                    $this->response->getBody()->write($data);
+                    $length = strlen($data);
+                }
             } else {
                 $stream = $fs->getBaseFilesystem()->readStream($file->getFilePathAttribute());
                 $data = stream_get_contents($stream, $end - $start + 1, $start);
@@ -138,6 +184,18 @@ class Video extends Controller
             Log::error($e);
         }
 
-        return null;
+        return $this->failure('Range Not Satisfiable', 416);
+    }
+
+    protected function download(File $file, ?string $title = null): ResponseInterface
+    {
+        $fs = $file->getFilesystem();
+        $stream = new Stream($fs->getBaseFilesystem()->readStream($file->getFilePathAttribute()));
+
+        return $this->response
+            ->withBody($stream)
+            ->withHeader('Content-Type', $file->type)
+            ->withHeader('Content-Length', $file->size)
+            ->withHeader('Content-Disposition', 'attachment; filename=' . $title ?: $file->file);
     }
 }

@@ -11,6 +11,12 @@ $scheduler->php(__DIR__ . '/clear-tokens.php', null, [], 'clear_tokens')
     // ->inForeground()
     ->onlyOne();
 
+if (getenv('CACHE_S3_SIZE') > 0) {
+    $scheduler->php(__DIR__ . '/clear-cache.php', null, [], 'clear_cache')
+        ->everyMinute(10)
+        ->onlyOne();
+}
+
 $scheduler->php(__DIR__ . '/prepare-videos.php', null, [], 'prepare_videos')
     ->everyMinute()
     ->onlyOne();

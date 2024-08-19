@@ -3,21 +3,15 @@
 namespace App\Controllers;
 
 use App\Models\File;
-use App\Services\Log;
+use App\Models\TopicFile;
 use Psr\Http\Message\ResponseInterface;
-use Throwable;
-use Vesp\Controllers\Controller;
 
-class Audio extends Controller
+class Audio extends Video
 {
     protected ?File $file = null;
 
-    public function checkScope(string $method): ?ResponseInterface
+    protected function loadFile(): ?ResponseInterface
     {
-        if ($method === 'options') {
-            return null;
-        }
-
         $uuid = $this->getProperty('uuid');
         $this->file = File::query()
             ->where('type', 'LIKE', 'audio/%')
@@ -27,46 +21,44 @@ class Audio extends Controller
             return $this->failure('Not Found', 404);
         }
 
-        return parent::checkScope($method);
+        $cacheTTL = (int)getenv('CACHE_MEDIA_ACCESS_TIME') ?: 3600;
+        $key = implode(':', ['audio', $uuid, $this->user?->id ?: 'null']);
+
+        $allow = $this->redis->get($key);
+        if ($allow === null) {
+            // Check permissions
+            $isAdmin = $this->user && $this->user->hasScope('topics/patch');
+
+            $allow = $isAdmin || $this->file->pageFiles()->count();
+            if (!$allow) {
+                $topicFiles = $this->file->topicFiles();
+                /** @var TopicFile $topicFile */
+                foreach ($topicFiles->cursor() as $topicFile) {
+                    if ($topicFile->topic->hasAccess($this->user)) {
+                        $allow = true;
+                        break;
+                    }
+                }
+            }
+            $this->redis->set($key, $allow, 'EX', $cacheTTL);
+        }
+        if (!$allow) {
+            return $this->failure('Access Denied', 403);
+        }
+
+        return null;
     }
 
     public function get(): ResponseInterface
     {
         $file = $this->file;
-        $range = $this->request->getHeaderLine('Range');
-        $range = explode('=', $range);
-        [$start, $end] = array_map('intval', explode('-', end($range), 2));
-        if (!$end) {
-            $end = $this->file->size - 1;
+
+        if ($range = $this->request->getHeaderLine('Range')) {
+            return $this->getRange($file, $range);
         }
 
-        try {
-            $fs = $file->getFilesystem();
-            if (method_exists($fs, 'readRangeStream')) {
-                $body = $fs->readRangeStream($file->getFilePathAttribute(), $start, $end);
-                $this->response = $this->response->withBody($body);
-                $length = $body->getSize();
-            } else {
-                $stream = $fs->getBaseFilesystem()->readStream($file->getFilePathAttribute());
-                $data = stream_get_contents($stream, $end - $start + 1, $start);
-                $this->response->getBody()->write($data);
-                $length = strlen($data);
-            }
-
-            return $this->response
-                ->withStatus(206, 'Partial Content')
-                ->withHeader('Accept-Ranges', 'bytes')
-                ->withHeader('Content-Type', $file->type)
-                ->withHeader('Content-Length', $length)
-                ->withHeader('Content-Range', "bytes $start-$end/$file->size")
-                ->withHeader(
-                    'Access-Control-Allow-Origin',
-                    getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
-                );
-        } catch (Throwable $e) {
-            Log::error($e);
-        }
-
-        return $this->failure('', 500);
+        return getenv('DOWNLOAD_MEDIA_ENABLED')
+            ? $this->download($file)
+            : $this->failure('Range Not Satisfiable', 416);
     }
 }
