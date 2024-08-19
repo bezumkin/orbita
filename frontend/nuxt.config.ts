@@ -21,7 +21,10 @@ const config: NuxtConfig = {
     },
     css: {
       preprocessorOptions: {
-        scss: {additionalData: '@use "@/assets/scss/_variables.scss" as *;'},
+        scss: {
+          additionalData: '@use "@/assets/scss/_variables.scss" as *;',
+          quietDeps: true,
+        },
       },
     },
   },
