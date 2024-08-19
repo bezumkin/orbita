@@ -9,7 +9,7 @@
 
       <BNavbarNav class="ms-auto">
         <BButton variant="light" class="me-1" @click="() => changeColorTheme()">
-          <VespFa :icon="colorIcon" fixed-width />
+          <VespFa :key="colorIcon[1]" :icon="colorIcon" fixed-width />
         </BButton>
         <AppLogin :btn-variant="btnVariant" @click="hideSidebar">
           <template #user-menu>
@@ -50,11 +50,12 @@ defineProps({
 })
 
 const hasAdmin = computed(() => getAdminSections().length)
+const {loggedIn} = useAuth()
 const {$sidebar} = useNuxtApp()
 const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
 const saved = useCookie<BasicColorSchema | undefined>('colorMode')
 const colorIcon = computed(() => {
-  return ['far', store.value === 'light' ? 'sun' : 'moon']
+  return ['far', store.value === 'dark' ? 'moon' : 'sun']
 })
 
 function toggleSidebar() {
@@ -81,18 +82,28 @@ function changeColorTheme(newValue: BasicColorSchema | undefined = undefined) {
   }
 }
 
+// Reset default theme for all users
 store.value = 'light'
 if (saved.value) {
   if (saved.value === 'auto') {
     saved.value = 'light'
   }
-  store.value = saved.value
-  useHead({
-    bodyAttrs: {
-      'data-bs-theme': saved.value,
-    },
-    meta: [{name: 'theme-color', content: saved.value === 'dark' ? '#000' : '#fff'}],
-  })
+
+  // Set theme tags for authorized users
+  if (loggedIn.value) {
+    store.value = saved.value
+    useHead({
+      bodyAttrs: {
+        'data-bs-theme': saved.value === 'dark' ? 'dark' : 'light',
+      },
+      meta: [{name: 'theme-color', content: saved.value === 'dark' ? '#000' : '#fff'}],
+    })
+  } else {
+    // Change theme after page load for guests
+    onMounted(() => {
+      changeColorTheme(saved.value === 'auto' ? 'light' : saved.value)
+    })
+  }
 }
 
 watch(system, changeColorTheme)

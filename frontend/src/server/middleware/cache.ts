@@ -26,5 +26,4 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   setResponseHeader(event, 'X-From-Cache', 'false')
-  setCookie(event, 'colorMode', 'light')
 })
