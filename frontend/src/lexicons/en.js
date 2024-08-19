@@ -71,6 +71,7 @@ export default {
       description: 'Description',
       chapters: 'Timecodes',
       image: 'Preview',
+      audio: 'Audio',
       progress: 'Processed',
       size: 'Size',
       width: 'Width',

@@ -1,5 +1,5 @@
 <template>
-  <audio v-show="false" ref="audio" :src="source" controls preload="metadata" />
+  <audio ref="audio" :title="title" preload="metadata" />
 </template>
 
 <script setup lang="ts">
@@ -8,19 +8,21 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  title: {
+    type: String,
+    default: '',
+  },
 })
 
-const {$plyr} = useNuxtApp()
 const audio = ref()
 const player = ref()
-const source = getApiUrl() + 'audio/' + props.uuid
 
 onMounted(() => {
-  $plyr(audio.value)
+  player.value = initAudioPlayer(props.uuid, audio.value)
 })
 
 onUnmounted(() => {
-  if (player.value) {
+  if (player.value && 'destroy' in player.value) {
     player.value.destroy()
   }
 })

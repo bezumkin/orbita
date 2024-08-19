@@ -1,5 +1,6 @@
 import type {BlockTool, BlockToolConstructorOptions, BlockToolData} from '@editorjs/editorjs'
-import sprite from '~/assets/icons/plyr.svg'
+import {icon} from '@fortawesome/fontawesome-svg-core'
+import {faPlay} from '@fortawesome/free-solid-svg-icons'
 
 export default class implements BlockTool {
   data: BlockToolData
@@ -41,16 +42,20 @@ export default class implements BlockTool {
       posterWrapper.append(poster)
 
       const button = document.createElement('button')
-      button.classList.add('plyr__control', 'plyr__control--overlaid')
-      button.innerHTML = `<svg aria-hidden="true" focusable="false"><use xlink:href="${sprite}#plyr-play" /></svg>`
+      button.classList.add('btn', 'btn-primary', 'play-video-button')
+      button.innerHTML = icon(faPlay).html[0]
       button.onclick = (e) => {
         e.preventDefault()
         this.activated = true
         this.html.innerHTML = ''
         this.showPreview()
       }
+      const fa = button.firstChild as HTMLElement
+      fa.style.width = '3rem'
+      fa.style.height = '3rem'
+      fa.classList.add('fa-fw')
 
-      wrapper.classList.add('plyr', 'plyr--full-ui', 'plyr--video')
+      wrapper.classList.add('play-video-wrapper')
       wrapper.append(posterWrapper)
       wrapper.append(button)
     } else {

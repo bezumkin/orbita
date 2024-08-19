@@ -1,4 +1,5 @@
 import Parent from './file'
+import {initAudioPlayer} from '~/utils/players'
 
 export default class extends Parent {
   type: string = 'audio'
@@ -23,20 +24,10 @@ export default class extends Parent {
       return
     }
 
-    const title = document.createElement('div')
-    title.classList.add('px-4', 'fw-medium', 'text-break')
-    title.textContent = this.data.title
-
-    const audioWrapper = document.createElement('div')
-    audioWrapper.classList.add('px-2')
-
     const audio = document.createElement('audio')
-    audio.src = getApiUrl() + 'audio/' + this.data.uuid
-    audioWrapper.appendChild(audio)
+    audio.title = this.data.title
+    this.html.appendChild(audio)
 
-    this.html.classList.add('py-3', 'border', 'rounded')
-    this.html.appendChild(title)
-    this.html.appendChild(audioWrapper)
-    useNuxtApp().$plyr(audio)
+    initAudioPlayer(this.data.uuid, audio)
   }
 }

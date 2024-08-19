@@ -21,6 +21,7 @@ class Videos extends ModelController
     protected function beforeGet(Builder $c): Builder
     {
         $c->with('image:id,uuid,updated_at');
+        $c->with('audio:id,uuid,updated_at');
 
         return $c;
     }
@@ -44,7 +45,9 @@ class Videos extends ModelController
 
     protected function afterCount(Builder $c): Builder
     {
-        $c->with('file:id,uuid,width,height,size,updated_at', 'image:id,uuid,width,height,size,updated_at');
+        $c->with('file:id,uuid,width,height,size,updated_at');
+        $c->with('image:id,uuid,width,height,size,updated_at');
+        $c->with('audio:id,uuid,size,updated_at');
 
         return $c;
     }

@@ -58,6 +58,9 @@ const config: NuxtConfig = {
       PAYMENT_SERVICES: process.env.PAYMENT_SERVICES || '',
       PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
       ADMIN_SECTIONS: process.env.ADMIN_SECTIONS || '',
+      DOWNLOAD_MEDIA_ENABLED: process.env.DOWNLOAD_MEDIA_ENABLED || '0',
+      EXTRACT_VIDEO_AUDIO_ENABLED: process.env.EXTRACT_VIDEO_AUDIO_ENABLED || '0',
+      EXTRACT_VIDEO_THUMBNAILS_ENABLED: process.env.EXTRACT_VIDEO_THUMBNAILS_ENABLED || '1',
     },
   },
   app: {

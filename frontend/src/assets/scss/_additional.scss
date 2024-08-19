@@ -24,11 +24,6 @@ fieldset {
 }
 
 .ratio {
-  .plyr {
-    position: absolute;
-    border-radius: inherit;
-  }
-
   &.rounded {
     > img, div {
       border-radius: inherit;
@@ -237,18 +232,4 @@ body.glightbox-open {
 
 .goverlay {
   background: rgba(var(--bs-dark-rgb), 0.85) !important;
-}
-
-// Plyr
-.plyr {
-  border-radius: var(--bs-border-radius);
-
-  @include media-breakpoint-down(md) {
-    // stylelint-disable-next-line
-    .plyr__volume {
-      & > input {
-        display: none;
-      }
-    }
-  }
 }

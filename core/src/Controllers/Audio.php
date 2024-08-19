@@ -31,12 +31,28 @@ class Audio extends Video
 
             $allow = $isAdmin || $this->file->pageFiles()->count();
             if (!$allow) {
-                $topicFiles = $this->file->topicFiles();
-                /** @var TopicFile $topicFile */
-                foreach ($topicFiles->cursor() as $topicFile) {
-                    if ($topicFile->topic->hasAccess($this->user)) {
-                        $allow = true;
-                        break;
+                /** @var \App\Models\Video $video */
+                if ($video = \App\Models\Video::query()->where('audio_id', $this->file->id)->first()) {
+                    // Check if this is the audio version of video
+                    $allow = $video->file->pageFiles()->count() > 0;
+                    if (!$allow) {
+                        $topicFiles = $video->file->topicFiles();
+                        /** @var TopicFile $topicFile */
+                        foreach ($topicFiles->cursor() as $topicFile) {
+                            if ($topicFile->topic->hasAccess($this->user)) {
+                                $allow = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    $topicFiles = $this->file->topicFiles();
+                    /** @var TopicFile $topicFile */
+                    foreach ($topicFiles->cursor() as $topicFile) {
+                        if ($topicFile->topic->hasAccess($this->user)) {
+                            $allow = true;
+                            break;
+                        }
                     }
                 }
             }

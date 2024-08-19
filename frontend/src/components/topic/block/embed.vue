@@ -1,13 +1,11 @@
 <template>
-  <div v-if="!activated" class="plyr plyr--full-ui plyr--video">
+  <div v-if="!activated" class="play-video-wrapper">
     <div v-bind="wrapperProps">
       <BImg :src="posterUrl" />
     </div>
-    <button class="plyr__control plyr__control--overlaid" @click.prevent="onActivate">
-      <svg aria-hidden="true" focusable="false">
-        <use :xlink:href="sprite + '#plyr-play'" />
-      </svg>
-    </button>
+    <BButton variant="primary" class="play-video-button" @click.prevent="onActivate">
+      <VespFa icon="play" style="width: 3rem; height: 3rem" fixed-width />
+    </BButton>
   </div>
   <div v-else v-bind="wrapperProps">
     <PlayerEmbed :url="url" :autoplay="true" />
@@ -16,7 +14,6 @@
 
 <script setup lang="ts">
 import type {OutputBlockData} from '@editorjs/editorjs'
-import sprite from '~/assets/icons/plyr.svg'
 import {getEmbedLink} from '~/utils/vesp'
 
 const props = defineProps({

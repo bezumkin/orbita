@@ -1,0 +1,56 @@
+@import "vidstack/player/styles/default/theme.css";
+@import "vidstack/player/styles/default/layouts/video.css";
+@import "vidstack/player/styles/default/layouts/audio.css";
+
+.vds-video-layout,
+.vds-audio-layout {
+  --default-bg: var(--bs-body-bg);
+  --default-brand: var(--bs-body-color);
+  --default-color: var(--bs-body-color);
+  --default-border: var(--bs-border-color);
+  --default-slider-track-bg: var(--bs-secondary-bg);
+  --media-menu-bg: var(--bs-body-bg);
+  --media-controls-color: var(--bs-body-color);
+  --media-menu-divider: 1px solid var(--bs-border-color);
+  --media-menu-checkbox-bg: var(--bs-secondary-bg);
+  --media-menu-text-color: var(--bs-body-color);
+  --media-menu-text-secondary-color: var(--bs-secondary);
+  --media-menu-slider-track-fill-bg: var(--bs-body-color);
+  --media-menu-slider-track-bg: var(--bs-secondary-bg);
+  --media-slider-thumb-border-radius: 9999px;
+  --media-menu-section-bg: var(--bs-tertiary-bg);
+  --media-menu-section-border-radius: var(--bs-border-radius);
+}
+
+.vds-video-layout {
+  --media-button-color: var(--bs-light);
+  --video-border-radius: var(--bs-border-radius);
+}
+
+.vds-audio-layout {
+  --audio-filter: none;
+  --audio-border-radius: var(--bs-border-radius);
+  --audio-slider-progress-bg: var(--bs-secondary);
+
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border: 1px solid var(--bs-border-color);
+}
+
+.play-video {
+  &-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-button {
+    position: absolute;
+    border-radius: 50%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

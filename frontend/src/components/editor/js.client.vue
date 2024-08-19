@@ -141,10 +141,13 @@ function insert(block: string) {
 }
 
 provide('pickVideo', (video: any) => {
-  const data = {
+  const data: VespVideo = {
     id: video.file_id,
     uuid: video.id,
     updated_at: video.updated_at,
+  }
+  if (video.audio) {
+    data.audio = video.audio.uuid
   }
   editor.value.focus()
   editor.value.blocks.insert('video', data, {}, currentBlockIdx.value + 1)

@@ -1,10 +1,5 @@
 <template>
-  <div class="py-3 border rounded">
-    <div class="px-4 fw-medium text-break">{{ block.data.title }}</div>
-    <div class="px-2">
-      <PlayerAudio :uuid="block.data.uuid" />
-    </div>
-  </div>
+  <PlayerAudio :uuid="block.data.uuid" :title="block.data.title" />
 </template>
 
 <script setup lang="ts">

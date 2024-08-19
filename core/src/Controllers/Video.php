@@ -82,6 +82,14 @@ class Video extends Controller
                 return $this->success($this->video->chapters);
             }
 
+            if ($quality === 'thumbnails') {
+                return $this->getThumbnails();
+            }
+
+            if ($quality === 'download') {
+                return $this->download($this->video->file, $this->video->title);
+            }
+
             if ($quality === 'download' && getenv('DOWNLOAD_MEDIA_ENABLED')) {
                 return $this->download($this->video->file, $this->video->title);
             }
@@ -120,6 +128,16 @@ class Video extends Controller
                 'Access-Control-Allow-Origin',
                 getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
             );
+    }
+
+    public function getThumbnails(): ?ResponseInterface
+    {
+        if (!$this->video->thumbnails && $this->video->thumbnail_id) {
+            $this->video->thumbnails = $this->video->getThumbnails();
+            $this->video->save();
+        }
+
+        return $this->success($this->video->thumbnails);
     }
 
     protected function getQuality(VideoQuality $videoQuality): ResponseInterface

@@ -1,5 +1,3 @@
-import type {Options} from 'plyr'
-import Plyr from 'plyr'
 import {Socket} from 'socket.io-client'
 import i18n from '@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs'
 import {getImageLink, hasScope} from '@vesp/frontend'
@@ -196,8 +194,6 @@ declare module '@vue/runtime-core' {
     $reactions: Ref<VespReaction[]>
     $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
-    $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
-    $plyrOptions: Options
     $contentPreview: Function
     $contentClick: (e: MouseClick) => void
   }
@@ -221,8 +217,6 @@ declare module '#app' {
     $reactions: Ref<VespReaction[]>
     $payment: Ref<undefined | VespTopic | VespLevel>
     $isMobile: Ref<boolean>
-    $plyr: (element: HTMLElement | string, options: Options = {}) => Plyr
-    $plyrOptions: Options
     $contentPreview: Function
     $contentClick: (e: MouseClick) => void
   }

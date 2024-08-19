@@ -9,8 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Slim\Psr7\Stream;
-use Slim\Psr7\UploadedFile;
 use Streaming\Format\X264;
 use Streaming\Representation;
 use Throwable;
@@ -19,6 +17,8 @@ use Throwable;
  * @property string $id
  * @property int $file_id
  * @property ?int $image_id
+ * @property ?int $audio_id
+ * @property ?int $thumbnail_id
  * @property ?string $title
  * @property ?string $description
  * @property ?int $duration
@@ -27,7 +27,8 @@ use Throwable;
  * @property bool $moved
  * @property int $progress
  * @property string $manifest
- * @property array $chapters
+ * @property ?array $chapters
+ * @property ?array $thumbnails
  * @property string $error
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -36,6 +37,8 @@ use Throwable;
  *
  * @property-read File $file
  * @property-read File $image
+ * @property-read File $audio
+ * @property-read File $thumbnail
  * @property-read VideoQuality[] $qualities
  * @property-read VideoUser[] $videoUsers
  * @property-read TopicFile[] $topicFiles
@@ -49,6 +52,7 @@ class Video extends Model
     protected $casts = [
         'active' => 'boolean',
         'chapters' => 'array',
+        'thumbnails' => 'array',
         'processed' => 'boolean',
         'moved' => 'boolean',
         'processed_at' => 'datetime',
@@ -62,6 +66,16 @@ class Video extends Model
     }
 
     public function image(): BelongsTo
+    {
+        return $this->belongsTo(File::class);
+    }
+
+    public function audio(): BelongsTo
+    {
+        return $this->belongsTo(File::class);
+    }
+
+    public function thumbnail(): BelongsTo
     {
         return $this->belongsTo(File::class);
     }
@@ -92,16 +106,40 @@ class Video extends Model
 
         try {
             if (!$this->image && $image = $media->getPreview($this->id)) {
-                $stream = new Stream(fopen('data:image/jpeg;base64,' . base64_encode($image), 'rb'));
-                $file = new File();
-                $file->uploadFile(new UploadedFile($stream, $this->title . '.jpg', 'image/jpeg', $stream->getSize()));
-                $this->image_id = $file->id;
+                $this->image_id = $image->id;
                 $this->save();
 
                 if (!$this->file->height || !$this->file->width) {
-                    $this->file->height = $file->height;
-                    $this->file->width = $file->width;
+                    $this->file->height = $image->height;
+                    $this->file->width = $image->width;
                     $this->file->save();
+                }
+            }
+
+            $representations = $media::getQualities($this->file->width, $this->file->height);
+
+            if (!$this->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
+                if (PHP_SAPI === 'cli') {
+                    $time = microtime(true);
+                    echo 'Extracting audio... ';
+                }
+                $audio = $media->getAudio($this->id);
+                $this->audio_id = $audio->id;
+                $this->save();
+                if (PHP_SAPI === 'cli') {
+                    echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
+                }
+            }
+            if (!$this->thumbnail && getenv('EXTRACT_VIDEO_THUMBNAILS_ENABLED')) {
+                if (PHP_SAPI === 'cli') {
+                    $time = microtime(true);
+                    echo 'Extracting thumbnails... ';
+                }
+                $thumbnail = $media->getThumbnail($this->id, $representations[0]);
+                $this->thumbnail_id = $thumbnail->id;
+                $this->save();
+                if (PHP_SAPI === 'cli') {
+                    echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
                 }
             }
         } catch (Throwable $e) {
@@ -112,7 +150,6 @@ class Video extends Model
             return;
         }
 
-        $representations = $media->getQualities($this->file->width, $this->file->height);
         $steps = count($representations);
         $stepSize = floor(100 / $steps);
         $startTime = time();
@@ -241,6 +278,7 @@ class Video extends Model
         $manifest = [
             '#EXTM3U',
             '#EXT-X-VERSION:7',
+            '#EXT-X-PLAYLIST-TYPE:VOD',
         ];
 
         /** @var VideoQuality $quality */
@@ -252,6 +290,41 @@ class Video extends Model
         }
 
         return implode(PHP_EOL, $manifest);
+    }
+
+    public function getThumbnails(): ?array
+    {
+        if (!$thumbnail = $this->thumbnail) {
+            return null;
+        }
+        /** @var VideoQuality $quality */
+        if (!$quality = $this->qualities()->orderBy('quality')->first()) {
+            return null;
+        }
+
+        $tmp = explode('x', $quality->resolution);
+        $width = $tmp[0] / 2;
+        $height = $tmp[1] / 2;
+
+        $storyboard = [
+            'file' => $thumbnail->only('id', 'uuid', 'updated_at'),
+            'tileWidth' => $width,
+            'tileHeight' => $height,
+            'tiles' => [],
+        ];
+
+        $chunk = ceil($this->duration / 3600) * 5; // every 25 seconds for 5 hours video
+        $x = $y = 0;
+        for ($i = 0; $i < $this->duration; $i += $chunk) {
+            $storyboard['tiles'][] = ['startTime' => $i, 'x' => $x, 'y' => $y];
+            $x += $width;
+            if ($x >= $thumbnail->width) {
+                $x = 0;
+                $y += $height;
+            }
+        }
+
+        return $storyboard;
     }
 
     public function delete(): bool
@@ -272,6 +345,12 @@ class Video extends Model
         $this->file->delete();
         if ($this->image) {
             $this->image->delete();
+        }
+        if ($this->audio) {
+            $this->audio->delete();
+        }
+        if ($this->thumbnail) {
+            $this->thumbnail->delete();
         }
 
         return parent::delete();

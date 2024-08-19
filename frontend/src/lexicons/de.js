@@ -71,6 +71,7 @@ export default {
       description: 'Beschreibung',
       chapters: 'Preisschilder',
       image: 'Vorschau',
+      audio: 'Audio',
       progress: 'Verarbeitet',
       size: 'Grösse',
       width: 'Breite',

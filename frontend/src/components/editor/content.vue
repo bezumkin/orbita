@@ -34,7 +34,7 @@ const props = defineProps({
   },
 })
 
-const maxWidth = computed(() => (props.type === 'topic' ? 800 : 400))
+const maxWidth = computed(() => (props.type === 'topic' ? 837 : 400))
 
 const blocks = computed(() => {
   const items = []

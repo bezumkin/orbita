@@ -1,6 +1,7 @@
 import type {BlockTool, BlockToolConstructorOptions, BlockToolData, ToolConfig} from '@editorjs/editorjs'
-import Hls from 'hls.js'
-import sprite from 'assets/icons/plyr.svg'
+import {icon} from '@fortawesome/fontawesome-svg-core'
+import {faPlay, faVideo} from '@fortawesome/free-solid-svg-icons'
+import {initAudioPlayer} from '~/utils/players'
 
 export default class implements BlockTool {
   data: BlockToolData
@@ -11,7 +12,7 @@ export default class implements BlockTool {
   static get toolbox() {
     return {
       title: 'Video',
-      icon: '<svg class="svg-inline--fa fa-fw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"></path></svg>',
+      icon: icon(faVideo).html[0],
     }
   }
 
@@ -55,52 +56,44 @@ export default class implements BlockTool {
       posterWrapper.append(poster)
 
       const button = document.createElement('button')
-      button.classList.add('plyr__control', 'plyr__control--overlaid')
-      button.innerHTML = `<svg aria-hidden="true" focusable="false"><use xlink:href="${sprite}#plyr-play" /></svg>`
+      button.classList.add('btn', 'btn-primary', 'play-video-button')
+      button.innerHTML = icon(faPlay).html[0]
       button.onclick = (e) => {
         e.preventDefault()
         this.activated = true
         this.html.innerHTML = ''
         this.showPreview()
       }
+      const fa = button.firstChild as HTMLElement
+      fa.style.width = '3rem'
+      fa.style.height = '3rem'
+      fa.classList.add('fa-fw')
 
-      wrapper.classList.add('plyr', 'plyr--full-ui', 'plyr--video')
+      wrapper.classList.add('play-video-wrapper')
       wrapper.append(posterWrapper)
       wrapper.append(button)
     } else {
-      const source = document.createElement('source')
-      source.src = getApiUrl() + 'video/' + this.data.uuid
-      source.type = 'application/x-mpegURL'
-
       const video = document.createElement('video')
-      video.poster = getApiUrl() + 'poster/' + this.data.uuid + '/1024'
-      video.appendChild(source)
-
       wrapper.appendChild(video)
       wrapper.classList.add('ratio', 'ratio-16x9', 'm-auto', 'rounded')
 
-      const {$plyr} = useNuxtApp()
-      const hls = new Hls()
-      hls.loadSource(source.src)
-      hls.attachMedia(video)
-
-      // eslint-disable-next-line import/no-named-as-default-member
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        const levels = hls.levels.map((i: Record<string, any>) => i.height)
-        const player = $plyr(video, {
-          quality: {
-            default: levels[0],
-            options: levels,
-            forced: true,
-            onChange(size: number) {
-              hls.currentLevel = levels.findIndex((i) => i === size)
-            },
-          },
-        })
-        player.play()
+      initVideoPlayer(this.data.uuid, video, {
+        poster: getApiUrl() + 'poster/' + this.data.uuid + '/1024',
+        autoPlay: true,
       })
     }
 
     this.html.appendChild(wrapper)
+
+    const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED)
+    if (useAudio && this.data.audio) {
+      wrapper.classList.add('mb-2')
+
+      const audio = document.createElement('audio')
+      audio.title = useNuxtApp().$i18n.t('models.video.audio')
+      this.html.appendChild(audio)
+
+      initAudioPlayer(this.data.audio, audio)
+    }
   }
 }
