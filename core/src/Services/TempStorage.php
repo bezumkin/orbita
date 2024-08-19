@@ -192,6 +192,9 @@ class TempStorage extends Filesystem
         if (!$video = $this->ffmpeg->open($this->getFullPath($source))) {
             throw new RuntimeException('Could not load source file ' . $source);
         }
+        if (!$video->getStreams()->audios()->first()) {
+            throw new RuntimeException('There is no audio in ' . $uuid);
+        }
 
         $path = $this->getFullPath($uuid . '/audio.mp3');
         $video->save(new Mp3(), $path);
@@ -230,7 +233,7 @@ class TempStorage extends Filesystem
 
         $path = $this->getFullPath($uuid . '/thumbnails.webp');
         $params = [
-            'ffmpeg -y -i '. $this->getFullPath($meta['file']),
+            'ffmpeg -y -i '. $this->getFullPath($source),
             '-loglevel error',
             '-filter_complex',
             '"select=\'not(mod(n,' . $extractEvery . '))\',scale=' . $width . ':' . $height . ',tile=' . $tileWidth . 'x' . $tileHeight . '"',
