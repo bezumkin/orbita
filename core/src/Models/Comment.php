@@ -138,6 +138,10 @@ class Comment extends Model
             $array['user_id'] = null;
             $array['user'] = [];
             $array['content'] = '';
+        } else {
+            $array['content']['blocks'] = !empty($array['content']['blocks'])
+                ? array_values($array['content']['blocks'])
+                : [];
         }
 
         if ($user && $this->relationLoaded('userReactions') && count($this->userReactions)) {
