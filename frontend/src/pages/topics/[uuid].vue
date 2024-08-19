@@ -1,11 +1,11 @@
 <template>
   <div>
     <BButton variant="link" class="d-block mb-2" @click="onBack">&larr; {{ $t('actions.back') }}</BButton>
-    <template v-if="topic?.access">
+    <template v-if="topic && topic.access">
       <TopicContent :topic="topic" class="column" />
       <CommentsTree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
     </template>
-    <TopicIntro v-else :topic="topic" />
+    <TopicIntro v-else-if="topic" :topic="topic" />
   </div>
 </template>
 
@@ -16,8 +16,8 @@ const {$settings, $image} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
 const {data, error} = await useCustomFetch('web/topics/' + route.params.uuid)
-const topic: ComputedRef<VespTopic | undefined> = computed(() => data.value || {})
-const topics: Ref<string[] | undefined> = useCookie('topics')
+const topic = computed<VespTopic | undefined>(() => data.value || undefined)
+const topics = useCookie<string[] | undefined>('topics')
 if (!topics.value) {
   topics.value = []
 }
@@ -78,6 +78,13 @@ onMounted(() => {
     clearError()
   } else {
     timeout.value = setTimeout(() => saveView(false), 2500)
+  }
+
+  if (!document.location.hash) {
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant',
+    })
   }
 })
 
