@@ -123,6 +123,9 @@ const config: NuxtConfig = {
   },
   i18n: {
     defaultLocale: locales[0].code,
+    detectBrowserLanguage: {
+      fallbackLocale: locales[0].code,
+    },
     locales,
   },
 }
