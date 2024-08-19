@@ -8,6 +8,7 @@ use App\Models\Reaction;
 use App\Models\Topic;
 use App\Models\TopicReaction;
 use App\Models\User;
+use App\Services\Socket;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -64,6 +65,7 @@ trait ReactionModelController
                 'reaction_id' => $reactionId,
             ]);
         }
+        $this->sendInfoToSocket();
 
         return $this->get();
     }
@@ -73,7 +75,23 @@ trait ReactionModelController
         if ($this->user && $reaction = $this->model->userReactions()->where('user_id', $this->user->id)->first()) {
             $reaction->delete();
         }
+        $this->sendInfoToSocket();
 
         return $this->get();
+    }
+
+    protected function sendInfoToSocket(): void
+    {
+        if ($this->model instanceof Topic) {
+            Socket::send('topic-reactions', [
+                'id' => $this->model->id,
+                'reactions_count' => $this->model->refresh()->reactions_count,
+            ]);
+        } elseif ($this->model instanceof Comment) {
+            Socket::send('comment-reactions', [
+                'id' => $this->model->id,
+                'reactions_count' => $this->model->refresh()->reactions_count,
+            ]);
+        }
     }
 }

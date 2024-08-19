@@ -9,10 +9,10 @@
       <div class="d-flex flex-wrap gap-3 order-0 me-auto">
         <UserReactions :item="topic">
           <template #default="{selected, total}">
-            <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ total }}
+            <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ formatBigNumber(total) }}
           </template>
         </UserReactions>
-        <div><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(topic.views_count) }}</div>
+        <div><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}</div>
         <div v-if="!isTopic">
           <BLink
             v-if="topic.access && commentsCount"
@@ -57,6 +57,7 @@ const route = useRoute()
 const isTopic = computed(() => route.params.uuid === props.topic.uuid)
 
 const commentsCount = ref(props.topic.comments_count || 0)
+const viewsCount = ref(props.topic.views_count || 0)
 const unseenCount = ref(props.topic.unseen_comments_count || 0)
 const tags = computed(() => {
   const value = route.query.tags as string
@@ -69,6 +70,12 @@ function onTopicComments(topic: VespTopic) {
     if (unseenCount.value > commentsCount.value) {
       unseenCount.value = commentsCount.value
     }
+  }
+}
+
+function onTopicViews(topic: VespTopic) {
+  if (props.topic.id === topic.id) {
+    viewsCount.value = topic.views_count || 0
   }
 }
 
@@ -111,17 +118,21 @@ function getTagParams(tag: VespTag) {
   return params
 }
 
-if (!isTopic.value) {
-  onMounted(() => {
+onMounted(() => {
+  $socket.on('topic-views', onTopicViews)
+  if (!isTopic.value) {
     $socket.on('topic-comments', onTopicComments)
     $socket.on('comment-create', onCommentCreate)
     $socket.on('comment-delete', onCommentDelete)
-  })
+  }
+})
 
-  onUnmounted(() => {
+onUnmounted(() => {
+  $socket.off('topic-views', onTopicViews)
+  if (!isTopic.value) {
     $socket.off('topic-comments', onTopicComments)
     $socket.off('comment-create', onCommentCreate)
     $socket.off('comment-delete', onCommentDelete)
-  })
-}
+  }
+})
 </script>

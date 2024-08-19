@@ -33,8 +33,9 @@ const props = defineProps({
 })
 
 const {loggedIn} = useAuth()
-const {$reactions, $isMobile, $login} = useNuxtApp()
-const url = 'web/' + ('uuid' in props.item ? 'topics/' + props.item.uuid : 'comments/' + props.item.id) + '/reactions'
+const {$reactions, $isMobile, $login, $socket} = useNuxtApp()
+const isTopic = 'uuid' in props.item
+const url = 'web/' + (isTopic ? 'topics/' + props.item.uuid : 'comments/' + props.item.id) + '/reactions'
 const reactions: Ref<Record<string, number> | undefined> = ref()
 const loading = ref(false)
 const selected = ref(props.item.reaction || 0)
@@ -127,4 +128,26 @@ const listener = (e: Event) => {
     visible.value = false
   }
 }
+
+function onUpdateReactions(data: VespTopic | VespComment) {
+  if (data.id === props.item.id) {
+    total.value = data.reactions_count || 0
+  }
+}
+
+onMounted(() => {
+  if (isTopic) {
+    $socket.on('topic-reactions', onUpdateReactions)
+  } else {
+    $socket.on('comment-reactions', onUpdateReactions)
+  }
+})
+
+onUnmounted(() => {
+  if (isTopic) {
+    $socket.off('topic-reactions', onUpdateReactions)
+  } else {
+    $socket.off('comment-reactions', onUpdateReactions)
+  }
+})
 </script>
