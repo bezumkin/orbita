@@ -4,7 +4,8 @@ namespace App\Controllers\Admin;
 
 use App\Models\File;
 use App\Models\Setting;
-use App\Services\Socket;
+use App\Services\Redis;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -12,9 +13,16 @@ use Vesp\Controllers\ModelController;
 
 class Settings extends ModelController
 {
+    protected Redis $redis;
     protected string $model = Setting::class;
     protected string|array $scope = 'settings';
     protected string|array $primaryKey = 'key';
+
+    public function __construct(Manager $eloquent, Redis $redis)
+    {
+        parent::__construct($eloquent);
+        $this->redis = $redis;
+    }
 
     public function patch(): ResponseInterface
     {
@@ -61,7 +69,8 @@ class Settings extends ModelController
     {
         // Notification of the frontend about changes in settings
         $controller = new \App\Controllers\Web\Settings($this->eloquent);
-        Socket::send('setting', $controller->prepareRow($record));
+        $this->redis->send('setting', $controller->prepareRow($record));
+        $this->redis->clearRoutesCache();
 
         return $record;
     }

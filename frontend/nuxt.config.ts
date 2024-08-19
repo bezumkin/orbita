@@ -26,9 +26,9 @@ const config: NuxtConfig = {
     },
   },
   nitro: {
-    experimental: {
-      websocket: true,
-    },
+    experimental: {websocket: true},
+    storage: {cache: {driver: 'redis', host: 'redis'}},
+    devStorage: {cache: {driver: 'redis', host: 'redis'}},
   },
   routeRules: {
     '/admin/**': {ssr: false},
@@ -36,6 +36,7 @@ const config: NuxtConfig = {
     '/search': {ssr: false},
   },
   runtimeConfig: {
+    CACHE_PAGES_TIME: process.env.CACHE_PAGES_TIME,
     SOCKET_SECRET: process.env.SOCKET_SECRET,
     YANDEX_METRIKA_ID: process.env.YANDEX_METRIKA_ID,
     locales,

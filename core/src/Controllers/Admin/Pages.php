@@ -3,7 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Models\Page;
-use App\Services\Socket;
+use App\Services\Redis;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -11,9 +12,16 @@ use Vesp\Controllers\ModelController;
 
 class Pages extends ModelController
 {
+    protected Redis $redis;
     protected string $model = Page::class;
     protected string|array $scope = 'pages';
     private bool $isNew = false;
+
+    public function __construct(Manager $eloquent, Redis $redis)
+    {
+        parent::__construct($eloquent);
+        $this->redis = $redis;
+    }
 
     protected function beforeCount(Builder $c): Builder
     {
@@ -77,10 +85,11 @@ class Pages extends ModelController
         $record->processUploadedFiles();
 
         if ($this->isNew) {
-            Socket::send('page-create', $this->prepareRow($record));
+            $this->redis->send('page-create', $this->prepareRow($record));
         } else {
-            Socket::send('page-update', $this->prepareRow($record));
+            $this->redis->send('page-update', $this->prepareRow($record));
         }
+        $this->redis->clearRoutesCache();
 
         return $record;
     }
@@ -90,7 +99,8 @@ class Pages extends ModelController
         $array = $this->prepareRow($record);
         $array['active'] = false;
 
-        Socket::send('page-update', $array);
+        $this->redis->send('page-update', $array);
+        $this->redis->clearRoutesCache();
 
         return null;
     }

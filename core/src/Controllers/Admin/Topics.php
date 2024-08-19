@@ -7,7 +7,7 @@ use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\TopicTag;
 use App\Services\Manticore;
-use App\Services\Socket;
+use App\Services\Redis;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,16 +19,18 @@ class Topics extends ModelController
     use FileModelController;
 
     protected Manticore $manticore;
+    protected Redis $redis;
     protected string $model = Topic::class;
     protected string|array $scope = 'topics';
     public array $attachments = ['cover'];
     private bool $isNew = false;
     private bool $notifyUsers = false;
 
-    public function __construct(Manager $eloquent, Manticore $manticore)
+    public function __construct(Manager $eloquent, Manticore $manticore, Redis $redis)
     {
         parent::__construct($eloquent);
         $this->manticore = $manticore;
+        $this->redis = $redis;
     }
 
     protected function beforeGet(Builder $c): Builder
@@ -133,7 +135,7 @@ class Topics extends ModelController
                 if (file_exists($cache)) {
                     unlink($cache);
                 }
-                Socket::send('tags');
+                $this->redis->send('tags');
             }
         }
 
@@ -143,15 +145,16 @@ class Topics extends ModelController
 
         // Send data to socket.io
         if ($this->isNew) {
-            Socket::send('topic-create', $data);
+            $this->redis->send('topic-create', $data);
         } else {
-            Socket::send('topic-update', $data);
+            $this->redis->send('topic-update', $data);
         }
+        $this->redis->clearRoutesCache();
 
         // Create notifications
         if ($this->notifyUsers) {
             $topic->notifyUsers();
-            Socket::send('topic-publish', $data);
+            $this->redis->send('topic-publish', $data);
         }
 
         // Update search index
@@ -174,7 +177,8 @@ class Topics extends ModelController
         }
         $record->delete();
 
-        Socket::send('topic-delete', $record->toArray());
+        $this->redis->send('topic-delete', $record->toArray());
+        $this->redis->clearRoutesCache();
         ($this->manticore->getIndex())->deleteDocument($record->id);
 
         return $this->success();
