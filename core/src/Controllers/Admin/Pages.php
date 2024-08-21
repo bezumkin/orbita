@@ -104,4 +104,14 @@ class Pages extends ModelController
 
         return null;
     }
+
+    public function prepareRow(Model $object): array
+    {
+        $array = $object->toArray();
+        if (!empty($array['content']) && !empty($array['content']['blocks'])) {
+            $array['content']['blocks'] = array_values($array['content']['blocks']);
+        }
+
+        return $array;
+    }
 }

@@ -42,6 +42,11 @@ class Pages extends ModelGetController
             }
         }
 
-        return $object->only($columns);
+        $array = $object->only($columns);
+        if (!empty($array['content']) && !empty($array['content']['blocks'])) {
+            $array['content']['blocks'] = array_values($array['content']['blocks']);
+        }
+
+        return $array;
     }
 }
