@@ -182,6 +182,11 @@ class Topic extends Model
         return $allow;
     }
 
+    public function isFree(): bool
+    {
+        return !$this->level_id && !$this->price;
+    }
+
     public function prepareOutput(?User $user, bool $listView = false): array
     {
         $array = $this->only(
@@ -202,6 +207,7 @@ class Topic extends Model
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');
         $array['access'] = $this->hasAccess($user);
+        $array['paid'] = !$this->isFree();
         if ($array['access']) {
             if ($user && $this->relationLoaded('views') && count($this->views)) {
                 $array['viewed_at'] = $this->views[0]->timestamp;

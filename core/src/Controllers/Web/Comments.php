@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Models\Comment;
 use App\Models\Topic;
+use App\Models\User;
 use App\Services\Socket;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
 
+/** @var User $user */
 class Comments extends ModelController
 {
     protected string|array $scope = 'comments';
@@ -80,7 +82,12 @@ class Comments extends ModelController
     protected function beforeSave(Model $record): ?ResponseInterface
     {
         if (!$this->user || !$this->hasAccess || !$this->user->hasScope('comments/put')) {
-            return $this->failure('errors.no_scope');
+            return $this->failure('components.comments.info.no_scope');
+        }
+        if (!$this->isAdmin && !$this->user?->currentSubscription) {
+            if ($this->topic->isFree() && getenv('COMMENTS_REQUIRE_SUBSCRIPTION')) {
+                return $this->failure('components.comments.info.no_subscription');
+            }
         }
 
         /** @var Comment $record */

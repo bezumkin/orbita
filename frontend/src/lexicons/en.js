@@ -269,6 +269,7 @@ export default {
         guest: 'You must be logged in to post comments',
         closed: 'Commenting on this topic has been disabled.',
         no_scope: "You don't have permission to comment",
+        no_subscription: 'Only subscribers can comment.',
       },
       destroy: {
         title: 'Confirmation required',

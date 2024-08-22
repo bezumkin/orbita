@@ -24,9 +24,12 @@
       <div v-if="topic.closed && !isAdmin" class="alert alert-info mt-5">
         {{ t('components.comments.info.closed') }}
       </div>
-      <template v-else-if="$scope('comments/put') || isAdmin">
+      <template v-else-if="$scope('comments/put')">
+        <div v-if="subRequired" class="alert alert-info mt-5">
+          {{ t('components.comments.info.no_subscription') }}
+        </div>
         <CommentsForm
-          v-if="!replying && !editing"
+          v-else-if="!replying && !editing"
           ref="form"
           v-model="commentForm"
           :topic="topic"
@@ -84,6 +87,12 @@ const commentsTree = computed(() => {
 })
 
 const isAdmin = computed(() => $scope('comments/delete'))
+// Sub is required for free topics
+const subRequired =
+  !isAdmin.value &&
+  !props.topic.paid &&
+  config.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
+  !user.value?.subscription?.level_id
 const submitting = ref(false)
 const destroying = ref(0)
 const replying: Ref<VespComment | undefined> = ref()
@@ -172,6 +181,7 @@ function canEdit(comment: VespComment) {
   }
   return false
 }
+
 function onEdit(comment: VespComment) {
   commentForm.value = {id: comment.id, parent_id: comment.parent_id, content: comment.content}
   editing.value = comment
@@ -191,8 +201,9 @@ function onEdit(comment: VespComment) {
 }
 
 function canReply() {
-  return !props.topic.closed && $scope('comments/put')
+  return !props.topic.closed && $scope('comments/put') && !subRequired
 }
+
 function onReply(comment: VespComment) {
   commentForm.value.id = 0
   commentForm.value.parent_id = comment.id
@@ -203,6 +214,7 @@ function onReply(comment: VespComment) {
 function canDelete() {
   return $scope('comments/delete')
 }
+
 async function onDelete(comment: VespComment) {
   try {
     pending.value = true
@@ -283,6 +295,7 @@ function observe(items: IntersectionObserverEntry[]) {
 }
 
 const observer = ref()
+
 function initObserver() {
   observer.value = new IntersectionObserver(observe)
   const targets = tree.value.$el.querySelectorAll('.comment')
@@ -307,6 +320,7 @@ function onCommentCreate(comment: VespComment) {
     addToObserver(comment)
   })
 }
+
 function onCommentUpdate(comment: VespComment) {
   const idx = comments.value.findIndex((i: VespComment) => i.id === comment.id)
   if (idx > -1) {

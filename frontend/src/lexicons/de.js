@@ -269,6 +269,7 @@ export default {
         guest: 'Du musst eingeloggt sein, um kommentieren zu können',
         closed: 'Das Kommentieren dieses Themas wurde deaktiviert.',
         no_scope: 'Du hast keine Berechtigung zum Kommentieren',
+        no_subscription: 'Nur Abonnenten können kommentieren.',
       },
       destroy: {
         title: 'Bestätigung erforderlich',
