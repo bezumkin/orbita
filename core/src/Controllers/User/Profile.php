@@ -36,8 +36,12 @@ class Profile extends \Vesp\Controllers\User\Profile
 
     public function patch(): ResponseInterface
     {
+        $data = array_filter($this->getProperties(), static function($key) {
+            return in_array($key, ['username', 'fullname', 'password', 'email', 'phone']);
+        }, ARRAY_FILTER_USE_KEY);
+
         try {
-            $this->user->fillData($this->getProperties());
+            $this->user->fillData($data);
         } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
