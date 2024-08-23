@@ -119,7 +119,7 @@ const accessOptions = computed(() => {
   ]
 })
 const delayed = ref(props.modelValue.publish_at !== null)
-const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS)
+const editorBlocks = useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS || false
 
 const accessLevel = ref('free')
 if (record.value.id) {

@@ -63,7 +63,7 @@ const props = defineProps({
     default: 'sm',
   },
   blocks: {
-    type: String,
+    type: [String, Boolean],
     default: '',
   },
 })
@@ -105,6 +105,9 @@ const allBlocks = [
   {type: 'kbd', class: Kbd, shortcut: 'CMD+SHIFT+K'},
 ]
 const enabledBlocks = computed(() => {
+  if (typeof props.blocks === 'boolean') {
+    return props.blocks ? allBlocks : []
+  }
   if (props.blocks.length) {
     const types = props.blocks.split(',').map((i) => i.trim().toLowerCase())
     return allBlocks.filter((i) => types.includes(i.type))

@@ -82,5 +82,5 @@ const positionOptions = [
   {value: 'footer', text: t('models.page.position_footer')},
   {value: null, text: t('models.page.position_null')},
 ]
-const editorBlocks = String(useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS)
+const editorBlocks = useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS || false
 </script>
