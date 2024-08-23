@@ -1,6 +1,9 @@
 <template>
   <div>
     <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
+      <template #header-middle>
+        <BFormSelect v-model="filters.role_id" class="mt-2 mt-md-0" :options="roles" />
+      </template>
       <template #cell(fullname)="{item}: any">
         <div class="d-flex align-items-center">
           <UserAvatar :user="item" size="40" />
@@ -22,13 +25,14 @@ import type {VespTableAction} from '@vesp/frontend'
 const {t, d} = useI18n()
 const table = ref()
 const url = 'admin/users'
-const filters = ref({query: ''})
+const filters = ref({query: '', role_id: 0})
 const sort = 'id'
 const dir = 'desc'
 const fields = computed(() => [
   {key: 'id', label: t('models.user.id'), sortable: true},
   {key: 'fullname', label: t('models.user.fullname')},
   {key: 'email', label: t('models.user.email'), sortable: true},
+  {key: 'role.title', label: t('models.user.role')},
   {key: 'created_at', label: t('models.user.created_at'), sortable: true, formatter: formatDate},
   {key: 'active_at', label: t('models.user.active_at'), sortable: true, formatter: formatDate},
 ])
@@ -39,6 +43,7 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-users-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
+const roles = ref([{value: 0, text: t('models.user_role.filter.all')}])
 
 function formatDate(value: any) {
   return value ? d(value, 'long') : ''
@@ -56,4 +61,13 @@ function rowClass(item: any) {
     return cls
   }
 }
+
+onMounted(async () => {
+  try {
+    const data = await useGet('admin/user-roles', {combo: true})
+    data.rows.forEach((item: any) => {
+      roles.value.push({value: item.id, text: item.title})
+    })
+  } catch (e) {}
+})
 </script>

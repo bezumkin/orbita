@@ -1,6 +1,5 @@
 import type {OutputData} from '@editorjs/editorjs'
-import ru from 'date-fns/locale/ru/index.js'
-import de from 'date-fns/locale/de/index.js'
+import {ru, de} from 'date-fns/locale'
 
 export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
   return getImageLink(file, options, prefix || 'file')

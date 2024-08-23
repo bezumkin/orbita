@@ -1,5 +1,11 @@
 <template>
-  <VespTable ref="table" v-bind="{url, sort, dir, fields, tableActions, rowClass}">
+  <VespTable ref="table" v-bind="{url, sort, dir, fields, filters, tableActions, rowClass, onLoad}">
+    <template #header-start>
+      <VespInputDatePicker v-model="filters.date" />
+    </template>
+    <template #header-middle>
+      <BFormSelect v-model="filters.status" class="mt-2 mt-md-0" :options="statuses" />
+    </template>
     <template #cell(user)="{value}: any">
       <BLink :to="{name: 'admin-users-id-edit', params: {id: value.id}}" class="d-flex align-items-center">
         <UserAvatar :user="value" size="40" />
@@ -34,6 +40,13 @@
       </template>
       <VespFa v-else icon="hourglass-half" />
     </template>
+    <template #pagination-data="{refresh, total, loading}">
+      <BButton class="border-0" @click="() => refresh()">
+        <BSpinner v-if="loading" :small="true" />
+        <VespFa v-else icon="repeat" fixed-width />
+      </BButton>
+      {{ t('models.payment.records', {total, sum: formatPrice(sum)}, total) }}
+    </template>
   </VespTable>
 </template>
 
@@ -47,6 +60,7 @@ const {t, d} = useI18n()
 const url = 'admin/payments'
 const sort = 'created_at'
 const dir = 'desc'
+const filters = ref({query: '', status: 1, date: []})
 const fields = computed(() => [
   {key: 'created_at', label: t('models.payment.date'), formatter: formatDate, sortable: true},
   {key: 'user', label: t('models.payment.user')},
@@ -64,6 +78,12 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
     isActive: (item: any) => item && item.paid !== true,
   },
 ])
+const statuses = ref([
+  {value: null, text: t('models.payment.filter.all')},
+  {value: 1, text: t('models.payment.filter.paid')},
+  {value: 0, text: t('models.payment.filter.error')},
+])
+const sum = ref(0)
 
 function formatService(value: any) {
   if (!value) {
@@ -86,5 +106,11 @@ function formatDate(value: any) {
 
 function rowClass(item: any) {
   return !item || !item.paid ? 'inactive' : ''
+}
+
+function onLoad(items: any) {
+  sum.value = items.sum || 0
+
+  return items
 }
 </script>

@@ -62,6 +62,9 @@ export default {
       title: 'Название',
       scope: 'Разрешения',
       users: 'Пользователи',
+      filter: {
+        all: 'Все группы',
+      },
     },
     video: {
       title_one: 'Видео',
@@ -219,6 +222,12 @@ export default {
       created_at: 'Создано',
       paid_at: 'Оплачено',
       date: 'Дата',
+      filter: {
+        all: 'Все платежи',
+        paid: 'Оплачено',
+        error: 'Ошибка',
+      },
+      records: `Платежей нет | {total} платёж, на сумму {sum} | {total} платежа, на сумму {sum} | {total} платежей, на сумму {sum}`,
     },
     reaction: {
       title_one: 'Реакция',

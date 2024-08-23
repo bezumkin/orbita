@@ -62,6 +62,9 @@ export default {
       title: 'Titel',
       scope: 'Scope',
       users: 'Benutzer',
+      filter: {
+        all: 'Alle Rollen' + '',
+      },
     },
     video: {
       title_one: 'Video',
@@ -219,6 +222,12 @@ export default {
       created_at: 'Erstellt am',
       paid_at: 'Bezahlt am',
       date: 'Datum',
+      filter: {
+        all: 'Alle Zahlungen',
+        paid: 'Bezahlt',
+        error: 'Fehler',
+      },
+      records: 'Keine Zahlungen | 1 zahlung, in Höhe von {sum} | {total} zahlungen, in Höhe von {sum}',
     },
     reaction: {
       title_one: 'Reaktion',

@@ -19,7 +19,7 @@
     "@editorjs/list": "^1.9.0",
     "@editorjs/paragraph": "^2.11.5",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@vesp/frontend": "^3.5.1",
+    "@vesp/frontend": "^3.6.1",
     "codeflask": "^1.4.1",
     "feed": "^4.2.2",
     "glightbox": "^3.2.0",
@@ -55,9 +55,9 @@
     "postcss-scss": "^4.0.8",
     "prettier": "^3.0.3",
     "sass-loader": "^13.3.2",
-    "stylelint": "^15.10.3",
+    "stylelint": "^16.8.2",
     "stylelint-config-recommended-vue": "^1.5.0",
-    "stylelint-config-standard-scss": "^11.0.0",
+    "stylelint-config-standard-scss": "^13.1.0",
     "vite-plugin-stylelint": "^5.1.1",
     "vue-eslint-parser": "^9.3.1"
   }
