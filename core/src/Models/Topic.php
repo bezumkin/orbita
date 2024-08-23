@@ -164,11 +164,9 @@ class Topic extends Model
     public function hasAccess(?User $user = null): bool
     {
         $allow = false;
-        // Free topic
-        if (!$this->level_id && !$this->price) {
+        if ($this->isFree()) {
             $allow = true;
-        }
-        if ($user) {
+        } elseif ($user) {
             // Admin can see anything
             if ($user->hasScope('topics/patch') || $user->hasScope('vip')) {
                 $allow = true;

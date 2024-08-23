@@ -87,12 +87,17 @@ const commentsTree = computed(() => {
 })
 
 const isAdmin = computed(() => $scope('comments/delete'))
+const isVip = computed(() => $scope('vip'))
 // Sub is required for free topics
-const subRequired =
-  !isAdmin.value &&
-  !props.topic.paid &&
-  config.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
-  !user.value?.subscription?.level_id
+const subRequired = computed(() => {
+  return (
+    config.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
+    !isAdmin.value &&
+    !isVip.value &&
+    !props.topic.paid &&
+    !user.value?.subscription?.level_id
+  )
+})
 const submitting = ref(false)
 const destroying = ref(0)
 const replying: Ref<VespComment | undefined> = ref()
@@ -201,7 +206,7 @@ function onEdit(comment: VespComment) {
 }
 
 function canReply() {
-  return !props.topic.closed && $scope('comments/put') && !subRequired
+  return !props.topic.closed && $scope('comments/put') && (!subRequired.value || isAdmin.value)
 }
 
 function onReply(comment: VespComment) {

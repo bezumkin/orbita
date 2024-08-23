@@ -21,6 +21,7 @@ class Comments extends ModelController
     private ?Topic $topic = null;
     private bool $isNew = false;
     private bool $isAdmin = false;
+    private bool $isVip = false;
     private bool $hasAccess = true;
 
     public function checkScope(string $method): ?ResponseInterface
@@ -30,6 +31,7 @@ class Comments extends ModelController
         }
 
         $this->isAdmin = $this->user && $this->user->hasScope('comments/delete');
+        $this->isVip = $this->user && $this->user->hasScope('vip');
         $uuid = $this->getProperty('topic_uuid');
 
         if (!$uuid || !$this->topic = $this->getTopic($uuid)) {
@@ -84,7 +86,7 @@ class Comments extends ModelController
         if (!$this->user || !$this->hasAccess || !$this->user->hasScope('comments/put')) {
             return $this->failure('components.comments.info.no_scope');
         }
-        if (!$this->isAdmin && !$this->user?->currentSubscription) {
+        if (!$this->isAdmin && !$this->isVip && !$this->user?->currentSubscription) {
             if ($this->topic->isFree() && getenv('COMMENTS_REQUIRE_SUBSCRIPTION')) {
                 return $this->failure('components.comments.info.no_subscription');
             }
