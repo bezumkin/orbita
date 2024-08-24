@@ -118,7 +118,7 @@ function formatDuration(value: any) {
   }
   const {hours, minutes, seconds} = intervalToDuration({start: 0, end: value * 1000})
 
-  return [hours, minutes, seconds].map((num) => String(num).padStart(2, '0')).join(':')
+  return [hours, minutes, seconds].map((num) => String(num || 0).padStart(2, '0')).join(':')
 }
 
 function rowClass(item: any) {
