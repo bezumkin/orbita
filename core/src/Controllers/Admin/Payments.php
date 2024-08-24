@@ -17,27 +17,31 @@ class Payments extends ModelController
     protected function beforeCount(Builder $c): Builder
     {
         if ($query = trim($this->getProperty('query', ''))) {
-            $c->whereHas('user', static function (Builder $c) use ($query) {
-                $c->where('username', 'LIKE', "%$query%");
-                $c->orWhere('fullname', 'LIKE', "%$query%");
-                $c->orWhere('email', 'LIKE', "%$query%");
-                $c->orWhere('phone', 'LIKE', "%$query%");
-            });
-            $c->whereHas('topic', static function (Builder $c) use ($query) {
-                $c->where('title', 'LIKE', "%$query%");
-            });
-            $c->whereHas('subscription', static function (Builder $c) use ($query) {
-                $c->whereHas('level', static function (Builder $c) use ($query) {
+            $c->where(static function (Builder $c) use ($query) {
+                $c->whereHas('user', static function (Builder $c) use ($query) {
+                    $c->where('username', 'LIKE', "%$query%");
+                    $c->orWhere('fullname', 'LIKE', "%$query%");
+                    $c->orWhere('email', 'LIKE', "%$query%");
+                    $c->orWhere('phone', 'LIKE', "%$query%");
+                });
+                $c->orWhereHas('topic', static function (Builder $c) use ($query) {
                     $c->where('title', 'LIKE', "%$query%");
+                });
+                $c->orWhereHas('subscription', static function (Builder $c) use ($query) {
+                    $c->whereHas('level', static function (Builder $c) use ($query) {
+                        $c->where('title', 'LIKE', "%$query%");
+                    });
                 });
             });
         }
+
         $status = $this->getProperty('status');
         if ($status !== null) {
             $c->where('paid', (bool)$status);
         }
+
         if ($date = $this->getProperty('date')) {
-            $c->whereBetween('created_at', $date);
+            $c->whereBetween('created_at', [$date[0] . ' 00:00:00', $date[1] . ' 23:59:59']);
         }
         $this->query = clone $c;
 
