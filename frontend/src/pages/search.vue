@@ -36,17 +36,11 @@
           </BCol>
         </BRow>
 
-        <div class="mt-4 d-flex flex-column gap-4">
-          <div v-for="(topic, idx) in topics" :key="topic.id" class="border rounded p-3">
-            <BRow class="d-flex align-items-start">
-              <BCol class="h5 col-auto me-md-auto">
-                {{ idx + 1 }}.&nbsp;<BLink :to="getTopicLink(topic)" v-html="topic.title" />
-              </BCol>
-              <BCol md="auto" class="text-secondary pb-2 py-md-0">{{ d(topic.published_at, 'long') }}</BCol>
-            </BRow>
-            <div class="col-12 col-md-auto" v-html="topic.content" />
-          </div>
-        </div>
+        <BRow class="mt-4 row-gap-4">
+          <BCol v-for="topic in topics" :key="topic.id" md="6">
+            <TopicIntro :topic="topic" />
+          </BCol>
+        </BRow>
       </template>
     </BOverlay>
   </div>
@@ -58,7 +52,7 @@ import type {RouteRecordName} from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 const {$settings} = useNuxtApp()
-const {t, d} = useI18n()
+const {t} = useI18n()
 
 const input = ref()
 const loading = ref(false)
@@ -89,10 +83,6 @@ async function onSearch() {
   } finally {
     loading.value = false
   }
-}
-
-function getTopicLink(topic: VespTopic) {
-  return {name: 'topics-uuid', params: {uuid: topic.uuid}}
 }
 
 function onSort(type: string) {

@@ -2,10 +2,9 @@
 
 namespace App\Controllers\Web;
 
+use App\Models\Topic;
 use App\Services\Manticore;
-use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager;
-use Manticoresearch\ResultHit;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
 
@@ -44,20 +43,19 @@ class Search extends Controller
             );
             $search->trackScores(true);
             $search->stripBadUtf8(true);
-            $search->limit(100);
+            $search->limit(getenv('SEARCH_LIMIT') ?: 100);
             if ($this->getProperty('sort', '') === 'date') {
                 $search->sort('published_at', 'desc');
             }
 
             $results = $search->match($query)->get();
             foreach ($results as $result) {
-                $rows[] = [
-                    'uuid' => $result->uuid,
-                    'title' => $result->title,
-                    'content' => $this::getHighlight($result),
-                    'published_at' => Carbon::createFromTimestamp($result->published_at)->toISOString(),
-                    'score' => $result->getScore(),
-                ];
+                /** @var Topic $topic */
+                if ($topic = Topic::query()->find($result->getId())) {
+                    $row = $topic->prepareOutput($this->user);
+                    $row['score'] = $result->getScore();
+                    $rows[] = $row;
+                }
             }
         }
 
@@ -65,20 +63,6 @@ class Search extends Controller
             'rows' => $rows,
             'total' => count($rows),
         ]);
-    }
-
-    protected static function getHighlight(ResultHit $result): string
-    {
-        $highlight = $result->getHighlight();
-        if (!empty($highlight['teaser'])) {
-            $text = implode(' ... ', $highlight['teaser']);
-        } elseif (!empty($highlight['content'])) {
-            $text = trim(implode(' ... ', $highlight['content']), ' .,:\/') . '...';
-        } else {
-            $text = $result->teaser;
-        }
-
-        return $text;
     }
 
 }
