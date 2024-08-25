@@ -18,9 +18,11 @@
         table td { margin: 0 }
         a { color: #369; outline: none; text-decoration: none }
         pre { padding: 10px; background: #f5f5f5; border-radius: 5px; white-space: pre-line }
+        img { border-radius: 5px; max-width: 100%; display: block; margin: auto; }
 
         .main { width: 600px; margin: auto }
         .logo { padding: 20px 0; text-align: center }
+        .teaser { padding-bottom: 10px }
         .content {
             height: 100px;
             vertical-align: top;
@@ -34,7 +36,8 @@
         .footer td.right { text-align: right }
         .footer a { color: #999; font-weight: bold }
 
-        .preview { padding: 10px; background-color: #efefef; border-radius: 5px; }
+        .preview { padding: 10px; border: 1px solid #efefef; border-radius: 5px; }
+        .file { padding: 10px; border: 1px solid #efefef; border-radius: 5px; }
 
         {block 'style'}{/block}
     </style>
@@ -45,7 +48,7 @@
     <tr>
         <td class="logo">
             <a href="{$.env.SITE_URL}" target="_blank">
-                <img src="{$.env.SITE_URL}email/logo.png" srcset="{$.env.SITE_URL}email/logo@2x.png 2x" alt="{$.env.SITE_NAME}" width="286" height="161" />
+                <img src="{$.env.SITE_URL}email/logo.png" srcset="{$.env.SITE_URL}email/logo@2x.png 2x" alt="{$.env.SITE_NAME}" width="286" />
             </a>
         </td>
     </tr>

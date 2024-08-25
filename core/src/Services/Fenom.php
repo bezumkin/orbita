@@ -23,23 +23,5 @@ class Fenom extends \Fenom
             'number_format',
             'trim',
         ]);
-
-        $this->addModifier(
-            'content_preview',
-            static function (array $content = []) {
-                $text = [];
-                if ($content && $content['blocks']) {
-                    foreach ($content['blocks'] as $block) {
-                        if ($block['type'] === 'paragraph') {
-                            if (!empty($block['data']) && !empty($block['data']['text'])) {
-                                $text[] = strip_tags($block['data']['text'], '<br>');
-                            }
-                        }
-                    }
-                }
-
-                return implode('<br><br>', $text);
-            }
-        );
     }
 }

@@ -115,6 +115,8 @@ export default {
       started_desc: 'Das Projektdatum wird in der Copyright Zeile im Footer angezeigt.',
       reactions: 'Reaktionen',
       reactions_desc: `Hier können Sie die verfügbaren Reaktionen für Themen und Kommentare verwalten. Symbole können per Drag-and-Drop sortiert werden.`,
+      cover: 'Abdeckung',
+      cover_desc: 'Dieses Bild wird standardmäßig für Notizen ohne eigenes Cover verwendet.',
     },
     level: {
       title_one: 'Abo Ebene',

@@ -1,7 +1,7 @@
 <template>
   <div :class="{'topic teaser': true, inactive: !topic.active}">
     <div class="topic-cover">
-      <BImg v-if="topic.cover" v-bind="imageProps" class="background" lazy />
+      <BImg v-if="imageProps" v-bind="imageProps" class="background" lazy />
       <div class="wrapper">
         <div class="text">
           <h2>
@@ -43,7 +43,7 @@ const props = defineProps({
   },
 })
 
-const {$socket, $payment, $levels, $image} = useNuxtApp()
+const {$socket, $payment, $levels, $image, $settings} = useNuxtApp()
 const isTopic = useRoute().params.uuid === props.topic.uuid
 const myValue: Ref<VespTopic> = ref(props.topic)
 const link = {name: 'topics-uuid', params: {uuid: myValue.value.uuid}}
@@ -54,12 +54,13 @@ const levelRequired = computed(() => {
   return undefined
 })
 const imageProps = computed(() => {
-  if (!myValue.value.cover) {
+  const file = myValue.value.cover || $settings.value.cover
+  if (!file) {
     return undefined
   }
   return {
-    src: $image(myValue.value.cover, {h: 400, fit: 'crop'}),
-    srcSet: $image(myValue.value.cover, {h: 800, fit: 'crop'}) + ' 2x',
+    src: $image(file as VespFile, {h: 400, fit: 'crop'}),
+    srcSet: $image(file as VespFile, {h: 800, fit: 'crop'}) + ' 2x',
   }
 })
 

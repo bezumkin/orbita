@@ -22,7 +22,9 @@
         <FileUpload
           v-else-if="type === 'image'"
           v-model="record"
-          v-bind="imageProps"
+          :class="'image image-' + key"
+          :width="imageParams.w || 'auto'"
+          :height="imageParams.h || 'auto'"
           :placeholder="typeof record === 'object' ? {...record} : null"
           :placeholder-params="typeof record === 'object' ? imageParams : null"
         />
@@ -80,27 +82,14 @@ const jsonTypes = ['string', 'text']
 const {d, locale, localeCodes} = useI18n()
 const lang: Ref<string> = ref(String(locale.value))
 
-const imageProps = computed(() => {
-  const width = key.value === 'poster' ? 225 : 'auto'
-  const height = key.value === 'poster' ? 280 : 240
-  const classes = ['image']
-  if (key.value === 'poster') {
-    classes.push('image-poster')
-  } else {
-    classes.push('image-background')
-  }
-
-  return {
-    width,
-    height,
-    class: classes.join(' '),
-  }
-})
 const imageParams = computed(() => {
   if (key.value === 'poster') {
-    return {w: 450, h: 560, fit: 'crop'}
+    return {w: 225, h: 280, fit: 'crop'}
   }
-  return {h: 480, fit: 'crop-center'}
+  if (key.value === 'background') {
+    return {h: 480, fit: 'crop-center'}
+  }
+  return {w: 480, h: 270}
 })
 
 function onLang(code: string) {
@@ -128,18 +117,13 @@ function formatDate(date: string) {
 <style scoped lang="scss">
 :deep(.image) {
   img {
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
     border: 1px solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
   }
 
-  &.image-poster {
-    width: 225px;
-
-    img {
-      height: 280px;
+  .upload-box {
+    > img {
+      border: none;
     }
   }
 
@@ -148,6 +132,10 @@ function formatDate(date: string) {
       height: 240px;
       width: 100%;
       object-fit: cover;
+    }
+
+    .upload-box {
+      height: 240px !important;
     }
   }
 }

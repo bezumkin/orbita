@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Mail;
+use App\Services\Utils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -78,6 +79,16 @@ class UserNotification extends Model
             $data['user'] = $this->comment->user->toArray();
             $data['comment'] = $this->comment->toArray();
             $data['comment']['link'] = $this->comment->getLink();
+            $data['comment']['content'] = Utils::renderContent($this->comment->content['blocks'], ['w' => 400]);
+        } else {
+            if (!$cover = $this->topic->cover?->only('id', 'uuid', 'updated_at')) {
+                /** @var Setting $setting */
+                $setting = Setting::query()->where('key', 'cover')->first();
+                if ($setting && $setting->value) {
+                    $cover = json_decode($setting->value, true);
+                }
+            }
+            $data['topic']['cover'] = $cover ? Utils::getImageLink($cover) : null;
         }
 
         $subject = match ($this->type) {

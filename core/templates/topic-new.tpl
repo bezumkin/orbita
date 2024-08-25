@@ -3,8 +3,14 @@
 {block 'content'}
     <h2>{$topic.title}</h2>
 
-    {if $topic.content}
-        <div class="preview">{$topic.content | content_preview | truncate : 1000}</div>
+    {if $topic.teaser}
+        <div class="teaser">{$topic.teaser}</div>
+    {/if}
+
+    {if $topic.cover}
+        <div class="cover">
+            <img src="{$topic.cover}" alt="" />
+        </div>
     {/if}
 
     {if $lang === 'de'}

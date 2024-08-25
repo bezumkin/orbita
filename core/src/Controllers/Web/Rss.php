@@ -3,6 +3,7 @@
 namespace App\Controllers\Web;
 
 use App\Models\Topic;
+use App\Services\Utils;
 use Psr\Http\Message\ResponseInterface;
 
 class Rss extends Sitemap
@@ -10,7 +11,6 @@ class Rss extends Sitemap
     public function get(): ResponseInterface
     {
         $rows = [];
-
         $topics = Topic::query()
             ->where('active', true)
             ->select('uuid', 'title', 'content', 'teaser', 'cover_id', 'user_id', 'published_at')
@@ -21,7 +21,7 @@ class Rss extends Sitemap
         foreach ($topics->get() as $topic) {
             /** @var Topic $topic */
             $row = [
-                'link' => $this->baseUrl . 'topics/' . $topic->uuid,
+                'link' => $topic->getLink(),
                 'title' => $topic->title,
                 'description' => $topic->teaser,
                 'content' => '',
@@ -33,50 +33,15 @@ class Rss extends Sitemap
             if ($topic->cover) {
                 $row['image'] = [
                     'type' => $topic->cover->type,
-                    'url' => $this->getImageUrl($topic->cover->toArray()),
+                    'url' => Utils::getImageLink($topic->cover->only('id', 'uuid', 'updated_at')),
                 ];
             }
-            if ($topic->hasAccess(null)) {
-                $row['content'] = $this->getContent($topic);
+            if ($topic->hasAccess()) {
+                $row['content'] = Utils::renderContent($topic->content['blocks']);
             }
             $rows[] = $row;
         }
 
         return $this->success($rows);
-    }
-
-    protected function getContent(Topic $topic): string
-    {
-        $blocks = [];
-        foreach ($topic->content['blocks'] as $block) {
-            if ($block['type'] === 'header') {
-                $tag = 'h' . $block['data']['level'];
-                $blocks[] = "<$tag>" . $block['data']['text'] . "</$tag>";
-            } elseif ($block['type'] === 'paragraph') {
-                $blocks[] = "<p>" . $block['data']['text'] . '</p>';
-            } elseif ($block['type'] === 'image') {
-                $blocks[] = '<img src="' . $this->getImageUrl($block['data']) . '" alt="" />';
-            } elseif ($block['type'] === 'list') {
-                $tag = $block['data']['style'] === 'unordered' ? 'ul' : 'ol';
-                $items = [];
-                foreach ($block['data']['items'] as $item) {
-                    $items[] = '<li>' . $item . '</li>';
-                }
-                $blocks[] = "<$tag>" . implode(PHP_EOL, $items) . "</$tag>";
-            }
-        }
-
-        return implode(PHP_EOL, $blocks);
-    }
-
-    protected function getImageUrl(array $file): string
-    {
-        $params = [
-            't' => strtotime($file['updated_at']),
-            'fit' => 'max',
-            'w' => getenv('RSS_MAX_IMAGE_WIDTH') ?: '800',
-        ];
-
-        return $this->apiUrl . 'image/' . $file['uuid'] . '?' . http_build_query($params);
     }
 }

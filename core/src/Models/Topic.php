@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\ContentFilesTrait;
+use App\Services\Utils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -236,7 +237,7 @@ class Topic extends Model
 
     public function getLink(): string
     {
-        return implode('/', [rtrim(getenv('SITE_URL'), '/'), 'topics', $this->uuid]);
+        return Utils::getSiteUrl() . 'topics/' . $this->uuid;
     }
 
     public function createPayment(User $user, string $serviceName): ?Payment

@@ -115,6 +115,8 @@ export default {
       started_desc: 'The project start date is used to form the copyright line in the footer',
       reactions: 'Reactions',
       reactions_desc: `Here you can manage the available reactions for topics and comments. Icons can be sorted by drag-and-drop.`,
+      cover: 'Cover',
+      cover_desc: 'This image will be used by default for notes without their own cover.',
     },
     level: {
       title_one: 'Subscription level',
