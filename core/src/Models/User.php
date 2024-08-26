@@ -178,6 +178,9 @@ class User extends \Vesp\Models\User
             throw new RuntimeException('errors.user.no_email');
         }
 
+        $data['username'] = filter_var($data['username'], FILTER_SANITIZE_EMAIL) ?: md5($data['email']);
+        $data['fullname'] = filter_var($data['fullname'], FILTER_SANITIZE_STRING);
+
         $c = self::query();
         if ($this->id) {
             $c->where('id', '!=', $this->id);

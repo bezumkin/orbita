@@ -11,8 +11,12 @@ class Register extends Controller
 {
     public function post(): ResponseInterface
     {
+        $data = array_filter($this->getProperties(), static function($key) {
+            return in_array($key, ['username', 'fullname', 'password', 'email', 'phone']);
+        }, ARRAY_FILTER_USE_KEY);
+
         try {
-            $user = User::createUser($this->getProperties());
+            $user = User::createUser($data);
         } catch (Throwable $e) {
             return $this->failure($e->getMessage());
         }
