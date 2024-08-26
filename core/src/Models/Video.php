@@ -9,8 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Streaming\Format\X264;
-use Streaming\Representation;
 use Throwable;
 
 /**
@@ -105,18 +103,22 @@ class Video extends Model
         $media = new TempStorage();
 
         try {
-            if (!$this->image && $image = $media->getPreview($this->id)) {
-                $this->image_id = $image->id;
-                $this->save();
+            $props = $media->getVideoProperties($this->id);
+            $qualities = $media::getQualities($props['width'], $props['height'], $props['bitrate']);
 
-                if (!$this->file->height || !$this->file->width) {
-                    $this->file->height = $image->height;
-                    $this->file->width = $image->width;
-                    $this->file->save();
-                }
+            if (!$this->file->height || !$this->file->width) {
+                $this->file->width = $props['width'];
+                $this->file->height = $props['height'];
+                $this->file->save();
             }
 
-            $representations = $media::getQualities($this->file->width, $this->file->height);
+            if (!$this->duration) {
+                $this->duration = $props['duration'];
+            }
+
+            if (!$this->image && $image = $media->getPreview($this->id)) {
+                $this->image_id = $image->id;
+            }
 
             if (!$this->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
                 if (PHP_SAPI === 'cli') {
@@ -125,7 +127,6 @@ class Video extends Model
                 }
                 $audio = $media->getAudio($this->id);
                 $this->audio_id = $audio->id;
-                $this->save();
                 if (PHP_SAPI === 'cli') {
                     echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
                 }
@@ -135,13 +136,13 @@ class Video extends Model
                     $time = microtime(true);
                     echo 'Extracting thumbnails... ';
                 }
-                $thumbnail = $media->getThumbnail($this->id, $representations[0]);
+                $thumbnail = $media->getThumbnail($this->id, $qualities[0]);
                 $this->thumbnail_id = $thumbnail->id;
-                $this->save();
                 if (PHP_SAPI === 'cli') {
                     echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
                 }
             }
+            $this->save();
         } catch (Throwable $e) {
             $this->processed = false;
             $this->error = $e->getMessage();
@@ -150,7 +151,7 @@ class Video extends Model
             return;
         }
 
-        $steps = count($representations);
+        $steps = count($qualities);
         $stepSize = floor(100 / $steps);
         $startTime = time();
         $step = 1;
@@ -158,62 +159,45 @@ class Video extends Model
         if (PHP_SAPI === 'cli') {
             echo PHP_EOL;
         }
-        /** @var Representation $rep */
-        foreach ($representations as $rep) {
+        /** @var \App\Models\VideoQuality $quality */
+        foreach ($qualities as $quality) {
             try {
-                $stepTime = time();
-
-                $params = ['hls_flags' => 'single_file'];
-                if ($preset = getenv('TRANSCODE_PRESET')) {
-                    $params['preset'] = strtolower($preset);
-                }
-                $format = new X264();
-                $format->setAdditionalParameters($params);
-
-                if ($oldQuality = $this->qualities()->where('quality', $rep->getHeight())) {
+                if ($oldQuality = $this->qualities()->where('quality', $quality->quality)) {
                     $oldQuality->delete();
                 }
 
-                $quality = new VideoQuality();
                 $quality->video_id = $this->id;
                 $quality->file_id = TempStorage::getFakeFile($this->file->title, 'video/mp2t')->id;
-                $quality->quality = $rep->getHeight();
                 $quality->save();
 
-                $format->on(
-                    'progress',
-                    function ($video, $format, $percentage) use ($quality, $startTime, $stepTime, $step, $stepSize) {
-                        $progress = ($stepSize / 100 * $percentage) + ($step - 1) * $stepSize;
-                        $round = ceil($progress / 4);
-                        if (PHP_SAPI === 'cli') {
-                            echo sprintf(
-                                "\r%s %s => %s%%, %s (%s) [%s%s]",
-                                $this->id,
-                                $quality->quality . 'p',
-                                number_format($progress, 2),
-                                Carbon::now()->subSeconds($stepTime)->timezone('UTC')->format('H:i:s'),
-                                Carbon::now()->subSeconds($startTime)->timezone('UTC')->format('H:i:s'),
-                                str_repeat('#', $round),
-                                str_repeat('-', (25 - $round))
-                            );
-                        }
-
-                        $quality->progress = number_format($percentage, 2);
-                        $quality->save();
-                        $this->progress = number_format($progress, 2);
-                        $this->save();
-
-                        $this->sendInfoToSocket();
+                $stepTime = time();
+                $callback = function ($percentage) use ($quality, $startTime, $stepTime, $step, $stepSize) {
+                    $progress = ($stepSize / 100 * $percentage) + ($step - 1) * $stepSize;
+                    $round = ceil($progress / 4);
+                    if (PHP_SAPI === 'cli') {
+                        echo sprintf(
+                            "\r%s %s => %s%%, %s (%s) [%s%s]",
+                            $this->id,
+                            $quality->quality . 'p',
+                            number_format($progress, 2),
+                            Carbon::now()->subSeconds($stepTime)->timezone('UTC')->format('H:i:s'),
+                            Carbon::now()->subSeconds($startTime)->timezone('UTC')->format('H:i:s'),
+                            str_repeat('#', $round),
+                            str_repeat('-', (25 - $round))
+                        );
                     }
-                );
 
-                $info = $media->transcode($this->id, $format, $rep);
-                if (!$this->duration) {
-                    $this->duration = (int)($info['video']['format']['duration'] ?? 0);
+                    $quality->progress = number_format($percentage, 2);
+                    $quality->save();
+                    $this->progress = number_format($progress, 2);
                     $this->save();
-                }
-                $step++;
+
+                    $this->sendInfoToSocket();
+                };
+
+                $media->transcode($quality, $callback);
                 $quality->finishProcessing();
+                $step++;
                 if (PHP_SAPI === 'cli') {
                     echo PHP_EOL;
                 }
@@ -302,9 +286,9 @@ class Video extends Model
             return null;
         }
 
-        $tmp = explode('x', $quality->resolution);
-        $width = $tmp[0] / 2;
-        $height = $tmp[1] / 2;
+        [$width, $height] = explode('x', $quality->resolution);
+        $width /= 2;
+        $height /= 2;
 
         $storyboard = [
             'file' => $thumbnail->only('id', 'uuid', 'updated_at'),

@@ -2,7 +2,6 @@
 
 use App\Models\Video;
 use App\Services\TempStorage;
-use Streaming\Representation;
 use Vesp\Services\Eloquent;
 
 require dirname(__DIR__) . '/bootstrap.php';
@@ -34,9 +33,6 @@ foreach ($videos->cursor() as $video) {
 
     /** @var \App\Models\VideoQuality $quality */
     $quality = $video->qualities()->orderBy('quality')->first();
-    [$width, $height] = explode('x', $quality->resolution);
-    $representation = new Representation();
-    $representation->setResize($width, $height);
 
     if (!$video->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
         try {
@@ -55,7 +51,7 @@ foreach ($videos->cursor() as $video) {
         try {
             $time = microtime(true);
             echo 'Extracting thumbnails... ';
-            $thumbnail = $media->getThumbnail($video->id, $representation);
+            $thumbnail = $media->getThumbnail($video->id, $quality);
             $video->thumbnail_id = $thumbnail->id;
             $video->save();
             echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;

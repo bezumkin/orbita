@@ -3,15 +3,13 @@
 namespace App\Services;
 
 use App\Models\File;
+use App\Models\VideoQuality;
 use FFMpeg\Coordinate\TimeCode;
-use FFMpeg\Format\Audio\Mp3;
-use League\Flysystem\StorageAttributes;
+use FFMpeg\FFMpeg;
+use FFMpeg\Format\ProgressListener\VideoProgressListener;
 use RuntimeException;
 use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile;
-use Streaming\FFMpeg;
-use Streaming\Format\StreamFormat;
-use Streaming\Representation;
 use Throwable;
 use Vesp\Services\Filesystem;
 
@@ -47,33 +45,43 @@ class TempStorage extends Filesystem
         return $dir;
     }
 
-    public function transcode(string $uuid, StreamFormat $format, Representation $representation): ?array
+    public function transcode(VideoQuality $quality, $callback = null): string
     {
-        if (!$meta = $this->getMeta($uuid)) {
-            throw new RuntimeException('Could not load meta file for ' . $uuid);
+        if (!$meta = $this->getMeta($quality->video_id)) {
+            throw new RuntimeException('Could not load meta file for ' . $quality->video_id);
         }
 
-        $path = $this->getFullPath($uuid);
-        $video = $this->ffmpeg->open($this->getFullPath($meta['file']));
+        $input = $this->getFullPath($meta['file']);
+        $output = pathinfo($input, PATHINFO_DIRNAME) . '/' . $quality->quality;
+        $video = $this->ffmpeg->open($input);
+        $bitrate = round($quality->bandwidth / 1024);
 
-        $result = $video->hls()->setFormat($format);
-        $result->addRepresentation($representation);
-        $result->save($path . '/' . $representation->getHeight());
+        $commands = [
+            '-y', '-i', $input,
+            '-c:v', getenv('TRANSCODE_ENCODER') ?: 'libx264',
+            '-c:a', 'aac',
+            '-hls_flags', 'single_file',
+            '-preset', getenv('TRANSCODE_PRESET') ?: 'fast',
+            '-hls_list_size', '0',
+            '-hls_time', getenv('TRANSCODE_CHUNK') ?: '10',
+            '-hls_allow_cache', '1',
+            '-hls_segment_type', 'mpegts',
+            '-hls_segment_filename', $output . '.ts',
+            '-s:v', $quality->resolution,
+            '-b:v', $bitrate . 'k',
+            '-strict',
+            '-2',
+            '-threads', '0',
+            $output . '.m3u8',
+        ];
 
-        $fs = $this->getBaseFilesystem();
-        $files = $fs->listContents($uuid);
-        /** @var StorageAttributes $file */
-        foreach ($files as $file) {
-            $path = $file->path();
-            if (str_ends_with($path, '%04d.ts')) {
-                $fs->move($path, str_replace('_%04d.ts', '.ts', $path));
-            } elseif (str_ends_with($path, '.m3u8')) {
-                $tmp = $fs->read($path);
-                $fs->write($path, str_replace('_%04d.ts', '.ts', $tmp));
-            }
+        $listener = null;
+        if ($callback) {
+            $listener = new VideoProgressListener($video->getFFProbe(), $input, 1, 1, 0);
+            $listener->on('progress', $callback);
         }
 
-        return $result->metadata()->get();
+        return $video->getFFMpegDriver()->command($commands, false, $listener);
     }
 
     public function getMeta(string $uuid): ?array
@@ -150,11 +158,16 @@ class TempStorage extends Filesystem
                 $dstBitrate = $maxBitrate;
             }
             if ($srcWidth >= $dstWidth && $srcHeight >= $dstHeight) {
-                $result[] = (new Representation())->setKiloBitrate($dstBitrate)->setResize($dstWidth, $dstHeight);
+                $quality = new VideoQuality();
+                $quality->quality = $dstHeight;
+                $quality->resolution = $dstWidth . 'x' . $dstHeight;
+                $quality->bandwidth = $dstBitrate * 1024;
+
+                $result[] = $quality;
             }
         }
         usort($result, static function ($a, $b) {
-            return $a->getWidth() <=> $b->getWidth();
+            return $a->quality <=> $b->quality;
         });
 
         return $result;
@@ -189,31 +202,37 @@ class TempStorage extends Filesystem
         } else {
             $source = $uuid . '/video.mp4';
         }
-        if (!$video = $this->ffmpeg->open($this->getFullPath($source))) {
-            throw new RuntimeException('Could not load source file ' . $source);
+
+        $input = $this->getFullPath($source);
+        if (!$video = $this->ffmpeg->open($input)) {
+            throw new RuntimeException('Could not load source file ' . $input);
         }
         if (!$video->getStreams()->audios()->first()) {
             throw new RuntimeException('There is no audio in ' . $uuid);
         }
 
-        $path = $this->getFullPath($uuid . '/audio.mp3');
-        $video->save(new Mp3(), $path);
+        $output = $this->getFullPath($uuid . '/audio.mp3');
+        $commands = ['-y', '-i', $input, '-c:a', 'mp3', '-q:a', '0', '-vn', $output];
+        $video->getFFMpegDriver()->command($commands);
 
-        $stream = new Stream(fopen($path, 'rb'));
+        $stream = new Stream(fopen($output, 'rb'));
         $file = new File();
         $file->uploadFile(new UploadedFile($stream, 'audio.mp3', 'audio/mpeg', $stream->getSize()));
 
         return $file;
     }
 
-    public function getThumbnail(string $uuid, Representation $rep): File
+    public function getThumbnail(string $uuid, VideoQuality $quality): File
     {
         if ($meta = $this->getMeta($uuid)) {
             $source = $meta['file'];
         } else {
             $source = $uuid . '/video.mp4';
         }
-        if (!$video = $this->ffmpeg->open($this->getFullPath($source))) {
+
+        $input = $this->getFullPath($source);
+        $output = $this->getFullPath($uuid . '/thumbnails.webp');
+        if (!$video = $this->ffmpeg->open($input)) {
             throw new RuntimeException('Could not load source file ' . $source);
         }
         if (!$stream = $video->getStreams()->videos()->first()) {
@@ -228,33 +247,50 @@ class TempStorage extends Filesystem
         $extractEvery = $chunk * $framerate; // extract image every n frames
         $tileHeight = ceil(ceil($totalFrames / $extractEvery) / $tileWidth);
 
-        $width = $rep->getWidth() / 2;
-        $height = $rep->getHeight() / 2;
+        [$width, $height] = explode('x', $quality->resolution);
+        $width /= 2;
+        $height /= 2;
 
-        $path = $this->getFullPath($uuid . '/thumbnails.webp');
-        $params = [
-            'ffmpeg -y -i '. $this->getFullPath($source),
-            '-loglevel error',
+        $commands = [
+            '-y', '-i', $input,
+            '-loglevel', 'error',
             '-filter_complex',
-            '"select=\'not(mod(n,' . $extractEvery . '))\',scale=' . $width . ':' . $height . ',tile=' . $tileWidth . 'x' . $tileHeight . '"',
-            '-frames:v 1',
-            '-qscale:v 50', // image quality
+            'select=\'not(mod(n,' . $extractEvery . '))\',scale=' . $width . ':' . $height . ',tile=' . $tileWidth . 'x' . $tileHeight,
+            '-frames:v', '1',
+            '-qscale:v', '50', // image quality
             '-an',
-            $path,
+            $output,
         ];
+        $video->getFFMpegDriver()->command($commands);
 
-        $command = implode(' ', $params);
-        $output = system($command, $status);
-        if ($status) {
-            Log::error('Thumbnails error for ' . $uuid, [(string)$output]);
-            throw new RuntimeException('Could not generate thumbnails for ' . $uuid);
-        }
-
-        $stream = new Stream(fopen($path, 'rb'));
+        $stream = new Stream(fopen($output, 'rb'));
         $file = new File();
         $file->uploadFile(new UploadedFile($stream, 'thumbnails.webp', 'image/webp', $stream->getSize()));
 
         return $file;
+    }
+
+    public function getVideoProperties(string $uuid): array
+    {
+        if ($meta = $this->getMeta($uuid)) {
+            $source = $meta['file'];
+        } else {
+            $source = $uuid . '/video.mp4';
+        }
+
+        $video = $this->ffmpeg->open($this->getFullPath($source));
+        if (!$video || !$stream = $video->getStreams()->videos()->first()) {
+            throw new RuntimeException('Could not load source file ' . $source);
+        }
+
+        $dimensions = $stream->getDimensions();
+        return [
+            'width' => $dimensions->getWidth(),
+            'height' => $dimensions->getHeight(),
+            'ratio' => $dimensions->getRatio()->getValue(),
+            'bitrate' => round($stream->get('bit_rate') / 1024),
+            'duration' => $stream->get('duration'),
+        ];
     }
 
     public static function getFakeFile(string $name, string $type, ?int $size = null): File

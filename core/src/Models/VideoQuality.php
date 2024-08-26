@@ -57,10 +57,8 @@ class VideoQuality extends Model
         $this->save();
 
         $storage = new TempStorage();
-        $basename = $this->quality . '_' . $this->quality . 'p';
-        $videoFile = $this->video_id . '/' . $basename . '.ts';
-        $mainFile = $this->video_id . '/' . $this->quality . '.m3u8';
-        $manifestFile = $this->video_id . '/' . $basename . '.m3u8';
+        $videoFile = $this->video_id . '/' . $this->quality . '.ts';
+        $manifestFile = $this->video_id . '/' . $this->quality . '.m3u8';
         $tempFs = $storage->getBaseFilesystem();
 
         $path = $this->file->getFullFilePathAttribute();
@@ -74,22 +72,15 @@ class VideoQuality extends Model
                 ->writeStream($this->file->getFilePathAttribute(), $tempFs->readStream($videoFile));
             $tempFs->delete($videoFile);
         }
-
-        $main = explode(PHP_EOL, $tempFs->read($mainFile));
-        if (preg_match('#BANDWIDTH=(\d+),RESOLUTION=(\d+x\d+),#', $main[2], $matches)) {
-            $this->bandwidth = $matches[1];
-            $this->resolution = $matches[2];
-            [$this->file->width, $this->file->height] = explode('x', $this->resolution);
-        }
+        [$this->file->width, $this->file->height] = explode('x', $this->resolution);
         $this->file->save();
 
-        $this->manifest = str_replace($basename . '.ts', $this->quality, $tempFs->read($manifestFile));
-
-        $tempFs->delete($mainFile);
-        $tempFs->delete($manifestFile);
-
+        $this->bandwidth = round(($this->file->size / $this->video->duration) * (getenv('TRANSCODE_CHUNK') ?: '10'));
+        $this->manifest = str_replace($this->quality . '.ts', $this->quality, $tempFs->read($manifestFile));
         $this->moved = true;
         $this->moved_at = time();
         $this->save();
+
+        $tempFs->delete($manifestFile);
     }
 }

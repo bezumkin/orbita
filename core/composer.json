@@ -17,7 +17,6 @@
   "require": {
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
-    "aminyazdanpanah/php-ffmpeg-video-streaming": "^1.2",
     "bacon/bacon-qr-code": "^2.0",
     "doctrine/dbal": "^3.7",
     "fenom/fenom": "^2.12",
@@ -28,6 +27,7 @@
     "monolog/monolog": "^3.4.0",
     "pelago/emogrifier": "^7.2",
     "peppeocchi/php-cron-scheduler": "^4.0",
+    "php-ffmpeg/php-ffmpeg": "^1.2",
     "phpmailer/phpmailer": "^6.8",
     "predis/predis": "^2.2",
     "ramsey/uuid": "^4.7",
