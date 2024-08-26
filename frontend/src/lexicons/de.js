@@ -142,6 +142,8 @@ export default {
       closed: 'Keine Kommentare',
       created_at: 'Erstellt am',
       published_at: 'Veröffentlcht am',
+      author: 'Autor',
+      author_desc: 'Sie können einen anderen Benutzer angeben, der Kommentarbenachrichtigungen erhalten soll.',
       access: {
         title: 'Topic Zugriff',
         free: 'Gratis Topic',

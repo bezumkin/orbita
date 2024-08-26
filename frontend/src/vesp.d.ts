@@ -84,7 +84,7 @@ declare global {
     uuid?: string
     title: string
     content: Record<string, any>
-    user_id?: VespUser
+    user_id?: number
     level_id?: number
     teaser?: string
     price?: number | string

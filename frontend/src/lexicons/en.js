@@ -142,6 +142,8 @@ export default {
       closed: 'No comments',
       created_at: 'Created At',
       published_at: 'Published At',
+      author: 'Author',
+      author_desc: 'You can specify another user to receive comment notifications.',
       access: {
         title: 'Topic access',
         free: 'Free topic',

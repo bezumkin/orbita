@@ -45,6 +45,10 @@
       <TopicTags v-model="record.tags" />
     </BFormGroup>
 
+    <BFormGroup v-if="changeAuthor" :label="$t('models.topic.author')" :description="$t('models.topic.author_desc')">
+      <VespInputComboBox v-model="record.user_id" url="admin/users" text-field="fullname" />
+    </BFormGroup>
+
     <BRow>
       <BCol md="6">
         <BFormGroup>
@@ -101,7 +105,7 @@ const record = computed({
 })
 
 const {t} = useI18n()
-const {$socket, $price} = useNuxtApp()
+const {$socket, $price, $scope} = useNuxtApp()
 const levels: Ref<VespLevel[]> = ref([])
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
@@ -119,7 +123,10 @@ const accessOptions = computed(() => {
   ]
 })
 const delayed = ref(props.modelValue.publish_at !== null)
-const editorBlocks = useRuntimeConfig().public.EDITOR_TOPIC_BLOCKS || false
+
+const {public: config} = useRuntimeConfig()
+const editorBlocks = config.EDITOR_TOPIC_BLOCKS || false
+const changeAuthor = $scope('users/get') && config.TOPICS_CHANGE_AUTHOR === '1'
 
 const accessLevel = ref('free')
 if (record.value.id) {

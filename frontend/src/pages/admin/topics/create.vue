@@ -7,11 +7,13 @@
 </template>
 
 <script setup lang="ts">
+const {user} = useAuth()
 const record = ref({
   id: 0,
   title: '',
   price: 0,
   content: {},
+  user_id: user.value?.id,
   active: false,
   closed: false,
   delayed: false,

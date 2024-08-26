@@ -16,6 +16,13 @@
 </template>
 
 <script setup lang="ts">
+const {user} = useAuth()
+if (!user.value) {
+  showError({statusCode: 401, statusMessage: 'Unauthorized'})
+} else if (!hasScope('topics/put')) {
+  showError({statusCode: 403, statusMessage: 'Access Denied'})
+}
+
 const router = useRouter()
 const loading = ref(false)
 const record = ref({
@@ -23,6 +30,7 @@ const record = ref({
   title: '',
   price: 0,
   content: {},
+  user_id: user.value?.id,
   active: false,
   closed: false,
   delayed: false,
@@ -51,12 +59,5 @@ function onKeydown(e: KeyboardEvent) {
     e.preventDefault()
     onSubmit()
   }
-}
-
-const {user} = useAuth()
-if (!user.value) {
-  showError({statusCode: 401, statusMessage: 'Unauthorized'})
-} else if (!hasScope('topics/put')) {
-  showError({statusCode: 403, statusMessage: 'Access Denied'})
 }
 </script>
