@@ -46,7 +46,14 @@
     </BFormGroup>
 
     <BFormGroup v-if="changeAuthor" :label="$t('models.topic.author')" :description="$t('models.topic.author_desc')">
-      <VespInputComboBox v-model="record.user_id" url="admin/users" text-field="fullname" />
+      <VespInputComboBox
+        v-model="record.user_id"
+        url="admin/users"
+        text-field="fullname"
+        :format-value="formatUser"
+        sort="id"
+        dir="asc"
+      />
     </BFormGroup>
 
     <BRow>
@@ -160,6 +167,10 @@ watch(accessLevel, (value: string) => {
 async function loadLevels() {
   const {rows} = await useGet('admin/levels', {combo: true, limit: 0})
   levels.value = rows
+}
+
+function formatUser(user: VespUser) {
+  return `${user.id}. ${user.fullname} (${user.username})`
 }
 
 onMounted(() => {

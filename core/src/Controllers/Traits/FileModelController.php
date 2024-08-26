@@ -26,6 +26,9 @@ trait FileModelController
             if ($file && $this->getProperty("new_$attachment") === false) {
                 $file->delete();
             } elseif ($tmp = $this->getProperty("new_$attachment", $this->getProperty($attachment))) {
+                if (empty($tmp['file'])) {
+                    return null;
+                }
                 if (!$file) {
                     $file = new File();
                 }
