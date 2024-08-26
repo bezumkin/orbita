@@ -1,5 +1,8 @@
 <?php
 
+use App\Services\Log;
+use Slim\Exception\HttpNotFoundException;
+
 require dirname(__DIR__) . '/core/bootstrap.php';
 
 $container = new DI\Container();
@@ -15,8 +18,11 @@ require BASE_DIR . 'core/routes.php';
 
 try {
     $app->run();
+} catch (HttpNotFoundException $e) {
+    http_response_code(404);
+    echo json_encode('Not Found');
 } catch (Throwable $e) {
-    App\Services\Log::error($e);
+    Log::error($e);
     http_response_code(500);
     echo json_encode('Internal Server Error');
 }
