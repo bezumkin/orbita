@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CommentFile;
 use App\Models\File as FileModel;
 use App\Models\TopicFile;
 use Psr\Http\Message\ResponseInterface;
@@ -16,14 +17,27 @@ class File extends \Vesp\Controllers\Data\Image
             return $this->failure('Not Found', 404);
         }
 
-        $allow = true;
-        if (!$this->user || !$this->user->hasScope('topics/patch')) {
+        $isAdmin = $this->user && $this->user->hasScope('topics/patch');
+
+        $allow = $isAdmin || $file->pageFiles()->where('type', 'file')->count();
+        if (!$allow) {
             $topicFiles = $file->topicFiles()->where('type', 'file');
             /** @var TopicFile $topicFile */
             foreach ($topicFiles->cursor() as $topicFile) {
-                if (!$topicFile->topic->hasAccess($this->user)) {
-                    $allow = false;
+                if ($topicFile->topic->hasAccess($this->user)) {
+                    $allow = true;
                     break;
+                }
+            }
+
+            if (!$allow) {
+                $commentFiles = $file->commentFiles()->where('type', 'file');
+                /** @var CommentFile $commentFile */
+                foreach ($commentFiles->cursor() as $commentFile) {
+                    if ($commentFile->comment->topic->hasAccess($this->user)) {
+                        $allow = true;
+                        break;
+                    }
                 }
             }
         }

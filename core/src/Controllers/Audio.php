@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CommentFile;
 use App\Models\File;
 use App\Models\TopicFile;
 use Psr\Http\Message\ResponseInterface;
@@ -29,14 +30,14 @@ class Audio extends Video
             // Check permissions
             $isAdmin = $this->user && $this->user->hasScope('topics/patch');
 
-            $allow = $isAdmin || $this->file->pageFiles()->count();
+            $allow = $isAdmin || $this->file->pageFiles()->where('type', 'audio')->count();
             if (!$allow) {
                 /** @var \App\Models\Video $video */
                 if ($video = \App\Models\Video::query()->where('audio_id', $this->file->id)->first()) {
                     // Check if this is the audio version of video
-                    $allow = $video->file->pageFiles()->count() > 0;
+                    $allow = $video->file->pageFiles()->where('type', 'video')->count() > 0;
                     if (!$allow) {
-                        $topicFiles = $video->file->topicFiles();
+                        $topicFiles = $video->file->topicFiles()->where('type', 'video');
                         /** @var TopicFile $topicFile */
                         foreach ($topicFiles->cursor() as $topicFile) {
                             if ($topicFile->topic->hasAccess($this->user)) {
@@ -46,12 +47,23 @@ class Audio extends Video
                         }
                     }
                 } else {
-                    $topicFiles = $this->file->topicFiles();
+                    $topicFiles = $this->file->topicFiles()->where('type', 'audio');
                     /** @var TopicFile $topicFile */
                     foreach ($topicFiles->cursor() as $topicFile) {
                         if ($topicFile->topic->hasAccess($this->user)) {
                             $allow = true;
                             break;
+                        }
+                    }
+
+                    if (!$allow) {
+                        $commentFiles = $this->file->commentFiles()->where('type', 'audio');
+                        /** @var CommentFile $commentFile */
+                        foreach ($commentFiles->cursor() as $commentFile) {
+                            if ($commentFile->comment->topic->hasAccess($this->user)) {
+                                $allow = true;
+                                break;
+                            }
                         }
                     }
                 }

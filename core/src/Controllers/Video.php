@@ -55,9 +55,9 @@ class Video extends Controller
                 return $this->failure('Not Found', 404);
             }
 
-            $allow = $isAdmin || $this->video->pageFiles()->count();
+            $allow = $isAdmin || $this->video->pageFiles()->where('type', 'video')->count();
             if (!$allow) {
-                $topicFiles = $this->video->topicFiles();
+                $topicFiles = $this->video->topicFiles()->where('type', 'video');
                 /** @var TopicFile $topicFile */
                 foreach ($topicFiles->cursor() as $topicFile) {
                     if ($topicFile->topic->hasAccess($this->user)) {
