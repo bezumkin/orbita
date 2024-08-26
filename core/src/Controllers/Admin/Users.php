@@ -17,6 +17,7 @@ class Users extends ModelController
     protected string|array $scope = 'users';
     protected string $model = User::class;
     public array $attachments = ['avatar'];
+    public array $allowedTypes = ['avatar' => 'image/'];
 
     protected function beforeGet(Builder $c): Builder
     {

@@ -17,6 +17,7 @@ class Videos extends ModelController
     protected string|array $scope = 'videos';
     protected string $model = Video::class;
     public array $attachments = ['image'];
+    public array $allowedTypes = ['image' => 'image/'];
 
     protected function beforeGet(Builder $c): Builder
     {

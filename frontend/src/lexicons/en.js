@@ -424,9 +424,11 @@ export default {
     upload: {
       no_filename: 'Could not get the name of file',
       no_size: 'Could not get the size of file',
+      no_mime: 'Could not determine the type of uploaded file',
+      wrong_mime: 'Invalid file type uploaded',
       missing_meta: 'Could not get upload metadata',
-      wrong_offset: 'Wrong upload chunk offset',
-      wrong_content: 'Wrong uploading encoding',
+      wrong_offset: 'Invalid upload chunk offset',
+      wrong_content: 'Invalid uploading encoding',
       write: 'File writing error',
     },
     level: {

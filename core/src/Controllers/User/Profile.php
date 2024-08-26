@@ -13,6 +13,7 @@ class Profile extends \Vesp\Controllers\User\Profile
 
     protected string|array $scope = 'profile';
     public array $attachments = ['avatar'];
+    public array $allowedTypes = ['avatar' => 'image/'];
 
     public function get(): ResponseInterface
     {

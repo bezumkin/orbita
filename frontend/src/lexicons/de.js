@@ -423,10 +423,12 @@ export default {
     },
     upload: {
       no_filename: 'Konnte den Namen der Datei nicht lesen',
-      no_size: 'Konnte die Grösse der Datei nicht ermitteln.',
-      missing_meta: 'Konnte die Metadaten nicht ermitteln.',
+      no_size: 'Konnte die Grösse der Datei nicht ermitteln',
+      no_mime: 'Der Typ der hochgeladenen Datei konnte nicht ermittelt werden',
+      wrong_mime: 'Ungültiger Dateityp hochgeladen',
+      missing_meta: 'Konnte die Metadaten nicht ermitteln',
       wrong_offset: 'Falschen upload Teil-Offset',
-      wrong_content: 'Falsches encoding des Uploads.',
+      wrong_content: 'Falsches encoding des Uploads',
       write: 'Fehler beim Schreiben der Datei',
     },
     level: {

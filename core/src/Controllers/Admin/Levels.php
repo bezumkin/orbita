@@ -18,6 +18,7 @@ class Levels extends ModelController
     protected string $model = Level::class;
     protected string|array $scope = 'levels';
     public array $attachments = ['cover'];
+    public array $allowedTypes = ['cover' => 'image/'];
     private bool $isNew = false;
 
     protected function beforeGet(Builder $c): Builder

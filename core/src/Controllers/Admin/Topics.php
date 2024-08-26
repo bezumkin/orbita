@@ -23,6 +23,7 @@ class Topics extends ModelController
     protected string $model = Topic::class;
     protected string|array $scope = 'topics';
     public array $attachments = ['cover'];
+    public array $allowedTypes = ['cover' => 'image/'];
     private bool $isNew = false;
     private bool $notifyUsers = false;
 
