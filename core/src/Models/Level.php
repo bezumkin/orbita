@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * @property int $id
@@ -44,5 +45,15 @@ class Level extends Model
     public function costForPeriod(int $period = 1): float
     {
         return $this->price * $period;
+    }
+
+    public function users(): HasManyThrough
+    {
+        return $this->hasManyThrough(User::class, Subscription::class, 'level_id', 'id', 'id', 'user_id');
+    }
+
+    public function activeUsers(): HasManyThrough
+    {
+        return $this->users()->where('subscriptions.active', true);
     }
 }

@@ -29,10 +29,11 @@ const filters = ref({query: ''})
 const sort = 'price'
 const dir = 'asc'
 const fields = computed(() => [
-  {key: 'id', label: t('models.level.id')},
+  {key: 'id', label: t('models.level.id'), sortable: true},
   {key: 'cover', label: t('models.level.cover')},
   {key: 'title', label: t('models.level.title')},
-  {key: 'price', label: t('models.level.price')},
+  {key: 'price', label: t('models.level.price'), sortable: true},
+  {key: 'active_users_count', label: t('models.user.title_many'), formatter: formatBigNumber, sortable: true},
 ])
 const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-levels-create'}, icon: 'plus', title: t('actions.create')},

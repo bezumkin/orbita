@@ -43,6 +43,7 @@ class Levels extends ModelController
             $c->select('id', 'title', 'price', 'active');
         } else {
             $c->with('cover:id,uuid,updated_at');
+            $c->withCount('activeUsers');
         }
 
         return $c;
