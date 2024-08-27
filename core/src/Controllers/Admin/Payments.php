@@ -62,8 +62,14 @@ class Payments extends ModelController
         if ($record->paid) {
             return $this->failure('errors.payment.delete_paid');
         }
+        if ($subscription = $record->subscription) {
+            // Remove unneeded subscription along with bad payment
+            if (!$subscription->active && $subscription->active_until === null) {
+                $subscription->delete();
+            }
+        }
 
-        return parent::beforeDelete($record);
+        return null;
     }
 
     public function prepareList(array $array): array
