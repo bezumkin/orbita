@@ -189,6 +189,10 @@ export default {
         'comment-new': 'Новый комментарий',
       },
     },
+    user_connection: {
+      connect_to: 'Подключиться к <strong>{service}</strong>',
+      disconnect_from: 'Вы подключены к {service}, отключиться?',
+    },
     page: {
       title_one: 'Страница',
       title_many: 'Страницы',
@@ -456,6 +460,9 @@ export default {
       wrong_service: 'Ошибка при инициализации платёжного сервиса',
       wrong_level: 'Не могу загрузить уровень подписки',
       delete_paid: 'Оплаченные операции удалять нельзя',
+    },
+    connection: {
+      no_service: 'Не удалось найти сервис для подключения.',
     },
     reaction: {
       title_exists: 'Реакция с таким названием уже существует',

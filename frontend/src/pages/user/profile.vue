@@ -8,6 +8,10 @@
         </div>
       </BForm>
     </BOverlay>
+
+    <div v-if="hasServices" class="mt-5 pt-5 border-top">
+      <UserConnections />
+    </div>
   </BCol>
 </template>
 
@@ -17,6 +21,7 @@ const {$settings} = useNuxtApp()
 const {loadUser} = useAuth()
 const loading = ref(false)
 const form = ref<VespUser>({id: 0, username: '', ...useAuth().user.value})
+const hasServices = useRuntimeConfig().public.CONNECTION_SERVICES !== ''
 
 async function onSubmit() {
   try {

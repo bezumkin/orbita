@@ -68,20 +68,14 @@
 
 <script setup lang="ts">
 import type {BaseSize} from 'bootstrap-vue-next'
-import slugify from 'slugify'
 
 const {t} = useI18n()
 const {$payment, $login} = useNuxtApp()
 const {user, loadUser} = useAuth()
 const loading = ref(false)
-const size: Ref<keyof BaseSize> = ref('md')
-const qr: Ref<undefined | Record<string, string>> = ref()
-const services = (useRuntimeConfig().public.PAYMENT_SERVICES as string).split(',').map((i: string) => {
-  return slugify(
-    i.trim().replace(/[A-Z]/g, (s) => ' ' + s),
-    {lower: true},
-  )
-})
+const size = ref<keyof BaseSize>('md')
+const qr = ref<undefined | Record<string, string>>()
+const services = useRuntimeConfig().public.PAYMENT_SERVICES.split(',').map(formatServiceKey)
 const showModal = ref(false)
 const canPay = computed(() => {
   return (
@@ -104,12 +98,7 @@ const isTopic = computed(() => {
   return $payment.value && 'uuid' in $payment.value && $payment.value.price
 })
 const subscriptionWarning = computed(() => {
-  const subscriptions = (useRuntimeConfig().public.PAYMENT_SUBSCRIPTIONS as string).split(',').map((i: string) => {
-    return slugify(
-      i.trim().replace(/[A-Z]/g, (s) => ' ' + s),
-      {lower: true},
-    )
-  })
+  const subscriptions = useRuntimeConfig().public.PAYMENT_SUBSCRIPTIONS.split(',').map(formatServiceKey)
   return Boolean(
     !isTopic.value &&
       subscriptions.length > 0 &&

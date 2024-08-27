@@ -189,6 +189,10 @@ export default {
         'comment-new': 'New comment',
       },
     },
+    user_connection: {
+      connect_to: 'Connect to <strong>{service}</strong>',
+      disconnect_from: 'You are connected to {service}, disconnect?',
+    },
     page: {
       title_one: 'Page',
       title_many: 'Pages',
@@ -456,6 +460,9 @@ export default {
       wrong_service: 'Error when initializing the payment service',
       wrong_level: 'Could not load subscription level',
       delete_paid: 'Paid transactions cannot be deleted',
+    },
+    connection: {
+      no_service: 'Could not find a service to connect to.',
     },
     reaction: {
       title_exists: 'A reaction with this name already exists',

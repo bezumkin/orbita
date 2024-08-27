@@ -32,6 +32,7 @@ use Vesp\Helpers\Jwt;
  * @property-read File $avatar
  * @property-read UserToken[] $tokens
  * @property-read VideoUser[] $userVideos
+ * @property-read UserConnection[] $connections
  * @property-read TopicView[] $views
  * @property-read UserNotification[] $notifications
  * @property-read Subscription[] $subscriptions
@@ -101,6 +102,11 @@ class User extends \Vesp\Models\User
         return $this->hasOne(Subscription::class)
             ->where('active', true)
             ->where('active_until', '>', time());
+    }
+
+    public function connections(): HasMany
+    {
+        return $this->hasMany(UserConnection::class);
     }
 
     public function setAttribute($key, $value)

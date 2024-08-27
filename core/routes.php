@@ -29,6 +29,9 @@ $group = $app->group(
             $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}', App\Controllers\User\Videos::class);
             $group->any('/payments[/{id}]', App\Controllers\User\Payments::class);
             $group->any('/subscription/{action}[/{level:\d+}]', App\Controllers\User\Subscription::class);
+            if (getenv('CONNECTION_SERVICES')) {
+                $group->any('/connections[/{service}]', App\Controllers\User\Connections::class);
+            }
         });
 
         $group->group('/admin', static function (RouteCollectorProxy $group) {
@@ -72,6 +75,12 @@ $group = $app->group(
                 $group->any('/sitemap', App\Controllers\Web\Sitemap::class);
                 $group->any('/rss', App\Controllers\Web\Rss::class);
                 $group->any('/search', App\Controllers\Web\Search::class);
+
+                $connections = array_map('trim', explode(',', getenv('CONNECTION_SERVICES')));
+                if (in_array('Telegram', $connections, true)) {
+                    $group->post('/connections/telegram/{local_id}', App\Controllers\Web\Connections\Telegram::class);
+                    $group->get('/connections/telegram/{remote_id}', App\Controllers\Web\Connections\Telegram::class);
+                }
             }
         );
     }

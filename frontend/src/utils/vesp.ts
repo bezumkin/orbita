@@ -1,5 +1,6 @@
 import type {OutputData} from '@editorjs/editorjs'
 import {ru, de} from 'date-fns/locale'
+import slugify from 'slugify'
 
 export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
   return getImageLink(file, options, prefix || 'file')
@@ -173,4 +174,11 @@ export function useDateLocale() {
 
 export function formatBigNumber(views: undefined | number | string) {
   return views ? String(views).replace(/(\d)(?=(\d{3})+$)/g, '$1 ') : '0'
+}
+
+export function formatServiceKey(service: string) {
+  return slugify(
+    service.trim().replace(/[A-Z]/g, (s) => '-' + s),
+    {lower: true},
+  )
 }

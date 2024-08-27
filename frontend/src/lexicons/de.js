@@ -189,6 +189,10 @@ export default {
         'comment-new': 'Neuer Kommentar',
       },
     },
+    user_connection: {
+      connect_to: 'Verbinden Sie sich mit <strong>{service}</strong>',
+      disconnect_from: 'Sie sind mit dem {service} verbunden, trennen Sie die Verbindung?',
+    },
     page: {
       title_one: 'Seite',
       title_many: 'Seiten',
@@ -456,6 +460,9 @@ export default {
       wrong_service: 'Fehler beim Starten des Bezahl Service.',
       wrong_level: 'Konnte das Abo Level nicht laden',
       delete_paid: 'Ageschlossene Transaktionen können nicht gelöscht werden.',
+    },
+    connection: {
+      no_service: 'Es konnte kein Dienst zum Verbinden gefunden werden.',
     },
     reaction: {
       title_exists: 'Eine Reaktion mit diesem Namen existiert bereits',
