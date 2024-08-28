@@ -26,8 +26,8 @@ class TempStorage extends Filesystem
         $config = [
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',
             'ffprobe.binaries' => '/usr/bin/ffprobe',
-            'ffmpeg.threads' => 0,
-            'timeout' => 0,
+            'ffmpeg.threads' => getenv('TRANSCODE_THREADS') ?: '0',
+            'timeout' => '0',
         ];
 
         $logger = Log::getLogger(getenv('LOG_LEVEL') ?: 'error', 'ffmpeg');
@@ -71,7 +71,7 @@ class TempStorage extends Filesystem
             '-b:v', $bitrate . 'k',
             '-strict',
             '-2',
-            '-threads', '0',
+            '-threads', getenv('TRANSCODE_THREADS') ?: '0',
             $output . '.m3u8',
         ];
 
