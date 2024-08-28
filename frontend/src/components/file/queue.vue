@@ -216,11 +216,13 @@ function continueUpload(item: UploadItem) {
 }
 
 async function cancelUpload(item: UploadItem) {
-  removeUpload(item)
   try {
     const upload = uploads[item.id]
     await upload.abort(true)
-  } catch (e) {}
+  } catch (e) {
+  } finally {
+    removeUpload(item)
+  }
 }
 
 function removeUpload(item: UploadItem) {
