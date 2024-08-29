@@ -397,10 +397,11 @@ export default {
     scope: 'Du hast nicht genug Rechte für diese Aktion. "{scope}" ist notwendig',
     index: 'Gehen Sie zurück zur Hauptseite',
     user: {
-      no_username: 'Benutzername erforderlich',
-      no_fullname: 'Voller Name erforderlich',
+      no_username: 'Eine Anmeldung ist erforderlich',
+      no_fullname: 'Sagen Sie uns, wie wir Sie anrufen können',
       no_email: 'Email erforderlich',
-      username_exists: 'Dieser Benutzername exisitiert bereits',
+      wrong_username: 'Falsche Anmeldung, es können nur lateinische Buchstaben und Zahlen verwendet werden',
+      username_exists: 'Dieses Login ist bereits vorhanden',
       email_exists: 'Diese Emailadresse existiert bereits',
       inactive: 'Dieses Konto ist nicht aktiv',
       blocked: 'Dieses Konto ist gesperrt.',
@@ -410,7 +411,7 @@ export default {
       delete_own: 'Du kannst Deine eigene Gruppe nicht löschen',
     },
     login: {
-      wrong: 'Falscher Benutzername oder Passwort',
+      wrong: 'Falscher Login oder Passwort',
     },
     activate: {
       no_user: 'Der Benutzer existiert nicht oder hat sein Passwort nicht zurückgesetzt.',
