@@ -49,4 +49,23 @@ class CloudStorage extends Filesystem
             ->execute($command)
             ->get('Body');
     }
+
+    public function getDownloadLink(string $path, ?string $filename = null, ?string $timeout = null): string
+    {
+        $options = [
+            'Bucket' => getenv('S3_BUCKET'),
+            'Key' => $path,
+            'ResponseContentDisposition' => 'attachment;',
+        ];
+        if ($filename) {
+            $options['ResponseContentDisposition'] .= ' filename="' . $filename . '"';
+        }
+        if (!$timeout) {
+            $timeout = getenv('DOWNLOAD_MEDIA_FROM_S3_TIMEOUT') ?: '+6 hours';
+        }
+        $command = $this->client->getCommand('GetObject', $options);
+        $request = $this->client->createPresignedRequest($command, $timeout);
+
+        return (string)$request->getUri();
+    }
 }

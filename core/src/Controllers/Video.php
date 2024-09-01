@@ -86,12 +86,8 @@ class Video extends Controller
                 return $this->getThumbnails();
             }
 
-            if ($quality === 'download') {
-                return $this->download($this->video->file, $this->video->title);
-            }
-
             if ($quality === 'download' && getenv('DOWNLOAD_MEDIA_ENABLED')) {
-                return $this->download($this->video->file, $this->video->title);
+                return $this->download($this->video->file);
             }
 
             /** @var VideoQuality $videoQuality */
@@ -208,6 +204,18 @@ class Video extends Controller
     protected function download(File $file, ?string $title = null): ResponseInterface
     {
         $fs = $file->getFilesystem();
+        try {
+            if (getenv('DOWNLOAD_MEDIA_FROM_S3') && method_exists($fs, 'getDownloadLink')) {
+                $link = $fs->getDownloadLink($file->getFilePathAttribute(), $title ?: $file->file);
+
+                return $this->response
+                    ->withStatus(302)
+                    ->withHeader('Location', $link);
+            }
+        } catch (Throwable $e) {
+            Log::error($e);
+        }
+
         $stream = new Stream($fs->getBaseFilesystem()->readStream($file->getFilePathAttribute()));
 
         return $this->response
