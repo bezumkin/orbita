@@ -138,7 +138,13 @@ class Video extends Controller
 
     protected function getQuality(VideoQuality $videoQuality): ResponseInterface
     {
-        $this->response->getBody()->write($videoQuality->manifest);
+        $manifest = $videoQuality->manifest;
+        $fs = $videoQuality->file->getFilesystem();
+        if (getenv('DOWNLOAD_MEDIA_FROM_S3') && method_exists($fs, 'getStreamLink')) {
+            $link = $fs->getStreamLink($videoQuality->file->getFilePathAttribute());
+            $manifest = preg_replace('#^' . $videoQuality->quality . '$#m', $link, $manifest);
+        }
+        $this->response->getBody()->write($manifest);
 
         return $this->response
             ->withHeader('Accept-Ranges', 'bytes')

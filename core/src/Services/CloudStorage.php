@@ -68,4 +68,45 @@ class CloudStorage extends Filesystem
 
         return (string)$request->getUri();
     }
+
+    public function getStreamLink(string $path, ?string $timeout = null): string
+    {
+        $options = [
+            'Bucket' => getenv('S3_BUCKET'),
+            'Key' => $path,
+        ];
+        if (!$timeout) {
+            $timeout = getenv('DOWNLOAD_MEDIA_FROM_S3_TIMEOUT') ?: '+6 hours';
+        }
+        $command = $this->client->getCommand('GetObject', $options);
+        $request = $this->client->createPresignedRequest($command, $timeout);
+
+        return (string)$request->getUri();
+    }
+
+    public function setBucketCorsRules(array $rules = []): bool
+    {
+        if (!$rules) {
+            $rules = [
+                'CORSRules' => [
+                    [
+                        'AllowedMethods' => ['GET'],
+                        'AllowedOrigins' => ['*'],
+                        'AllowedHeaders' => [],
+                        'ExposeHeaders' => [],
+                        'MaxAgeSeconds' => 3600,
+                    ],
+                ],
+            ];
+        } elseif (!isset($rules['CORSRules'])) {
+            $rules['CORSRules'] = $rules;
+        }
+
+        $response = $this->client->putBucketCors([
+            'Bucket' => getenv('S3_BUCKET'),
+            'CORSConfiguration' => $rules,
+        ]);
+
+        return $response->get('@metadata')['statusCode'] === 200;
+    }
 }
