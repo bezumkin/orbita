@@ -259,8 +259,12 @@ class Topic extends Model
         return $payment;
     }
 
-    public function notifyUsers(): void
+    public function createNotifications(): void
     {
+        if (getenv('TOPICS_FREE_SKIP_NOTIFICATIONS') && $this->isFree()) {
+            return;
+        }
+
         $level = $this->level;
         $users = User::query()
             // ->where('id', '!=', $this->user_id)

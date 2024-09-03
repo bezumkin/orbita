@@ -155,7 +155,7 @@ class Topics extends ModelController
 
         // Create notifications
         if ($this->notifyUsers) {
-            $topic->notifyUsers();
+            $topic->createNotifications();
             $this->redis->send('topic-publish', $data);
         }
 
