@@ -86,6 +86,10 @@ export default {
       created_at: 'Erstellt am',
       qualities: 'Versionen',
       error: 'Fehler verarbeiten',
+      play: {
+        video: 'Zurück zum Video',
+        audio: 'Wechseln Sie zu Audio',
+      },
     },
     video_quality: {
       titel_one: 'Version',

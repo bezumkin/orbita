@@ -62,7 +62,7 @@ export async function initAudioPlayer(uuid: string, target: HTMLElement, props: 
     target,
     src: {src: url, type: 'audio/mpeg'},
     viewType: 'audio',
-    storage: new MediaDatabaseStorage({uuid, type: 'audio'}),
+    storage: new MediaDatabaseStorage({uuid, type: 'audio', status: props.status}),
     ...commonSettings,
     layout: new VidstackPlayerLayout({
       ...layoutSettings,
@@ -99,7 +99,7 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
     target,
     src: {src: url, type: 'application/x-mpegurl'},
     viewType: 'video',
-    storage: new MediaDatabaseStorage({uuid, type: 'video'}),
+    storage: new MediaDatabaseStorage({uuid, type: 'video', status: props.status}),
     ...commonSettings,
     layout: new VidstackPlayerLayout({
       ...layoutSettings,
@@ -172,11 +172,13 @@ class MediaDatabaseStorage implements MediaStorage {
   type: string
   user: VespUser | undefined
   status: Record<string, {quality: number | null; time: number; speed: number; volume: number}> = {}
+  forcedStatus: Record<string, {quality: number | null; time: number; speed: number; volume: number}> = {}
 
-  constructor({uuid, type}: Record<string, any>) {
+  constructor({uuid, type, status}: Record<string, any>) {
     this.uuid = uuid
     this.type = type
     this.user = useAuth().user.value
+    this.forcedStatus = status || {}
   }
 
   get isLocal() {
@@ -344,6 +346,12 @@ class MediaDatabaseStorage implements MediaStorage {
         if (typeof data === 'object' && 'quality' in data) {
           this.status[this.uuid] = data
         }
+      }
+
+      if (this.forcedStatus) {
+        Object.keys(this.forcedStatus).forEach((key) => {
+          this.setValue(key, this.forcedStatus[key])
+        })
       }
     } catch (e) {
       console.error(e)

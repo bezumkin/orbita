@@ -86,6 +86,10 @@ export default {
       created_at: 'Загружено',
       qualities: 'Версии',
       error: 'Ошибка обработки',
+      play: {
+        video: 'Вернуться к видео',
+        audio: 'Переключить на аудиоверсию',
+      },
     },
     video_quality: {
       title_one: 'Версия',

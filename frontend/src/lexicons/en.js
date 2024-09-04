@@ -86,6 +86,10 @@ export default {
       created_at: 'Created at',
       qualities: 'Versions',
       error: 'Processing error',
+      play: {
+        video: 'Return back to video',
+        audio: 'Switch to audio',
+      },
     },
     video_quality: {
       title_one: 'Version',

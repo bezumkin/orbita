@@ -16,6 +16,12 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  status: {
+    type: Object,
+    default() {
+      return {}
+    },
+  },
 })
 
 const video = ref()
@@ -26,10 +32,17 @@ async function initPlayer() {
     return
   }
 
-  player.value = await initVideoPlayer(props.uuid, video.value, {
-    poster: props.poster,
-    autoPlay: props.autoplay,
-  })
+  player.value = await initVideoPlayer(
+    props.uuid,
+    video.value,
+    JSON.parse(
+      JSON.stringify({
+        poster: props.poster,
+        autoPlay: props.autoplay,
+        status: props.status,
+      }),
+    ),
+  )
 }
 
 onMounted(() => {

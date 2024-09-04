@@ -8,6 +8,8 @@ export default class implements BlockTool {
   html: HTMLElement
   config?: ToolConfig
   activated: boolean
+  playing?: string
+  time?: number
 
   static get toolbox() {
     return {
@@ -45,9 +47,11 @@ export default class implements BlockTool {
       return
     }
 
-    const wrapper = document.createElement('div')
+    const {t} = useNuxtApp().$i18n
+    this.html.innerHTML = ''
+    const videoWrapper = document.createElement('div')
 
-    if (!this.activated) {
+    if (!this.playing) {
       const poster = document.createElement('img')
       poster.src = getApiUrl() + 'poster/' + this.data.uuid + '/1024'
 
@@ -60,8 +64,7 @@ export default class implements BlockTool {
       button.innerHTML = icon(faPlay).html[0]
       button.onclick = (e) => {
         e.preventDefault()
-        this.activated = true
-        this.html.innerHTML = ''
+        this.playing = 'video'
         this.showPreview()
       }
       const fa = button.firstChild as HTMLElement
@@ -69,31 +72,77 @@ export default class implements BlockTool {
       fa.style.height = '3rem'
       fa.classList.add('fa-fw')
 
-      wrapper.classList.add('play-video-wrapper')
-      wrapper.append(posterWrapper)
-      wrapper.append(button)
-    } else {
+      videoWrapper.classList.add('play-video-wrapper')
+      videoWrapper.append(posterWrapper)
+      videoWrapper.append(button)
+    } else if (this.playing === 'video') {
       const video = document.createElement('video')
-      wrapper.appendChild(video)
-      wrapper.classList.add('ratio', 'ratio-16x9', 'm-auto', 'rounded')
+      videoWrapper.appendChild(video)
+      videoWrapper.classList.add('ratio', 'ratio-16x9', 'm-auto', 'rounded')
 
       initVideoPlayer(this.data.uuid, video, {
         poster: getApiUrl() + 'poster/' + this.data.uuid + '/1024',
         autoPlay: true,
+        status: {
+          time: this.time,
+        },
       })
+    } else {
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-primary')
+      button.textContent = t('models.video.play.video')
+      button.onclick = (e) => {
+        e.preventDefault()
+        if (this.playing === 'audio') {
+          const storage = JSON.parse(localStorage.getItem('player-audio') || {})
+          if (this.data.audio in storage) {
+            this.time = storage[this.data.audio].time || 0
+          }
+        }
+        this.playing = 'video'
+        this.showPreview()
+      }
+      videoWrapper.classList.add('text-center')
+      videoWrapper.appendChild(button)
     }
 
-    this.html.appendChild(wrapper)
+    this.html.appendChild(videoWrapper)
 
-    const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED)
-    if (useAudio && this.data.audio) {
-      wrapper.classList.add('mb-2')
+    const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED) && this.data.audio
+    if (useAudio) {
+      const audioWrapper = document.createElement('div')
+      audioWrapper.classList.add('mt-2')
+      if (this.playing === 'audio') {
+        const audio = document.createElement('audio')
+        audio.title = t('models.video.audio')
+        audioWrapper.appendChild(audio)
 
-      const audio = document.createElement('audio')
-      audio.title = useNuxtApp().$i18n.t('models.video.audio')
-      this.html.appendChild(audio)
+        initAudioPlayer(this.data.audio, audio, {
+          autoPlay: true,
+          status: {
+            time: this.time,
+          },
+        })
+      } else {
+        const button = document.createElement('button')
+        button.classList.add('btn', 'btn-primary')
+        button.textContent = t('models.video.play.audio')
+        button.onclick = (e) => {
+          e.preventDefault()
+          if (this.playing === 'video') {
+            const storage = JSON.parse(localStorage.getItem('player-video') || {})
+            if (this.data.uuid in storage) {
+              this.time = storage[this.data.uuid].time || 0
+            }
+          }
+          this.playing = 'audio'
+          this.showPreview()
+        }
+        audioWrapper.classList.add('text-center')
+        audioWrapper.appendChild(button)
+      }
 
-      initAudioPlayer(this.data.audio, audio)
+      this.html.appendChild(audioWrapper)
     }
   }
 }
