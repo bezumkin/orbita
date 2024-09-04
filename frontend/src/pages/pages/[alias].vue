@@ -10,14 +10,14 @@
       <EditorContent v-if="blocks" :content="{blocks}" />
     </div>
     <BForm v-else-if="$scope('pages/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
-      <div class="topic-buttons">
+      <FormsPage v-model="record" />
+      <div class="topic-buttons mb-0 mt-2">
         <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
         <BButton variant="primary" type="submit" :disabled="loading">
           <BSpinner v-if="loading" small />
           {{ $t('actions.save') }}
         </BButton>
       </div>
-      <FormsPage v-model="record" />
     </BForm>
   </BOverlay>
 </template>
