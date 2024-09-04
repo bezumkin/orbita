@@ -84,18 +84,12 @@ const canPay = computed(() => {
   )
 })
 
-const paymentProperties: Ref<Record<string, any>> = ref({service: services[0], price: 0})
-const isVariants = computed(() => {
-  return Boolean(
-    !paymentProperties.value.mode &&
-      $payment.value &&
-      'uuid' in $payment.value &&
-      $payment.value.level_id &&
-      $payment.value.price,
-  )
-})
+const paymentProperties = ref<Record<string, any>>({service: services[0], price: 0})
 const isTopic = computed(() => {
   return $payment.value && 'uuid' in $payment.value && $payment.value.price
+})
+const isVariants = computed(() => {
+  return !paymentProperties.value.mode && isTopic.value && $payment.value.level_id
 })
 const subscriptionWarning = computed(() => {
   const subscriptions = useRuntimeConfig().public.PAYMENT_SUBSCRIPTIONS.split(',').map(formatServiceKey)

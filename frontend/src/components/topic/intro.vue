@@ -65,13 +65,22 @@ const imageProps = computed(() => {
 })
 
 function onSubscribe() {
+  let value: VespTopic | VespSubscription = {}
+  if (props.topic.price > 0) {
+    value = props.topic
+  } else if (levelRequired.value) {
+    value = levelRequired.value
+  } else {
+    return
+  }
+
   if ($payment.value) {
     $payment.value = undefined
     nextTick(() => {
-      $payment.value = props.topic
+      $payment.value = value
     })
   } else {
-    $payment.value = props.topic
+    $payment.value = value
   }
 }
 

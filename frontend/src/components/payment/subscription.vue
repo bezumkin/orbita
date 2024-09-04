@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import {addDays, addMonths, differenceInDays} from 'date-fns'
-import type {WritableComputedRef} from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -47,12 +46,12 @@ const {t, d} = useI18n()
 const {$payment, $levels} = useNuxtApp()
 const {user} = useAuth()
 const periods = [1, 3, 6, 12]
-const currentLevel: Ref<VespLevel | undefined> = ref()
+const currentLevel = ref<VespLevel | undefined>()
 const downgrading = ref(false)
 const upgrading = ref(false)
-const level: ComputedRef<VespLevel> = computed(() => $payment.value as unknown as VespLevel)
+const level = computed<VespLevel>(() => $payment.value as unknown as VespLevel)
 
-const myValue: WritableComputedRef<Record<string, any>> = computed({
+const myValue = computed<Record<string, any>>({
   get() {
     return props.modelValue
   },
