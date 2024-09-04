@@ -138,6 +138,7 @@ const config: NuxtConfig = {
     },
     locales,
   },
+  compatibilityDate: '2024-09-04',
 }
 
 if (process.env.NODE_ENV === 'development') {
