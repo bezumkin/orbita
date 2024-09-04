@@ -55,8 +55,8 @@ class Topic extends Model
         'price' => 'float',
         'active' => 'bool',
         'closed' => 'bool',
-        'published_at' => 'datetime',
-        'publish_at' => 'datetime',
+        'published_at' => 'datetime:Y-m-d H:i:s',
+        'publish_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     protected static function booted(): void
@@ -200,6 +200,7 @@ class Topic extends Model
             'reactions_count',
             'comments_count',
             'published_at',
+            'publish_at',
             'tags',
             'active',
         );

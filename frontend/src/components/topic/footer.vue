@@ -32,9 +32,9 @@
         </template>
       </div>
       <div class="ms-md-auto order-2 order-md-3">
-        <template v-if="topic.published_at">
+        <template v-if="topic.published_at || topic.publish_at">
           <VespFa icon="calendar" class="fa-fw" />
-          {{ d(topic.published_at, 'long') }}
+          {{ d(topic.published_at || topic.publish_at, 'long') }}
         </template>
       </div>
     </div>
