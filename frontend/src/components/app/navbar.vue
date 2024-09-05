@@ -2,7 +2,7 @@
   <BNavbar id="navbar" sticky="top" :container="false">
     <BContainer>
       <BNavbarBrand :to="{name: 'index'}" class="p-0" @click="hideSidebar">
-        <BImg src="/project/logo.svg" class="logo" height="40" />
+        <BImg :src="logo" class="logo" height="40" />
       </BNavbarBrand>
 
       <AppPages class="d-none d-md-flex" />
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import type {BaseButtonVariant} from 'bootstrap-vue-next'
 import {type BasicColorSchema, useColorMode} from '@vueuse/core'
+import logo from '~/public/project/logo.svg'
 
 defineProps({
   sidebar: {
