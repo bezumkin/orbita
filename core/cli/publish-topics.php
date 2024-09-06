@@ -17,7 +17,7 @@ $topics = Topic::query()
 /** @var Topic $topic */
 foreach ($topics as $topic) {
     $topic->active = true;
-    $topic->published_at = time();
+    $topic->published_at = date('Y-m-d H:i:s');
     $topic->publish_at = null;
     $topic->save();
 
