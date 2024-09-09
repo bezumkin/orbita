@@ -92,7 +92,7 @@ class CloudStorage extends Filesystem
                     [
                         'AllowedMethods' => ['GET'],
                         'AllowedOrigins' => ['*'],
-                        'AllowedHeaders' => [],
+                        'AllowedHeaders' => ['*'],
                         'ExposeHeaders' => [],
                         'MaxAgeSeconds' => 3600,
                     ],
