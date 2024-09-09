@@ -202,6 +202,7 @@ class Video extends Model
                     echo PHP_EOL;
                 }
             } catch (Throwable $e) {
+                $quality?->delete();
                 $this->processed = false;
                 $this->error = $e->getMessage();
                 $this->save();
@@ -323,10 +324,10 @@ class Video extends Model
             Log::error($e);
         }
 
-        foreach ($this->qualities as $quality) {
-            $quality->file->delete();
-        }
         $this->file->delete();
+        foreach ($this->qualities as $quality) {
+            $quality->delete();
+        }
         if ($this->image) {
             $this->image->delete();
         }

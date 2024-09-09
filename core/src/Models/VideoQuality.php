@@ -83,4 +83,11 @@ class VideoQuality extends Model
 
         $tempFs->delete($manifestFile);
     }
+
+    public function delete(): bool
+    {
+        $this->file?->delete();
+
+        return parent::delete();
+    }
 }
