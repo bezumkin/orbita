@@ -37,6 +37,10 @@ const props = defineProps({
     type: Number,
     default: 800,
   },
+  autoplay: {
+    type: Boolean,
+    default: false,
+  },
 })
 const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
 
@@ -60,9 +64,13 @@ const audioProps = ref({
   status: {},
 })
 
+if (props.autoplay) {
+  playing.value = 'video'
+}
+
 function playVideo() {
   if (playing.value === 'audio') {
-    const storage = JSON.parse(localStorage.getItem('player-audio') || {})
+    const storage = JSON.parse(localStorage.getItem('player-audio') || '{}')
     if (audioProps.value.uuid in storage) {
       videoProps.value.status.time = storage[audioProps.value.uuid].time || 0
     }
@@ -72,7 +80,7 @@ function playVideo() {
 
 function playAudio() {
   if (playing.value === 'video') {
-    const storage = JSON.parse(localStorage.getItem('player-video') || {})
+    const storage = JSON.parse(localStorage.getItem('player-video') || '{}')
     if (videoProps.value.uuid in storage) {
       audioProps.value.status.time = storage[videoProps.value.uuid].time || 0
     }
