@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $service
  * @property string $remote_id
  * @property ?array $data
- * @property Carbon $timestamp
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @property-read User $user
  */
@@ -23,7 +24,6 @@ class UserConnection extends Model
     protected $guarded = [];
     protected $casts = [
         'data' => 'array',
-        'timestamp' => 'datetime',
     ];
 
     public function user(): BelongsTo
