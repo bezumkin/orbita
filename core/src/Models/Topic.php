@@ -55,8 +55,8 @@ class Topic extends Model
         'price' => 'float',
         'active' => 'bool',
         'closed' => 'bool',
-        'published_at' => 'datetime:Y-m-d H:i:s',
-        'publish_at' => 'datetime:Y-m-d H:i:s',
+        'published_at' => 'datetime',
+        'publish_at' => 'datetime',
     ];
 
     protected static function booted(): void

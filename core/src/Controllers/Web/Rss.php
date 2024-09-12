@@ -13,6 +13,7 @@ class Rss extends Sitemap
         $rows = [];
         $topics = Topic::query()
             ->where('active', true)
+            ->whereNotNull('published_at')
             ->select('uuid', 'title', 'content', 'teaser', 'cover_id', 'user_id', 'published_at')
             ->with('cover:id,uuid,type,updated_at')
             ->with('user:id,fullname')

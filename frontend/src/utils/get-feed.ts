@@ -24,21 +24,18 @@ export async function getRssFeed() {
   })
 
   try {
-    const [{rows: settings}, topics] = await Promise.all([
-      ofetch('web/settings', {baseURL}),
-      ofetch('web/rss', {baseURL}),
-    ])
+    const [{settings}, topics] = await Promise.all([ofetch('web/settings', {baseURL}), ofetch('web/rss', {baseURL})])
     topics.forEach((topic: any) => {
       feed.addItem({...topic, date: new Date(topic.date)})
     })
 
-    settings.forEach((setting: any) => {
-      if (['title', 'description', 'copyright'].includes(setting.key) && setting.value[locale]) {
+    Object.keys(settings).forEach((key: any) => {
+      const value = settings[key]
+      if (['title', 'description', 'copyright'].includes(key) && value[locale]) {
         // @ts-ignore
-        feed.options[setting.key] = stripTags(setting.value[locale])
-      } else if (setting.key === 'poster' && setting.value.uuid) {
-        feed.options.image =
-          baseURL + 'image/' + setting.value.uuid + '?t=' + new Date(setting.value.updated_at).getTime()
+        feed.options[key] = stripTags(value[locale])
+      } else if (key === 'poster' && value.uuid) {
+        feed.options.image = baseURL + 'image/' + value.uuid + '?t=' + new Date(value.updated_at).getTime()
       }
     })
   } catch (e) {

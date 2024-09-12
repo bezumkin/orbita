@@ -8,7 +8,6 @@ use App\Models\Topic;
 use App\Models\TopicTag;
 use App\Services\Manticore;
 use App\Services\Redis;
-use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -185,5 +184,16 @@ class Topics extends ModelController
         ($this->manticore->getIndex())->deleteDocument($record->id);
 
         return $this->success();
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        /** @var Topic $object */
+        $array = $object->toArray();
+        if ($object->publish_at) {
+            $array['publish_at'] = $object->publish_at->toDateTimeString();
+        }
+
+        return $array;
     }
 }
