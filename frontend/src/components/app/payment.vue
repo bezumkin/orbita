@@ -75,7 +75,9 @@ const {user, loadUser} = useAuth()
 const loading = ref(false)
 const size = ref<keyof BaseSize>('md')
 const qr = ref<undefined | Record<string, string>>()
-const services = $variables.value.PAYMENT_SERVICES.split(',').map(formatServiceKey)
+const services = computed(() => {
+  return $variables.value?.PAYMENT_SERVICES?.split(',').map(formatServiceKey) || []
+})
 const showModal = ref(false)
 const canPay = computed(() => {
   return (
@@ -84,7 +86,7 @@ const canPay = computed(() => {
   )
 })
 
-const paymentProperties = ref<Record<string, any>>({service: services[0], price: 0})
+const paymentProperties = ref<Record<string, any>>({service: services.value.length ? services.value[0] : '', price: 0})
 const isTopic = computed(() => {
   return $payment.value && 'uuid' in $payment.value && $payment.value.price
 })
@@ -92,7 +94,7 @@ const isVariants = computed(() => {
   return !paymentProperties.value.mode && isTopic.value && $payment.value.level_id
 })
 const subscriptionWarning = computed(() => {
-  const subscriptions = $variables.value.PAYMENT_SUBSCRIPTIONS.split(',').map(formatServiceKey)
+  const subscriptions = $variables.value?.PAYMENT_SUBSCRIPTIONS?.split(',').map(formatServiceKey) || []
   return Boolean(
     !isTopic.value &&
       subscriptions.length > 0 &&
@@ -167,7 +169,7 @@ function onCancel() {
   showModal.value = false
   qr.value = undefined
   $payment.value = undefined
-  paymentProperties.value = {service: services[0], price: 0}
+  paymentProperties.value = {service: services.value[0], price: 0}
 }
 
 function serviceClass(selected: string) {
@@ -199,6 +201,12 @@ watch(user, async (newValue) => {
     }
   } else {
     $payment.value = undefined
+  }
+})
+
+watch(services, () => {
+  if (paymentProperties.value.service === '' && services.value.length) {
+    paymentProperties.value.service = services.value[0]
   }
 })
 
