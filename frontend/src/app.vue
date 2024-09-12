@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import {stripTags} from '~/utils/vesp'
 
-const {$settings, $image, $isMobile} = useNuxtApp()
+const {$settings, $variables, $image, $isMobile} = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const isColumns = computed(() => {
@@ -61,7 +61,7 @@ const background = computed(() => {
   const bg = $settings.value.background as VespFile
   return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
 })
-const {SITE_URL, COMMENTS_SHOW_ONLINE} = useRuntimeConfig().public
+const {SITE_URL, COMMENTS_SHOW_ONLINE} = $variables.value
 const showOnline = COMMENTS_SHOW_ONLINE === '1'
 
 const mainClasses = computed(() => {
@@ -76,7 +76,7 @@ const mainClasses = computed(() => {
 })
 
 function handleResize() {
-  const width = process.client ? window.innerWidth : 768
+  const width = import.meta.client ? window.innerWidth : 768
   $isMobile.value = width < 768
 }
 

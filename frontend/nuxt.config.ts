@@ -8,7 +8,6 @@ const locales = [
   {code: 'en', name: 'English', file: 'lexicons/en.js', iso: 'en-GB'},
   {code: 'de', name: 'Deutsch', file: 'lexicons/de.js', iso: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
-const SITE_URL = process.env.SITE_URL || 'http://127.0.0.1:8080/'
 
 const config: NuxtConfig = {
   telemetry: false,
@@ -45,26 +44,8 @@ const config: NuxtConfig = {
     locales,
     public: {
       TZ: process.env.TZ || 'Europe/Moscow',
-      SITE_URL,
+      SITE_URL: process.env.SITE_URL || 'http://127.0.0.1:8080/',
       API_URL: process.env.API_URL || '/api/',
-      JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
-      CURRENCY: process.env.CURRENCY || 'RUB',
-      REGISTER_ENABLED: process.env.REGISTER_ENABLED || '1',
-      COMMENTS_SHOW_ONLINE: process.env.COMMENTS_SHOW_ONLINE || '1',
-      COMMENTS_MAX_LEVEL: process.env.COMMENTS_MAX_LEVEL || '3',
-      COMMENTS_EDIT_TIME: process.env.COMMENTS_EDIT_TIME || '600',
-      EDITOR_TOPIC_BLOCKS: process.env.EDITOR_TOPIC_BLOCKS || '',
-      EDITOR_COMMENT_BLOCKS: process.env.EDITOR_COMMENT_BLOCKS || '',
-      PAYMENT_SERVICES: process.env.PAYMENT_SERVICES || '',
-      PAYMENT_SUBSCRIPTIONS: process.env.PAYMENT_SUBSCRIPTIONS || '',
-      CONNECTION_SERVICES: process.env.CONNECTION_SERVICES || '',
-      ADMIN_SECTIONS: process.env.ADMIN_SECTIONS || '',
-      DOWNLOAD_MEDIA_ENABLED: process.env.DOWNLOAD_MEDIA_ENABLED || '0',
-      EXTRACT_VIDEO_AUDIO_ENABLED: process.env.EXTRACT_VIDEO_AUDIO_ENABLED || '0',
-      EXTRACT_VIDEO_THUMBNAILS_ENABLED: process.env.EXTRACT_VIDEO_THUMBNAILS_ENABLED || '1',
-      COMMENTS_REQUIRE_SUBSCRIPTION: process.env.COMMENTS_REQUIRE_SUBSCRIPTION || '0',
-      TOPICS_SHOW_AUTHOR: process.env.TOPICS_SHOW_AUTHOR || '0',
-      TOPICS_CHANGE_AUTHOR: process.env.TOPICS_CHANGE_AUTHOR || '0',
     },
   },
   app: {

@@ -52,9 +52,9 @@ defineProps({
 
 const hasAdmin = computed(() => getAdminSections().length)
 const {loggedIn} = useAuth()
-const {$sidebar} = useNuxtApp()
+const {$sidebar, $variables} = useNuxtApp()
 const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
-const saved = useCookie<BasicColorSchema | undefined>('colorMode', {maxAge: useRuntimeConfig().public.JWT_EXPIRE})
+const saved = useCookie<BasicColorSchema | undefined>('colorMode', {maxAge: $variables.value.JWT_EXPIRE})
 const colorIcon = computed(() => {
   return ['fas', store.value === 'dark' ? 'moon' : 'sun']
 })
@@ -75,7 +75,7 @@ function changeColorTheme(newValue: BasicColorSchema | undefined = undefined) {
   }
   saved.value = store.value
 
-  if (process.client) {
+  if (import.meta.client) {
     const elem = document.querySelector('meta[name="theme-color"]')
     if (elem) {
       elem.setAttribute('content', store.value === 'dark' ? '#000' : '#fff')

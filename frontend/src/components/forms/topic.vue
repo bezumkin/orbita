@@ -112,7 +112,7 @@ const record = computed({
 })
 
 const {t} = useI18n()
-const {$socket, $price, $scope} = useNuxtApp()
+const {$socket, $price, $scope, $variables} = useNuxtApp()
 const levels: Ref<VespLevel[]> = ref([])
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
@@ -131,9 +131,8 @@ const accessOptions = computed(() => {
 })
 const delayed = ref(props.modelValue.publish_at !== null)
 
-const {public: config} = useRuntimeConfig()
-const editorBlocks = config.EDITOR_TOPIC_BLOCKS || false
-const changeAuthor = $scope('users/get') && config.TOPICS_CHANGE_AUTHOR === '1'
+const editorBlocks = $variables.value.EDITOR_TOPIC_BLOCKS || false
+const changeAuthor = $scope('users/get') && $variables.value.TOPICS_CHANGE_AUTHOR === '1'
 
 const accessLevel = ref('free')
 if (record.value.id) {

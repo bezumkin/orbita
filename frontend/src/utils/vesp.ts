@@ -98,7 +98,7 @@ export function contentClick(e: MouseEvent) {
   if (target.tagName === 'A') {
     e.preventDefault()
     const href = (target as HTMLLinkElement).href
-    const local = useRuntimeConfig().public.SITE_URL
+    const local = useNuxtApp().$variables.value.SITE_URL
     if (!/:/.test(href) || href.startsWith(local)) {
       const router = useRouter()
       const route = router.resolve(href.replace(local, '/'))
@@ -123,7 +123,7 @@ export function translateServerMessage(message: string) {
 }
 
 export function getAdminSections() {
-  const userSections = useRuntimeConfig().public.ADMIN_SECTIONS || ''
+  const userSections = useNuxtApp().$variables.value.ADMIN_SECTIONS || ''
   const allSections: Record<string, any> = {
     payments: {scope: 'payments/get', title: 'payments', route: 'admin-payments'},
     topics: {scope: 'topics/get', title: 'topics', route: 'admin-topics'},

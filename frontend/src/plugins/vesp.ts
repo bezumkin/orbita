@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const $socket = nuxtApp.$socket as Socket
   const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
-  const {sidebar, login, isMobile, payment} = storeToRefs(store)
+  const {sidebar, login, isMobile, payment, variables} = storeToRefs(store)
 
   nuxtApp.provide('file', getFileLink)
   nuxtApp.provide('contentPreview', contentPreview)
@@ -17,6 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('login', login)
   nuxtApp.provide('isMobile', isMobile)
   nuxtApp.provide('payment', payment)
+  nuxtApp.provide('variables', variables)
   nuxtApp.provide('price', (val: number) => {
     if (!val) {
       return ''

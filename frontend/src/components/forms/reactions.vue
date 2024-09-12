@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BOverlay :show="pending || loading" opacity="0.5">
+    <BOverlay :show="status === 'pending' || loading" opacity="0.5">
       <Draggable :list="reactions" item-key="id" class="row g-2" @end="onSort">
         <template #item="{element}">
           <BCol cols="6" md="auto">
@@ -90,7 +90,7 @@
 import Draggable from 'vuedraggable'
 
 const url = 'admin/reactions'
-const {data, pending} = useCustomFetch(url)
+const {data, status} = useCustomFetch(url)
 const loading = ref(false)
 const reactions: ComputedRef<VespReaction[]> = computed(() => {
   return data.value?.rows || []

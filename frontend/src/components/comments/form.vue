@@ -60,7 +60,7 @@ const record = computed({
 })
 
 const uploadUrl = getApiUrl() + 'web/topics/' + props.topic.uuid + '/comments/upload'
-const editorBlocks = useRuntimeConfig().public.EDITOR_COMMENT_BLOCKS || false
+const editorBlocks = useNuxtApp().$variables.value.EDITOR_COMMENT_BLOCKS || false
 const editor = ref()
 const editingTime = computed(() => {
   if (!props.timer) {

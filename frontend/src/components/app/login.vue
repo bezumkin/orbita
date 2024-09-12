@@ -79,7 +79,7 @@ defineProps({
 
 const {t} = useI18n()
 const {user, login, logout} = useAuth()
-const {$login} = useNuxtApp()
+const {$login, $variables} = useNuxtApp()
 const showModal = computed({
   get() {
     return $login.value
@@ -91,7 +91,7 @@ const showModal = computed({
 const loading = ref(false)
 const form = ref()
 const tabs = ref()
-const registerEnabled = useRuntimeConfig().public.REGISTER_ENABLED === '1'
+const registerEnabled = $variables.value.REGISTER_ENABLED === '1'
 
 const formLogin = ref({username: '', password: ''})
 const formRegister = ref({username: '', password: '', fullname: '', email: ''})

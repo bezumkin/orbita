@@ -42,7 +42,7 @@ const props = defineProps({
     default: false,
   },
 })
-const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
+const useAudio = Number(useNuxtApp().$variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
 
 const playing = ref<string | undefined>()
 const wrapperProps = computed(() => {

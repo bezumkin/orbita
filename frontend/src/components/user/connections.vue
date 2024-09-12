@@ -18,12 +18,12 @@
 </template>
 
 <script setup lang="ts">
-const {$socket} = useNuxtApp()
+const {$socket, $variables} = useNuxtApp()
 const {user} = useAuth()
 
 const loading = ref(false)
 const userServices = ref<Record<string, any>[]>([])
-const allServices = useRuntimeConfig().public.CONNECTION_SERVICES.split(',').map(formatServiceKey)
+const allServices = $variables.value.CONNECTION_SERVICES.split(',').map(formatServiceKey)
 
 function formatServiceName(service: string) {
   return service.charAt(0).toUpperCase() + service.slice(1)

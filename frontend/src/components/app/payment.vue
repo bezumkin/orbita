@@ -70,12 +70,12 @@
 import type {BaseSize} from 'bootstrap-vue-next'
 
 const {t} = useI18n()
-const {$payment, $login} = useNuxtApp()
+const {$payment, $login, $variables} = useNuxtApp()
 const {user, loadUser} = useAuth()
 const loading = ref(false)
 const size = ref<keyof BaseSize>('md')
 const qr = ref<undefined | Record<string, string>>()
-const services = useRuntimeConfig().public.PAYMENT_SERVICES.split(',').map(formatServiceKey)
+const services = $variables.value.PAYMENT_SERVICES.split(',').map(formatServiceKey)
 const showModal = ref(false)
 const canPay = computed(() => {
   return (
@@ -92,7 +92,7 @@ const isVariants = computed(() => {
   return !paymentProperties.value.mode && isTopic.value && $payment.value.level_id
 })
 const subscriptionWarning = computed(() => {
-  const subscriptions = useRuntimeConfig().public.PAYMENT_SUBSCRIPTIONS.split(',').map(formatServiceKey)
+  const subscriptions = $variables.value.PAYMENT_SUBSCRIPTIONS.split(',').map(formatServiceKey)
   return Boolean(
     !isTopic.value &&
       subscriptions.length > 0 &&

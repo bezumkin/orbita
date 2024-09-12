@@ -22,7 +22,7 @@ import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-yaml'
 import 'prismjs/components/prism-markup-templating'
 
-if (process.server) {
+if (import.meta.server) {
   loadLanguages([
     'bash',
     'docker',

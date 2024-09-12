@@ -47,7 +47,8 @@ export default class implements BlockTool {
       return
     }
 
-    const {t} = useNuxtApp().$i18n
+    const {$i18n, $variables} = useNuxtApp()
+    const t = $i18n.t
     this.html.innerHTML = ''
     const videoWrapper = document.createElement('div')
 
@@ -108,7 +109,7 @@ export default class implements BlockTool {
 
     this.html.appendChild(videoWrapper)
 
-    const useAudio = Number(useRuntimeConfig().public.EXTRACT_VIDEO_AUDIO_ENABLED) && this.data.audio
+    const useAudio = Number($variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && this.data.audio
     if (useAudio) {
       const audioWrapper = document.createElement('div')
       audioWrapper.classList.add('mt-2')

@@ -1,7 +1,7 @@
 <template>
   <div v-if="comments.length" class="widget">
     <h5 class="widget-title">{{ $t('widgets.comments') }}</h5>
-    <BOverlay class="widget-body comments" :show="pending" opacity="0.5">
+    <BOverlay class="widget-body comments" :show="status === 'pending'" opacity="0.5">
       <div v-for="comment in comments" :key="comment.id" class="comment">
         <div v-if="comment.user" class="comment-header">
           <UserAvatar :user="comment.user" class="me-1" />
@@ -27,7 +27,7 @@
 const url = 'web/comments/latest'
 const {d} = useI18n()
 const {$socket} = useNuxtApp()
-const {data, refresh, pending} = useCustomFetch(url, {query: {limit: 10}})
+const {data, refresh, status} = useCustomFetch(url, {query: {limit: 10}})
 const comments: ComputedRef<VespComment[]> = computed(() => data.value?.rows || [])
 const route = useRoute()
 

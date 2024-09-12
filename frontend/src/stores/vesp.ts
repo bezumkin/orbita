@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 
 export const useVespStore = defineStore('settings', () => {
   const settings: Ref<Record<string, string | string[]>> = ref({})
+  const variables: Ref<Record<string, string>> = ref({})
   const pages: Ref<VespPage[]> = ref([])
   const levels: Ref<VespLevel[]> = ref([])
   const reactions: Ref<VespReaction[]> = ref([])
@@ -12,10 +13,8 @@ export const useVespStore = defineStore('settings', () => {
 
   useCustomFetch('web/settings', {
     onResponse({response}) {
-      settings.value = {}
-      response._data?.rows?.forEach((i: VespSetting) => {
-        settings.value[i.key] = i.value
-      })
+      settings.value = response._data?.settings || {}
+      variables.value = response._data?.variables || {}
     },
   })
 
@@ -46,5 +45,5 @@ export const useVespStore = defineStore('settings', () => {
     },
   })
 
-  return {settings, pages, levels, reactions, isMobile, sidebar, payment, login}
+  return {settings, variables, pages, levels, reactions, isMobile, sidebar, payment, login}
 })

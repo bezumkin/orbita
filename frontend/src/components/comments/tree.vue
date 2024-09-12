@@ -65,15 +65,14 @@ const props = defineProps({
   },
 })
 
-const {$socket, $scope, $isMobile} = useNuxtApp()
+const {$socket, $scope, $isMobile, $variables} = useNuxtApp()
 const {t} = useI18n()
 const {user} = useAuth()
 
 const url = 'web/topics/' + props.topic.uuid + '/comments'
-const config = useRuntimeConfig().public
-const editTime = Number(config.COMMENTS_EDIT_TIME) || 600
+const editTime = Number($variables.value.COMMENTS_EDIT_TIME) || 600
 const maxLevel: Ref<number> = computed(() => {
-  return $isMobile.value ? 1 : Number(config.COMMENTS_MAX_LEVEL) || 5
+  return $isMobile.value ? 1 : Number($variables.value.COMMENTS_MAX_LEVEL) || 5
 })
 const commentForm: Ref<VespComment> = ref({id: 0, parent_id: 0, content: {}})
 const form = ref()
@@ -91,7 +90,7 @@ const isVip = computed(() => $scope('vip'))
 // Sub is required for free topics
 const subRequired = computed(() => {
   return (
-    config.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
+    $variables.value.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
     !isAdmin.value &&
     !isVip.value &&
     !props.topic.paid &&
