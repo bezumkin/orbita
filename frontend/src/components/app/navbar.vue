@@ -54,9 +54,9 @@ const hasAdmin = computed(() => getAdminSections().length)
 const {loggedIn} = useAuth()
 const {$sidebar} = useNuxtApp()
 const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
-const saved = useCookie<BasicColorSchema | undefined>('colorMode')
+const saved = useCookie<BasicColorSchema | undefined>('colorMode', {maxAge: useRuntimeConfig().public.JWT_EXPIRE})
 const colorIcon = computed(() => {
-  return ['far', store.value === 'dark' ? 'moon' : 'sun']
+  return ['fas', store.value === 'dark' ? 'moon' : 'sun']
 })
 
 function toggleSidebar() {

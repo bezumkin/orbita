@@ -130,8 +130,10 @@ const config: NuxtConfig = {
         'arrow-up-wide-short',
         'arrow-down-short-wide',
         'download',
+        'sun',
+        'moon',
       ],
-      regular: ['face-smile', 'sun', 'moon'],
+      regular: ['face-smile'],
     },
   },
   i18n: {
