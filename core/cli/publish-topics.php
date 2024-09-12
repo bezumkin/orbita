@@ -21,7 +21,7 @@ foreach ($topics as $topic) {
     $topic->publish_at = null;
     $topic->save();
 
-    $topic->notifyUsers();
+    $topic->createNotifications();
 }
 
 if (count($topics)) {
