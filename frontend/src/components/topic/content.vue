@@ -63,6 +63,7 @@ async function onEdit() {
 async function onSubmit() {
   try {
     loading.value = true
+    scrollToTop()
     await usePatch('admin/topics/' + props.topic.id, {...record.value})
     onCancel()
   } catch (e) {

@@ -57,6 +57,7 @@ async function onEdit() {
 async function onSubmit() {
   try {
     loading.value = true
+    scrollToTop()
     const data = await usePatch('admin/pages/' + page.value.id, {...record.value})
     if (data.external) {
       await router.push({name: 'index', replace: true})
