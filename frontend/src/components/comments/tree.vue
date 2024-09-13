@@ -191,7 +191,7 @@ function onEdit(comment: VespComment) {
   editing.value = comment
   replying.value = undefined
 
-  if (!isAdmin && comment.created_at) {
+  if (!isAdmin.value && comment.created_at) {
     editingTime.value = editTime - getTimeDiff(comment.created_at)
     timer.value = setInterval(() => {
       if (comment.created_at) {
