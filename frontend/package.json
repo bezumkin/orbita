@@ -35,7 +35,7 @@
     "socket.io-client": "^4.7.2",
     "tus-js-client": "^3.1.1",
     "typescript": "^5.2.2",
-    "vidstack": "https://github.com/bezumkin/orbita-vidstack-player/tarball/4a9cab3435220aabb5aae3e8efd6739e17102e35",
+    "vidstack": "https://github.com/bezumkin/orbita-vidstack-player/tarball/fbf29a7c7f4491b3086922faf441d64780cd538e",
     "vite": "^5.0.12",
     "vue": "^3.5.0",
     "vue-tsc": "^1.8.15",
