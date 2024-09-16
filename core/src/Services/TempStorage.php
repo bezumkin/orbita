@@ -166,9 +166,6 @@ class TempStorage extends Filesystem
                 $result[] = $quality;
             }
         }
-        usort($result, static function ($a, $b) {
-            return $a->quality <=> $b->quality;
-        });
 
         return $result;
     }
@@ -222,7 +219,7 @@ class TempStorage extends Filesystem
         return $file;
     }
 
-    public function getThumbnail(string $uuid, VideoQuality $quality): File
+    public function getThumbnail(string $uuid): File
     {
         if ($meta = $this->getMeta($uuid)) {
             $source = $meta['file'];
@@ -247,10 +244,7 @@ class TempStorage extends Filesystem
         $extractEvery = $chunk * $framerate; // extract image every n frames
         $tileHeight = ceil(ceil($totalFrames / $extractEvery) / $tileWidth);
 
-        [$width, $height] = explode('x', $quality->resolution);
-        $width /= 2;
-        $height /= 2;
-
+        [$width, $height] = explode('x', getenv('EXTRACT_VIDEO_THUMBNAILS_SIZE') ?: '213x120');
         $commands = [
             '-y', '-i', $input,
             '-loglevel', 'error',

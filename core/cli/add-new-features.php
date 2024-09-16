@@ -31,9 +31,6 @@ foreach ($videos->cursor() as $video) {
     }
     echo 'Processing ' . $mainFile . ' ...' . PHP_EOL;
 
-    /** @var \App\Models\VideoQuality $quality */
-    $quality = $video->qualities()->orderBy('quality')->first();
-
     if (!$video->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
         try {
             $time = microtime(true);
@@ -51,7 +48,7 @@ foreach ($videos->cursor() as $video) {
         try {
             $time = microtime(true);
             echo 'Extracting thumbnails... ';
-            $thumbnail = $media->getThumbnail($video->id, $quality);
+            $thumbnail = $media->getThumbnail($video->id);
             $video->thumbnail_id = $thumbnail->id;
             $video->save();
             echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;

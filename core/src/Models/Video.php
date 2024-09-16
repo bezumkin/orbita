@@ -136,7 +136,7 @@ class Video extends Model
                     $time = microtime(true);
                     echo 'Extracting thumbnails... ';
                 }
-                $thumbnail = $media->getThumbnail($this->id, $qualities[0]);
+                $thumbnail = $media->getThumbnail($this->id);
                 $this->thumbnail_id = $thumbnail->id;
                 if (PHP_SAPI === 'cli') {
                     echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
