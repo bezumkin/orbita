@@ -287,10 +287,7 @@ class Video extends Model
             return null;
         }
 
-        [$width, $height] = explode('x', $quality->resolution);
-        $width /= 2;
-        $height /= 2;
-
+        [$width, $height] = array_map('intval', explode('x', getenv('EXTRACT_VIDEO_THUMBNAILS_SIZE') ?: '213x120'));
         $storyboard = [
             'file' => $thumbnail->only('id', 'uuid', 'updated_at'),
             'tileWidth' => $width,
