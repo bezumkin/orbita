@@ -16,10 +16,10 @@
             <BDropdownItem v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
               {{ $t('pages.admin.title') }}
             </BDropdownItem>
-            <!--<b-dropdown-item v-if="user && user.subscription" :to="{name: 'user-subscription'}">
-              {{ $t('pages.user.subscription') }}
-            </b-dropdown-item>-->
             <BDropdownItem :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</BDropdownItem>
+            <BDropdownItem v-if="$levels.length" :to="{name: 'user-subscription'}">
+              {{ $t('pages.user.subscription') }}
+            </BDropdownItem>
             <BDropdownItem :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</BDropdownItem>
           </template>
         </AppLogin>
@@ -52,7 +52,7 @@ defineProps({
 
 const hasAdmin = computed(() => getAdminSections().length)
 const {loggedIn} = useAuth()
-const {$sidebar, $variables} = useNuxtApp()
+const {$sidebar, $variables, $levels} = useNuxtApp()
 const {system, store} = useColorMode({attribute: 'data-bs-theme', selector: 'body'})
 const saved = useCookie<BasicColorSchema | undefined>('colorMode', {maxAge: $variables.value.JWT_EXPIRE})
 const colorIcon = computed(() => {

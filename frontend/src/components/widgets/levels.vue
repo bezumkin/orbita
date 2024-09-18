@@ -1,24 +1,22 @@
 <template>
   <div v-if="$levels.length" class="widget">
-    <h5 class="widget-title">{{ $t('widgets.levels') }}</h5>
-    <div class="widget-body subscriptions">
-      <BOverlay opacity="0.5" :show="loading">
-        <div v-for="level in $levels" :key="level.id" class="level">
-          <div class="title">{{ level.title }}</div>
-          <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
-          <div v-if="level.cover" class="cover">
-            <BImg
-              :src="$image(level.cover, {h: 150, fit: 'crop'})"
-              :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
-              class="rounded"
-              height="150"
-            />
-          </div>
-          <div v-if="level.content" class="content">{{ level.content }}</div>
-          <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
+    <h5 v-if="!userPage" class="widget-title">{{ $t('widgets.levels') }}</h5>
+    <BOverlay opacity="0.5" :show="loading" :class="{'widget-body subscriptions': true, user: userPage}">
+      <div v-for="level in $levels" :key="level.id" class="level">
+        <div class="title">{{ level.title }}</div>
+        <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
+        <div v-if="level.cover" class="cover">
+          <BImg
+            :src="$image(level.cover, {h: 150, fit: 'crop'})"
+            :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
+            class="rounded"
+            height="150"
+          />
         </div>
-      </BOverlay>
-    </div>
+        <div v-if="level.content" class="content">{{ level.content }}</div>
+        <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
+      </div>
+    </BOverlay>
 
     <VespConfirm v-if="confirmVisible" :on-ok="cancelAction" ok-title="actions.ok" @hidden="confirmVisible = false">
       <div v-html="cancelText" />
@@ -34,6 +32,13 @@ const loading = ref(false)
 const confirmVisible = ref(false)
 const cancelText = ref('')
 const cancelAction = ref(() => {})
+
+defineProps({
+  userPage: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 function getBtnParams(level: VespLevel) {
   const params: Record<string, any> = {}

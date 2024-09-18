@@ -1,25 +1,22 @@
 <template>
-  <div>
-    <BRow class="mt-4">
-      <BCol md="3">
-        <BNav pills vertical>
-          <!--<b-nav-item v-if="user && user.subscription" :to="{name: 'user-subscription'}">
-            {{ $t('pages.user.subscription') }}
-          </b-nav-item>-->
-          <BNavItem :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</BNavItem>
-          <BNavItem :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</BNavItem>
-        </BNav>
-      </BCol>
-      <BCol md="9" class="mt-5 mt-md-0">
-        <NuxtPage />
-      </BCol>
-    </BRow>
+  <div class="col-10 col-lg-9 m-auto">
+    <BNav tabs>
+      <BNavItem :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</BNavItem>
+      <BNavItem v-if="$levels.length" :to="{name: 'user-subscription'}">
+        {{ $t('pages.user.subscription') }}
+      </BNavItem>
+      <BNavItem :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</BNavItem>
+    </BNav>
+    <div class="mt-4">
+      <NuxtPage />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const {user} = useAuth()
+const {$levels} = useNuxtApp()
 
 if (!user.value && !String(route.name).startsWith('user-confirm')) {
   showError({statusCode: 401, statusMessage: 'Unauthorized'})
