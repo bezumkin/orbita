@@ -65,6 +65,13 @@
     }
   }
 
+  .ce-block a {
+    text-decoration: $link-decoration;
+
+    &:hover {
+      text-decoration: $link-hover-decoration;
+    }
+  }
 
   .ce-block--selected {
     .ce-block__content {

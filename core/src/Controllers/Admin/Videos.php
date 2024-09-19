@@ -21,8 +21,9 @@ class Videos extends ModelController
 
     protected function beforeGet(Builder $c): Builder
     {
+        $c->with('file:id,uuid,size,updated_at');
         $c->with('image:id,uuid,updated_at');
-        $c->with('audio:id,uuid,updated_at');
+        $c->with('audio:id,uuid,size,updated_at');
 
         return $c;
     }
@@ -72,6 +73,14 @@ class Videos extends ModelController
         }
 
         return null;
+    }
+
+    protected function afterSave(Model $record): Model
+    {
+        /** @var Video $record */
+        $record->updateContentBlocks();
+
+        return $record;
     }
 
     protected function addSorting(Builder $c): Builder

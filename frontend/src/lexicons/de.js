@@ -90,6 +90,10 @@ export default {
         video: 'Zurück zum Video',
         audio: 'Wechseln Sie zu Audio',
       },
+      download: {
+        video: 'Video herunterladen ({size})',
+        audio: 'Audio herunterladen ({size})',
+      },
     },
     video_quality: {
       titel_one: 'Version',
@@ -263,6 +267,9 @@ export default {
       code: 'Weiterleitungscode',
       rank: 'Priorität',
       active: 'Aktiv',
+    },
+    file: {
+      download: 'Datei herunterladen ({size})',
     },
   },
   components: {

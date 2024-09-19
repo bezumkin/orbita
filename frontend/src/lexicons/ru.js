@@ -90,6 +90,10 @@ export default {
         video: 'Вернуться к видео',
         audio: 'Переключить на аудиоверсию',
       },
+      download: {
+        video: 'Скачать видео ({size})',
+        audio: 'Скачать аудио ({size})',
+      },
     },
     video_quality: {
       title_one: 'Версия',
@@ -263,6 +267,9 @@ export default {
       code: 'Код редиректа',
       rank: 'Приоритет',
       active: 'Активно',
+    },
+    file: {
+      download: 'Скачать файл ({size})',
     },
   },
   components: {

@@ -48,13 +48,9 @@ function onError(e: MediaErrorEvent) {
 export async function initAudioPlayer(uuid: string, target: HTMLElement, props: Record<string, any> = {}) {
   const url = getApiUrl() + 'audio/' + uuid
   try {
-    const {$i18n, $isMobile, $variables} = useNuxtApp()
+    const {$i18n} = useNuxtApp()
     if ($i18n.locale.value === 'ru') {
       layoutSettings.translations = ruLexicon
-    }
-    const {DOWNLOAD_MEDIA_ENABLED} = $variables.value
-    if (Number(DOWNLOAD_MEDIA_ENABLED) && !$isMobile.value) {
-      layoutSettings.download = {url, filename: ''}
     }
   } catch (e) {}
 
@@ -78,20 +74,17 @@ export async function initAudioPlayer(uuid: string, target: HTMLElement, props: 
 export async function initVideoPlayer(uuid: string, target: HTMLElement, props: Record<string, any> = {}) {
   const url = getApiUrl() + 'video/' + uuid
   try {
-    const {$i18n, $isMobile, $variables} = useNuxtApp()
+    const {$i18n, $variables} = useNuxtApp()
     if ($i18n.locale.value === 'ru') {
       layoutSettings.translations = ruLexicon
     }
-    const {DOWNLOAD_MEDIA_ENABLED, EXTRACT_VIDEO_THUMBNAILS_ENABLED} = $variables.value
+    const {EXTRACT_VIDEO_THUMBNAILS_ENABLED} = $variables.value
     if (Number(EXTRACT_VIDEO_THUMBNAILS_ENABLED)) {
       const data = await useGet(url + '/thumbnails')
       if (data.file) {
         data.url = getImageLink(data.file)
         layoutSettings.thumbnails = data
       }
-    }
-    if (Number(DOWNLOAD_MEDIA_ENABLED) && !$isMobile.value) {
-      layoutSettings.download = {url: url + '/download', filename: ''}
     }
   } catch (e) {}
 

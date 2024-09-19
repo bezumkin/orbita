@@ -17,9 +17,9 @@ if (getenv('CACHE_S3_SIZE') > 0) {
         ->onlyOne();
 }
 
-$scheduler->php(__DIR__ . '/prepare-videos.php', null, [], 'prepare_videos')
-    ->everyMinute()
-    ->onlyOne();
+//$scheduler->php(__DIR__ . '/prepare-videos.php', null, [], 'prepare_videos')
+//    ->everyMinute()
+//    ->onlyOne();
 
 $scheduler->php(__DIR__ . '/send-notifications.php', null, [], 'send_notifications')
     ->everyMinute(10)

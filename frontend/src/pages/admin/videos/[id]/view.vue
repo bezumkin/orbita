@@ -22,7 +22,9 @@ const props = {
   block: {
     data: {
       uuid: record.value.id,
+      size: record.value.file.size,
       audio: record.value.audio?.uuid,
+      audio_size: record.value.audio?.size,
     },
   },
   autoplay: true,

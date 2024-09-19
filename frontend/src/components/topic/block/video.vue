@@ -10,22 +10,38 @@
   <div v-else-if="playing === 'video'" v-bind="wrapperProps">
     <PlayerVideo v-bind="videoProps" />
   </div>
-  <div v-else class="text-center">
-    <BButton variant="primary" @click="playVideo">{{ t('models.video.play.video') }}</BButton>
-  </div>
 
-  <div v-if="useAudio">
-    <div v-if="playing === 'audio'">
+  <template v-if="useAudio || useDownload">
+    <div v-if="useAudio && playing === 'audio'">
       <PlayerAudio v-bind="audioProps" />
     </div>
-    <div v-else class="text-center">
-      <BButton variant="primary" @click="playAudio">{{ t('models.video.play.audio') }}</BButton>
+    <div v-else class="d-flex flex-wrap justify-content-center">
+      <BButton v-if="useAudio" variant="link" @click="playAudio">
+        <VespFa icon="play" fixed-width />
+        {{ t('models.video.play.audio') }}
+      </BButton>
+      <BButton v-if="useDownload" variant="link" :href="downloadVideo">
+        <VespFa icon="download" fixed-width />
+        {{ t('models.video.download.video', {size: videoSize}) }}
+      </BButton>
     </div>
-  </div>
+
+    <div v-if="playing === 'audio'" class="d-flex flex-wrap justify-content-center">
+      <BButton variant="link" @click="playVideo">
+        <VespFa icon="play" fixed-width />
+        {{ t('models.video.play.video') }}
+      </BButton>
+      <BButton v-if="useDownload" variant="link" :href="downloadAudio">
+        <VespFa icon="download" fixed-width />
+        {{ t('models.video.download.audio', {size: audioSize}) }}
+      </BButton>
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
 import type {OutputBlockData} from '@editorjs/editorjs'
+import prettyBytes from 'pretty-bytes'
 const {t} = useI18n()
 
 const props = defineProps({
@@ -42,7 +58,9 @@ const props = defineProps({
     default: false,
   },
 })
-const useAudio = Number(useNuxtApp().$variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
+const {$variables} = useNuxtApp()
+const useAudio = Number($variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
+const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1'
 
 const playing = ref<string | undefined>()
 const wrapperProps = computed(() => {
@@ -63,6 +81,12 @@ const audioProps = ref({
   title: t('models.video.audio'),
   status: {},
 })
+
+const api = getApiUrl()
+const downloadVideo = api + 'video/' + videoProps.value.uuid + '/download'
+const downloadAudio = api + 'audio/' + audioProps.value.uuid
+const videoSize = props.block.data.size ? prettyBytes(props.block.data.size) : 0
+const audioSize = props.block.data.audio_size ? prettyBytes(props.block.data.audio_size) : 0
 
 if (props.autoplay) {
   playing.value = 'video'

@@ -1,3 +1,6 @@
+import prettyBytes from 'pretty-bytes'
+import {icon} from '@fortawesome/fontawesome-svg-core'
+import {faDownload} from '@fortawesome/free-solid-svg-icons'
 import Parent from './file'
 import {initAudioPlayer} from '~/utils/players'
 
@@ -27,6 +30,24 @@ export default class extends Parent {
     const audio = document.createElement('audio')
     audio.title = this.data.title
     this.html.appendChild(audio)
+
+    const {$i18n, $variables} = useNuxtApp()
+    const t = $i18n.t
+
+    const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1'
+    if (useDownload) {
+      const size = this.data.size ? prettyBytes(this.data.size) : 0
+
+      const wrapper = document.createElement('div')
+      wrapper.classList.add('text-center')
+      const link = document.createElement('a')
+      link.classList.add('btn', 'btn-link')
+      link.href = getApiUrl() + 'audio/' + this.data.uuid
+      link.innerHTML = icon(faDownload).html[0] + ' ' + t('models.file.download', {size})
+
+      wrapper.appendChild(link)
+      this.html.appendChild(wrapper)
+    }
 
     initAudioPlayer(this.data.uuid, audio)
   }

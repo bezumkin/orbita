@@ -143,6 +143,7 @@ class Video extends Model
                 }
             }
             $this->save();
+            $this->refresh()->updateContentBlocks();
         } catch (Throwable $e) {
             $this->processed = false;
             $this->error = $e->getMessage();
@@ -349,10 +350,51 @@ class Video extends Model
             ->fresh([
                 'file:id,uuid,width,height,size,updated_at',
                 'image:id,uuid,width,height,size,updated_at',
-                'qualities', 'qualities.file:id,uuid,width,height,size,updated_at',
+                'qualities',
+                'qualities.file:id,uuid,width,height,size,updated_at',
             ])
             ?->toArray();
 
         Socket::send('transcode', $data);
+    }
+
+    public function updateContentBlocks(): void
+    {
+        /** @var TopicFile $topicFile */
+        foreach ($this->topicFiles()->cursor() as $topicFile) {
+            $topicFile->topic->content = $this->processContentBlocks($topicFile->topic->content);
+            $topicFile->topic->save();
+        }
+
+        /** @var PageFile $pageFile */
+        foreach ($this->pageFiles()->cursor() as $pageFile) {
+            $pageFile->page->content = $this->processContentBlocks($pageFile->page->content);
+            $pageFile->page->save();
+        }
+    }
+
+    protected function processContentBlocks(array $content): array
+    {
+        foreach ($content['blocks'] as $idx => $block) {
+            if ($block['type'] === 'video' && $block['data']['uuid'] === $this->id) {
+                $data = [
+                    'id' => $this->file_id,
+                    'uuid' => $this->id,
+                    'duration' => $this->duration,
+                    'size' => $this->file->size,
+                    'width' => $this->file->width,
+                    'height' => $this->file->height,
+                    'updated_at' => $this->updated_at->toJSON(),
+                ];
+                if ($this->audio) {
+                    $data['audio'] = $this->audio->uuid;
+                    $data['audio_size'] = $this->audio->size;
+                }
+
+                $content['blocks'][$idx]['data'] = $data;
+            }
+        }
+
+        return $content;
     }
 }

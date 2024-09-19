@@ -147,10 +147,15 @@ provide('pickVideo', (video: any) => {
   const data: VespVideo = {
     id: video.file_id,
     uuid: video.id,
+    duration: video.duration,
+    size: video.file?.size,
+    width: video.file?.width,
+    height: video.file?.height,
     updated_at: video.updated_at,
   }
   if (video.audio) {
     data.audio = video.audio.uuid
+    data.audio_size = video.audio.size
   }
   editor.value.focus()
   editor.value.blocks.insert('video', data, {}, currentBlockIdx.value + 1)

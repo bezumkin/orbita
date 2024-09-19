@@ -90,6 +90,10 @@ export default {
         video: 'Return back to video',
         audio: 'Switch to audio',
       },
+      download: {
+        video: 'Download video ({size})',
+        audio: 'Download audio ({size})',
+      },
     },
     video_quality: {
       title_one: 'Version',
@@ -263,6 +267,9 @@ export default {
       code: 'Redirect Code',
       rank: 'Priority',
       active: 'Active',
+    },
+    file: {
+      download: 'Download file ({size})',
     },
   },
   components: {
