@@ -266,14 +266,30 @@ class Topic extends Model
             return;
         }
 
-        $level = $this->level;
-        $users = User::query()
+        $common = User::query()
             // ->where('id', '!=', $this->user_id)
             ->where('active', true)
             ->where('notify', true)
             ->where('blocked', false)
             ->whereNotNull('email');
 
+        // VIP users
+        $vip = clone $common;
+        $vip->whereHas('role', static function (Builder $c) {
+            $c->whereJsonContains('scope', 'vip');
+        });
+
+        /** @var User $user */
+        foreach ($vip->cursor() as $user) {
+            $user->notifications()->create([
+                'topic_id' => $this->id,
+                'type' => 'topic-new',
+            ]);
+        }
+
+        // Subscribers
+        $level = $this->level;
+        $users = clone $common;
         if ($level && $this->price) {
             $users->where(function (Builder $c) use ($level) {
                 $c->whereHas('currentSubscription', static function (Builder $c) use ($level) {
