@@ -52,7 +52,7 @@ class Search extends Controller
             foreach ($results as $result) {
                 /** @var Topic $topic */
                 if ($topic = Topic::query()->find($result->getId())) {
-                    $row = $topic->prepareOutput($this->user);
+                    $row = $topic->prepareOutput($this->user, true);
                     $row['score'] = $result->getScore();
                     $rows[] = $row;
                 }
