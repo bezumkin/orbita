@@ -14,6 +14,7 @@ import {
   type SerializedVideoQuality,
   TextTrack,
 } from 'vidstack'
+import HLS from 'hls.js'
 import ruLexicon from '~/lexicons/ru-player'
 import {useToastError} from '#build/imports'
 
@@ -25,7 +26,7 @@ defineCustomElement(MediaAudioLayoutElement)
 const commonSettings: Partial<MediaPlayerProps> = {
   controls: false,
   streamType: 'on-demand',
-  logLevel: 'warn',
+  logLevel: import.meta.dev ? 'debug' : 'warn',
   playsInline: true,
 }
 const layoutSettings: Partial<DefaultLayoutProps> = {
@@ -101,6 +102,13 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
   })
 
   player.addEventListener('error', onError)
+
+  player.addEventListener('provider-change', (event) => {
+    const provider = event.detail
+    if (provider?.type === 'hls') {
+      provider.library = HLS
+    }
+  })
 
   player.addEventListener('can-play', async () => {
     if (props.quality) {
