@@ -33,7 +33,8 @@ class Videos extends ModelController
         if ($query = trim($this->getProperty('query', ''))) {
             $c->where(
                 static function (Builder $c) use ($query) {
-                    $c->where('title', 'LIKE', "%$query%");
+                    $c->where('id', $query);
+                    $c->orWhere('title', 'LIKE', "%$query%");
                     $c->orWhere('description', 'LIKE', "%$query%");
                 }
             );
