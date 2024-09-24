@@ -107,7 +107,8 @@ class Video extends Controller
 
     public function getManifest(): ?ResponseInterface
     {
-        if (!$manifest = $this->video->manifest) {
+        $manifest = $this->video->manifest;
+        if (!$manifest || str_contains($manifest, '#EXT-X-PLAYLIST-TYPE:VOD')) {
             $manifest = $this->video->getManifest();
         }
         if (empty($manifest)) {

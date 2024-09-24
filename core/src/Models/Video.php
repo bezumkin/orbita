@@ -261,11 +261,7 @@ class Video extends Model
 
     public function getManifest(): string
     {
-        $manifest = [
-            '#EXTM3U',
-            '#EXT-X-VERSION:7',
-            '#EXT-X-PLAYLIST-TYPE:VOD',
-        ];
+        $manifest = ['#EXTM3U'];
 
         /** @var VideoQuality $quality */
         foreach ($this->qualities()->orderBy('quality')->cursor() as $quality) {
