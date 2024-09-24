@@ -28,6 +28,7 @@ const commonSettings: Partial<MediaPlayerProps> = {
   streamType: 'on-demand',
   logLevel: import.meta.dev ? 'debug' : 'warn',
   playsInline: true,
+  preferNativeHLS: true,
 }
 const layoutSettings: Partial<DefaultLayoutProps> = {
   playbackRates: {min: 0.25, max: 3, step: 0.25},
