@@ -45,7 +45,7 @@ class Settings extends ModelController
                 ? getenv('EXTRACT_VIDEO_THUMBNAILS_ENABLED')
                 : '1',
             'TOPICS_SHOW_AUTHOR' => getenv('TOPICS_SHOW_AUTHOR') ?: '0',
-            'TOPICS_CHANGE_AUTHOR' => getenv('TOPICS_SHOW_AUTHOR') ?: '0',
+            'TOPICS_CHANGE_AUTHOR' => getenv('TOPICS_CHANGE_AUTHOR') ?: '0',
         ];
 
         return $this->success([
