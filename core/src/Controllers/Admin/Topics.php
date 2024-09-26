@@ -193,6 +193,11 @@ class Topics extends ModelController
         if ($object->publish_at) {
             $array['publish_at'] = $object->publish_at->toDateTimeString();
         }
+        if (isset($array['content'])) {
+            $array['content']['blocks'] = !empty($array['content']['blocks'])
+                ? array_values($array['content']['blocks'])
+                : [];
+        }
 
         return $array;
     }
