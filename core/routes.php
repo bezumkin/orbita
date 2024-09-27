@@ -26,6 +26,7 @@ $group = $app->group(
         $group->group('/user', static function (RouteCollectorProxy $group) {
             $group->any('/profile', App\Controllers\User\Profile::class);
             $group->any('/logout', App\Controllers\Security\Logout::class);
+            $group->map(['OPTIONS', 'GET', 'POST', 'DELETE'], '/avatar', App\Controllers\User\Avatar::class);
             $group->map(['OPTIONS', 'GET', 'POST'], '/video/{uuid}', App\Controllers\User\Videos::class);
             $group->any('/payments[/{id}]', App\Controllers\User\Payments::class);
             $group->any('/subscription/{action}[/{level:\d+}]', App\Controllers\User\Subscription::class);

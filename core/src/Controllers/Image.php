@@ -12,7 +12,11 @@ class Image extends \Vesp\Controllers\Data\Image
 
     protected function handleFile($file): ?ResponseInterface
     {
-        if ($file->width && $this->getProperty('fit') === 'crop-center') {
+        /** @var File $file */
+        if ($crop = @$file->metadata['crop']) {
+            $data = implode(',', [$crop['width'], $crop['height'], $crop['x'], $crop['y']]);
+            $this->setProperty('crop', $data);
+        } elseif ($file->width && $this->getProperty('fit') === 'crop-center') {
             $this->setProperty('w', (string)$file->width);
         }
 

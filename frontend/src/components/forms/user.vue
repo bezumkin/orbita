@@ -9,8 +9,8 @@
           <VespInputPassword v-model.trim="record.password" :required="!record.id" />
         </BFormGroup>
       </BCol>
-      <BCol md="4" class="d-flex justify-content-center justify-content-md-end order-0 order-md-1">
-        <BFormGroup>
+      <BCol md="4" class="text-center order-0 order-md-1">
+        <slot name="avatar">
           <FileUpload
             v-model="record.new_avatar"
             :placeholder="record.avatar"
@@ -18,7 +18,7 @@
             :width="150"
             wrapper-class="rounded-circle"
           />
-        </BFormGroup>
+        </slot>
       </BCol>
     </BRow>
 
