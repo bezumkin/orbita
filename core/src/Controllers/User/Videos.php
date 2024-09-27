@@ -3,6 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Models\Video;
+use App\Models\VideoQuality;
 use App\Models\VideoUser;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
@@ -23,8 +24,20 @@ class Videos extends Controller
             $videoUser->video_id = $video->id;
             $videoUser->user_id = $this->user->id;
         }
-        if ($this->getProperty('quality')) {
-            $videoUser->fill($this->getProperties());
+
+        if (!$quality = $this->getProperty('quality')) {
+            /** @var VideoQuality $videoQuality */
+            if ($videoQuality = $video->qualities()->orderByDesc('quality')->first()) {
+                $quality = $videoQuality->quality;
+            }
+        }
+        if ($quality) {
+            $videoUser->fill([
+                'quality' => $quality,
+                'volume' => $this->getProperty('volume', 1),
+                'speed' => $this->getProperty('speed', 1),
+                'time' => $this->getProperty('time', 0),
+            ]);
             $videoUser->save();
         }
 
