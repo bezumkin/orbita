@@ -21,7 +21,7 @@
     border: 1px solid var(--bs-border-color);
     border-radius: 2rem;
     background-color: var(--bs-body-bg);
-    transition: all 0.25s;
+    transition: all $transition-speed;
     visibility: hidden;
     opacity: 0;
 
@@ -32,7 +32,7 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      transition: all 0.25s;
+      transition: all $transition-speed;
       border-radius: 100%;
       background-color: transparent;
       cursor: pointer;
@@ -40,12 +40,12 @@
       .emoji {
         font-size: 2rem;
         line-height: 1;
-        transition: all 0.25s;
+        transition: all $transition-speed;
       }
 
       .counter {
         position: absolute;
-        transition: all 0.25s;
+        transition: all $transition-speed;
         top: -0.5em;
         right: -0.5em;
         font-size: 0.5em;

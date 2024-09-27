@@ -41,7 +41,7 @@ fieldset {
   background: var(--bs-tertiary-bg) url('~/assets/icons/upload.svg') no-repeat center;
   background-size: 1.5rem;
   border: 1px solid var(--bs-border-color);
-  transition: background $transition;
+  transition: background $transition-speed;
   cursor: pointer;
   min-height: 6rem;
   border-radius: var(--bs-border-radius);
@@ -67,7 +67,7 @@ fieldset {
     content: '';
     background-color: rgba($success, 0.25);
     opacity: 0;
-    transition: opacity $transition;
+    transition: opacity $transition-speed;
     pointer-events: none;
     position: absolute;
     inset: 0;
@@ -89,7 +89,7 @@ fieldset {
 }
 
 #navbar, #footer {
-  transition: all 0.25s;
+  transition: all $transition-speed;
   background-color: var(--bs-secondary-bg);
 
   .pages {

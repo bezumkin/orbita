@@ -13,7 +13,7 @@
 .fade {
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.25s;
+    transition: opacity $transition-speed;
   }
 
   &-enter,

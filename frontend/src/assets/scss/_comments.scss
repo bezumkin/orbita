@@ -9,14 +9,14 @@
       border-radius: var(--bs-border-radius);
       margin: 2rem -0.25rem -0.25rem;
       padding: 0.25rem;
-      transition: background-color 0.25s;
+      transition: background-color $transition-speed;
       background-color: var(--bs-body-bg);
 
       &-header {
         display: flex;
         flex-flow: wrap column;
         line-height: 1.5rem;
-        transition: background-color 0.25s;
+        transition: background-color $transition-speed;
         padding-bottom: 0.25rem;
         border-bottom: 1px solid var(--bs-border-color);
 
@@ -138,7 +138,7 @@
           .comment-footer {
             .text-danger {
               opacity: 0;
-              transition: opacity 0.25s;
+              transition: opacity $transition-speed;
             }
           }
 
