@@ -23,15 +23,23 @@ defineCustomElement(MediaProviderElement)
 defineCustomElement(MediaVideoLayoutElement)
 defineCustomElement(MediaAudioLayoutElement)
 
+let oldBrowser = false
+if (import.meta.client && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+  const version = navigator.userAgent.match(/OS (\d+)/)
+  if (version) {
+    oldBrowser = version[1] < 17
+  }
+}
+
 const commonSettings: Partial<MediaPlayerProps> = {
   controls: false,
   streamType: 'on-demand',
   logLevel: import.meta.dev ? 'debug' : 'warn',
   playsInline: true,
-  preferNativeHLS: import.meta.client && /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
+  preferNativeHLS: oldBrowser,
 }
 const layoutSettings: Partial<DefaultLayoutProps> = {
-  playbackRates: {min: 0.25, max: 3, step: 0.25},
+  playbackRates: {min: 0.25, max: oldBrowser ? 2 : 3, step: 0.25},
   colorScheme: 'default',
   flatSettingsMenu: true,
   noAudioGain: true,
