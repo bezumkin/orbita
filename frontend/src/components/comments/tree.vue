@@ -319,10 +319,12 @@ function addToObserver(comment: VespComment) {
 }
 
 function onCommentCreate(comment: VespComment) {
-  comments.value.push(comment)
-  nextTick(() => {
-    addToObserver(comment)
-  })
+  if (comment.topic_id === props.topic.id) {
+    comments.value.push(comment)
+    nextTick(() => {
+      addToObserver(comment)
+    })
+  }
 }
 
 function onCommentUpdate(comment: VespComment) {
