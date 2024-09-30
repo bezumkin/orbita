@@ -52,6 +52,7 @@ const props = defineProps({
 })
 
 const {d} = useI18n()
+const {user} = useAuth()
 const {$socket} = useNuxtApp()
 const route = useRoute()
 const isTopic = computed(() => route.params.uuid === props.topic.uuid)
@@ -76,13 +77,18 @@ function onTopicComments(topic: VespTopic) {
 function onTopicViews(topic: VespTopic) {
   if (props.topic.id === topic.id) {
     viewsCount.value = topic.views_count || 0
+    if (props.topic.viewed_at && user.value && topic.user_id && topic.user_id === user.value.id) {
+      unseenCount.value = topic.unseen_comments_count || 0
+    }
   }
 }
 
 function onCommentCreate(comment: VespComment) {
   if (props.topic.id === comment.topic_id) {
     if (comment.created_at && props.topic.viewed_at && comment.created_at > props.topic.viewed_at) {
-      unseenCount.value++
+      if (user.value && comment.user_id !== user.value.id) {
+        unseenCount.value++
+      }
     }
   }
 }
@@ -90,11 +96,13 @@ function onCommentCreate(comment: VespComment) {
 function onCommentDelete(comment: VespComment) {
   if (props.topic.id === comment.topic_id) {
     if (comment.created_at && props.topic.viewed_at && comment.created_at > props.topic.viewed_at) {
-      unseenCount.value--
-      if (unseenCount.value < 0) {
-        unseenCount.value = 0
-      } else if (unseenCount.value > commentsCount.value) {
-        unseenCount.value = commentsCount.value
+      if (user.value && comment.user_id !== user.value.id) {
+        unseenCount.value--
+        if (unseenCount.value < 0) {
+          unseenCount.value = 0
+        } else if (unseenCount.value > commentsCount.value) {
+          unseenCount.value = commentsCount.value
+        }
       }
     }
   }

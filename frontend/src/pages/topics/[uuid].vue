@@ -40,7 +40,7 @@ async function saveView(updateView: boolean) {
       if (data.views_count) {
         topic.value.views_count = data.views_count
       }
-      if (updateView && data.viewed_at) {
+      if (data.viewed_at && (updateView || !topic.value.viewed_at)) {
         topic.value.viewed_at = data.viewed_at
       }
     }
