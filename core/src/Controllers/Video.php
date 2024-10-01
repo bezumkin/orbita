@@ -114,6 +114,10 @@ class Video extends Controller
         if (empty($manifest)) {
             return null;
         }
+        // Support external apps with token in request
+        if ($token = $this->getProperty('token')) {
+            $manifest = preg_replace('#^(' . $this->video->id . '/\d+)$#m', '$1?token=' . $token, $manifest);
+        }
 
         $this->response->getBody()->write($manifest);
 
@@ -144,6 +148,9 @@ class Video extends Controller
         if (getenv('DOWNLOAD_MEDIA_FROM_S3') && method_exists($fs, 'getStreamLink')) {
             $link = $fs->getStreamLink($videoQuality->file->getFilePathAttribute());
             $manifest = preg_replace('#^' . $videoQuality->quality . '$#m', $link, $manifest);
+        } elseif ($token = $this->getProperty('token')) {
+            // Support external apps with token in request
+            $manifest = preg_replace('#^(' . $videoQuality->quality . ')$#m', '$1?token=' . $token, $manifest);
         }
         $this->response->getBody()->write($manifest);
 
