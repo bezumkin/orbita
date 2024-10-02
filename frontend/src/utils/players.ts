@@ -273,7 +273,14 @@ class MediaDatabaseStorage implements MediaStorage {
 
   async getTime() {
     return await new Promise<number>((resolve) => {
-      resolve(this.getValue('time') as number)
+      const time = this.getValue('time') as number
+      if (time > 0) {
+        setTimeout(() => {
+          resolve(time)
+        }, 1000)
+      } else {
+        resolve(time)
+      }
     })
   }
 
