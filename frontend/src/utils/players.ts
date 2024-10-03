@@ -52,7 +52,10 @@ const layoutSettings: Partial<DefaultLayoutProps> = {
 }
 
 function onError(e: MediaErrorEvent) {
-  useToastError(e.detail.message || 'Unknown message')
+  console.error(e)
+  if (e.detail.message) {
+    useToastError(e.detail.message)
+  }
 }
 
 export async function initAudioPlayer(uuid: string, target: HTMLElement, props: Record<string, any> = {}) {
@@ -110,12 +113,28 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
     ...props,
   })
 
-  player.addEventListener('error', onError)
+  player.addEventListener('error', (e: MediaErrorEvent) => {
+    onError(e)
+    if (e.detail.message === 'PIPELINE_ERROR_DECODE') {
+      player.storage?.setVideoQuality(player.qualities[0])
+      player.provider.instance.recoverMediaError()
+      player.provider.instance.currentLevel = 0
+    }
+  })
 
-  player.addEventListener('provider-change', (event) => {
-    const provider = event.detail
+  player.addEventListener('provider-change', ({provider}) => {
     if (provider?.type === 'hls') {
       provider.library = HLS
+      provider.config = {
+        capLevelToPlayerSize: true,
+      }
+    }
+  })
+
+  player.addEventListener('hls-level-switched', ({detail}) => {
+    const {level} = detail
+    if (player.qualities[level]) {
+      player.storage?.setVideoQuality(player.qualities[level])
     }
   })
 
