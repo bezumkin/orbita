@@ -77,6 +77,10 @@ trait UploadController
         $meta['size'] = $size;
         $meta['expires'] = Carbon::now()->addHours($this::EXPIRE_HOURS)->toRfc7231String();
 
+        if ($response = $this->checkMetaBeforeStart($meta)) {
+            return $response;
+        }
+
         $this->storage->getBaseFilesystem()->write($meta['file'], '');
         $this->storage->setMeta($uuid, $meta);
         $location = rtrim((string)$this->request->getUri(), '/') . '/' . $uuid;
@@ -85,6 +89,11 @@ trait UploadController
         return $this->success('', 201)
             ->withHeader('Location', $location)
             ->withHeader('Upload-Expires', $meta['expires']);
+    }
+
+    protected function checkMetaBeforeStart(array $meta): ?ResponseInterface
+    {
+        return null;
     }
 
     public function patch(): ResponseInterface

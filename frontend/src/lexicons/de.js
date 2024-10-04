@@ -446,6 +446,8 @@ export default {
       wrong_offset: 'Falschen upload Teil-Offset',
       wrong_content: 'Falsches encoding des Uploads',
       write: 'Fehler beim Schreiben der Datei',
+      limit_size: 'Dateigröße zu groß zum Hochladen',
+      limit_extension: 'Dieser Dateityp ist zum Hochladen nicht zulässig',
     },
     level: {
       no_title: 'Du hast den Namen des Abolevels anzugeben.',

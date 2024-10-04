@@ -194,7 +194,9 @@ export default class implements BlockTool {
       },
       onError(e: Error | DetailedError) {
         if ('originalResponse' in e) {
-          useToastError(JSON.parse(e.originalResponse?.getBody() as string))
+          const {$i18n} = useNuxtApp()
+          const message = JSON.parse(e.originalResponse?.getBody() as string)
+          useToastError($i18n.t(message))
           const status = e.originalResponse?.getStatus() as number
           if (status >= 400 && status < 500) {
             $this.abortUpload()

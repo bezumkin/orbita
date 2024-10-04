@@ -446,6 +446,8 @@ export default {
       wrong_offset: 'Invalid upload chunk offset',
       wrong_content: 'Invalid uploading encoding',
       write: 'File writing error',
+      limit_size: 'File size too large to upload',
+      limit_extension: 'This file type is not allowed for uploading',
     },
     level: {
       no_title: 'You forgot to specify the name of the subscription level',
