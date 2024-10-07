@@ -85,7 +85,7 @@ export const useTopicsStore = defineStore('topics', () => {
       const found = topics.value.find((i: VespTopic) => i.uuid === view.uuid)
       if (found) {
         found.views_count = view.views_count || 0
-        if (view.user_id && view.user_id === user.value.id) {
+        if (user.value && view.user_id && view.user_id === user.value.id) {
           found.viewed_at = view.viewed_at
           found.unseen_comments_count = view.unseen_comments_count || 0
         }
