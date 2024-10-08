@@ -384,6 +384,7 @@ class Video extends Model
                     'size' => $this->file->size,
                     'width' => $this->file->width,
                     'height' => $this->file->height,
+                    'moved' => $this->moved,
                     'updated_at' => $this->updated_at->toJSON(),
                 ];
                 if ($this->audio) {

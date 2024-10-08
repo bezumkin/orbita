@@ -60,7 +60,7 @@ const props = defineProps({
 })
 const {$variables} = useNuxtApp()
 const useAudio = Number($variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && props.block.data.audio
-const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1'
+const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1' && props.block.data.moved !== false
 
 const playing = ref<string | undefined>()
 const wrapperProps = computed(() => {

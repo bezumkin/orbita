@@ -151,6 +151,7 @@ provide('pickVideo', (video: any) => {
     size: video.file?.size,
     width: video.file?.width,
     height: video.file?.height,
+    moved: video.moved,
     updated_at: video.updated_at,
   }
   if (video.audio) {

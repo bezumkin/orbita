@@ -97,7 +97,7 @@ export default class implements BlockTool {
     buttonWrapper.classList.add('d-flex', 'flex-wrap', 'justify-content-center')
 
     const useAudio = Number($variables.value.EXTRACT_VIDEO_AUDIO_ENABLED) && this.data.audio
-    const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1'
+    const useDownload = $variables.value.DOWNLOAD_MEDIA_ENABLED === '1' && this.data.moved !== false
 
     if (useAudio) {
       const audioWrapper = document.createElement('div')
