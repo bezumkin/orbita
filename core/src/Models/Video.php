@@ -100,8 +100,12 @@ class Video extends Model
 
     public function transcode(): void
     {
-        $media = new TempStorage();
+        $this->progress = 0;
+        $this->processed = null;
+        $this->error = null;
+        $this->save();
 
+        $media = new TempStorage();
         try {
             $props = $media->getVideoProperties($this->id);
             $qualities = $media::getQualities($props['width'], $props['height'], $props['bitrate']);

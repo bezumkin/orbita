@@ -74,6 +74,9 @@ class TempStorage extends Filesystem
             '-threads', getenv('TRANSCODE_THREADS') ?: '0',
             $output . '.m3u8',
         ];
+        if (getenv('TRANSCODE_ENCODER') === 'h264_nvenc') {
+            array_unshift($commands, '-hwaccel', 'cuda');
+        }
 
         $listener = null;
         if ($callback) {
@@ -209,7 +212,14 @@ class TempStorage extends Filesystem
         }
 
         $output = $this->getFullPath($uuid . '/audio.mp3');
-        $commands = ['-y', '-i', $input, '-c:a', 'mp3', '-q:a', '0', '-vn', $output];
+        $commands = [
+            '-y', '-i', $input,
+            '-c:a', 'mp3',
+            '-q:a', '0',
+            '-vn',
+            '-threads', getenv('TRANSCODE_THREADS') ?: '0',
+            $output
+        ];
         $video->getFFMpegDriver()->command($commands);
 
         $stream = new Stream(fopen($output, 'rb'));
@@ -253,8 +263,12 @@ class TempStorage extends Filesystem
             '-frames:v', '1',
             '-qscale:v', '50', // image quality
             '-an',
+            '-threads', getenv('TRANSCODE_THREADS') ?: '0',
             $output,
         ];
+        if (getenv('TRANSCODE_ENCODER') === 'h264_nvenc') {
+            array_unshift($commands, '-hwaccel', 'cuda');
+        }
         $video->getFFMpegDriver()->command($commands);
 
         $stream = new Stream(fopen($output, 'rb'));
@@ -278,6 +292,7 @@ class TempStorage extends Filesystem
         }
 
         $dimensions = $stream->getDimensions();
+
         return [
             'width' => $dimensions->getWidth(),
             'height' => $dimensions->getHeight(),
