@@ -31,14 +31,13 @@ class Rss extends Sitemap
                     ['name' => $topic->user->fullname],
                 ],
             ];
-            if ($topic->cover) {
-                $row['image'] = [
-                    'type' => $topic->cover->type,
-                    'url' => Utils::getImageLink($topic->cover->only('id', 'uuid', 'updated_at')),
-                ];
-            }
             if ($topic->hasAccess()) {
                 $row['content'] = Utils::renderContent($topic->content['blocks']);
+            } elseif ($topic->cover) {
+                $row['image'] = [
+                    'type' => $topic->cover->type,
+                    'url' => htmlspecialchars(Utils::getImageLink($topic->cover->only('id', 'uuid', 'updated_at'))),
+                ];
             }
             $rows[] = $row;
         }
