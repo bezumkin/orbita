@@ -142,7 +142,7 @@ class Topics extends ModelController
 
         /** @var Topic $topic */
         $topic = $this->beforeGet($record->newQuery())->find($record->id);
-        $data = $topic->prepareOutput($this->user);
+        $data = $topic->prepareOutput(null);
         unset($data['access']);
 
         // Send data to socket.io
