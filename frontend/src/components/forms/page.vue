@@ -3,7 +3,7 @@
     <BRow class="align-items-md-top">
       <BCol md="7">
         <BFormGroup :label="$t('models.page.name')">
-          <BFormInput v-model.trim="record.name" required autofocus />
+          <BFormInput v-model="record.name" required autofocus />
         </BFormGroup>
       </BCol>
       <BCol md="5" class="mt-md-3 pt-md-4">
@@ -32,7 +32,7 @@
       </BFormGroup>
 
       <BFormGroup :label="$t('models.page.title')" :description="$t('models.page.title_desc')">
-        <BFormInput v-model.trim="record.title" required />
+        <BFormInput v-model="record.title" required />
       </BFormGroup>
 
       <BFormGroup :label="$t('models.page.content')">

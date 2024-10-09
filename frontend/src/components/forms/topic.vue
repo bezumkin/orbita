@@ -1,7 +1,7 @@
 <template>
   <div>
     <BFormGroup :label="$t('models.topic.title')">
-      <BFormInput v-model.trim="record.title" required autofocus />
+      <BFormInput v-model="record.title" required autofocus />
     </BFormGroup>
     <BFormGroup :label="$t('models.topic.content')">
       <EditorJs v-model="record.content" :blocks="editorBlocks" />

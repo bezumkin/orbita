@@ -1,11 +1,11 @@
 <template>
   <div>
     <BFormGroup :label="$t('models.video.title')">
-      <BFormInput v-model.trim="record.title" required autofocus />
+      <BFormInput v-model="record.title" required autofocus />
     </BFormGroup>
 
     <BFormGroup :label="$t('models.video.description')">
-      <BFormTextarea v-model.trim="record.description" :rows="record.description ? 6 : 3" />
+      <BFormTextarea v-model="record.description" :rows="record.description ? 6 : 3" />
     </BFormGroup>
 
     <BFormGroup :label="$t('models.video.image')">
@@ -21,7 +21,7 @@
     </BFormGroup>
 
     <BFormGroup :label="$t('models.video.chapters')">
-      <BFormTextarea v-model.trim="record.chapters" :rows="record.chapters ? 6 : 3" />
+      <BFormTextarea v-model="record.chapters" :rows="record.chapters ? 6 : 3" />
     </BFormGroup>
 
     <BFormGroup>

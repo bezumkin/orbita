@@ -3,7 +3,7 @@
     <BRow>
       <BCol md="8">
         <BFormGroup :label="$t('models.level.title')">
-          <BFormInput v-model.trim="record.title" required autofocus />
+          <BFormInput v-model="record.title" required autofocus />
         </BFormGroup>
       </BCol>
       <BCol md="4">

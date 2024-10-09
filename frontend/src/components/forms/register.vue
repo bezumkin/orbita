@@ -5,7 +5,7 @@
     </BFormGroup>
 
     <BFormGroup :label="$t('models.user.fullname')">
-      <BFormInput v-model.trim="record.fullname" required />
+      <BFormInput v-model="record.fullname" required />
     </BFormGroup>
 
     <BFormGroup :label="$t('models.user.email')">
