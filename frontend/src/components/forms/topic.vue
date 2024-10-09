@@ -112,12 +112,11 @@ const record = computed({
 })
 
 const {t} = useI18n()
-const {$socket, $price, $scope, $variables} = useNuxtApp()
-const levels: Ref<VespLevel[]> = ref([])
+const {$price, $scope, $variables, $levels} = useNuxtApp()
 const levelOptions = computed(() => {
   const options: Record<string, any> = []
-  levels.value.forEach((i: VespLevel) => {
-    options.push({value: i.id, text: i.title + ', ' + $price(i.price), disabled: !i.active})
+  $levels.value.forEach((i: VespLevel) => {
+    options.push({value: i.id, text: i.title + ', ' + $price(i.price)})
   })
   return options
 })
@@ -143,6 +142,9 @@ if (record.value.id) {
   } else if (record.value.price) {
     accessLevel.value = 'payments'
   }
+} else if ($levels.value.length) {
+  accessLevel.value = 'subscribers'
+  record.value.level_id = $levels.value[0].id
 }
 
 watch(accessLevel, (value: string) => {
@@ -151,37 +153,21 @@ watch(accessLevel, (value: string) => {
     record.value.price = 0
   } else if (value === 'subscribers') {
     record.value.price = 0
-    if (levels.value.length) {
-      record.value.level_id = levels.value[0].id
+    if ($levels.value.length) {
+      record.value.level_id = $levels.value[0].id
     }
   } else if (value === 'payments') {
     record.value.level_id = 0
     record.value.price = 0
-  } else if (value === 'sub_payments' && levels.value.length) {
-    record.value.level_id = levels.value[0].id
+  } else if (value === 'sub_payments' && $levels.value.length) {
+    record.value.level_id = $levels.value[0].id
     record.value.price = 0
   }
 })
 
-async function loadLevels() {
-  const {rows} = await useGet('admin/levels', {combo: true, limit: 0})
-  levels.value = rows
-}
-
 function formatUser(user: VespUser) {
   return `${user.id}. ${user.fullname} (${user.username})`
 }
-
-onMounted(() => {
-  $socket.on('level-create', loadLevels)
-  $socket.on('level-update', loadLevels)
-  loadLevels()
-})
-
-onUnmounted(() => {
-  $socket.off('level-create', loadLevels)
-  $socket.off('level-update', loadLevels)
-})
 
 watch(
   () => record.value.active,
