@@ -164,12 +164,16 @@ class Topic extends Model
 
     public function hasAccess(?User $user = null): bool
     {
+        $isAdmin = $user?->hasScope('topics/patch');
+        if (!$this->active && !$isAdmin) {
+            return false;
+        }
+
         $allow = false;
         if ($this->isFree()) {
             $allow = true;
         } elseif ($user) {
-            // Admin can see anything
-            if ($user->hasScope('topics/patch') || $user->hasScope('vip')) {
+            if ($isAdmin || $user->hasScope('vip')) {
                 $allow = true;
             } elseif ($user->payments()->where(['topic_id' => $this->id, 'paid' => true])->count()) {
                 $allow = true;

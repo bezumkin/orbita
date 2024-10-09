@@ -3,6 +3,7 @@
 namespace App\Controllers\Web\Comments;
 
 use App\Controllers\Traits\UploadController;
+use App\Models\Topic;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
 
@@ -14,6 +15,12 @@ class Upload extends Controller
 
     protected function checkMetaBeforeStart(array $meta): ?ResponseInterface
     {
+        $topic = Topic::query()->where('uuid', $this->getProperty('topic_uuid'))->first();
+        /** @var Topic $topic */
+        if (!$topic || !$topic->hasAccess($this->user)) {
+            return $this->failure('Access Denied', 403);
+        }
+
         if (str_starts_with($meta['filetype'], 'image/')) {
             $limit = (int)getenv('COMMENTS_UPLOAD_IMAGE_LIMIT');
         } elseif (str_starts_with($meta['filetype'], 'audio/')) {
@@ -39,6 +46,4 @@ class Upload extends Controller
 
         return null;
     }
-
-    // @TODO Check access to topic
 }
