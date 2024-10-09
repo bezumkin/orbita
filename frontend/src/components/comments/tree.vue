@@ -191,14 +191,11 @@ function onEdit(comment: VespComment) {
   editing.value = comment
   replying.value = undefined
 
-  if (!isAdmin.value && comment.created_at) {
-    editingTime.value = editTime - getTimeDiff(comment.created_at)
+  if (!isAdmin.value && editTime && comment.created_at) {
     timer.value = setInterval(() => {
-      if (comment.created_at) {
-        editingTime.value = editTime - getTimeDiff(comment.created_at)
-        if (editingTime.value > editTime) {
-          onCancel()
-        }
+      editingTime.value = editTime - getTimeDiff(comment.created_at)
+      if (editingTime.value <= 0) {
+        onCancel()
       }
     }, 1000)
   }
