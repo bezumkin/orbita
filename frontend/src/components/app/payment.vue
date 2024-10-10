@@ -18,7 +18,7 @@
           <div class="fw-bold">{{ t('components.payment.service.title') }}</div>
           <div class="services mt-1">
             <div v-for="i in services" :key="i" :class="serviceClass(i)" @click="onService(i)">
-              <BImg :src="'/payments/' + i + '.svg'" height="50" />
+              <BImg :src="'/payments/' + i + '.svg'" height="50" class="logo" />
             </div>
           </div>
           <Transition name="fade" mode="out-in">

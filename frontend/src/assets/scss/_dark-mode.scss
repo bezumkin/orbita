@@ -1,6 +1,6 @@
 body[data-bs-theme="dark"] {
   .logo {
-    filter: invert(100%);
+    filter: grayscale(1) invert(1);
   }
 
   .table {
