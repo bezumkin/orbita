@@ -65,8 +65,8 @@ class Videos extends ModelController
         }
 
         if ($chapters = $this->getProperty('chapters')) {
-            preg_match_all('#([\d:]+)\s+(.*)#', $chapters, $matches);
-            $record->chapters = $matches ? array_combine($matches[1], $matches[2]) : null;
+            preg_match_all('#(\d+:\d+(:\d+)?)\s+(.*)#', $chapters, $matches);
+            $record->chapters = $matches ? array_combine($matches[1], $matches[3]) : null;
         }
 
         if ($error = $this->processFiles($record)) {
