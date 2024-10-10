@@ -21,6 +21,7 @@
   --media-menu-section-bg: var(--bs-tertiary-bg);
   --media-menu-section-border-radius: var(--bs-border-radius);
   --media-menu-box-shadow: var(--bs-box-shadow);
+  --media-menu-filter: drop-shadow(0 4px 3px rgba(var(--bs-secondary-bg-rgb), 0.5)) drop-shadow(0 2px 2px rgba(var(--bs-secondary-bg-rgb), 0.5));
 }
 
 .vds-video-layout {
