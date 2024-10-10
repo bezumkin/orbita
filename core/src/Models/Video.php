@@ -251,6 +251,7 @@ class Video extends Model
         $this->moved = true;
         $this->moved_at = time();
         $this->save();
+        $this->updateContentBlocks();
 
         $this->sendInfoToSocket();
     }
