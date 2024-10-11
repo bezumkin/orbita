@@ -34,10 +34,10 @@ class Upload extends Controller
             return $this->failure('errors.upload.limit_size');
         }
 
-        $extensions = array_map(static function ($val) {
-            return strtolower(trim($val));
-        }, explode(',', getenv('COMMENTS_UPLOAD_EXTENSIONS')));
-        if ($extensions) {
+        if ($extensions = getenv('COMMENTS_UPLOAD_EXTENSIONS')) {
+            $extensions = array_map(static function ($val) {
+                return strtolower(trim($val));
+            }, explode(',', $extensions));
             $extension = strtolower(pathinfo($meta['filename'], PATHINFO_EXTENSION));
             if (!in_array($extension, $extensions, true)) {
                 return $this->failure('errors.upload.limit_extension');
