@@ -4,6 +4,8 @@
 
 .vds-video-layout,
 .vds-audio-layout {
+  --default-text: var(--bs-body-color);
+  --default-text-secondary: var(--bs-secondary-text-emphasis);
   --default-bg: var(--bs-body-bg);
   --default-brand: var(--bs-body-color);
   --default-color: var(--bs-body-color);
@@ -14,24 +16,23 @@
   --media-menu-divider: 1px solid var(--bs-border-color);
   --media-menu-checkbox-bg: var(--bs-secondary-bg);
   --media-menu-text-color: var(--bs-body-color);
-  --media-menu-text-secondary-color: var(--bs-secondary);
   --media-menu-slider-track-fill-bg: var(--bs-body-color);
   --media-menu-slider-track-bg: var(--bs-secondary-bg);
-  --media-slider-thumb-border-radius: 9999px;
-  --media-menu-section-bg: var(--bs-tertiary-bg);
+  --media-menu-section-bg: var(--bs-secondary-bg);
   --media-menu-section-border-radius: var(--bs-border-radius);
   --media-menu-box-shadow: var(--bs-box-shadow);
   --media-menu-filter: drop-shadow(0 4px 3px rgba(var(--bs-secondary-bg-rgb), 0.5)) drop-shadow(0 2px 2px rgba(var(--bs-secondary-bg-rgb), 0.5));
+  --media-menu-item-hover-bg: var(--bs-tertiary-bg);
+  --media-chapters-item-active-bg: rgba(var(--bs-primary-rgb), 0.1);
+  --media-slider-thumb-border-radius: 9999px;
 }
 
 .vds-video-layout {
   --media-button-color: var(--bs-light);
-  --video-border-radius: var(--bs-border-radius);
 }
 
 .vds-audio-layout {
   --audio-filter: none;
-  --audio-border-radius: var(--bs-border-radius);
   --audio-slider-progress-bg: var(--bs-secondary);
 
   padding-top: 1.5rem;
