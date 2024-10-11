@@ -11,6 +11,7 @@ RUN apt-get install -y zlib1g-dev libzip-dev libpng-dev libwebp-dev libjpeg62-tu
 RUN ln -sf /bin/bash /bin/sh
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp && docker-php-ext-install gd
+RUN docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install opcache
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql

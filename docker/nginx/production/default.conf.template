@@ -42,7 +42,7 @@ server {
         fastcgi_pass php-fpm:9000;
     }
 
-    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|bmp|ttf|woff|woff2|svg)$ {
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|bmp|ttf|woff|woff2|svg|json)$ {
         root /vesp/frontend/.output/public/;
         access_log off;
         expires 1y;
