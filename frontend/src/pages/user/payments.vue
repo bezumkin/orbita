@@ -15,7 +15,7 @@
         </div>
       </template>
       <template #cell(service)="{value}">
-        <BImg :src="formatService(value)" style="max-height: 25px; max-width: 75px" />
+        <BImg :src="formatService(value)" style="max-height: 25px; max-width: 75px" class="logo" />
       </template>
       <template #cell(paid)="{item, value}">
         <template v-if="value">
