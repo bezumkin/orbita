@@ -16,7 +16,7 @@
             :placeholder="record.avatar"
             :height="150"
             :width="150"
-            wrapper-class="rounded-circle"
+            wrapper-class="rounded-circle m-auto"
           />
         </slot>
       </BCol>
