@@ -56,6 +56,7 @@ class TempStorage extends Filesystem
         $video = $this->ffmpeg->open($input);
         $bitrate = round($quality->bandwidth / 1024);
 
+        $cuda = getenv('TRANSCODE_ENCODER') === 'h264_nvenc';
         $commands = [
             '-y', '-i', $input,
             '-c:v', getenv('TRANSCODE_ENCODER') ?: 'libx264',
@@ -74,8 +75,12 @@ class TempStorage extends Filesystem
             '-threads', getenv('TRANSCODE_THREADS') ?: '0',
             $output . '.m3u8',
         ];
-        if (getenv('TRANSCODE_ENCODER') === 'h264_nvenc') {
+        if ($cuda) {
+            array_unshift($commands, '-hwaccel_output_format', 'cuda');
             array_unshift($commands, '-hwaccel', 'cuda');
+            $idx = array_search('-s:v', $commands, true);
+            $commands[$idx] = '-vf';
+            $commands[$idx + 1] = 'scale_cuda=' . str_replace('x', ':', $quality->resolution);
         }
 
         $listener = null;
@@ -253,20 +258,25 @@ class TempStorage extends Filesystem
         $framerate = round($totalFrames / $duration);
         $extractEvery = $chunk * $framerate; // extract image every n frames
         $tileHeight = ceil(ceil($totalFrames / $extractEvery) / $tileWidth);
+        $tile = "tile={$tileWidth}x{$tileHeight}";
 
         [$width, $height] = explode('x', getenv('EXTRACT_VIDEO_THUMBNAILS_SIZE') ?: '213x120');
+        $wh = "$width:$height";
+
+        $cuda = getenv('TRANSCODE_ENCODER') === 'h264_nvenc';
         $commands = [
             '-y', '-i', $input,
             '-loglevel', 'error',
             '-filter_complex',
-            'select=\'not(mod(n,' . $extractEvery . '))\',scale=' . $width . ':' . $height . ',tile=' . $tileWidth . 'x' . $tileHeight,
+            'select=\'not(mod(n,' . $extractEvery . '))\',' . ($cuda ? "scale_cuda=$wh,hwdownload,format=nv12" : "scale=$wh") . ',' . $tile,
             '-frames:v', '1',
             '-qscale:v', '50', // image quality
             '-an',
             '-threads', getenv('TRANSCODE_THREADS') ?: '0',
             $output,
         ];
-        if (getenv('TRANSCODE_ENCODER') === 'h264_nvenc') {
+        if ($cuda) {
+            array_unshift($commands, '-hwaccel_output_format', 'cuda');
             array_unshift($commands, '-hwaccel', 'cuda');
         }
         $video->getFFMpegDriver()->command($commands);
