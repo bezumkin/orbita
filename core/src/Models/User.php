@@ -146,11 +146,10 @@ class User extends \Vesp\Models\User
     public function createToken(?string $ip = null): UserToken
     {
         /** @var UserToken $token */
-        $token = $this->tokens()->create([
-            'token' => Jwt::makeToken($this->id),
-            'valid_till' => date('Y-m-d H:i:s', time() + getenv('JWT_EXPIRE')),
-            'ip' => $ip,
-        ]);
+        $token = $this->tokens()->updateOrCreate(
+            ['token' => Jwt::makeToken($this->id)],
+            ['valid_till' => date('Y-m-d H:i:s', time() + getenv('JWT_EXPIRE')), 'ip' => $ip]
+        );
 
         // Limit active tokens
         if ($max = getenv('JWT_MAX')) {
