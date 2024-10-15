@@ -46,6 +46,7 @@ const config: NuxtConfig = {
       TZ: process.env.TZ || 'Europe/Moscow',
       SITE_URL: process.env.SITE_URL || 'http://127.0.0.1:8080/',
       API_URL: process.env.API_URL || '/api/',
+      JWT_EXPIRE: process.env.JWT_EXPIRE || '2592000',
     },
   },
   app: {
