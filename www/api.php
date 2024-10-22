@@ -10,7 +10,7 @@ $container->set(Illuminate\Database\Capsule\Manager::class, new Vesp\Services\El
 
 $app = DI\Bridge\Slim\Bridge::create($container);
 $app->add(App\Middlewares\Auth::class);
-$app->add(new RKA\Middleware\IpAddress());
+$app->add(new RKA\Middleware\IpAddress(true, []));
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 
