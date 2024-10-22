@@ -18,6 +18,7 @@ class Comments extends ModelController
 {
     protected string|array $scope = 'comments';
     protected string $model = Comment::class;
+    protected int $maxLimit = 0;
     private ?Topic $topic = null;
     private bool $isNew = false;
     private bool $isAdmin = false;
@@ -26,8 +27,8 @@ class Comments extends ModelController
 
     public function checkScope(string $method): ?ResponseInterface
     {
-        if ($method === 'options') {
-            return null;
+        if (!in_array($method, ['options', 'get']) && $error = parent::checkScope($method)) {
+            return $error;
         }
 
         $this->isAdmin = $this->user && $this->user->hasScope('comments/delete');
