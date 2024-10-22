@@ -30,13 +30,15 @@ class CommentReaction extends Model
     {
         static::created(
             static function (self $record) {
-                $record->comment->update(['reactions_count' => $record->comment->userReactions()->count()]);
+                $record->comment->reactions_count = $record->comment->userReactions()->count();
+                $record->comment->save();
             }
         );
 
         static::deleted(
             static function (self $record) {
-                $record->comment->update(['reactions_count' => $record->comment->userReactions()->count()]);
+                $record->comment->reactions_count = $record->comment->userReactions()->count();
+                $record->comment->save();
             }
         );
     }

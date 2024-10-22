@@ -33,7 +33,7 @@ class Comment extends Model
 {
     use ContentFilesTrait;
 
-    protected $fillable = ['content', 'active', 'reactions_count'];
+    protected $fillable = ['content', 'active'];
     protected $casts = [
         'active' => 'boolean',
         'content' => 'array',

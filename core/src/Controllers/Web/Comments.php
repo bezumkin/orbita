@@ -39,6 +39,10 @@ class Comments extends ModelController
         }
         $this->hasAccess = $this->topic->hasAccess($this->user);
 
+        if (!$this->isAdmin) {
+            $this->unsetProperty('active');
+        }
+
         return null;
     }
 
@@ -108,6 +112,7 @@ class Comments extends ModelController
             $record->active = true;
             $record->parent_id = null;
             $record->topic_id = $this->topic->id;
+            $record->user_id = $this->user->id;
 
             if ($parent_id = (int)$this->getProperty('parent_id')) {
                 /** @var Comment $parent */
@@ -121,16 +126,15 @@ class Comments extends ModelController
             }
             $this->isNew = true;
         } elseif (!$this->isAdmin) {
+            if ($this->user->id !== $record->user_id) {
+                return $this->failure('errors.no_scope');
+            }
             if ($record->children()->count()) {
                 return $this->failure('errors.comment.children_exists');
             }
             if ($record->created_at->toImmutable()->addSeconds(getenv('COMMENTS_EDIT_TIME'))->timestamp < time()) {
                 return $this->failure('errors.comment.edit_time');
             }
-        }
-
-        if (!$record->user_id) {
-            $record->user_id = $this->user->id;
         }
 
         return null;
