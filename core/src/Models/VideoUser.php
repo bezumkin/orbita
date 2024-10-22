@@ -24,7 +24,7 @@ class VideoUser extends Model
     use Traits\CompositeKey;
 
     protected $primaryKey = ['user_id', 'video_id'];
-    protected $fillable = ['quality', 'time', 'speed', 'volume'];
+    protected $fillable = ['user_id', 'video_id', 'quality', 'time', 'speed', 'volume'];
     protected $casts = [
         'quality' => 'int',
         'time' => 'int',

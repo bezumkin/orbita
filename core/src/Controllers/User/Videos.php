@@ -2,8 +2,6 @@
 
 namespace App\Controllers\User;
 
-use App\Models\Video;
-use App\Models\VideoQuality;
 use App\Models\VideoUser;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\Controller;
@@ -14,31 +12,19 @@ class Videos extends Controller
 
     public function post(): ResponseInterface
     {
-        /** @var Video $video */
-        if (!$video = Video::query()->find($this->getProperty('uuid'))) {
-            return $this->failure('Not Found', 404);
-        }
-
-        if (!$videoUser = $video->videoUsers()->where('user_id', $this->user->id)->first()) {
-            $videoUser = new VideoUser();
-            $videoUser->video_id = $video->id;
-            $videoUser->user_id = $this->user->id;
-        }
-
-        if (!$quality = $this->getProperty('quality')) {
-            /** @var VideoQuality $videoQuality */
-            if ($videoQuality = $video->qualities()->orderByDesc('quality')->first()) {
-                $quality = $videoQuality->quality;
+        try {
+            if ($quality = $this->getProperty('quality')) {
+                VideoUser::query()->updateOrCreate([
+                    'video_id' => $this->getProperty('uuid'),
+                    'user_id' => $this->user->id,
+                ], [
+                    'quality' => $quality,
+                    'volume' => $this->getProperty('volume', 1),
+                    'speed' => $this->getProperty('speed', 1),
+                    'time' => $this->getProperty('time', 0),
+                ]);
             }
-        }
-        if ($quality) {
-            $videoUser->fill([
-                'quality' => $quality,
-                'volume' => $this->getProperty('volume', 1),
-                'speed' => $this->getProperty('speed', 1),
-                'time' => $this->getProperty('time', 0),
-            ]);
-            $videoUser->save();
+        } catch (\Exception $e) {
         }
 
         return $this->success();
@@ -46,15 +32,11 @@ class Videos extends Controller
 
     public function get(): ResponseInterface
     {
-        /** @var Video $video */
-        if (!$video = Video::query()->find($this->getProperty('uuid'))) {
-            return $this->failure('Not Found', 404);
-        }
+        $videoUser = VideoUser::query()
+            ->where(['video_id' => $this->getProperty('uuid'), 'user_id' => $this->user->id])
+            ->select('quality', 'time', 'speed', 'volume')
+            ->first();
 
-        if ($videoUser = $video->videoUsers()->where('user_id', $this->user->id)->first()) {
-            return $this->success($videoUser->toArray());
-        }
-
-        return $this->success();
+        return $this->success($videoUser?->toArray());
     }
 }
