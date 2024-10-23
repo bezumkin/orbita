@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\ContentFilesTrait;
 use App\Services\Socket;
+use App\Services\Utils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -150,5 +151,13 @@ class Comment extends Model
         }
 
         return $array;
+    }
+
+    public static function sanitizeContent(array $content): ?array
+    {
+        $blocks = getenv('EDITOR_COMMENT_BLOCKS');
+        $enabled = $blocks ? array_map('trim', explode(',', strtolower($blocks))) : null;
+
+        return Utils::sanitizeContent($content, $enabled);
     }
 }

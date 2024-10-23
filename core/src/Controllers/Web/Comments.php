@@ -98,15 +98,18 @@ class Comments extends ModelController
         }
 
         /** @var Comment $record */
-        $content = $record->content;
+        if (!$content = $record->content) {
+            return $this->failure('errors.comment.no_content');
+        }
         $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
-        $record->content = $content;
+        try {
+            $record->content = $record::sanitizeContent($content);
+        } catch (\Throwable $e) {
+            return $this->failure('errors.comment.wrong_content');
+        }
 
         if (!$this->isAdmin && $record->isDirty('active')) {
             return $this->failure('errors.no_scope');
-        }
-        if (!$record->content) {
-            return $this->failure('errors.comment.no_content');
         }
 
         if (!$record->exists) {

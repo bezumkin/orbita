@@ -457,9 +457,11 @@ export default {
     },
     topic: {
       title_exists: 'A topic with this name already exists',
+      wrong_content: 'Could not process the content of topic',
     },
     comment: {
       no_content: 'You forgot to write a comment',
+      wrong_content: 'Could not process the content of comment',
       edit_time: 'Editing time has expired',
       wrong_topic: 'Incorrect topic specified',
       wrong_parent: 'Incorrect parent comment specified',

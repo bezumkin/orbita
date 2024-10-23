@@ -63,7 +63,11 @@ class Topics extends ModelController
         /** @var Topic $record */
         $content = $record->content;
         $content['blocks'] = !empty($content['blocks']) ? array_values($content['blocks']) : [];
-        $record->content = $content;
+        try {
+            $record->content = $record::sanitizeContent($content);
+        } catch (\Throwable $e) {
+            return $this->failure('errors.comment.wrong_content');
+        }
 
         if (!$record->user_id) {
             $record->user_id = $this->user->id;

@@ -457,9 +457,11 @@ export default {
     },
     topic: {
       title_exists: 'Ein Topic mit diesem Namen existiert bereits.',
+      wrong_content: 'Der Inhalt des Themas konnte nicht verarbeitet werden',
     },
     comment: {
       no_content: 'Du hast vergessen einen Kommentar zu schreiben.',
+      wrong_content: 'Der Inhalt des Kommentars konnte nicht verarbeitet werden',
       edit_time: 'Bearbeitungszeit wurde überschritten.',
       wrong_topic: 'Falsches Topic ausgewählt',
       wrong_parent: 'Falscher Elternbeitrag ausgewählt.',

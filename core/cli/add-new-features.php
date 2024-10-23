@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Comment;
+use App\Models\Page;
+use App\Models\Topic;
 use App\Models\Video;
 use App\Services\TempStorage;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +13,42 @@ require dirname(__DIR__) . '/bootstrap.php';
 $eloquent = new Eloquent();
 $media = new TempStorage();
 $dst = $media->getBaseFilesystem();
+
+// Sanitize current content blocks
+if (getenv('EDITOR_SANITIZATION_FORCE')) {
+    try {
+        /** @var Comment $comment */
+        foreach (Comment::query()->cursor() as $comment) {
+            $comment->content = Comment::sanitizeContent($comment->content);
+            $comment->save();
+        }
+    } catch (\Throwable $e) {
+        echo $e->getMessage() . PHP_EOL;
+        echo print_r($comment->toArray(), true) . PHP_EOL;
+    }
+
+    try {
+        /** @var Topic $topic */
+        foreach (Topic::query()->cursor() as $topic) {
+            $topic->content = Topic::sanitizeContent($topic->content);
+            $topic->save();
+        }
+    } catch (\Throwable $e) {
+        echo $e->getMessage() . PHP_EOL;
+        echo print_r($topic->toArray(), true) . PHP_EOL;
+    }
+
+    try {
+        /** @var Page $page */
+        foreach (Page::query()->where('external', false)->cursor() as $page) {
+            $page->content = Topic::sanitizeContent($page->content);
+            $page->save();
+        }
+    } catch (\Throwable $e) {
+        echo $e->getMessage() . PHP_EOL;
+        echo print_r($page->toArray(), true) . PHP_EOL;
+    }
+}
 
 // Add new features
 if (getenv('EXTRACT_VIDEO_AUDIO_ENABLED') || getenv('EXTRACT_VIDEO_THUMBNAILS_ENABLED')) {

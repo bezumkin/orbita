@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\Page;
+use App\Models\Topic;
 use App\Services\Redis;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,21 +41,24 @@ class Pages extends ModelController
         $c = Page::query();
 
         /** @var Page $record */
-        $content = $record->content;
         if ($record->external) {
             $record->alias = null;
+            $record->content = null;
             if (!$record->title) {
                 $record->title = null;
             }
-            if (!$content || empty($content['blocks'])) {
-                $content = null;
-            }
-        } elseif (!$content) {
-            $content = ['blocks' => []];
         } else {
-            $content['blocks'] = array_values($content['blocks']);
+            if (!$content = $record->content) {
+                $content = ['blocks' => []];
+            } else {
+                $content['blocks'] = array_values($content['blocks']);
+            }
+            try {
+                $record->content = Topic::sanitizeContent($content);
+            } catch (\Throwable $e) {
+                return $this->failure('errors.topic.wrong_content');
+            }
         }
-        $record->content = $content;
 
         if ($this->isNew = !$record->exists) {
             if (!$record->rank) {

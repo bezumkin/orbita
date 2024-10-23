@@ -18,6 +18,7 @@
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
     "bacon/bacon-qr-code": "^2.0",
+    "codex-team/editor.js": "^2.0",
     "doctrine/dbal": "^3.7",
     "fenom/fenom": "^2.12",
     "guzzlehttp/guzzle": "^7.8",

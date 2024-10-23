@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use App\Models\Video;
+use EditorJS\EditorJS;
 
 class Utils
 {
@@ -102,5 +103,101 @@ class Utils
         }
 
         return http_build_query($params, '', '&');
+    }
+
+    public static function sanitizeContent(array $content, ?array $activeBlocks = null): array
+    {
+        if (!getenv('EDITOR_SANITIZATION')) {
+            return $content;
+        }
+
+        $tags  = 'i,b,u,kbd,br,a[href]';
+        $rules = [
+            'header' => [
+                'text' => ['type' => 'string', 'allowedTags' => $tags],
+                'level' => 'int',
+            ],
+            'paragraph' => [
+                'text' => ['type' => 'string', 'allowedTags' => $tags],
+            ],
+            'list' => [
+                'style' => ['type' => 'string', 'canBeOnly' => ['ordered', 'unordered']],
+                'items' => [
+                    'type' => 'array',
+                    'data' => [
+                        '-' => ['type' => 'string', 'allowedTags' => $tags],
+                    ],
+                ],
+            ],
+            'file' => [
+                'id' => 'int',
+                'uuid' => 'string',
+                'title' => ['type' => 'string', 'required' => false],
+                'size' => ['type' => 'int', 'required' => false, 'allow_null' => true],
+                'type' => 'string',
+                'width' => ['type' => 'int', 'required' => false, 'allow_null' => true],
+                'height' => ['type' => 'int', 'required' => false, 'allow_null' => true],
+                'updated_at' => 'string',
+            ],
+            'video' => [
+                'id' => 'int',
+                'uuid' => 'string',
+                'duration' => ['type' => 'int', 'required' => false],
+                'size' => ['type' => 'int', 'required' => false],
+                'width' => ['type' => 'int', 'required' => false],
+                'height' => ['type' => 'int', 'required' => false],
+                'moved' => ['type' => 'bool', 'required' => false],
+                'audio' => ['type' => 'string', 'required' => false],
+                'audio_size' => ['type' => 'int', 'required' => false],
+                'updated_at' => 'string',
+            ],
+            'embed' => [
+                'id' => 'string',
+                'service' => 'string',
+                'url' => 'string',
+            ],
+            'code' => [
+                'language' => 'string',
+                'code' => 'string',
+            ],
+        ];
+
+        $tools = [
+            'header' => $rules['header'],
+            'paragraph' => $rules['paragraph'],
+            'list' => $rules['list'],
+            'file' => $rules['file'],
+            'image' => array_merge($rules['file'], [
+                'crop' => [
+                    'type' => 'array',
+                    'required' => false,
+                    'data' => [
+                        'width' => ['type' => 'int', 'required' => false],
+                        'height' => ['type' => 'int', 'required' => false],
+                        'fit' => ['type' => 'string', 'required' => false],
+                    ],
+                ],
+            ]),
+            'audio' => $rules['file'],
+            'video' => $rules['video'],
+            'embed' => $rules['embed'],
+            'code' => $rules['code'],
+        ];
+        if ($activeBlocks) {
+            $tools = array_filter($tools, static function ($key) use ($activeBlocks) {
+                return $key === 'paragraph' || in_array($key, $activeBlocks, true);
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        $content['blocks'] = array_filter($content['blocks'], static function ($value) {
+            return !empty($value['data']);
+        });
+        $editor = new EditorJS(
+            json_encode($content, JSON_THROW_ON_ERROR),
+            json_encode(['tools' => $tools], JSON_THROW_ON_ERROR)
+        );
+        $content['blocks'] = $editor->getBlocks();
+
+        return $content;
     }
 }

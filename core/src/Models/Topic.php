@@ -356,4 +356,12 @@ class Topic extends Model
             'published_at' => $this->published_at->timestamp,
         ];
     }
+
+    public static function sanitizeContent(array $content): ?array
+    {
+        $blocks = getenv('EDITOR_TOPIC_BLOCKS');
+        $enabled = $blocks ? array_map('trim', explode(',', strtolower($blocks))) : null;
+
+        return Utils::sanitizeContent($content, $enabled);
+    }
 }
