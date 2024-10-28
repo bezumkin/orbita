@@ -38,6 +38,7 @@ use Throwable;
  * @property-read File $audio
  * @property-read File $thumbnail
  * @property-read VideoQuality[] $qualities
+ * @property-read VideoQuality[] $processedQualities
  * @property-read VideoUser[] $videoUsers
  * @property-read TopicFile[] $topicFiles
  * @property-read PageFile[] $pageFiles
@@ -46,7 +47,7 @@ class Video extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['title', 'description', 'duration', 'progress', 'active', 'processed_at'];
+    protected $fillable = ['title', 'description', 'active'];
     protected $casts = [
         'active' => 'boolean',
         'chapters' => 'array',
@@ -56,7 +57,6 @@ class Video extends Model
         'processed_at' => 'datetime',
         'moved_at' => 'datetime',
     ];
-    protected $appends = ['processed_qualities'];
 
     public function file(): BelongsTo
     {
@@ -81,6 +81,12 @@ class Video extends Model
     public function qualities(): HasMany
     {
         return $this->hasMany(VideoQuality::class);
+    }
+
+    public function processedQualities(): HasMany
+    {
+        return $this->hasMany(VideoQuality::class)
+            ->where('processed', true);
     }
 
     public function videoUsers(): HasMany
@@ -340,11 +346,6 @@ class Video extends Model
         return parent::delete();
     }
 
-    public function getProcessedQualitiesAttribute(): array
-    {
-        return $this->qualities()->where('processed', true)->pluck('quality')->toArray();
-    }
-
     protected function sendInfoToSocket(): void
     {
         $data = $this
@@ -355,6 +356,15 @@ class Video extends Model
                 'qualities.file:id,uuid,width,height,size,updated_at',
             ])
             ?->toArray();
+
+        if (!empty($data['qualities'])) {
+            $data['processed_qualities'] = [];
+            foreach ($data['qualities'] as $quality) {
+                if ($quality['processed']) {
+                    $data['processed_qualities'][] = $quality['quality'];
+                }
+            }
+        }
 
         Socket::send('transcode', $data);
     }

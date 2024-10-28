@@ -7,6 +7,7 @@ use App\Models\Video;
 use App\Models\VideoUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
 
@@ -51,6 +52,7 @@ class Videos extends ModelController
         $c->with('file:id,uuid,width,height,size,updated_at');
         $c->with('image:id,uuid,width,height,size,updated_at');
         $c->with('audio:id,uuid,size,updated_at');
+        $c->with('processedQualities:video_id,quality');
 
         return $c;
     }
@@ -101,10 +103,10 @@ class Videos extends ModelController
     {
         /** @var Video $object */
         $array = $object->toArray();
-        if ($this->getPrimaryKey()) {
-            /** @var VideoUser $status */
-            $status = $object->videoUsers()->where('user_id', $this->user->id)->first();
-            $array['status'] = $status?->only('quality', 'time', 'speed', 'volume');
+        if (!empty($array['processed_qualities'])) {
+            $array['processed_qualities'] = array_map(static function ($val) {
+                return $val['quality'];
+            }, $array['processed_qualities']);
         }
 
         return $array;
