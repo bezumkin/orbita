@@ -64,7 +64,8 @@ async function onSubmit() {
   try {
     loading.value = true
     scrollToTop()
-    await usePatch('admin/topics/' + props.topic.id, {...record.value})
+    const data = await usePatch('admin/topics/' + props.topic.id, {...record.value})
+    onTopicUpdate(data)
     onCancel()
   } catch (e) {
   } finally {
