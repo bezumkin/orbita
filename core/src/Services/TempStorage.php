@@ -162,6 +162,13 @@ class TempStorage extends Filesystem
                 }
             }
 
+            if ($dstWidth % 2) {
+                $dstWidth++;
+            }
+            if ($dstHeight % 2) {
+                $dstHeight++;
+            }
+
             if ($maxBitrate && $dstBitrate > $maxBitrate) {
                 $dstBitrate = $maxBitrate;
             }
