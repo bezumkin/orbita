@@ -2,15 +2,16 @@
 
 namespace App\Controllers\Web;
 
-use App\Models\Topic;
 use App\Services\Manticore;
 use Illuminate\Database\Capsule\Manager;
-use Psr\Http\Message\ResponseInterface;
-use Vesp\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
-class Search extends Controller
+class Search extends Topics
 {
     protected Manticore $manticore;
+    protected array $ids = [];
+    protected array $scores = [];
 
     public function __construct(Manager $eloquent, Manticore $manticore)
     {
@@ -18,10 +19,12 @@ class Search extends Controller
         $this->manticore = $manticore;
     }
 
-    public function get(): ResponseInterface
+    protected function beforeCount(Builder $c): Builder
     {
-        $rows = [];
-        if ($query = $this->getProperty('query')) {
+        $limit = getenv('SEARCH_LIMIT') ?: 100;
+        $this->maxLimit = $limit;
+
+        if ($query = trim($this->getProperty('query', ''))) {
             $search = $this->manticore->getSearch();
             $search->option('field_weights', [
                 'title' => 50,
@@ -43,26 +46,42 @@ class Search extends Controller
             );
             $search->trackScores(true);
             $search->stripBadUtf8(true);
-            $search->limit(getenv('SEARCH_LIMIT') ?: 100);
-            if ($this->getProperty('sort', '') === 'date') {
+            $search->limit($limit);
+            if ($this->getProperty('sort') === 'date') {
                 $search->sort('published_at', 'desc');
             }
 
             $results = $search->match($query)->get();
             foreach ($results as $result) {
-                /** @var Topic $topic */
-                if ($topic = Topic::query()->find($result->getId())) {
-                    $row = $topic->prepareOutput($this->user, true);
-                    $row['score'] = $result->getScore();
-                    $rows[] = $row;
-                }
+                $id = (int)$result->getId();
+                $this->ids[] = $id;
+                $this->scores[$id] = $result->getScore();
             }
         }
 
-        return $this->success([
-            'rows' => $rows,
-            'total' => count($rows),
-        ]);
+        if (!$this->ids) {
+            $c->where('id', -1);
+        } else {
+            $c->whereIn('id', $this->ids);
+        }
+
+        return parent::beforeCount($c);
     }
 
+    protected function addSorting(Builder $c): Builder
+    {
+        if ($this->ids) {
+            $c->orderByRaw('FIELD (id, ' . implode(', ', $this->ids) . ') ASC');
+        }
+
+        return $c;
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        $array = parent::prepareRow($object);
+        $array['search_score'] = $this->scores[$array['id']] ?? 0;
+
+        return $array;
+    }
 }
