@@ -54,7 +54,7 @@ $group = $app->group(
             $group->any('/redirects[/{id:\d+}]', App\Controllers\Admin\Redirects::class);
         });
 
-        $group->group(
+        $web = $group->group(
             '/web',
             static function (RouteCollectorProxy $group) {
                 $group->any('/settings', App\Controllers\Web\Settings::class);
@@ -84,6 +84,10 @@ $group = $app->group(
                 }
             }
         );
+
+        if ((int)getenv('CACHE_API_TIME')) {
+            $web->add(App\Middlewares\Cache::class);
+        }
     }
 );
 
