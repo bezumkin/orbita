@@ -142,10 +142,10 @@ class Utils
             'video' => [
                 'id' => 'int',
                 'uuid' => 'string',
-                'duration' => ['type' => 'int', 'required' => false],
+                'duration' => ['type' => 'int', 'required' => false, 'allow_null' => true],
                 'size' => ['type' => 'int', 'required' => false],
-                'width' => ['type' => 'int', 'required' => false],
-                'height' => ['type' => 'int', 'required' => false],
+                'width' => ['type' => 'int', 'required' => false, 'allow_null' => true],
+                'height' => ['type' => 'int', 'required' => false, 'allow_null' => true],
                 'moved' => ['type' => 'bool', 'required' => false],
                 'audio' => ['type' => 'string', 'required' => false],
                 'audio_size' => ['type' => 'int', 'required' => false],

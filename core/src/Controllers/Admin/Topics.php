@@ -66,7 +66,7 @@ class Topics extends ModelController
         try {
             $record->content = $record::sanitizeContent($content);
         } catch (\Throwable $e) {
-            return $this->failure('errors.comment.wrong_content');
+            return $this->failure('errors.topic.wrong_content');
         }
 
         if (!$record->user_id) {

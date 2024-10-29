@@ -290,10 +290,6 @@ class Video extends Model
         if (!$thumbnail = $this->thumbnail) {
             return null;
         }
-        /** @var VideoQuality $quality */
-        if (!$quality = $this->qualities()->orderBy('quality')->first()) {
-            return null;
-        }
 
         [$width, $height] = array_map('intval', explode('x', getenv('EXTRACT_VIDEO_THUMBNAILS_SIZE') ?: '213x120'));
         $storyboard = [
@@ -396,7 +392,7 @@ class Video extends Model
                     'width' => $this->file->width,
                     'height' => $this->file->height,
                     'moved' => $this->moved,
-                    'updated_at' => $this->updated_at->toJSON(),
+                    'updated_at' => is_scalar($this->updated_at) ? $this->updated_at : $this->updated_at->toJSON(),
                 ];
                 if ($this->audio) {
                     $data['audio'] = $this->audio->uuid;
