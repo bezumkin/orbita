@@ -42,7 +42,7 @@ class VideoCache
     {
         $this->filesystem->deleteDirectory($uuid);
     }
-    
+
     public function has(string $uuid, int $start, int $end): bool
     {
         $key = $uuid . DIRECTORY_SEPARATOR . "$start-$end";
@@ -57,7 +57,7 @@ class VideoCache
 
         $diff = $used - $max;
         if ($diff > 0) {
-            $dirs = explode(PHP_EOL, shell_exec("ls -tr1 $this->baseDir"));
+            $dirs = explode(PHP_EOL, shell_exec("ls -tru1 $this->baseDir"));
             foreach ($dirs as $dir) {
                 $size = explode("\t", shell_exec("du -sb $this->baseDir$dir"))[0];
                 $diff -= $size;
