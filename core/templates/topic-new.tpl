@@ -14,10 +14,10 @@
     {/if}
 
     {if $lang === 'de'}
-        <p>Bitte folgen Sie <a href="{$topic.link}">diesem Link</a>, um ihn zu lesen.</p>
+        <p>Bitte folgen Sie <a href="{$topic.link}">diesem Link</a>, um es anzuzeigen.</p>
     {elseif $lang === 'ru'}
-        <p>Пожалуйста, пройдите <a href="{$topic.link}">по этой ссылке</a>, чтобы его прочитать.</p>
+        <p>Пожалуйста, пройдите <a href="{$topic.link}">по этой ссылке</a>, чтобы ознакомиться.</p>
     {else}
-        <p>Please follow <a href="{$topic.link}">this link</a>, to read it.</p>
+        <p>Please follow <a href="{$topic.link}">this link</a>, to view.</p>
     {/if}
 {/block}

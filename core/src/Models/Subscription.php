@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ?string $remote_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property Carbon $warned_at
  * @property Carbon $active_until
  *
  * @property-read User $user
@@ -31,6 +32,7 @@ class Subscription extends Model
     protected $casts = [
         'active' => 'bool',
         'cancelled' => 'bool',
+        'warned_at' => 'datetime',
         'active_until' => 'datetime',
     ];
 
@@ -139,6 +141,19 @@ class Subscription extends Model
         return false;
     }
 
+    public function warn(): bool
+    {
+        if (!$this->sendEmail('warn')) {
+            $this->timestamps = false;
+            $this->warned_at = date('Y-m-d H:i:s');
+            $this->save();
+
+            return true;
+        }
+
+        return false;
+    }
+
     protected function sendEmail(string $type): ?string
     {
         $lang = $this->user->lang ?? 'en';
@@ -151,6 +166,9 @@ class Subscription extends Model
             'renew' => $service->canSubscribe(),
         ];
         $subject = getenv('EMAIL_SUBSCRIPTION_' . strtoupper($type) . '_' . strtoupper($lang));
+        if (empty($subject)) {
+            $subject = 'No Subject';
+        }
 
         return $this->user->sendEmail($subject, 'subscription-' . $type, $data);
     }
