@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import MainPage from './app.vue'
 const isDev = import.meta.dev
-const {fullPath} = useRoute()
 
 const props = defineProps({
   error: {
@@ -25,7 +24,8 @@ const props = defineProps({
   },
 })
 
-if (props.error.statusCode === 404 && import.meta.server) {
+if (props.error.statusCode === 404) {
+  const fullPath = import.meta.server ? useRoute().fullPath : location.pathname
   try {
     const data = await useGet('web/locate' + fullPath)
     if (data.location) {
