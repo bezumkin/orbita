@@ -38,6 +38,12 @@ export default {
     reset: 'Reset',
     reset_desc: `You can request a one-time link to log in to your account. After logging in, you will be able to change your old password.`,
   },
+  filter: {
+    week: 'Week',
+    month: 'Month',
+    quarter: 'Quarter',
+    year: 'Year',
+  },
   models: {
     user: {
       title_one: 'User',

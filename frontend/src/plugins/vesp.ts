@@ -18,8 +18,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('isMobile', isMobile)
   nuxtApp.provide('payment', payment)
   nuxtApp.provide('variables', variables)
-  nuxtApp.provide('price', (val: number) => {
-    if (!val) {
+  nuxtApp.provide('price', (val: number, zero: boolean = false) => {
+    if (!val && !zero) {
       return ''
     }
     const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)

@@ -38,6 +38,12 @@ export default {
     reset: 'Zurücksetzen',
     reset_desc: `Du kannst einen Einmal-Link fürs Login anfordern. Nach dem Login kannst du dein altes Passwort ändern.`,
   },
+  filter: {
+    week: 'Woche',
+    month: 'Monat',
+    quarter: 'Quartal',
+    year: 'Jahr',
+  },
   models: {
     user: {
       title_one: 'Benutzer',

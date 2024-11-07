@@ -46,6 +46,7 @@ class Settings extends ModelController
                 : '1',
             'TOPICS_SHOW_AUTHOR' => getenv('TOPICS_SHOW_AUTHOR') ?: '0',
             'TOPICS_CHANGE_AUTHOR' => getenv('TOPICS_CHANGE_AUTHOR') ?: '0',
+            'CHART_PAYMENTS_DISABLE' => getenv('CHART_PAYMENTS_DISABLE'),
         ];
 
         return $this->success([

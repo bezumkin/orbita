@@ -94,6 +94,7 @@ class Payment extends Model
                     $this->subscription->activate();
                 }
                 Socket::send('profile', ['id' => $this->user_id]);
+                Socket::send('payment');
             } elseif ($status === false || $this->created_at->addHours(6) < Carbon::now()) {
                 $this->paid = false;
                 if ($this->subscription && !$this->subscription->next_level_id) {
