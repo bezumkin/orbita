@@ -55,7 +55,7 @@ $group = $app->group(
             $group->any('/redirects[/{id:\d+}]', App\Controllers\Admin\Redirects::class);
         });
 
-        $web = $group->group(
+        $group->group(
             '/web',
             static function (RouteCollectorProxy $group) {
                 $group->any('/settings', App\Controllers\Web\Settings::class);
@@ -84,11 +84,7 @@ $group = $app->group(
                     $group->get('/connections/telegram/{remote_id}', App\Controllers\Web\Connections\Telegram::class);
                 }
             }
-        );
-
-        if ((int)getenv('CACHE_API_TIME')) {
-            $web->add(App\Middlewares\Cache::class);
-        }
+        )->add(App\Middlewares\Cache::class);
     }
 );
 

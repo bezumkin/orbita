@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Factory\ResponseFactory;
+use Vesp\Helpers\Jwt;
 
 class Cache
 {
@@ -20,9 +21,11 @@ class Cache
 
     public function __invoke(Request $request, RequestHandler $handler): ResponseInterface
     {
-        $cacheTTL = (int)getenv('CACHE_API_TIME');
-        if ($cacheTTL && $request->getMethod() === 'GET' && !$request->getAttribute('token')) {
-            $cacheKey = $this::getCacheKey($request->getUri());
+        $time = microtime(true);
+        $token = $request->getAttribute('token');
+        $cacheTTL = (int)getenv($token ? 'CACHE_API_TIME_USER' : 'CACHE_API_TIME');
+        if ($cacheTTL && $request->getMethod() === 'GET') {
+            $cacheKey = $this::getCacheKey($request->getUri(), $token);
             if ($this->redis->exists($cacheKey)) {
                 $response = (new ResponseFactory())->createResponse();
                 $response->getBody()->write($this->redis->get($cacheKey));
@@ -32,7 +35,8 @@ class Cache
                 }
 
                 return $response
-                    ->withHeader('X-From-Cache', '1')
+                    ->withHeader('X-Response-Time', number_format(microtime(true) - $time, 3) . ' s')
+                    ->withHeader('X-From-Cache', 'true')
                     ->withHeader('Content-Type', 'application/json; charset=utf-8');
             }
 
@@ -43,15 +47,22 @@ class Cache
                 $this->redis->set($cacheKey, (string)$response->getBody(), 'EX', $cacheTTL);
             }
 
-            return $response;
+            return $response
+                ->withHeader('X-Response-Time', number_format(microtime(true) - $time, 3) . ' s')
+                ->withHeader('X-From-Cache', 'false');
         }
 
-        return $handler->handle($request);
+        return $handler->handle($request)
+            ->withHeader('X-Response-Time', number_format(microtime(true) - $time, 3) . ' s');
     }
 
-    protected static function getCacheKey(UriInterface $uri): string
+    protected static function getCacheKey(UriInterface $uri, ?string $token = null): string
     {
         $key = str_replace('/', ':', trim($uri->getPath(), '/'));
+        if ($token && $decoded = Jwt::decodeToken($token)) {
+            $key .= ':' . $decoded->id;
+        }
+
         parse_str($uri->getQuery(), $query);
         ksort($query);
         if ($query) {
