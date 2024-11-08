@@ -4,22 +4,29 @@ namespace App\Controllers;
 
 use App\Models\File;
 use App\Models\TopicFile;
+use App\Models\User;
 use App\Models\Video as VideoFile;
 use App\Models\VideoQuality;
 use App\Services\Log;
 use App\Services\Redis;
 use App\Services\VideoCache;
 use Illuminate\Database\Capsule\Manager;
+use Illuminate\Database\Eloquent\Builder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Stream;
 use Throwable;
 use Vesp\Controllers\Controller;
 
+/** @property User $user */
 class Video extends Controller
 {
     protected ?VideoFile $video = null;
     protected VideoCache $cache;
     protected Redis $redis;
+    protected bool $isAdmin = false;
+    protected bool $isVip = false;
+    protected bool $isSubscriber = false;
+    protected bool $isFree = false;
 
     public function __construct(Manager $eloquent, VideoCache $cache, Redis $redis)
     {
@@ -30,8 +37,8 @@ class Video extends Controller
 
     public function checkScope(string $method): ?ResponseInterface
     {
-        if ($method === 'options') {
-            return parent::checkScope('options');
+        if ($error = parent::checkScope($method)) {
+            return $error;
         }
 
         return $this->loadFile();
@@ -47,29 +54,51 @@ class Video extends Controller
         $cacheTTL = (int)getenv('CACHE_MEDIA_ACCESS_TIME') ?: 3600;
         $key = implode(':', ['video', $uuid, $this->user?->id ?: 'null']);
 
-        $allow = $this->redis->get($key);
-        if ($allow === null) {
-            // Check permissions
-            $isAdmin = $this->user && $this->user->hasScope('videos/patch');
-            if (!$isAdmin && !$this->video->active) {
-                return $this->failure('Not Found', 404);
-            }
+        $this->isAdmin = $this->user?->hasScope('videos/patch') ?? false;
+        $this->isVip = $this->user?->hasScope('vip') ?? false;
 
-            $allow = $isAdmin || $this->video->pageFiles()->where('type', 'video')->count();
-            if (!$allow) {
-                $topicFiles = $this->video->topicFiles()->where('type', 'video');
-                /** @var TopicFile $topicFile */
-                foreach ($topicFiles->cursor() as $topicFile) {
-                    if ($topicFile->topic->hasAccess($this->user)) {
-                        $allow = true;
-                        break;
+        // Check if video is active
+        if (!$this->isAdmin && !$this->video->active) {
+            return $this->failure('Not Found', 404);
+        }
+
+        if (!$this->isAdmin && !$this->isVip) {
+            // Check permissions only for regular users
+            $allow = $this->redis->get($key);
+            if ($allow === null) {
+                // Check if this is free video
+                if (!$isFree = $this->video->pageFiles()->where('type', 'video')->count()) {
+                    $isFree = $this->video->topicFiles()->where('type', 'video')
+                        ->whereHas('topic', static function (Builder $c) {
+                            $c->where('active', true);
+                            $c->whereNull('level_id');
+                            $c->where(static function (Builder $c) {
+                                $c->where('price', 0);
+                                $c->orWhereNull('price');
+                            });
+                        })->count();
+                }
+                if ($isFree) {
+                    $allow = 'free';
+                } else {
+                    $allow = false;
+                    $topicFiles = $this->video->topicFiles()->where('type', 'video');
+                    /** @var TopicFile $topicFile */
+                    foreach ($topicFiles->cursor() as $topicFile) {
+                        if ($topicFile->topic->hasAccess($this->user)) {
+                            $allow = true;
+                            break;
+                        }
                     }
                 }
+                $this->redis->set($key, $allow, 'EX', $cacheTTL);
             }
-            $this->redis->set($key, $allow, 'EX', $cacheTTL);
-        }
-        if (!$allow) {
-            return $this->failure('Access Denied', 403);
+
+            if (!$allow) {
+                return $this->failure('Access Denied', 403);
+            }
+            $this->isFree = $allow === 'free';
+            $this->isSubscriber = $this->user?->currentSubscription !== null;
         }
 
         return null;
@@ -145,7 +174,14 @@ class Video extends Controller
     {
         $manifest = $videoQuality->manifest;
         $fs = $videoQuality->file->getFilesystem();
-        if (getenv('DOWNLOAD_MEDIA_FROM_S3') && method_exists($fs, 'getStreamLink')) {
+
+        $useRemote = method_exists($fs, 'getStreamLink') && $stream = getenv('STREAM_MEDIA_FROM_S3');
+        if ($useRemote) {
+            if ($stream === '2' && ($this->isAdmin || $this->isVip || $this->isSubscriber || !$this->isFree)) {
+                $useRemote = false;
+            }
+        }
+        if ($useRemote) {
             $link = $fs->getStreamLink($videoQuality->file->getFilePathAttribute());
             $manifest = preg_replace('#^' . $videoQuality->quality . '$#m', $link, $manifest);
         } elseif ($token = $this->getProperty('token')) {
