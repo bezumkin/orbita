@@ -33,6 +33,9 @@ class Users extends ModelController
                     $c->orWhere('fullname', 'LIKE', "%$query%");
                     $c->orWhere('email', 'LIKE', "%$query%");
                     $c->orWhere('phone', 'LIKE', "%$query%");
+                    $c->orWhereHas('tokens', static function (Builder $c) use ($query) {
+                        $c->where('ip', 'LIKE', "$query%");
+                    });
                 }
             );
         }
@@ -54,6 +57,10 @@ class Users extends ModelController
 
         if ($error = $this->processFiles($record)) {
             return $error;
+        }
+
+        if ($record->blocked) {
+            $record->tokens()->update(['active' => false]);
         }
 
         return null;
