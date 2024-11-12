@@ -36,8 +36,6 @@ foreach ($subscriptions->cursor() as $subscription) {
 // Try to prolong active subscriptions
 $subscriptions = Subscription::query()
     ->where('active', true)
-    ->where('cancelled', false)
-    ->whereNotNull('remote_id')
     ->where('active_until', '<', $now);
 foreach ($subscriptions->cursor() as $subscription) {
     /** @var Subscription $subscription */
