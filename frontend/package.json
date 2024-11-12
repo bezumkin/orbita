@@ -14,7 +14,7 @@
     "stylelint:fix": "stylelint --fix --quiet ./src/assets/**/*.scss"
   },
   "dependencies": {
-    "@editorjs/editorjs": "^2.30.3",
+    "@editorjs/editorjs": "^2.30.7",
     "@editorjs/header": "^2.8.1",
     "@editorjs/list": "^1.9.0",
     "@editorjs/paragraph": "^2.11.5",
