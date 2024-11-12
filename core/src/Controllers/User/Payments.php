@@ -16,6 +16,7 @@ use RuntimeException;
 use Throwable;
 use Vesp\Controllers\ModelGetController;
 
+/** @property User $user */
 class Payments extends ModelGetController
 {
     protected string $model = Payment::class;
@@ -38,7 +39,10 @@ class Payments extends ModelGetController
     public function prepareRow(Model $object): array
     {
         /** @var Payment $object */
-        $object->checkStatus();
+        if ($object->paid === null) {
+            sleep(random_int(1, 3));
+            $object->checkStatus();
+        }
 
         $array = $object->only('id', 'service', 'amount', 'paid', 'paid_at', 'created_at', 'metadata');
         if ($object->topic) {
@@ -54,22 +58,28 @@ class Payments extends ModelGetController
             $service = $this->getService($this->getProperty('service', ''));
             $serviceName = (new ReflectionClass($service))->getShortName();
 
-            if ($levelId = $this->getProperty('level')) {
+            if ($levelId = (int)$this->getProperty('level')) {
                 /** @var Level $level */
-                if ($level = Level::query()->where('active', true)->find($levelId)) {
-                    return $this->success($this->buyLevel($level, $serviceName));
+                if (!$level = Level::query()->where('active', true)->find($levelId)) {
+                    return $this->failure('Not Found', 404);
+                }
+                if ($this->user->currentSubscription?->level_id === $levelId) {
+                    return $this->failure('errors.payment.same_level');
                 }
 
-                return $this->failure('Not Found', 404);
+                return $this->success($this->buyLevel($level, $serviceName));
             }
 
             if ($topicUuid = $this->getProperty('topic')) {
                 /** @var Topic $topic */
-                if ($topic = Topic::query()->where(['uuid' => $topicUuid, 'active' => true])->first()) {
-                    return $this->success($this->buyTopic($topic, $serviceName));
+                if (!$topic = Topic::query()->where(['uuid' => $topicUuid, 'active' => true])->first()) {
+                    return $this->failure('Not Found', 404);
+                }
+                if ($topic->hasAccess($this->user)) {
+                    return $this->failure('errors.payment.topic_access');
                 }
 
-                return $this->failure('Not Found', 404);
+                return $this->success($this->buyTopic($topic, $serviceName));
             }
         } catch (Throwable $e) {
             return $this->failure($e->getMessage());
@@ -81,7 +91,6 @@ class Payments extends ModelGetController
     protected function buyLevel(Level $level, string $serviceName): array
     {
         $response = [];
-        /** @var User $user */
         $user = $this->user;
 
         $period = (int)$this->getProperty('period') ?: 1;

@@ -39,8 +39,8 @@ $subscriptions = Subscription::query()
     ->where('active_until', '<', $now);
 foreach ($subscriptions->cursor() as $subscription) {
     /** @var Subscription $subscription */
-    if ($subscription->charge()) {
-        $subscription->activate();
+    if ($payment = $subscription->charge()) {
+        $subscription->activate($payment);
     } else {
         $subscription->disable();
     }

@@ -81,31 +81,35 @@ class Payment extends Model
 
     public function checkStatus(): ?bool
     {
-        if ($this->paid === null) {
-            $service = $this->getService();
-            $status = $service->getPaymentStatus($this);
-            if ($status === true) {
-                $this->paid = true;
-                $this->paid_at = time();
-                $this->save();
+        // Try to avoid race condition on status checking
+        $payment = $this->refresh();
 
-                if ($this->subscription) {
-                    $this->subscription->service = $this->service;
-                    $this->subscription->activate();
+        // Check the payment
+        if ($payment->paid === null) {
+            $service = $payment->getService();
+            $status = $service->getPaymentStatus($payment);
+            if ($status === true) {
+                $payment->paid = true;
+                $payment->paid_at = time();
+                $payment->save();
+
+                if ($payment->subscription) {
+                    $payment->subscription->service = $payment->service;
+                    $payment->subscription->activate($payment);
                 }
-                Socket::send('profile', ['id' => $this->user_id]);
+                Socket::send('profile', ['id' => $payment->user_id]);
                 Socket::send('payment');
-            } elseif ($status === false || $this->created_at->addHours(6) < Carbon::now()) {
-                $this->paid = false;
-                if ($this->subscription && !$this->subscription->next_level_id) {
-                    $this->subscription->next_period = null;
+            } elseif ($status === false || $payment->created_at->addHours(6) < Carbon::now()) {
+                $payment->paid = false;
+                if ($payment->subscription && !$payment->subscription->next_level_id) {
+                    $payment->subscription->next_period = null;
                 }
-                $this->save();
-                Socket::send('profile', ['id' => $this->user_id]);
+                $payment->save();
+                Socket::send('profile', ['id' => $payment->user_id]);
             }
         }
 
-        return $this->paid;
+        return $payment->paid;
     }
 
     public function getLink(): ?array

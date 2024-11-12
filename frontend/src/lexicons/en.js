@@ -481,7 +481,9 @@ export default {
       no_service: 'Could not find the specified payment service',
       wrong_service: 'Error when initializing the payment service',
       wrong_level: 'Could not load subscription level',
+      same_level: 'You already have this subscription level',
       delete_paid: 'Paid transactions cannot be deleted',
+      topic_access: 'You already have access to this post',
     },
     connection: {
       no_service: 'Could not find a service to connect to.',

@@ -481,7 +481,9 @@ export default {
       no_service: 'Konnte den ausgewählten Bezahl Service nicht finden.',
       wrong_service: 'Fehler beim Starten des Bezahl Service.',
       wrong_level: 'Konnte das Abo Level nicht laden',
+      same_level: 'Sie haben bereits diese Abonnementstufe',
       delete_paid: 'Ageschlossene Transaktionen können nicht gelöscht werden.',
+      topic_access: 'Sie haben bereits Zugriff auf diesen Beitrag',
     },
     connection: {
       no_service: 'Es konnte kein Dienst zum Verbinden gefunden werden.',

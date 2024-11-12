@@ -6,6 +6,7 @@ use App\Services\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read User $user
  * @property-read Level $level
  * @property-read Level $nextLevel
+ * @property-read Payment $payments
  */
 class Subscription extends Model
 {
@@ -58,9 +60,14 @@ class Subscription extends Model
         return new $service();
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function createPayment(int $period = 1, string $service = null): Payment
     {
-        $now = ($this->active_until ?: Carbon::now())->toImmutable();
+        $from = ($this->active_until && !$this->nextLevel ? $this->active_until : Carbon::now())->toImmutable();
 
         $payment = new Payment();
         $payment->user_id = $this->user->id;
@@ -71,7 +78,7 @@ class Subscription extends Model
             'level' => $this->nextLevel->id ?? $this->level->id,
             'title' => $this->nextLevel->title ?? $this->level->title,
             'period' => $period,
-            'until' => (string)$now->addMonths($period),
+            'until' => (string)$from->addMonths($period),
         ];
 
         return $payment;
@@ -82,7 +89,7 @@ class Subscription extends Model
         return $this->level->price * $period;
     }
 
-    public function activate(): void
+    public function activate(Payment $payment): void
     {
         $now = Carbon::now()->toImmutable();
 
@@ -93,7 +100,7 @@ class Subscription extends Model
                 $this->level_id = $this->next_level_id;
             }
         } else {
-            $this->active_until = $this->active_until->addMonths($period);
+            $this->active_until = $payment->paid_at->addMonths($period);
         }
         $this->active = true;
         $this->cancelled = false;
@@ -122,7 +129,7 @@ class Subscription extends Model
         return $this->level->costPerDay() * $days;
     }
 
-    public function charge(): ?bool
+    public function charge(): ?Payment
     {
         $service = $this->getService();
         if ($this->remote_id && $service::SUBSCRIPTIONS) {
@@ -134,11 +141,11 @@ class Subscription extends Model
                 $payment->paid_at = time();
                 $payment->save();
 
-                return true;
+                return $payment;
             }
         }
 
-        return false;
+        return null;
     }
 
     public function warn(): bool
