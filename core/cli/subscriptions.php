@@ -9,15 +9,6 @@ new Eloquent();
 
 $now = Carbon::now()->toImmutable();
 
-// Clean old unpaid subscriptions
-/*
-Subscription::query()
-    ->where('active', false)
-    ->whereNull('active_until')
-    ->where('created_at', '<', $now->subDay())
-    ->delete();
-*/
-
 // Warning about future prolongation
 $subscriptions = Subscription::query()
     ->where('active', true)

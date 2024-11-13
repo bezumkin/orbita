@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use App\Models\VideoQuality;
+use Carbon\Carbon;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\ProgressListener\VideoProgressListener;
@@ -335,5 +336,21 @@ class TempStorage extends Filesystem
         $file->save();
 
         return $file;
+    }
+
+    public function clearTemporaryFiles(int $days = 3): int
+    {
+        $count = 0;
+        $root = $this->getRoot();
+        $time = Carbon::now()->subDays($days)->timestamp;
+        $files = explode(PHP_EOL, shell_exec("ls -tr1 $root"));
+        foreach ($files as $file) {
+            $file = $root . '/' . $file;
+            if (is_file($file) && filemtime($file) < $time && unlink($file)) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }

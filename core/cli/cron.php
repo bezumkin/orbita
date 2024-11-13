@@ -6,7 +6,7 @@ use GO\Scheduler;
 require dirname(__DIR__) . '/bootstrap.php';
 $scheduler = new Scheduler();
 
-$scheduler->php(__DIR__ . '/clear-tokens.php', null, [], 'clear_tokens')
+$scheduler->php(__DIR__ . '/clear-garbage.php', null, [], 'clear_garbage')
     ->daily()
     // ->inForeground()
     ->onlyOne();
