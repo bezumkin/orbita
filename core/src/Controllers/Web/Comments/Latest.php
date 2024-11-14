@@ -13,10 +13,15 @@ class Latest extends ModelGetController
 
     public function get(): ResponseInterface
     {
+        $limit = $this->getProperty('limit', 20);
+        if ($limit > $this->maxLimit) {
+            $limit = $this->maxLimit;
+        }
+
         $ids = Topic::query()
             ->where('active', true)
             ->orderByDesc('last_comment_id')
-            ->limit($this->getProperty('limit', 20))
+            ->limit($limit)
             ->pluck('last_comment_id')
             ->toArray();
 
