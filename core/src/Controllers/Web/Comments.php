@@ -71,6 +71,8 @@ class Comments extends ModelController
         $c->with('user', function (BelongsTo $c) {
             $c->select('id', 'username', 'fullname', 'role_id', 'avatar_id');
             $c->with('avatar:id,uuid,updated_at');
+            $c->with('role:id,title,color');
+            $c->with('currentSubscription:id,user_id,level_id', 'currentSubscription.level:id,title,color');
         });
         if ($this->user) {
             $c->with('userReactions', function (HasMany $c) {

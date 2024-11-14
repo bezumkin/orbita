@@ -7,6 +7,7 @@ declare global {
   type VespUserRole = {
     id: number
     title: string
+    color?: string
     scope: string[]
   }
 
@@ -73,6 +74,7 @@ declare global {
     title: string
     content?: string
     price: number
+    color?: string
     active: bool
     new_cover?: {file: string; metadata: {[key: string]: any}} | Boolean
     cover_id?: number

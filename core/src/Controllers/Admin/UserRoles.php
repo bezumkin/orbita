@@ -27,6 +27,16 @@ class UserRoles extends ModelController
         return $c->withCount('users');
     }
 
+    protected function beforeSave(Model $record): ?ResponseInterface
+    {
+        /** @var UserRole $record */
+        if (!$record->color || !trim($record->color)) {
+            $record->color = null;
+        }
+
+        return null;
+    }
+
     protected function beforeDelete(Model $record): ?ResponseInterface
     {
         /** @var UserRole $record */

@@ -68,8 +68,9 @@ class Users extends ModelController
 
     protected function afterCount(Builder $c): Builder
     {
-        $c->with('role:id,title');
+        $c->with('role:id,title,color');
         $c->with('avatar:id,uuid,updated_at');
+        $c->with('currentSubscription:id,user_id,level_id', 'currentSubscription.level:id,title,color');
 
         return $c;
     }

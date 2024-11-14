@@ -4,6 +4,10 @@
       <BFormInput v-model="record.title" required autofocus />
     </BFormGroup>
 
+    <BFormGroup :label="$t('models.user_role.color')">
+      <BFormInput v-model="record.color" placeholder="#000" />
+    </BFormGroup>
+
     <BFormGroup :label="$t('models.user_role.scope')">
       <BFormTags v-model="record.scope" remove-on-delete placeholder="" :add-button-text="$t('actions.add')" />
     </BFormGroup>

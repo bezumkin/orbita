@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property ?string $content
  * @property float $price
  * @property ?int $cover_id
+ * @property ?string $color
  * @property bool $active
  * @property Carbon $created_at
  * @property Carbon $updated_at

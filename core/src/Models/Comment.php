@@ -143,6 +143,10 @@ class Comment extends Model
             $array['content']['blocks'] = !empty($array['content']['blocks'])
                 ? array_values($array['content']['blocks'])
                 : [];
+            if (isset($array['user']['current_subscription'])) {
+                $array['user']['subscription'] = $array['user']['current_subscription'];
+                unset($array['user']['current_subscription']);
+            }
         }
 
         if ($user && $this->relationLoaded('userReactions') && count($this->userReactions)) {

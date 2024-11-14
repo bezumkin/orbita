@@ -68,6 +68,7 @@ export default {
       title: 'Titel',
       scope: 'Scope',
       users: 'Benutzer',
+      color: 'Kommentare farbig ausmalen',
       filter: {
         all: 'Alle Rollen' + '',
       },
@@ -140,6 +141,7 @@ export default {
       content: 'Beschreibung',
       price: 'Preise',
       cover: 'Deckbild',
+      color: 'Kommentare farbig ausmalen',
       active: 'Aktiv',
       per_month: 'pro Monat',
     },

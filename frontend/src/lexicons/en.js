@@ -68,6 +68,7 @@ export default {
       title: 'Title',
       scope: 'Scope',
       users: 'Users',
+      color: 'Color in comments',
       filter: {
         all: 'All Roles',
       },
@@ -140,6 +141,7 @@ export default {
       content: 'Description',
       price: 'Price',
       cover: 'Cover image',
+      color: 'Color in comments',
       active: 'Enabled',
       per_month: 'per month',
     },

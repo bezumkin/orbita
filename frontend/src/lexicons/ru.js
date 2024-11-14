@@ -68,6 +68,7 @@ export default {
       title: 'Название',
       scope: 'Разрешения',
       users: 'Пользователи',
+      color: 'Цвет в комментариях',
       filter: {
         all: 'Все группы',
       },
@@ -140,6 +141,7 @@ export default {
       content: 'Описание',
       price: 'Цена',
       cover: 'Обложка',
+      color: 'Цвет в комментариях',
       active: 'Включено',
       per_month: 'в месяц',
     },

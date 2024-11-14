@@ -21,6 +21,10 @@
       <BFormTextarea v-model="record.content" rows="5" />
     </BFormGroup>
 
+    <BFormGroup :label="$t('models.level.color')">
+      <BFormInput v-model="record.color" placeholder="#000" />
+    </BFormGroup>
+
     <BFormGroup>
       <BFormCheckbox v-model="record.active">
         {{ $t('models.level.active') }}

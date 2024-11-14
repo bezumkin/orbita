@@ -77,19 +77,6 @@
 
         background-color: var(--bs-primary-bg-subtle);
       }
-
-      &.admin {
-        .comment-user {
-          color: var(--bs-danger);
-        }
-      }
-
-      &.paid,
-      &.author {
-        .comment-user {
-          color: var(--bs-success);
-        }
-      }
     }
 
     #comments-form {

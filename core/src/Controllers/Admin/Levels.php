@@ -58,6 +58,9 @@ class Levels extends ModelController
         if (!$price = (int)$this->getProperty('price')) {
             return $this->failure('errors.level.no_price');
         }
+        if (!$record->color || !trim($record->color)) {
+            $record->color = null;
+        }
 
         $this->isNew = !$record->exists;
 

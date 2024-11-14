@@ -5,7 +5,11 @@
         <template v-if="comment.active || isAdmin">
           <div class="comment-header">
             <div v-if="comment.user" class="comment-user">
-              <UserAvatar :user="comment.user" class="me-1" /> {{ comment.user.fullname }}
+              <UserAvatar :user="comment.user" class="me-1" />
+              <BLink v-if="isAdmin && comment.user_id !== user?.id" v-bind="getUserLinkAttrs(comment)">
+                {{ comment.user.fullname }}
+              </BLink>
+              <span v-else v-bind="getUserAttrs(comment)">{{ comment.user.fullname }}</span>
             </div>
             <div v-if="comment.created_at" class="comment-date">
               <BLink :href="getCommentLink(comment)" @click="(e) => (onLink ? onLink(e, comment) : {})">
@@ -117,6 +121,31 @@ const btnVariant = computed(() => {
 
 function getCommentLink(comment: VespComment) {
   return router.resolve({...route, hash: '#comment-' + comment.id}).href
+}
+
+function getUserLinkAttrs(comment: VespComment) {
+  return {
+    ...getUserAttrs(comment),
+    target: '_blank',
+    href: router.resolve({name: 'admin-users-id-edit', params: {id: comment.user_id}}).href,
+  }
+}
+
+function getUserAttrs(comment: VespComment) {
+  const attrs: Record<string, any> = {}
+  const color = comment.user?.role?.color || comment.user?.subscription?.level?.color
+  if (color) {
+    attrs.style = {color}
+  }
+  const title = [comment.user?.role?.title]
+  if (comment.user?.subscription?.level?.title) {
+    title.push(comment.user.subscription.level.title)
+  }
+  if (title.length) {
+    attrs.title = title.join(', ')
+  }
+
+  return attrs
 }
 
 function getCommentClass(comment: VespComment) {

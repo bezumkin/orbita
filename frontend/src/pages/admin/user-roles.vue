@@ -1,6 +1,10 @@
 <template>
   <div>
-    <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, sort, dir}" />
+    <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, sort, dir}">
+      <template #cell(title)="{value, item}: any">
+        <span :style="{color: item.color}">{{ value }}</span>
+      </template>
+    </VespTable>
     <NuxtPage />
   </div>
 </template>

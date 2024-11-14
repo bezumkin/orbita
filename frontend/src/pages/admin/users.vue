@@ -13,6 +13,12 @@
           </div>
         </div>
       </template>
+      <template #cell(role)="{value, item}: any">
+        <div :style="{color: value.color}">{{ value.title }}</div>
+        <div v-if="item.current_subscription" class="small" :style="{color: item.current_subscription.level?.color}">
+          {{ item.current_subscription.level?.title }}
+        </div>
+      </template>
     </VespTable>
 
     <NuxtPage />
@@ -32,7 +38,7 @@ const fields = computed(() => [
   {key: 'id', label: t('models.user.id'), sortable: true},
   {key: 'fullname', label: t('models.user.fullname')},
   {key: 'email', label: t('models.user.email'), sortable: true},
-  {key: 'role.title', label: t('models.user.role')},
+  {key: 'role', label: t('models.user.role')},
   {key: 'created_at', label: t('models.user.created_at'), sortable: true, formatter: formatDate},
   {key: 'active_at', label: t('models.user.active_at'), sortable: true, formatter: formatDate},
 ])

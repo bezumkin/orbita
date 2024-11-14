@@ -1,6 +1,9 @@
 <template>
   <div>
     <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
+      <template #cell(title)="{value, item}: any">
+        <span :style="{color: item.color}">{{ value }}</span>
+      </template>
       <template #cell(price)="{value}: any">
         {{ $price(value) }}
       </template>
