@@ -69,7 +69,7 @@ class Comments extends ModelController
     protected function afterCount(Builder $c): Builder
     {
         $c->with('user', function (BelongsTo $c) {
-            $c->select('id', 'username', 'fullname', 'role_id', 'avatar_id');
+            $c->select('id', 'username', 'fullname', 'role_id', 'avatar_id', 'blocked');
             $c->with('avatar:id,uuid,updated_at');
             $c->with('role:id,title,color');
             $c->with('currentSubscription:id,user_id,level_id', 'currentSubscription.level:id,title,color');

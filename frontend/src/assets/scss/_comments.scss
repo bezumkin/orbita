@@ -77,6 +77,18 @@
 
         background-color: var(--bs-primary-bg-subtle);
       }
+
+      &.blocked {
+        opacity: 0.75;
+
+        .comment-user {
+          text-decoration: line-through;
+
+          a, span {
+            color: inherit !important;
+          }
+        }
+      }
     }
 
     #comments-form {

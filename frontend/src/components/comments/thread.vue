@@ -152,6 +152,7 @@ function getCommentClass(comment: VespComment) {
   return {
     comment: true,
     deleted: !comment.active,
+    blocked: comment.user?.blocked,
     author: (comment.active || isAdmin.value) && props.topic.user_id === comment.user_id,
     admin: (comment.active || isAdmin.value) && comment.user?.role_id === 1,
     // paid: Boolean(comment.user?.paid),
