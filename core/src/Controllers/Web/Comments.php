@@ -151,9 +151,7 @@ class Comments extends ModelController
         /** @var Comment $record */
         $record->processUploadedFiles();
 
-        $record->refresh();
-        $record->load('user:id,username,fullname,role_id,avatar_id', 'user.avatar:id,uuid,updated_at');
-
+        $record = $this->afterCount(Comment::query())->find($record->id);
         if ($this->isNew) {
             Socket::send('comment-create', $this->prepareRow($record));
             $this->createNotifications($record);
