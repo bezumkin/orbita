@@ -57,6 +57,7 @@ class Video extends Model
         'processed_at' => 'datetime',
         'moved_at' => 'datetime',
     ];
+    private array $transcodeStatus = [];
 
     public function file(): BelongsTo
     {
@@ -198,14 +199,20 @@ class Video extends Model
                         );
                     }
 
-                    $quality->progress = number_format($percentage, 2);
-                    $quality->save();
-                    $this->progress = number_format($progress, 2);
-                    $this->save();
+                    $status = number_format($percentage, 2);
+                    if ($this->transcodeStatus[$quality->quality] !== $status) {
+                        $this->transcodeStatus[$quality->quality] = $status;
 
-                    $this->sendInfoToSocket();
+                        $quality->progress = $status;
+                        $quality->save();
+                        $this->progress = number_format($progress, 2);
+                        $this->save();
+
+                        $this->sendInfoToSocket();
+                    }
                 };
 
+                $this->transcodeStatus[$quality->quality] = 0;
                 $media->transcode($quality, $callback);
                 $quality->finishProcessing();
                 $step++;
@@ -325,19 +332,13 @@ class Video extends Model
             Log::error($e);
         }
 
-        $this->file->delete();
-        foreach ($this->qualities as $quality) {
+        foreach ($this->qualities()->cursor() as $quality) {
             $quality->delete();
         }
-        if ($this->image) {
-            $this->image->delete();
-        }
-        if ($this->audio) {
-            $this->audio->delete();
-        }
-        if ($this->thumbnail) {
-            $this->thumbnail->delete();
-        }
+        $this->file->delete();
+        $this->image?->delete();
+        $this->audio?->delete();
+        $this->thumbnail?->delete();
 
         return parent::delete();
     }
