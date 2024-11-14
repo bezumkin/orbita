@@ -363,7 +363,7 @@ class Video extends Model
             }
         }
 
-        Socket::send('transcode', $data);
+        Socket::send('transcode', $data, 'videos');
     }
 
     public function updateContentBlocks(): void

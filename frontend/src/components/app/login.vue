@@ -78,8 +78,8 @@ defineProps({
 })
 
 const {t} = useI18n()
-const {user, login, logout} = useAuth()
-const {$login, $variables} = useNuxtApp()
+const {loggedIn, user, login, logout} = useAuth()
+const {$login, $variables, $socket} = useNuxtApp()
 const showModal = computed({
   get() {
     return $login.value
@@ -185,4 +185,11 @@ function onTab() {
     })
   }
 }
+
+watch(loggedIn, () => {
+  if ($socket.connected) {
+    $socket.disconnect()
+  }
+  $socket.connect()
+})
 </script>

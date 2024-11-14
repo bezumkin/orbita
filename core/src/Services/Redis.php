@@ -11,11 +11,11 @@ class Redis extends Client
         parent::__construct(['host' => 'redis'], $options);
     }
 
-    public function send(string $event, mixed $data = []): void
+    public function send(string $event, mixed $data = [], ?string $room = 'general'): void
     {
         $this->publish(
-            'general',
-            json_encode(['secret' => getenv('SOCKET_SECRET'), 'event' => $event, 'data' => $data])
+            $room,
+            json_encode(['secret' => getenv('SOCKET_SECRET'), 'event' => $event, 'data' => $data], JSON_THROW_ON_ERROR)
         );
     }
 
