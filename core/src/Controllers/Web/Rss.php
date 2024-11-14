@@ -8,15 +8,22 @@ use Psr\Http\Message\ResponseInterface;
 
 class Rss extends Sitemap
 {
+    protected int $maxLimit = 100;
+
     public function get(): ResponseInterface
     {
+        $limit = abs((int)$this->getProperty('limit', 20));
+        if (!$limit || $limit > $this->maxLimit) {
+            $limit = $this->maxLimit;
+        }
+
         $rows = [];
         $topics = Topic::query()
             ->where('active', true)
             ->whereNotNull('published_at')
             ->with('cover:id,uuid,type,updated_at')
             ->with('user:id,fullname')
-            ->limit($this->getProperty('limit', 20))
+            ->limit($limit)
             ->orderByDesc('published_at');
         foreach ($topics->get() as $topic) {
             /** @var Topic $topic */

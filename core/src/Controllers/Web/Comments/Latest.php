@@ -10,11 +10,12 @@ use Vesp\Controllers\ModelGetController;
 class Latest extends ModelGetController
 {
     protected string $model = Comment::class;
+    protected int $maxLimit = 100;
 
     public function get(): ResponseInterface
     {
-        $limit = $this->getProperty('limit', 20);
-        if ($limit > $this->maxLimit) {
+        $limit = abs((int)$this->getProperty('limit', 20));
+        if (!$limit || $limit > $this->maxLimit) {
             $limit = $this->maxLimit;
         }
 
