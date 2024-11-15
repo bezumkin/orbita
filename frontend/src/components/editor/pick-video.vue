@@ -14,7 +14,7 @@
     <div class="grid">
       <BCard v-for="video in videos" :key="video.id" v-bind="getProps(video)" @click="pick(video)">
         <template #img>
-          <BImg v-if="video.image" :src="$image(video.image, {w: 1024})" />
+          <BImg v-if="video.image" :src="$image(video.image, {w: 1024})" class="border-bottom" />
         </template>
         <template #default>
           <div class="fw-medium">{{ video.title }}</div>
@@ -110,11 +110,13 @@ function pick(video: VespVideo) {
 function getProps(video: VespVideo) {
   const isActive = picked.value && picked.value.id === video.id
   return {
-    class: 'g-col-12 g-col-md-6 g-col-lg-4',
-    style: 'cursor: pointer',
+    class: 'g-col-12 g-col-md-6 g-col-lg-4 overflow-hidden',
     'body-class': 'd-flex flex-column',
-    'bg-variant': isActive ? 'white' : 'light',
-    'border-variant': isActive ? 'primary' : 'light',
+    style: {
+      cursor: 'pointer',
+      background: isActive ? 'var(--bs-secondary-bg)' : 'var(--bs-tertiary-bg)',
+      'border-color': isActive ? 'var(--bs-primary)' : '',
+    },
   }
 }
 
