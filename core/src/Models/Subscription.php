@@ -102,6 +102,7 @@ class Subscription extends Model
         } else {
             $this->active_until = $payment->paid_at->addMonths($period);
         }
+        $this->period = $period;
         $this->active = true;
         $this->cancelled = false;
         $this->next_level_id = null;
