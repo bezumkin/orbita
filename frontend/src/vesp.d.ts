@@ -191,6 +191,7 @@ declare module '@vue/runtime-core' {
     $sidebar: Ref<boolean>
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[] | Record<string, any>>>
+    $variables: Record<string, any>
     $pages: Ref<VespPage[]>
     $levels: Ref<VespLevel[]>
     $reactions: Ref<VespReaction[]>
@@ -214,6 +215,7 @@ declare module '#app' {
     $sidebar: Ref<boolean>
     $login: Ref<boolean>
     $settings: Ref<Record<string, string | string[] | Record<string, any>>>
+    $variables: Record<string, any>
     $pages: Ref<Record<string, any>[]>
     $levels: Ref<VespLevel[]>
     $reactions: Ref<VespReaction[]>
