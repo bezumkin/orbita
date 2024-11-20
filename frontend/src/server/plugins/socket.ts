@@ -6,7 +6,7 @@ import {createClient} from 'redis'
 import type {VespUser} from '@vesp/frontend'
 import {getApiUrl} from '#imports'
 
-const specialRooms = ['videos'] // We can add more rooms here
+const specialRooms = ['videos', 'payments'] // We can add more rooms here
 
 function checkScope(required: string, user: VespUser) {
   const userScope = user.role?.scope
