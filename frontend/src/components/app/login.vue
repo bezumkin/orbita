@@ -33,37 +33,39 @@
       </div>
     </Transition>
 
-    <BModal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
-      <BOverlay :show="loading" opacity="0.5">
-        <BTabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
-          <BTab :title="$t('security.login')">
-            <BForm @submit.prevent="onLogin">
-              <FormsLogin v-model="formLogin" />
-              <div class="text-center">
-                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
-              </div>
-            </BForm>
-          </BTab>
-          <BTab v-if="registerEnabled" :title="$t('security.register')">
-            <BForm @submit.prevent="onRegister">
-              <FormsRegister v-model="formRegister" />
-              <div class="text-center">
-                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
-              </div>
-            </BForm>
-          </BTab>
-          <BTab :title="$t('security.reset')">
-            <BForm @submit.prevent="onReset">
-              <FormsReset v-model="formReset" />
-              <div class="alert alert-light">{{ $t('security.reset_desc') }}</div>
-              <div class="text-center">
-                <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
-              </div>
-            </BForm>
-          </BTab>
-        </BTabs>
-      </BOverlay>
-    </BModal>
+    <ClientOnly>
+      <BModal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
+        <BOverlay :show="loading" opacity="0.5">
+          <BTabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
+            <BTab :title="$t('security.login')">
+              <BForm @submit.prevent="onLogin">
+                <FormsLogin v-model="formLogin" />
+                <div class="text-center">
+                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                </div>
+              </BForm>
+            </BTab>
+            <BTab v-if="registerEnabled" :title="$t('security.register')">
+              <BForm @submit.prevent="onRegister">
+                <FormsRegister v-model="formRegister" />
+                <div class="text-center">
+                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                </div>
+              </BForm>
+            </BTab>
+            <BTab :title="$t('security.reset')">
+              <BForm @submit.prevent="onReset">
+                <FormsReset v-model="formReset" />
+                <div class="alert alert-light">{{ $t('security.reset_desc') }}</div>
+                <div class="text-center">
+                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                </div>
+              </BForm>
+            </BTab>
+          </BTabs>
+        </BOverlay>
+      </BModal>
+    </ClientOnly>
   </div>
 </template>
 
