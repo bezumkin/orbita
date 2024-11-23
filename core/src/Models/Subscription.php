@@ -133,7 +133,7 @@ class Subscription extends Model
     public function charge(): ?Payment
     {
         $service = $this->getService();
-        if ($this->remote_id && $service::SUBSCRIPTIONS) {
+        if ($this->remote_id && !$this->cancelled && $service::SUBSCRIPTIONS) {
             $payment = $this->createPayment($this->next_period ?? $this->period);
             $payment->save();
 
