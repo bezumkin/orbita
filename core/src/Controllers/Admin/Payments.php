@@ -18,7 +18,8 @@ class Payments extends ModelController
     {
         if ($query = trim($this->getProperty('query', ''))) {
             $c->where(static function (Builder $c) use ($query) {
-                $c->whereHas('user', static function (Builder $c) use ($query) {
+                $c->where('service', $query);
+                $c->orWhereHas('user', static function (Builder $c) use ($query) {
                     $c->where('username', 'LIKE', "%$query%");
                     $c->orWhere('fullname', 'LIKE', "%$query%");
                     $c->orWhere('email', 'LIKE', "%$query%");
