@@ -93,22 +93,22 @@ export const useTopicsStore = defineStore('topics', () => {
     })
 
     $socket.on('comment-create', (comment: VespComment) => {
-      const topic = topics.value.find((i: VespTopic) => i.uuid === comment.topic.uuid)
-      if (topic) {
+      const topic = topics.value.find((i: VespTopic) => i.id === comment.topic_id)
+      if (topic && topic.comments_count !== undefined) {
         topic.comments_count++
         if (comment.created_at && topic.viewed_at && comment.created_at > topic.viewed_at) {
-          if (user.value && comment.user_id !== user.value.id) {
+          if (user.value && comment.user_id !== user.value.id && topic.unseen_comments_count !== undefined) {
             topic.unseen_comments_count++
           }
         }
       }
     })
     $socket.on('comment-delete', (comment: VespComment) => {
-      const topic = topics.value.find((i: VespTopic) => i.uuid === comment.topic.uuid)
-      if (topic) {
+      const topic = topics.value.find((i: VespTopic) => i.id === comment.topic_id)
+      if (topic && topic.comments_count !== undefined) {
         topic.comments_count--
         if (comment.created_at && topic.viewed_at && comment.created_at > topic.viewed_at) {
-          if (user.value && comment.user_id !== user.value.id) {
+          if (user.value && comment.user_id !== user.value.id && topic.unseen_comments_count !== undefined) {
             topic.unseen_comments_count--
             if (topic.unseen_comments_count < 0) {
               topic.unseen_comments_count = 0
