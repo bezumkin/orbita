@@ -1,5 +1,13 @@
 <template>
   <div>
+    <ChartCommon
+      v-if="chartEnabled"
+      name="subscriptions"
+      endpoint="admin/subscriptions/stat"
+      :formatter="(v: number) => formatBigNumber(v)"
+      class="mb-5"
+    />
+
     <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
       <template #cell(title)="{value, item}: any">
         <span :style="{color: item.color}">{{ value }}</span>
@@ -24,6 +32,10 @@
 
 <script setup lang="ts">
 import type {VespTableAction} from '@vesp/frontend'
+import {formatBigNumber} from '~/utils/vesp'
+
+const {$variables} = useNuxtApp()
+const chartEnabled = $variables.value.CHART_SUBSCRIPTIONS_DISABLE !== '1'
 
 const {t} = useI18n()
 const table = ref()

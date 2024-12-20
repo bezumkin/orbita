@@ -1,6 +1,14 @@
 <template>
   <div>
-    <ChartPayments v-if="chartEnabled" :filter="filters" class="mb-5" :date="filters.date" />
+    <ChartCommon
+      v-if="chartEnabled"
+      name="payments"
+      endpoint="admin/payments/stat"
+      event="payment"
+      :date="filters.date"
+      :formatter="(v: any) => $price(v, true)"
+      class="mb-5"
+    />
 
     <VespTable ref="table" v-bind="{url, sort, dir, fields, filters, tableActions, rowClass, onLoad}">
       <template #header-start>

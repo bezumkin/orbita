@@ -66,6 +66,20 @@ class Topic extends Model
                 $model->uuid = Uuid::uuid4();
             }
         });
+
+        static::deleting(
+            static function (self $record) {
+                /** @var TopicFile $topicFile */
+                foreach ($record->contentFiles()->cursor() as $topicFile) {
+                    $count = TopicFile::query()
+                        ->where('file_id', $topicFile->file_id)->where('topic_id', '!=', $record->id)
+                        ->count();
+                    if (!$count) {
+                        $topicFile->file->delete();
+                    }
+                }
+            }
+        );
     }
 
     public function user(): BelongsTo

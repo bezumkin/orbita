@@ -1,5 +1,13 @@
 <template>
   <div>
+    <ChartCommon
+      v-if="chartEnabled"
+      name="users"
+      endpoint="admin/users/stat"
+      :formatter="(v: number) => formatBigNumber(v)"
+      class="mb-5"
+    />
+
     <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
       <template #header-middle>
         <BFormSelect v-model="filters.role_id" class="mt-2 mt-md-0" :options="roles" />
@@ -27,6 +35,10 @@
 
 <script setup lang="ts">
 import type {VespTableAction} from '@vesp/frontend'
+import {formatBigNumber} from '~/utils/vesp'
+
+const {$variables} = useNuxtApp()
+const chartEnabled = $variables.value.CHART_USERS_DISABLE !== '1'
 
 const {t, d} = useI18n()
 const table = ref()

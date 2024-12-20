@@ -2,7 +2,7 @@
   <div>
     <BRow class="mb-2 row-gap-3" align-v="center">
       <BCol md="6" class="d-flex gap-3 justify-content-center justify-content-md-start order-1 order-md-0">
-        <span class="fw-bold">{{ $price(sum, true) }}</span>
+        <span class="fw-bold">{{ formatter(sum, 'sum') }}</span>
         <span v-if="diff > '0'" class="text-success">{{ diff }}%&nbsp;&uarr;</span>
         <span v-else-if="diff < '0'" class="text-danger">{{ diff }}%&nbsp;&darr;</span>
       </BCol>
@@ -26,6 +26,24 @@ import Annotation from 'chartjs-plugin-annotation'
 import {format} from 'date-fns'
 
 const props = defineProps({
+  endpoint: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    default: '',
+  },
+  event: {
+    type: String,
+    default: '',
+  },
+  formatter: {
+    type: Function,
+    default(value: any) {
+      return value
+    },
+  },
   date: {
     type: Array,
     default() {
@@ -35,7 +53,7 @@ const props = defineProps({
 })
 
 const locale = useDateLocale().value
-const {$price, $i18n, $isMobile, $socket} = useNuxtApp()
+const {$i18n, $isMobile, $socket} = useNuxtApp()
 
 let chart: Chart
 const image = ref()
@@ -71,7 +89,7 @@ const diff = computed(() => {
 
 async function fetch() {
   try {
-    const data = await useGet('admin/payments/stat', {date: props.date, filter: filter.value, page: filterPage.value})
+    const data = await useGet(props.endpoint, {date: props.date, filter: filter.value, page: filterPage.value})
     values.value = data.rows
     filterPages.value = data.pages
     sum.value = data.sum
@@ -123,7 +141,7 @@ async function init() {
               return [format(date, 'dd.MM.yyyy', {locale}), format(date, 'EEEE', {locale})]
             },
             label: function (item: Record<string, any>) {
-              return $price(item.raw, true)
+              return props.formatter(item.raw, 'label')
             },
           },
         },
@@ -154,7 +172,7 @@ async function init() {
           beginAtZero: true,
           ticks: {
             callback(value) {
-              return value ? $price(value) : ''
+              return value ? props.formatter(value, 'tick') : ''
             },
           },
         },
@@ -200,17 +218,22 @@ function onNext() {
   filterPage.value++
 }
 
+function getName() {
+  return props.name !== '' ? props.name : props.endpoint?.split('/').join('-')
+}
+
 function getStorage() {
   const storage = JSON.parse(localStorage.getItem('chart') || '{}')
-  return storage.payments || {}
+  return storage[getName()] || {}
 }
 
 function setStorage(key: string, value: any) {
   const storage = JSON.parse(localStorage.getItem('chart') || '{}')
-  if (!storage.payments) {
-    storage.payments = {}
+  const name = getName()
+  if (!storage[name]) {
+    storage[name] = {}
   }
-  storage.payments[key] = value
+  storage[name][key] = value
   localStorage.setItem('chart', JSON.stringify(storage))
 }
 
@@ -231,14 +254,18 @@ onMounted(() => {
   }
 
   init()
-  $socket.on('payment', () => {
-    if (!props.date.length && filterPage.value === 1) {
-      fetch()
-    }
-  })
+  if (props.event) {
+    $socket.on(props.event, () => {
+      if (!props.date.length && filterPage.value === 1) {
+        fetch()
+      }
+    })
+  }
 })
 
 onBeforeUnmount(() => {
-  $socket.off('payment')
+  if (props.event) {
+    $socket.off(props.event)
+  }
 })
 </script>
