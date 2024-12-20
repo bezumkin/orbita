@@ -4,11 +4,12 @@
       v-if="chartEnabled"
       name="subscriptions"
       endpoint="admin/subscriptions/stat"
+      event="subscription"
       :formatter="(v: number) => formatBigNumber(v)"
       class="mb-5"
     />
 
-    <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
+    <VespTable ref="table" v-bind="{url, fields, filters, headerActions, tableActions, rowClass, sort, dir}">
       <template #cell(title)="{value, item}: any">
         <span :style="{color: item.color}">{{ value }}</span>
       </template>
@@ -34,7 +35,7 @@
 import type {VespTableAction} from '@vesp/frontend'
 import {formatBigNumber} from '~/utils/vesp'
 
-const {$variables} = useNuxtApp()
+const {$socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_SUBSCRIPTIONS_DISABLE !== '1'
 
 const {t} = useI18n()
@@ -48,7 +49,7 @@ const fields = computed(() => [
   {key: 'cover', label: t('models.level.cover')},
   {key: 'title', label: t('models.level.title')},
   {key: 'price', label: t('models.level.price'), sortable: true},
-  {key: 'active_users_count', label: t('models.user.title_many'), formatter: formatBigNumber, sortable: true},
+  {key: 'active_users_count', label: t('models.user.title_many'), formatter: formatNumber, sortable: true},
 ])
 const headerActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-levels-create'}, icon: 'plus', title: t('actions.create')},
@@ -57,6 +58,10 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-levels-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
+
+function formatNumber(value: any) {
+  return value ? formatBigNumber(value) : ''
+}
 
 function rowClass(item: any) {
   if (item) {
@@ -67,4 +72,16 @@ function rowClass(item: any) {
     return cls
   }
 }
+
+onMounted(() => {
+  $socket.on('subscription', () => {
+    if (!filters.value.query && table.value.page === 1) {
+      table.value.refresh()
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  $socket.off('subscription')
+})
 </script>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\PaymentService;
+use App\Services\Socket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -110,6 +111,9 @@ class Subscription extends Model
         $this->save();
 
         $this->sendEmail('paid');
+        if (!Carbon::now()->diffInDays($this->created_at)) {
+            Socket::send('subscription', [], 'levels');
+        }
     }
 
     public function disable(): void

@@ -4,6 +4,7 @@
       v-if="chartEnabled"
       name="users"
       endpoint="admin/users/stat"
+      event="user"
       :formatter="(v: number) => formatBigNumber(v)"
       class="mb-5"
     />
@@ -37,7 +38,7 @@
 import type {VespTableAction} from '@vesp/frontend'
 import {formatBigNumber} from '~/utils/vesp'
 
-const {$variables} = useNuxtApp()
+const {$socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_USERS_DISABLE !== '1'
 
 const {t, d} = useI18n()
@@ -87,5 +88,15 @@ onMounted(async () => {
       roles.value.push({value: item.id, text: item.title})
     })
   } catch (e) {}
+
+  $socket.on('user', () => {
+    if (!filters.value.query && table.value.page === 1) {
+      table.value.refresh()
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  $socket.off('user')
 })
 </script>

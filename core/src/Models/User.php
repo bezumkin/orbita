@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Mail;
+use App\Services\Socket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -139,6 +140,8 @@ class User extends \Vesp\Models\User
         $this->reset_at = null;
         $this->timestamps = false;
         $this->save();
+
+        Socket::send('user', [], 'users');
 
         return true;
     }
