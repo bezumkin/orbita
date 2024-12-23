@@ -138,7 +138,7 @@ class Comment extends Model
         if (!$this->active && (!$user || !$user->hasScope('comments'))) {
             $array['user_id'] = null;
             $array['user'] = [];
-            $array['content'] = '';
+            $array['content'] = [];
         } else {
             $array['content']['blocks'] = !empty($array['content']['blocks'])
                 ? array_values($array['content']['blocks'])
