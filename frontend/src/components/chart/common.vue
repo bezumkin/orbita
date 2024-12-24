@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="values.length">
     <BRow class="mb-2 row-gap-3" align-v="center">
       <BCol md="6" class="d-flex gap-3 justify-content-center justify-content-md-start order-1 order-md-0">
         <span class="fw-bold">{{ formatter(sum, 'sum') }}</span>
@@ -55,9 +55,9 @@ const props = defineProps({
 const locale = useDateLocale().value
 const {$i18n, $isMobile, $socket} = useNuxtApp()
 
-let chart: Chart
+let chart: Chart<'line', string[], string>
 const image = ref()
-const values = ref()
+const values = ref([])
 const sum = ref(0)
 const previous = ref(0)
 const options = [
@@ -99,6 +99,9 @@ async function fetch() {
 
 async function init() {
   await fetch()
+  if (!values.value.length) {
+    return
+  }
 
   Chart.register(LinearScale, CategoryScale, LineController, LineElement, PointElement, Filler, Tooltip, Annotation)
 

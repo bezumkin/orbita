@@ -13,12 +13,12 @@ class Stat extends Controller
 
     protected string|array $scope = 'payments';
 
-    protected function getMinDate(): string
+    protected function getMinDate(): ?string
     {
         return Payment::query()->where('paid', true)->min('created_at');
     }
 
-    protected function getMaxDate(): string
+    protected function getMaxDate(): ?string
     {
         return Payment::query()->where('paid', true)->max('created_at');
     }

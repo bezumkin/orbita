@@ -13,12 +13,12 @@ class Stat extends Controller
 
     protected string|array $scope = 'users';
 
-    protected function getMinDate(): string
+    protected function getMinDate(): ?string
     {
         return User::query()->where('active', true)->min('created_at');
     }
 
-    protected function getMaxDate(): string
+    protected function getMaxDate(): ?string
     {
         return User::query()->where('active', true)->max('created_at');
     }

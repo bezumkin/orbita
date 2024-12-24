@@ -9,7 +9,16 @@ trait StatModelController
 {
     public function get(): ResponseInterface
     {
-        $minDate = Carbon::createFromTimestamp(strtotime($this->getMinDate()))->toImmutable();
+        if (!$minDate = $this->getMinDate()) {
+            return $this->success([
+                'total' => 0,
+                'pages' => 0,
+                'rows' => [],
+                'sum' => 0,
+                'previous' => 0,
+            ]);
+        }
+        $minDate = Carbon::createFromTimestamp(strtotime($minDate))->toImmutable();
 
         $pages = 0;
         $previous = false;

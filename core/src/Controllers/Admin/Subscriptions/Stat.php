@@ -13,12 +13,12 @@ class Stat extends Controller
 
     protected string|array $scope = 'levels';
 
-    protected function getMinDate(): string
+    protected function getMinDate(): ?string
     {
         return Subscription::query()->whereNotNull('active_until')->min('created_at');
     }
 
-    protected function getMaxDate(): string
+    protected function getMaxDate(): ?string
     {
         return Subscription::query()->whereNotNull('active_until')->max('created_at');
     }
