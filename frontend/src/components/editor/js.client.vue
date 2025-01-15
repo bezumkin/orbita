@@ -81,7 +81,7 @@ const holder = ref()
 const editor = ref()
 const {locale, t} = useI18n()
 const currentBlockIdx = ref(0)
-const messages = computed(() => (locale.value === 'ru' ? ruEditor : undefined))
+const messages = computed(() => (locale.value === 'ru' ? convertLexicon(ruEditor) : undefined))
 const allBlocks = [
   {
     type: 'header',
