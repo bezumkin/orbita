@@ -1,5 +1,5 @@
 <template>
-  <VespModal :title="record.title" size="lg" :cancel-title="$t('actions.close')">
+  <VespModal :title="record.title" size="lg" cancel-title="actions.close">
     <div class="d-flex flex-column gap-2">
       <TopicBlockVideo v-bind="props" />
     </div>

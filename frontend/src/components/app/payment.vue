@@ -1,5 +1,5 @@
 <template>
-  <BModal id="payment" v-model="showModal" v-bind="{title, size, hideFooter: isVariants}" @hidden="onCancel">
+  <BModal id="payment" v-model="showModal" v-bind="{title, size, noFooter: isVariants}" @hidden="onCancel">
     <div v-if="$payment && !qr">
       <Transition name="fade" mode="out-in">
         <PaymentVariants v-if="isVariants" v-model="paymentProperties" @title="(v: string) => (title = v)" />

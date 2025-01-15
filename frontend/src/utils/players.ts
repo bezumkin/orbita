@@ -23,11 +23,13 @@ defineCustomElement(MediaProviderElement)
 defineCustomElement(MediaVideoLayoutElement)
 defineCustomElement(MediaAudioLayoutElement)
 
+type storageKey = 'quality' | 'time' | 'speed' | 'volume'
+
 let oldBrowser = false
 if (import.meta.client && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
   const version = navigator.userAgent.match(/OS (\d+)/)
   if (version) {
-    oldBrowser = version[1] < 17
+    oldBrowser = version[1] < '17'
   }
 }
 
@@ -116,12 +118,20 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
   player.addEventListener('error', (e: MediaErrorEvent) => {
     onError(e)
     if (e.detail.message === 'PIPELINE_ERROR_DECODE') {
-      player.storage?.setVideoQuality(player.qualities[0])
-      player.provider.instance.recoverMediaError()
-      player.provider.instance.currentLevel = 0
+      if (player.storage instanceof MediaDatabaseStorage) {
+        player.storage?.setVideoQuality(player.qualities[0] as SerializedVideoQuality)
+      }
+      // @ts-ignore
+      if (player.provider?.instance) {
+        // @ts-ignore
+        player.provider.instance.recoverMediaError()
+        // @ts-ignore
+        player.provider.instance.currentLevel = 0
+      }
     }
   })
 
+  // @ts-ignore
   player.addEventListener('provider-change', ({provider}) => {
     if (provider?.type === 'hls') {
       provider.library = HLS
@@ -133,7 +143,7 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
 
   player.addEventListener('hls-level-switched', ({detail}) => {
     const {level} = detail
-    if (player.qualities[level]) {
+    if (player.qualities[level] && player.storage instanceof MediaDatabaseStorage) {
       player.storage?.setVideoQuality(player.qualities[level])
     }
   })
@@ -386,7 +396,7 @@ class MediaDatabaseStorage implements MediaStorage {
 
       if (this.forcedStatus) {
         Object.keys(this.forcedStatus).forEach((key) => {
-          this.setValue(key, this.forcedStatus[key])
+          this.setValue(key as storageKey, this.forcedStatus[key])
         })
       }
     } catch (e) {

@@ -34,7 +34,7 @@
     </Transition>
 
     <ClientOnly>
-      <BModal v-model="showModal" hide-footer :auto-focus="false" @shown="onShown">
+      <BModal v-model="showModal" no-footer :auto-focus="false" @shown="onShown">
         <BOverlay :show="loading" opacity="0.5">
           <BTabs ref="tabs" pills justified content-class="mt-3" @update:model-value="onTab">
             <BTab :title="$t('security.login')">

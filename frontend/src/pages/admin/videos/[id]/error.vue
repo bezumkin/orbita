@@ -1,5 +1,5 @@
 <template>
-  <VespModal :title="record.title" :cancel-title="$t('actions.close')">
+  <VespModal :title="record.title" cancel-title="actions.close">
     <BFormGroup :label="$t('models.video.error')">
       <BFormTextarea v-model="record.error" disabled rows="10" />
     </BFormGroup>

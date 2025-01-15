@@ -60,7 +60,7 @@ const imageProps = computed(() => {
   }
   return {
     src: $image(file as VespFile, {h: 400, fit: 'crop'}),
-    srcSet: $image(file as VespFile, {h: 800, fit: 'crop'}) + ' 2x',
+    srcset: $image(file as VespFile, {h: 800, fit: 'crop'}) + ' 2x',
   }
 })
 

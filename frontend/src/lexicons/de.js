@@ -70,7 +70,7 @@ export default {
       users: 'Benutzer',
       color: 'Kommentare farbig ausmalen',
       filter: {
-        all: 'Alle Rollen' + '',
+        all: 'Alle Rollen',
       },
     },
     video: {

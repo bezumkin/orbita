@@ -64,7 +64,7 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {
     route: {name: 'admin-videos-id-qualities'},
     icon: 'list',
-    title: t('models.video_quality.title'),
+    title: t('models.video_quality.title_many'),
     isActive: (item: any) => item && item.progress !== null,
   },
   {
@@ -135,16 +135,20 @@ function rowClass(item: any) {
 }
 
 function listener(data: any) {
-  if (table.value && table.value.items) {
-    const item = table.value.items.find((i: any) => i.id === data.id)
-    if (item) {
+  if (table.value && table.value.items && table.value.setItems) {
+    const items = JSON.parse(JSON.stringify(table.value.items))
+    const idx = items.findIndex((i: any) => i.id === data.id)
+    if (idx > -1) {
+      const item = items[idx]
       const keys = Object.keys(data)
       Object.keys(item).forEach((key: string) => {
         if (keys.includes(key)) {
           item[key] = data[key]
         }
       })
+      items[idx] = item
     }
+    table.value.setItems(items)
   }
 }
 

@@ -34,7 +34,7 @@ const imgProps = computed(() => {
   }
   if (props.user.avatar) {
     data.src = $image(props.user.avatar, {w: props.size, h: props.size, fit: 'crop'})
-    data.srcSet = $image(props.user.avatar, {w: Number(props.size) * 2, h: Number(props.size) * 2, fit: 'crop'}) + ' 2x'
+    data.srcset = $image(props.user.avatar, {w: Number(props.size) * 2, h: Number(props.size) * 2, fit: 'crop'}) + ' 2x'
   }
   return data
 })

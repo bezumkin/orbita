@@ -120,7 +120,7 @@ function getProps(video: VespVideo) {
   }
 }
 
-const pickVideo: Function | undefined = inject('pickVideo')
+const pickVideo: ((value: VespVideo | undefined) => void) | undefined = inject('pickVideo')
 function useVideo() {
   if (pickVideo && picked.value) {
     pickVideo(picked.value)

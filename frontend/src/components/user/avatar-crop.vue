@@ -21,7 +21,7 @@ import Cropper from 'cropperjs'
 
 const props = defineProps({
   modelValue: {
-    type: Object as PropType<VespUser>,
+    type: Object as PropType<Record<string, any>>,
     required: true,
   },
   required: {
@@ -57,6 +57,7 @@ function initCropper() {
     rotatable: false,
     scalable: false,
     zoomable: false,
+    responsive: true,
     crop: () => {
       const value = record.value
       value.metadata.crop = cropper.value.getData(true)
@@ -72,7 +73,7 @@ function destroyCropper() {
   cropper.value = undefined
 }
 
-function replaceFile(file, crop: Record<string, number> | undefined) {
+function replaceFile(file: string, crop: Record<string, number> | undefined = undefined) {
   if (!cropper.value) {
     initCropper()
   }
@@ -90,7 +91,8 @@ function onSelect() {
   input.multiple = false
   input.accept = 'image/*'
   input.onchange = (e) => {
-    onAddFile({dataTransfer: {files: e.target.files}})
+    // @ts-ignore
+    onAddFile({dataTransfer: {files: (e.target as HTMLInputElement).files as FileList}})
   }
   input.click()
 }
@@ -101,15 +103,15 @@ function onClick() {
   }
 }
 
-function onAddFile({dataTransfer}) {
+function onAddFile({dataTransfer}: DragEvent) {
   dragCount.value = 0
-  const file = Array.from(dataTransfer.files).shift()
+  const file = Array.from(dataTransfer?.files as FileList).shift() as File
   if (file.type.includes('image/')) {
     const reader = new FileReader()
     reader.onload = () => {
       record.value.file = reader.result
       record.value.metadata = {name: file.name, size: file.size, type: file.type, crop: null}
-      replaceFile(reader.result)
+      replaceFile(reader.result as string)
     }
     reader.readAsDataURL(file)
   }
@@ -129,7 +131,9 @@ watch(
     if (!newValue.file) {
       destroyCropper()
     } else {
-      replaceFile(newValue.file, newValue.metadata?.crop)
+      setTimeout(() => {
+        replaceFile(newValue.file, newValue.metadata?.crop)
+      }, 100)
     }
   },
 )

@@ -1,5 +1,5 @@
 <template>
-  <VespModal :title="record.title" size="lg" :cancel-title="$t('actions.close')">
+  <VespModal :title="record.title" size="lg" cancel-title="actions.close">
     <div class="vesp-table">
       <BTable ref="table" :fields="fields" :items="qualities" responsive>
         <template #cell(progress)="{item, value}">

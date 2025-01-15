@@ -181,6 +181,7 @@ declare global {
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $i18n: i18n
+    $t: i18n.t
     $image: getImageLink
     $file: getFileLink
     $scope: hasScope
@@ -205,6 +206,7 @@ declare module '@vue/runtime-core' {
 declare module '#app' {
   interface NuxtApp {
     $i18n: i18n
+    $t: i18n.t
     $image: getImageLink
     $file: getFileLink
     $scope: hasScope

@@ -1,4 +1,4 @@
-import type {NitroApp} from 'nitropack'
+import {type NitroApp} from 'nitropack/types'
 import {Server as Engine} from 'engine.io'
 import {Server} from 'socket.io'
 import {defineEventHandler} from 'h3'
@@ -66,22 +66,18 @@ export default defineNitroPlugin(async (nitroApp: NitroApp) => {
     '/socket.io/',
     defineEventHandler({
       handler(event) {
+        // @ts-expect-error
         engine.handleRequest(event.node.req, event.node.res)
         event._handled = true
       },
       websocket: {
         open(peer) {
-          const nodeContext = peer.ctx.node
-          const req = nodeContext.req
-
+          // @ts-expect-error private method
+          const req = peer._internal.nodeReq
           // @ts-expect-error private method
           engine.prepare(req)
-
-          const rawSocket = nodeContext.req.socket
-          const websocket = nodeContext.ws
-
           // @ts-expect-error private method
-          engine.onWebSocket(req, rawSocket, websocket)
+          engine.onWebSocket(req, req.socket, peer.websocket)
         },
       },
     }),

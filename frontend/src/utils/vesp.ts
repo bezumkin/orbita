@@ -140,8 +140,8 @@ export function getAdminSections() {
   let sections: Record<string, any>[] = []
   if (userSections) {
     const allKeys = Object.keys(allSections)
-    const userKeys = userSections.split(',').map((key) => key.toLowerCase().trim())
-    userKeys.forEach((key) => {
+    const userKeys = userSections.split(',').map((key: string) => key.toLowerCase().trim())
+    userKeys.forEach((key: string) => {
       if (key === '-' || key === '') {
         sections.push({disabled: true})
       } else if (allKeys.includes(key)) {

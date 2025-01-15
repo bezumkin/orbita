@@ -1,5 +1,5 @@
 <template>
-  <VespModal size="lg" hide-footer :title="$t('models.tag.title_many')">
+  <VespModal size="lg" no-footer :title="$t('models.tag.title_many')">
     <VespTable ref="table" v-bind="{url, fields, tableActions, limit, filters, sort, dir}">
       <template #cell(title)="{item}">
         <BForm @submit.prevent="onSave">

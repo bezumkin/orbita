@@ -32,9 +32,8 @@ type RecordFile = {
 }
 
 const props = defineProps({
-  // @ts-ignore
   modelValue: {
-    type: [Object as PropType<RecordFile>, Boolean],
+    type: [Boolean, Object],
     default() {
       return {file: undefined, metadata: undefined}
     },
@@ -85,7 +84,7 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['update:modelValue'])
-const record = computed({
+const record = computed<RecordFile | boolean>({
   get() {
     return props.modelValue
   },
@@ -104,6 +103,7 @@ const classes = computed(() => {
     if (typeof props.wrapperClass === 'string') {
       cls.push(props.wrapperClass)
     } else {
+      // @ts-ignore
       cls.concat(props.wrapperClass)
     }
   }

@@ -4,9 +4,9 @@ import type {NuxtConfig} from '@nuxt/schema'
 
 const enabledLocales = (process.env.LOCALES || 'ru,en,de').split(',')
 const locales = [
-  {code: 'ru', name: 'Русский', file: 'lexicons/ru.js', iso: 'ru-RU'},
-  {code: 'en', name: 'English', file: 'lexicons/en.js', iso: 'en-GB'},
-  {code: 'de', name: 'Deutsch', file: 'lexicons/de.js', iso: 'de-DE'},
+  {code: 'ru', name: 'Русский', file: 'ru.js', language: 'ru-RU'},
+  {code: 'en', name: 'English', file: 'en.js', language: 'en-GB'},
+  {code: 'de', name: 'Deutsch', file: 'de.js', language: 'de-DE'},
 ].filter((i) => enabledLocales.includes(i.code))
 
 const config: NuxtConfig = {
@@ -26,6 +26,9 @@ const config: NuxtConfig = {
         },
       },
     },
+  },
+  experimental: {
+    appManifest: false,
   },
   nitro: {
     experimental: {websocket: true},
@@ -119,13 +122,15 @@ const config: NuxtConfig = {
     },
   },
   i18n: {
+    langDir: 'lexicons',
+    restructureDir: 'src',
     defaultLocale: locales[0].code,
     detectBrowserLanguage: {
       fallbackLocale: locales[0].code,
     },
     locales,
   },
-  compatibilityDate: '2024-09-04',
+  compatibilityDate: '2025-01-07',
 }
 
 if (process.env.NODE_ENV === 'development') {
