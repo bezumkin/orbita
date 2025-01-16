@@ -29,7 +29,7 @@ import VideoBlock from './blocks/video'
 import EmbedBlock from './blocks/embed'
 import CodeBlock from './blocks/code'
 import Kbd from './blocks/kbd'
-import ruEditor from '~/lexicons/ru-editor'
+import ruLexicon from './lexicons/ru'
 
 const props = defineProps({
   modelValue: {
@@ -81,7 +81,7 @@ const holder = ref()
 const editor = ref()
 const {locale, t} = useI18n()
 const currentBlockIdx = ref(0)
-const messages = computed(() => (locale.value === 'ru' ? convertLexicon(ruEditor) : undefined))
+const messages = computed(() => (locale.value === 'ru' ? ruLexicon : undefined))
 const allBlocks = [
   {
     type: 'header',
