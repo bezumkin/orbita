@@ -189,17 +189,3 @@ export function scrollToTop() {
     behavior: 'smooth',
   })
 }
-
-export function convertLexicon(source: Record<string, any>): Record<string, any> {
-  const lexicon: Record<string, any> = {}
-  for (const key in source) {
-    if (typeof source[key] === 'object') {
-      if ('loc' in source[key] && 'source' in source[key].loc) {
-        lexicon[key] = source[key].loc.source
-      } else {
-        lexicon[key] = {...convertLexicon(source[key])}
-      }
-    }
-  }
-  return lexicon
-}

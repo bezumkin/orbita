@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import slugify from 'slugify'
 
-const {$price} = useNuxtApp()
+const {$price, $settings} = useNuxtApp()
 const {t, d} = useI18n()
 const url = 'user/payments'
 const sort = 'created_at'
@@ -69,4 +69,8 @@ function formatDate(value: any) {
 function rowClass(item: any) {
   return !item || !item.paid ? 'inactive' : ''
 }
+
+useHead({
+  title: () => [t('pages.user.payments'), t('pages.user.title'), $settings.value.title].join(' / '),
+})
 </script>
