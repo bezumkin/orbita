@@ -10,62 +10,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const store = useVespStore()
   const {sidebar, login, isMobile, payment, variables} = storeToRefs(store)
 
-  nuxtApp.provide('file', getFileLink)
-  nuxtApp.provide('contentPreview', contentPreview)
-  nuxtApp.provide('contentClick', contentClick)
-  nuxtApp.provide('sidebar', sidebar)
-  nuxtApp.provide('login', login)
-  nuxtApp.provide('isMobile', isMobile)
-  nuxtApp.provide('payment', payment)
-  nuxtApp.provide('variables', variables)
-  nuxtApp.provide('price', (val: number, zero: boolean = false) => {
-    if (!val && !zero) {
-      return ''
-    }
-    const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
-    if (locale && typeof locale !== 'string') {
-      const formatter = new Intl.NumberFormat(locale.iso || 'ru-RU', {
-        currency,
-        style: 'currency',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      return formatter.format(val)
-    }
-    return val
-  })
-  nuxtApp.provide(
-    'settings',
-    computed(() => {
-      const settings: Record<string, any> = {}
-      Object.keys(store.settings).forEach((key: string) => {
-        let value: string | Record<string, any> = store.settings[key]
-        if (value && typeof value === 'object' && value[$i18n.locale.value]) {
-          value = value[$i18n.locale.value]
-        }
-        settings[key] = value
-      })
-      return settings
-    }),
-  )
-
-  nuxtApp.provide(
-    'pages',
-    // @ts-ignore
-    computed(() => store.pages.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
-  )
-
-  nuxtApp.provide(
-    'levels',
-    computed(() => store.levels.sort((a, b) => (a.price > b.price ? 1 : -1))),
-  )
-
-  nuxtApp.provide(
-    'reactions',
-    // @ts-ignore
-    computed(() => store.reactions.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
-  )
-
   if ($socket) {
     // Listen for Settings update
     $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
@@ -139,5 +83,50 @@ export default defineNuxtPlugin((nuxtApp) => {
         loadUser()
       }
     })
+  }
+
+  return {
+    provide: {
+      file: getFileLink,
+      contentPreview,
+      contentClick,
+      sidebar,
+      login,
+      isMobile,
+      payment,
+      variables,
+      price: (val: number, zero: boolean = false) => {
+        if (!val && !zero) {
+          return ''
+        }
+        const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
+        if (locale && typeof locale !== 'string') {
+          const formatter = new Intl.NumberFormat(locale.iso || 'ru-RU', {
+            currency,
+            style: 'currency',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+          return formatter.format(val)
+        }
+        return val
+      },
+      settings: computed(() => {
+        const settings: Record<string, any> = {}
+        Object.keys(store.settings).forEach((key: string) => {
+          let value: string | Record<string, any> = store.settings[key]
+          if (value && typeof value === 'object' && value[$i18n.locale.value]) {
+            value = value[$i18n.locale.value]
+          }
+          settings[key] = value
+        })
+        return settings
+      }),
+      // @ts-ignore
+      pages: computed(() => store.pages.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
+      levels: computed(() => store.levels.sort((a, b) => (a.price > b.price ? 1 : -1))),
+      // @ts-ignore
+      reactions: computed(() => store.reactions.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
+    },
   }
 })
