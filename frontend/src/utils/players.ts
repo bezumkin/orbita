@@ -65,7 +65,7 @@ export async function initAudioPlayer(uuid: string, target: HTMLElement, props: 
   try {
     const {$i18n} = useNuxtApp()
     if ($i18n.locale.value === 'ru') {
-      layoutSettings.translations = ruLexicon
+      layoutSettings.translations = convertLexicon(ruLexicon)
     }
   } catch (e) {}
 
@@ -91,7 +91,7 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
   try {
     const {$i18n, $variables} = useNuxtApp()
     if ($i18n.locale.value === 'ru') {
-      layoutSettings.translations = ruLexicon
+      layoutSettings.translations = convertLexicon(ruLexicon)
     }
     const {EXTRACT_VIDEO_THUMBNAILS_ENABLED} = $variables.value
     if (Number(EXTRACT_VIDEO_THUMBNAILS_ENABLED)) {
