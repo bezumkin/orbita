@@ -16,7 +16,7 @@ import {
 } from 'vidstack'
 import HLS from 'hls.js'
 import ruLexicon from '~/components/player/lexicons/ru'
-import {useToastError} from '#build/imports'
+import {useToastError} from '#imports'
 
 defineCustomElement(MediaPlayerElement)
 defineCustomElement(MediaProviderElement)

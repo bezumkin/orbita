@@ -1,8 +1,3 @@
-import {Socket} from 'socket.io-client'
-import i18n from '@nuxtjs/i18n/dist/runtime/plugins/i18n.mjs'
-import {getImageLink, hasScope} from '@vesp/frontend'
-import {getFileLink} from '~/utils/vesp'
-
 declare global {
   type VespUserRole = {
     id: number
@@ -175,56 +170,6 @@ declare global {
     code?: number
     message?: string
     active?: boolean
-  }
-}
-
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $i18n: i18n
-    $t: i18n.t
-    $image: getImageLink
-    $file: getFileLink
-    $scope: hasScope
-    $price: Function
-    $prism: Function
-    $prismLanguages: Record<string, any>
-    $socket: Socket
-    $sidebar: Ref<boolean>
-    $login: Ref<boolean>
-    $settings: Ref<Record<string, string | string[] | Record<string, any>>>
-    $variables: Record<string, any>
-    $pages: Ref<VespPage[]>
-    $levels: Ref<VespLevel[]>
-    $reactions: Ref<VespReaction[]>
-    $payment: Ref<undefined | VespTopic | VespLevel>
-    $isMobile: Ref<boolean>
-    $contentPreview: Function
-    $contentClick: (e: MouseClick) => void
-  }
-}
-
-declare module '#app' {
-  interface NuxtApp {
-    $i18n: i18n
-    $t: i18n.t
-    $image: getImageLink
-    $file: getFileLink
-    $scope: hasScope
-    $price: Function
-    $prism: Function
-    $prismLanguages: Record<string, any>
-    $socket: Socket
-    $sidebar: Ref<boolean>
-    $login: Ref<boolean>
-    $settings: Ref<Record<string, string | string[] | Record<string, any>>>
-    $variables: Record<string, any>
-    $pages: Ref<Record<string, any>[]>
-    $levels: Ref<VespLevel[]>
-    $reactions: Ref<VespReaction[]>
-    $payment: Ref<undefined | VespTopic | VespLevel>
-    $isMobile: Ref<boolean>
-    $contentPreview: Function
-    $contentClick: (e: MouseClick) => void
   }
 }
 
