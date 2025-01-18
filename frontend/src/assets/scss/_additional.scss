@@ -90,6 +90,10 @@ html, body {
   }
 }
 
+#navbar {
+  z-index: $zindex-modal-backdrop;
+}
+
 #navbar, #footer {
   transition: all $transition-speed;
   background-color: var(--bs-secondary-bg);
@@ -184,7 +188,6 @@ html, body {
 }
 
 #sidebar {
-  z-index: $zindex-sticky - 10;
   padding-top: 4rem;
 }
 
