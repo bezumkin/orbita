@@ -122,8 +122,8 @@ const config: NuxtConfig = {
     },
   },
   i18n: {
-    langDir: 'lexicons',
-    restructureDir: 'src',
+    langDir: 'src/lexicons',
+    restructureDir: '.',
     defaultLocale: locales[0].code,
     detectBrowserLanguage: {
       fallbackLocale: locales[0].code,
