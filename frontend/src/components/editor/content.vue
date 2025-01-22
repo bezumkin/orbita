@@ -3,7 +3,7 @@
     <template v-for="block in blocks" :key="block.id">
       <TopicBlockParagraph v-if="block.type === 'paragraph'" :block="block" />
       <TopicBlockHeader v-else-if="block.type === 'header'" :block="block" />
-      <TopicBlockFile v-else-if="block.type === 'file'" :block="block" />
+      <TopicBlockFile v-else-if="block.type === 'file'" :block="block" :max-width="maxWidth" />
       <TopicBlockImage v-else-if="block.type === 'image'" :block="block" :max-width="maxWidth" />
       <TopicBlockVideo v-else-if="block.type === 'video'" :block="block" :max-width="maxWidth" />
       <TopicBlockEmbed v-else-if="block.type === 'embed'" :block="block" :max-width="maxWidth" />

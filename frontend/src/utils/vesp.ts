@@ -3,7 +3,7 @@ import {ru, de} from 'date-fns/locale'
 import slugify from 'slugify'
 
 export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
-  return getImageLink(file, options, prefix || 'file')
+  return getImageLink(file, options, prefix || 'file').replace(/([?&])fm=.*?&/, '$1')
 }
 
 export function getEmbedLink(service?: string, id?: string, autoplay: boolean = true) {
