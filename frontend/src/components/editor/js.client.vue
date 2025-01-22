@@ -108,13 +108,19 @@ const enabledBlocks = computed(() => {
   if (typeof props.blocks === 'boolean') {
     return props.blocks ? allBlocks : []
   }
-  if (props.blocks.length) {
-    const types = props.blocks.split(',').map((i) => i.trim().toLowerCase())
-    return allBlocks.filter((i) => types.includes(i.type))
+  if (typeof props.blocks === 'string') {
+    const blocks: Record<string, any>[] = []
+    props.blocks.split(',').forEach((key: string) => {
+      const block = allBlocks.find((i) => i.type === key.trim().toLowerCase())
+      if (block) {
+        blocks.push(block)
+      }
+    })
+    return blocks
   }
   return allBlocks
 })
-const tools: ComputedRef<Record<string, any>> = computed(() => {
+const tools = computed<Record<string, any>>(() => {
   return Object.fromEntries(
     enabledBlocks.value.map((i) => [
       i.type,
