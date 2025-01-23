@@ -7,7 +7,7 @@
           <UserAvatar :user="comment.user" class="me-1" />
           <div class="d-flex flex-grow-1 flex-wrap align-items-center justify-content-between">
             <div>{{ comment.user.fullname }}</div>
-            <div v-if="comment.created_at" class="small">{{ formatDate(comment.created_at) }}</div>
+            <div v-if="comment.created_at" class="small" data-allow-mismatch>{{ formatDate(comment.created_at) }}</div>
           </div>
         </div>
         <div class="comment-text">{{ $contentPreview(comment?.content, 100) }}</div>

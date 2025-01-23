@@ -12,9 +12,12 @@
               <span v-else v-bind="getUserAttrs(comment)">{{ comment.user.fullname }}</span>
             </div>
             <div v-if="comment.created_at" class="comment-date">
-              <BLink :href="getCommentLink(comment)" @click="(e) => (onLink ? onLink(e, comment) : {})">
-                {{ formatDate(comment.created_at) }}
-              </BLink>
+              <BLink
+                :href="getCommentLink(comment)"
+                data-allow-mismatch
+                @click="(e) => (onLink ? onLink(e, comment) : {})"
+                v-text="formatDate(comment.created_at)"
+              />
             </div>
           </div>
           <div v-if="record.id !== comment.id" class="comment-text">

@@ -34,7 +34,7 @@
       <div class="ms-md-auto order-2 order-md-3">
         <template v-if="topic.published_at || topic.publish_at">
           <VespFa icon="calendar" class="fa-fw" />
-          {{ formatDate(topic.published_at || topic.publish_at) }}
+          <span data-allow-mismatch>{{ formatDate(topic.published_at || topic.publish_at) }}</span>
         </template>
       </div>
     </div>
