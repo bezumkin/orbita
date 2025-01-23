@@ -64,7 +64,7 @@ function getBtnParams(level: VespLevel) {
 
 function getBtnLabel(level: VespLevel) {
   if (user.value && user.value.subscription && user.value.subscription.active_until) {
-    const date = $i18n.d(user.value.subscription.active_until, 'short')
+    const date = formatDateShort(user.value.subscription.active_until)
 
     if (user.value.subscription.next_level_id === level.id && user.value.subscription.active_until) {
       return $i18n.t('components.payment.level.active_from', {date})

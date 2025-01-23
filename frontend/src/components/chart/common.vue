@@ -52,7 +52,7 @@ const props = defineProps({
   },
 })
 
-const locale = useDateLocale().value
+const locale = useDateLocale()
 const {$i18n, $isMobile, $socket} = useNuxtApp()
 
 let chart: Chart<'line', string[], string>
@@ -141,7 +141,7 @@ async function init() {
           callbacks: {
             title(item) {
               const date = new Date(item[0].label)
-              return [format(date, 'dd.MM.yyyy', {locale}), format(date, 'EEEE', {locale})]
+              return [formatDateShort(date), format(date, 'EEEE', {locale: locale.value})]
             },
             label: function (item: Record<string, any>) {
               return props.formatter(item.raw, 'label')

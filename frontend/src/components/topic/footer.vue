@@ -34,7 +34,7 @@
       <div class="ms-md-auto order-2 order-md-3">
         <template v-if="topic.published_at || topic.publish_at">
           <VespFa icon="calendar" class="fa-fw" />
-          {{ d(topic.published_at || topic.publish_at, 'long') }}
+          {{ formatDate(topic.published_at || topic.publish_at) }}
         </template>
       </div>
     </div>
@@ -51,7 +51,6 @@ const props = defineProps({
   },
 })
 
-const {d} = useI18n()
 const {user} = useAuth()
 const {$socket} = useNuxtApp()
 const route = useRoute()

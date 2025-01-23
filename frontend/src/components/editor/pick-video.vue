@@ -19,7 +19,7 @@
         <template #default>
           <div class="fw-medium">{{ video.title }}</div>
           <BCardText class="small mt-auto pt-2 d-flex flex-column gap-1">
-            <div v-if="video.created_at">{{ d(video.created_at, 'long') }}</div>
+            <div v-if="video.created_at">{{ formatDate(video.created_at) }}</div>
             <div v-if="video.processed_qualities">
               {{ video.processed_qualities.map((i: number) => i + 'p').join(', ') }}
             </div>
@@ -49,8 +49,6 @@
 </template>
 
 <script setup lang="ts">
-const {d} = useI18n()
-
 const picked: Ref<VespVideo | undefined> = ref()
 const query = ref('')
 const modal = ref()

@@ -34,7 +34,7 @@
           {{
             t('models.payment.subscription_desc', {
               title: item.metadata.title,
-              date: d(item.metadata.until, 'short'),
+              date: formatDateShort(item.metadata.until),
             })
           }}
         </div>
@@ -44,7 +44,7 @@
       </template>
       <template #cell(paid)="{item, value}">
         <template v-if="value">
-          <VespFa icon="check" class="text-success" :title="d(item.paid_at as string, 'long')" />
+          <VespFa icon="check" class="text-success" :title="formatDate(item.paid_at as string)" />
         </template>
         <template v-else-if="value === false">
           <VespFa icon="times" class="text-danger" />
@@ -71,7 +71,7 @@ const {$price, $socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_PAYMENTS_DISABLE !== '1'
 
 const table = ref()
-const {t, d} = useI18n()
+const {t} = useI18n()
 const url = 'admin/payments'
 const sort = 'created_at'
 const dir = 'desc'
@@ -113,10 +113,6 @@ function formatService(value: any) {
 
 function formatPrice(value: any) {
   return value ? $price(value) : ''
-}
-
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
 }
 
 function rowClass(item: any) {

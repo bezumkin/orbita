@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import type {VespTableAction} from '@vesp/frontend'
 
-const {t, d} = useI18n()
+const {t} = useI18n()
 const table = ref()
 const url = 'admin/topics'
 const filters = ref({query: ''})
@@ -43,10 +43,6 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {route: {name: 'admin-topics-id-edit'}, icon: 'edit', title: t('actions.edit')},
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
-
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
-}
 
 function rowClass(item: any) {
   return item && !item.active ? 'inactive' : ''

@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import prettyBytes from 'pretty-bytes'
-import {formatDistanceToNow, formatDuration, fromUnixTime, intervalToDuration} from 'date-fns'
+import {formatDistanceToNow, formatDuration, fromUnixTime, intervalToDuration, type Duration} from 'date-fns'
 import {DetailedError, Upload} from 'tus-js-client'
 import type {HttpRequest, UploadOptions} from 'tus-js-client'
 import type {BaseColorVariant} from 'bootstrap-vue-next'

@@ -42,7 +42,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'title'])
 
-const {t, d} = useI18n()
+const {t} = useI18n()
 const {$payment, $levels} = useNuxtApp()
 const {user} = useAuth()
 const periods = [1, 3, 6, 12]
@@ -71,7 +71,7 @@ const description = computed(() => {
       date = addDays(new Date(), days)
     }
   }
-  parts.push(t('components.payment.subscription.month_' + myValue.value.period, {date: d(date, 'short')}))
+  parts.push(t('components.payment.subscription.month_' + myValue.value.period, {date: formatDateShort(date)}))
   if (downgrading.value || upgrading.value) {
     parts.push(t('components.payment.subscription.free'))
   } else {

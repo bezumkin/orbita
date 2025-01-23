@@ -41,7 +41,7 @@ import {formatBigNumber} from '~/utils/vesp'
 const {$socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_USERS_DISABLE !== '1'
 
-const {t, d} = useI18n()
+const {t} = useI18n()
 const table = ref()
 const url = 'admin/users'
 const filters = ref({query: '', role_id: 0})
@@ -63,10 +63,6 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {function: (i: any) => table.value.delete(i), icon: 'times', title: t('actions.delete'), variant: 'danger'},
 ])
 const roles = ref([{value: 0, text: t('models.user_role.filter.all')}])
-
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
-}
 
 function rowClass(item: any) {
   if (item) {

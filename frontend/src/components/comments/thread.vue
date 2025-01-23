@@ -13,7 +13,7 @@
             </div>
             <div v-if="comment.created_at" class="comment-date">
               <BLink :href="getCommentLink(comment)" @click="(e) => (onLink ? onLink(e, comment) : {})">
-                {{ d(comment.created_at, 'long') }}
+                {{ formatDate(comment.created_at) }}
               </BLink>
             </div>
           </div>
@@ -110,7 +110,6 @@ defineSlots<{
 const route = useRoute()
 const router = useRouter()
 const {user} = useAuth()
-const {d} = useI18n()
 const {$scope, $isMobile} = useNuxtApp()
 const isAdmin = computed(() => {
   return $scope('comments/delete')

@@ -36,7 +36,7 @@ import prettyBytes from 'pretty-bytes'
 import type {VespTableAction} from '@vesp/frontend'
 import {intervalToDuration} from 'date-fns'
 
-const {t, d} = useI18n()
+const {t} = useI18n()
 const {$socket} = useNuxtApp()
 const url = 'admin/videos'
 const sort = 'created_at'
@@ -95,9 +95,6 @@ function onSuccess() {
 }
 function formatSize(value: any) {
   return value ? prettyBytes(value) : ''
-}
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
 }
 
 function formatDimension(_value: any, _field: any, item: any) {

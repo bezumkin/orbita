@@ -7,10 +7,10 @@
           <UserAvatar :user="comment.user" class="me-1" />
           <div class="d-flex flex-grow-1 flex-wrap align-items-center justify-content-between">
             <div>{{ comment.user.fullname }}</div>
-            <div v-if="comment.created_at" class="small">{{ d(comment.created_at, 'long') }}</div>
+            <div v-if="comment.created_at" class="small">{{ formatDate(comment.created_at) }}</div>
           </div>
         </div>
-        <div class="comment-text">{{ $contentPreview(comment.content, 100) }}</div>
+        <div class="comment-text">{{ $contentPreview(comment?.content, 100) }}</div>
         <div v-if="comment.topic" class="comment-footer">
           <BLink v-if="showLink(comment)" :to="getCommentLink(comment)" class="me-2">
             <VespFa icon="file" class="fa-fw" /> {{ comment.topic.title }}
@@ -25,7 +25,6 @@
 
 <script setup lang="ts">
 const url = 'web/comments/latest'
-const {d} = useI18n()
 const {$socket} = useNuxtApp()
 const {data, refresh, status} = useCustomFetch(url, {query: {limit: 10}})
 const comments: ComputedRef<VespComment[]> = computed(() => data.value?.rows || [])

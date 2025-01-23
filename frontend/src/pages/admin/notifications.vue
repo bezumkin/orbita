@@ -26,7 +26,7 @@ import type {VespTableAction} from '@vesp/frontend'
 
 const url = 'admin/notifications'
 const {$contentPreview} = useNuxtApp()
-const {t, d} = useI18n()
+const {t} = useI18n()
 const sort = 'created_at'
 const dir = 'desc'
 const table = ref()
@@ -46,10 +46,6 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
 
 function rowClass(item: any) {
   return item && !item.active ? 'inactive' : undefined
-}
-
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
 }
 
 function formatType(value: any) {

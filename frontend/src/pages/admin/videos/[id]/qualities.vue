@@ -38,7 +38,7 @@ import {formatDuration, intervalToDuration, parseISO} from 'date-fns'
 import prettyBytes from 'pretty-bytes'
 
 const {$socket} = useNuxtApp()
-const {t, d} = useI18n()
+const {t} = useI18n()
 const locale = useDateLocale()
 const fields = computed(() => [
   {key: 'quality', label: t('models.video_quality.quality'), formatter: formatQuality},
@@ -51,10 +51,6 @@ const qualities = ref<VespVideoQuality[]>([])
 
 function formatQuality(value: any) {
   return value ? value + 'p' : ''
-}
-
-function formatDate(value: any) {
-  return value ? d(value, 'long') : ''
 }
 
 try {

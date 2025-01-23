@@ -42,6 +42,6 @@ const nextLevel = computed(() => {
     : undefined
 })
 const paid = computed(() => {
-  return user.value?.subscription?.active_until ? d(user.value.subscription.active_until, 'long') : ''
+  return formatDate(user.value?.subscription?.active_until)
 })
 </script>

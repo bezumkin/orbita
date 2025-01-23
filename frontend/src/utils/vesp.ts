@@ -1,5 +1,6 @@
 import type {OutputData} from '@editorjs/editorjs'
 import {ru, de} from 'date-fns/locale'
+import {format} from 'date-fns'
 import slugify from 'slugify'
 
 export function getFileLink(file: VespFile | Record<string, any>, options?: VespFileOptions, prefix?: string): string {
@@ -188,4 +189,12 @@ export function scrollToTop() {
     top: 0,
     behavior: 'smooth',
   })
+}
+
+export function formatDate(date: string | Date) {
+  return date ? format(date, 'dd.MM.yyyy HH:mm:ss') : ''
+}
+
+export function formatDateShort(date: string | Date) {
+  return date ? format(date, 'dd.MM.yyyy') : ''
 }
