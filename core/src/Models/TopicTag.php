@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Vesp\Models\Traits\CompositeKey;
 
 /**
  * @property int $topic_id
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TopicTag extends Model
 {
-    use Traits\CompositeKey;
+    use CompositeKey;
 
     public $incrementing = false;
     public $timestamps = false;

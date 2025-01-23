@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Vesp\Models\Traits\CompositeKey;
 
 /**
  * @property int $topic_id
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TopicView extends Model
 {
-    use Traits\CompositeKey;
+    use CompositeKey;
 
     public $timestamps = false;
     protected $primaryKey = ['topic_id', 'user_id'];

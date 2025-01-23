@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Vesp\Models\Traits\CompositeKey;
 
 /**
  * @property int $comment_id
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class CommentReaction extends Model
 {
-    use Traits\CompositeKey;
+    use CompositeKey;
 
     public $incrementing = false;
     public $timestamps = false;

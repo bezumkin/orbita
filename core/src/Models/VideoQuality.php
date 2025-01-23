@@ -6,6 +6,7 @@ use App\Services\TempStorage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Vesp\Models\Traits\CompositeKey;
 
 /**
  * @property int $quality
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class VideoQuality extends Model
 {
-    use Traits\CompositeKey;
+    use CompositeKey;
 
     public $timestamps = false;
     protected $primaryKey = ['quality', 'video_id'];

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Vesp\Models\Traits\CompositeKey;
 
 /**
  * @property int $user_id
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class UserConnection extends Model
 {
-    use Traits\CompositeKey;
+    use CompositeKey;
 
     protected $primaryKey = ['user_id', 'service'];
     protected $guarded = [];
