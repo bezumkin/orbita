@@ -145,6 +145,18 @@ export default {
       active: 'Enabled',
       per_month: 'per month',
     },
+    category: {
+      title_one: 'Category',
+      title_many: 'Categories',
+      title_none: 'No Category',
+      id: 'Id',
+      title: 'Title',
+      description: 'Description',
+      uri: 'URI',
+      active: 'Active',
+      rank: 'Rank',
+      created_at: 'Careated At',
+    },
     topic: {
       title_one: 'Topic',
       title_many: 'Topics',
@@ -467,6 +479,14 @@ export default {
     topic: {
       title_exists: 'A topic with this name already exists',
       wrong_content: 'Could not process the content of topic',
+    },
+    category: {
+      no_title: 'You forgot to specify the name of the category',
+      no_uri: 'You need to specify the address for the category page',
+      system_uri: 'You cannot use this address because it is already used by the system',
+      wrong_uri: 'You have entered the wrong address for the category',
+      title_exists: 'Category with this name already exists',
+      uri_exists: 'This address is already used for another category',
     },
     comment: {
       no_content: 'You forgot to write a comment',

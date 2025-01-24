@@ -41,4 +41,24 @@ class Page extends Model
     {
         return $this->hasMany(PageFile::class, 'page_id');
     }
+
+    public function prepareOutput(bool $listView = false): array {
+        $columns = ['id', 'rank', 'position', 'name', 'external'];
+        if ($this->external) {
+            $columns[] = 'link';
+            $columns[] = 'blank';
+        } else {
+            $columns[] = 'alias';
+            $columns[] = 'title';
+            if (!$listView) {
+                $columns[] = 'content';
+            }
+        }
+        $array = $this->only($columns);
+        if (!empty($array['content']) && !empty($array['content']['blocks'])) {
+            $array['content']['blocks'] = array_values($array['content']['blocks']);
+        }
+
+        return $array;
+    }
 }

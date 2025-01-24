@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Web;
 
+use App\Models\Category;
 use App\Models\Page;
 use App\Models\PageFile;
 use App\Models\Topic;
@@ -18,12 +19,24 @@ class Sitemap extends Controller
         $siteUrl = Utils::getSiteUrl();
 
         $rows = [];
+        $categories = Category::query()
+            ->where('active', true)
+            ->orderBy('rank');
+        foreach ($categories->get() as $category) {
+            /** @var Category $category */
+            $rows[] = [
+                'loc' => $category->getLink(),
+                'lastmod' => $category->updated_at->toIso8601String(),
+            ];
+        }
+
         $topics = Topic::query()
             ->where('active', true)
             ->select('id', 'uuid', 'cover_id', 'published_at')
             ->orderByDesc('published_at')
             ->with('cover:id,uuid,updated_at')
-            ->with('contentFiles.file:id,uuid,updated_at', 'contentFiles.file.video:file_id,id');
+            ->with('contentFiles.file:id,uuid,updated_at', 'contentFiles.file.video:file_id,id')
+            ->with('category:id,uri');
         foreach ($topics->get() as $topic) {
             /** @var Topic $topic */
             $row = [

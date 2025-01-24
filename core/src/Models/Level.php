@@ -57,4 +57,9 @@ class Level extends Model
     {
         return $this->users()->where('subscriptions.active', true);
     }
+
+    public function prepareOutput(): array
+    {
+        return $this->toArray();
+    }
 }

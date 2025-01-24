@@ -1,8 +1,21 @@
 <template>
   <div>
-    <BFormGroup :label="$t('models.topic.title')">
+    <BRow v-if="categoryOptions.length > 1">
+      <BCol md="8">
+        <BFormGroup :label="$t('models.topic.title')">
+          <BFormInput v-model="record.title" required autofocus />
+        </BFormGroup>
+      </BCol>
+      <BCol md="4">
+        <BFormGroup :label="$t('models.category.title_one')">
+          <BFormSelect v-model="record.category_id" :options="categoryOptions" />
+        </BFormGroup>
+      </BCol>
+    </BRow>
+    <BFormGroup v-else :label="$t('models.topic.title')">
       <BFormInput v-model="record.title" required autofocus />
     </BFormGroup>
+
     <BFormGroup :label="$t('models.topic.content')">
       <EditorJs v-model="record.content" :blocks="editorBlocks" />
     </BFormGroup>
@@ -114,7 +127,7 @@ const record = computed({
 const {t} = useI18n()
 const {$price, $scope, $variables, $levels} = useNuxtApp()
 const levelOptions = computed(() => {
-  const options: Record<string, any> = []
+  const options: Record<string, any>[] = []
   $levels.value.forEach((i: VespLevel) => {
     options.push({value: i.id, text: i.title + ', ' + $price(i.price)})
   })
@@ -128,6 +141,7 @@ const accessOptions = computed(() => {
     {value: 'payments', text: t('models.topic.access.payments')},
   ]
 })
+const categoryOptions = ref([{value: null, text: t('models.category.title_none')}])
 const delayed = ref(props.modelValue.publish_at !== null)
 
 const editorBlocks = $variables.value.EDITOR_TOPIC_BLOCKS || false
@@ -168,6 +182,15 @@ watch(accessLevel, (value: string) => {
 function formatUser(user: VespUser) {
   return `${user.id}. ${user.fullname} (${user.username})`
 }
+
+onMounted(async () => {
+  try {
+    const data = await useGet('admin/categories', {combo: true, sort: 'rank'})
+    data.rows.forEach((row: VespCategory) => {
+      categoryOptions.value.push({value: row.id, text: row.title})
+    })
+  } catch (e) {}
+})
 
 watch(
   () => record.value.active,

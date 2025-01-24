@@ -15,6 +15,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * @property int $id
  * @property string $uuid
+ * @property ?int $category_id
  * @property string $title
  * @property array $content
  * @property ?string $teaser
@@ -33,6 +34,7 @@ use Ramsey\Uuid\Uuid;
  * @property ?Carbon $published_at
  * @property ?Carbon $publish_at
  *
+ * @property-read Category $category
  * @property-read User $user
  * @property-read File $cover
  * @property-read Level $level
@@ -80,6 +82,11 @@ class Topic extends Model
                 }
             }
         );
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function user(): BelongsTo
@@ -224,6 +231,7 @@ class Topic extends Model
         );
 
         $array['cover'] = $this->cover?->only('id', 'uuid', 'updated_at');
+        $array['category'] = $this->category?->only('id', 'title', 'uri');
         $array['access'] = $this->hasAccess($user);
         $array['paid'] = !$this->isFree();
         if ($array['access']) {
@@ -256,7 +264,7 @@ class Topic extends Model
 
     public function getLink(): string
     {
-        return Utils::getSiteUrl() . 'topics/' . $this->uuid;
+        return Utils::getSiteUrl() . ($this->category?->uri ?? 'topics') . '/' . $this->uuid;
     }
 
     public function createPayment(User $user, string $serviceName): ?Payment

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div v-if="!isTopic && topic.category" class="topic-category">
+      <div v-if="route.params.topics === topic.category.uri" class="fw-bold">{{ topic.category.title }} /</div>
+      <BLink v-else :to="{name: 'topics', params: {topics: topic.category.uri}}">{{ topic.category.title }} /</BLink>
+    </div>
     <div v-if="topic.tags?.length" class="topic-tags">
       <BBadge v-for="(tag, idx) in topic.tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1">
         <div>{{ tag.title }}</div>
@@ -14,10 +18,7 @@
         </UserReactions>
         <div><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}</div>
         <div v-if="!isTopic">
-          <BLink
-            v-if="topic.access && commentsCount"
-            :to="{name: 'topics-uuid', params: {uuid: topic.uuid}, hash: '#comments'}"
-          >
+          <BLink v-if="topic.access && commentsCount" :to="link">
             <VespFa icon="comment" class="fa-fw" />
             {{ formatBigNumber(commentsCount) }}
             <span v-if="unseenCount" class="text-success">+{{ formatBigNumber(unseenCount) }}</span>
@@ -55,6 +56,13 @@ const {user} = useAuth()
 const {$socket} = useNuxtApp()
 const route = useRoute()
 const isTopic = computed(() => route.params.uuid === props.topic.uuid)
+const link = computed(() => {
+  return {
+    name: 'topics-uuid',
+    params: {topics: props.topic.category?.uri || 'topics', uuid: props.topic.uuid},
+    hash: '#comments',
+  }
+})
 
 const commentsCount = ref(props.topic.comments_count || 0)
 const viewsCount = ref(props.topic.views_count || 0)
@@ -120,7 +128,11 @@ function getTagParams(tag: VespTag) {
     const idx = values.findIndex((i: string) => i === id)
     values.splice(idx, 1)
   }
-  params.to = {name: 'index', query: {...route.query, tags: values.length ? values.join(',') : undefined}}
+  params.to = {
+    name: route.name,
+    params: route.params,
+    query: {...route.query, tags: values.length ? values.join(',') : undefined},
+  }
 
   return params
 }

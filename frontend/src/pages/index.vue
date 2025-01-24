@@ -1,13 +1,23 @@
 <template>
   <div>
+    <template v-if="category">
+      <BButton variant="link" class="d-block mb-2 ps-0" @click="handleBackBtn()">
+        &larr; {{ $t('actions.back') }}
+      </BButton>
+      <h1 v-if="category" class="mb-4">{{ category.title }}</h1>
+    </template>
     <BRow class="align-items-center mb-3">
       <BCol>
-        <BButton v-if="$scope('topics/put')" :to="{name: 'topics-create'}" variant="primary">
+        <BButton
+          v-if="$scope('topics/put')"
+          :to="{name: 'topics-create', params: {topics: category?.uri || 'topics'}}"
+          variant="primary"
+        >
           <VespFa icon="plus" fixed-width /> {{ $t('actions.create') }}
         </BButton>
       </BCol>
       <BCol cols="auto">
-        <BButton v-if="query.tags || query.reverse" @click="onReverse">
+        <BButton v-if="category || query.tags || query.reverse" @click="onReverse">
           <VespFa :icon="query.reverse ? 'arrow-down-short-wide' : 'arrow-up-wide-short'" />
           {{ $t('models.topic.published_at') }}
         </BButton>
@@ -36,10 +46,10 @@
 const router = useRouter()
 const route = useRoute()
 const store = useTopicsStore()
-const {topics, total, loading, query} = storeToRefs(store)
+const {topics, total, loading, query, category} = storeToRefs(store)
 const {fetch, refresh} = store
 const {t} = useI18n()
-const {$settings} = useNuxtApp()
+const {$settings, $categories} = useNuxtApp()
 const {loggedIn} = useAuth()
 const canFetch = computed(() => {
   return total.value > query.value.page * query.value.limit
@@ -63,7 +73,11 @@ function initObserver() {
 
 function onReverse() {
   query.value.reverse = !query.value.reverse
-  router.push({name: 'index', query: {...route.query, reverse: query.value.reverse ? '1' : undefined}})
+  router.push({
+    name: route.name,
+    params: route.params,
+    query: {...route.query, reverse: query.value.reverse ? '1' : undefined},
+  })
 }
 
 async function onScroll() {
@@ -73,9 +87,14 @@ async function onScroll() {
   initObserver()
 }
 
-useHead({
-  title: () => [t('pages.index'), $settings.value.title].join(' / '),
-})
+function loadCategory() {
+  if (route.params.topics) {
+    category.value = $categories?.value.find((i: VespCategory) => i.uri === route.params.topics)
+    if (!category.value) {
+      showError({statusCode: 404, statusMessage: 'Not Found'})
+    }
+  }
+}
 
 watch([() => route.query, loggedIn], async () => {
   query.value.tags = route.query.tags as string
@@ -96,11 +115,39 @@ if (route.query.page) {
   await navigateTo({name: 'index'}, {redirectCode: 301})
 }
 
-if (!total.value || query.value.tags !== route.query.targs) {
+// Update topics depending on current category
+if (route.params.topics) {
+  if (category.value?.uri !== route.params.topics) {
+    loadCategory()
+    if (total.value) {
+      await fetch()
+    }
+  }
+} else if (category.value) {
+  category.value = undefined
+  if (total.value) {
+    await fetch()
+  }
+}
+
+if (!total.value || query.value.tags !== route.query.tags) {
   await fetch()
 }
 
-if (!total.value && route.query.targs) {
+if (!total.value && route.query.tags) {
   navigateTo({name: 'index'})
+}
+
+useHead({
+  title: () => [category.value?.title || t('pages.index'), $settings.value.title].join(' / '),
+})
+
+if (category.value) {
+  useSeoMeta({
+    title: category.value.title,
+    ogTitle: category.value.title,
+    description: category.value.description || '',
+    ogDescription: category.value.description || '',
+  })
 }
 </script>

@@ -46,7 +46,9 @@ const props = defineProps({
 const {$socket, $payment, $levels, $image, $settings} = useNuxtApp()
 const isTopic = useRoute().params.uuid === props.topic.uuid
 const myValue: Ref<VespTopic> = ref(props.topic)
-const link = {name: 'topics-uuid', params: {uuid: myValue.value.uuid}}
+const link = computed(() => {
+  return {name: 'topics-uuid', params: {topics: myValue.value.category?.uri || 'topics', uuid: myValue.value.uuid}}
+})
 const levelRequired = computed(() => {
   if (myValue.value.level_id) {
     return $levels.value.find((i: VespLevel) => i.id === myValue.value.level_id)

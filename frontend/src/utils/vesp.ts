@@ -191,6 +191,36 @@ export function scrollToTop() {
   })
 }
 
+export function handleBackBtn(topic: VespTopic | undefined = undefined) {
+  const router = useRouter()
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.replace(topic?.category ? {name: 'topics', params: {topics: topic.category.uri}} : {name: 'index'})
+  }
+}
+
+export function formatPrice(val: number, zero: boolean = false) {
+  if (!val && !zero) {
+    return ''
+  }
+  const {$i18n, $variables} = useNuxtApp()
+  if ($i18n) {
+    const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
+    if (locale && typeof locale !== 'string') {
+      const formatter = new Intl.NumberFormat(locale.language || 'ru-RU', {
+        currency: $variables.value.CURRENCY,
+        style: 'currency',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      return formatter.format(val)
+    }
+  }
+
+  return String(val)
+}
+
 export function formatDate(date: string | Date) {
   return date ? format(date, 'dd.MM.yyyy HH:mm:ss') : ''
 }

@@ -28,7 +28,11 @@
       </template>
       <template #cell(type)="{item}: any">
         <div v-if="item.topic">
-          <BLink :to="{name: 'topics-uuid', params: {uuid: item.topic.uuid}}">{{ item.topic.title }}</BLink>
+          <BLink
+            :to="{name: 'topics-uuid', params: {topics: item.topic.category?.uri || 'topics', uuid: item.topic.uuid}}"
+          >
+            {{ item.topic.title }}
+          </BLink>
         </div>
         <div v-else-if="item.metadata && item.metadata.until">
           {{

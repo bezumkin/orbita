@@ -23,6 +23,9 @@ if (!user.value) {
   showError({statusCode: 403, statusMessage: 'Access Denied'})
 }
 
+const store = useTopicsStore()
+const category = computed(() => store.category)
+
 const router = useRouter()
 const loading = ref(false)
 const record = ref({
@@ -31,6 +34,7 @@ const record = ref({
   price: 0,
   content: {},
   user_id: user.value?.id,
+  category_id: category.value?.id,
   active: false,
   closed: false,
   delayed: false,
@@ -43,7 +47,7 @@ async function onSubmit() {
   try {
     loading.value = true
     const data = await usePut('admin/topics', {...record.value})
-    await router.replace({name: 'topics-uuid', params: {uuid: data.uuid}})
+    await router.replace({name: 'topics-uuid', params: {topics: data.category?.uri || 'topics', uuid: data.uuid}})
   } catch (e) {
   } finally {
     loading.value = false

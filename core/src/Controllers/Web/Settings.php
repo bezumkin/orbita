@@ -2,6 +2,10 @@
 
 namespace App\Controllers\Web;
 
+use App\Models\Category;
+use App\Models\Level;
+use App\Models\Page;
+use App\Models\Reaction;
 use App\Models\Setting;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
@@ -12,17 +16,19 @@ class Settings extends ModelController
 
     public function get(): ResponseInterface
     {
-        $settings = [];
-        /** @var Setting $setting */
-        foreach (Setting::query()->orderBy('rank')->cursor() as $setting) {
-            $array = $setting->only('key', 'value');
-            if (!empty($setting->value) && in_array($setting->type, Setting::JSON_TYPES, true)) {
-                $array['value'] = json_decode($setting->value, true);
-            }
-            $settings[$array['key']] = $array['value'];
-        }
+        return $this->success([
+            'variables' => $this->getVariables(),
+            'settings' => $this->getSettings(),
+            'categories' => $this->getCategories(),
+            'pages' => $this->getPages(),
+            'levels' => $this->getLevels(),
+            'reactions' => $this->getReactions(),
+        ]);
+    }
 
-        $variables = [
+    protected function getVariables(): array
+    {
+        return [
             'TZ' => getenv('TZ') ?: 'Europe/Moscow',
             'SITE_URL' => getenv('SITE_URL') ?: 'http://127.0.0.1:8080/',
             'API_URL' => getenv('API_URL') ?: '/api/',
@@ -50,10 +56,84 @@ class Settings extends ModelController
             'CHART_USERS_DISABLE' => getenv('CHART_USERS_DISABLE'),
             'CHART_SUBSCRIPTIONS_DISABLE' => getenv('CHART_SUBSCRIPTIONS_DISABLE'),
         ];
+    }
 
-        return $this->success([
-            'settings' => $settings,
-            'variables' => $variables,
-        ]);
+    protected function getSettings(): array
+    {
+        $c = Setting::query()->orderBy('rank');
+
+        $items = [];
+        /** @var Setting $setting */
+        foreach ($c->cursor() as $setting) {
+            $array = $setting->only('key', 'value');
+            if (!empty($setting->value) && in_array($setting->type, Setting::JSON_TYPES, true)) {
+                $array['value'] = json_decode($setting->value, true);
+            }
+            $items[$array['key']] = $array['value'];
+        }
+
+        return $items;
+    }
+
+    protected function getCategories(): array
+    {
+        $c = Category::query()
+            ->where('active', true)
+            ->orderBy('rank');
+
+        $items = [];
+        foreach ($c->cursor() as $item) {
+            /** @var Category $item */
+            $items[] = $item->prepareOutput();
+        }
+
+        return $items;
+    }
+
+    protected function getPages(): array
+    {
+        $c = Page::query()
+            ->where('active', true)
+            ->orderBy('rank');
+
+        $items = [];
+        foreach ($c->cursor() as $item) {
+            /** @var Page $item */
+            $items[] = $item->prepareOutput(true);
+        }
+
+        return $items;
+    }
+
+    protected function getLevels(): array
+    {
+        $c = Level::query()
+            ->where('active', true)
+            ->with('cover:id,uuid,updated_at')
+            ->orderBy('price');
+
+        $items = [];
+        foreach ($c->cursor() as $item) {
+            /** @var Level $item */
+            $items[] = $item->prepareOutput();
+        }
+
+        return $items;
+    }
+
+    protected function getReactions(): array
+    {
+        $c = Reaction::query()
+            ->where('active', true)
+            ->select('id', 'title', 'emoji', 'rank')
+            ->orderBy('rank');
+
+        $items = [];
+        foreach ($c->cursor() as $item) {
+            /** @var Reaction $item */
+            $items[] = $item->prepareOutput();
+        }
+
+        return $items;
     }
 }

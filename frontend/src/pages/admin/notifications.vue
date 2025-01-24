@@ -57,7 +57,7 @@ function getUserLink(user: VespUser) {
 }
 
 function getTopicLink(topic: VespTopic) {
-  return {name: 'topics-uuid', params: {uuid: topic.uuid}}
+  return {name: 'topics-uuid', params: {topics: topic.category?.uri || 'topics', uuid: topic.uuid}}
 }
 
 function getCommentLink(topic: VespTopic, comment: VespComment) {

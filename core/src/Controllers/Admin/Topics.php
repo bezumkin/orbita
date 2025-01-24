@@ -46,6 +46,12 @@ class Topics extends ModelController
     {
         if ($query = trim($this->getProperty('query', ''))) {
             $c->where('title', 'LIKE', "%$query%");
+            $c->orWhereHas('category', function ($c) use ($query) {
+                $c->where('title', 'LIKE', "%$query%");
+            });
+            $c->orWhereHas('tags', function ($c) use ($query) {
+                $c->where('title', 'LIKE', "%$query%");
+            });
         }
 
         return $c;
@@ -54,6 +60,8 @@ class Topics extends ModelController
     protected function afterCount(Builder $c): Builder
     {
         $c->with('cover:id,uuid,updated_at');
+        $c->with('tags');
+        $c->with('category:id,title,uri');
 
         return $c;
     }

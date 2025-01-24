@@ -1,6 +1,9 @@
 <template>
   <BOverlay :show="loading" opacity="0.5" class="topic">
     <div v-if="!record">
+      <div v-if="topic.category" class="topic-category">
+        <BLink :to="{name: 'topics', params: {topics: topic.category.uri}}"> {{ topic.category.title }} / </BLink>
+      </div>
       <div class="topic-header">
         <h1 class="mt-2">
           <span @click="$contentClick" v-html="title" />
@@ -79,11 +82,18 @@ function onCancel() {
 
 function onTopicUpdate(newValue: VespTopic) {
   if (newValue.uuid === topic.value.uuid) {
-    Object.keys(topic.value).forEach((key: string) => {
-      if (newValue[key] !== undefined) {
-        topic.value[key] = newValue[key]
-      }
-    })
+    if (newValue.category?.uri !== topic.value?.category?.uri) {
+      useRouter().replace({
+        name: 'topics-uuid',
+        params: {topics: newValue.category?.uri || 'topics'},
+      })
+    } else {
+      Object.keys(topic.value).forEach((key: string) => {
+        if (newValue[key] !== undefined) {
+          topic.value[key] = newValue[key]
+        }
+      })
+    }
   }
 }
 

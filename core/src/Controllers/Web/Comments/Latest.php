@@ -30,7 +30,7 @@ class Latest extends ModelGetController
             ->whereIn('id', $ids)
             ->where('active', true)
             ->with('user:id,username,fullname,avatar_id', 'user.avatar:id,uuid,updated_at')
-            ->with('topic:id,uuid,title,comments_count')
+            ->with('topic:id,uuid,title,category_id,comments_count', 'topic.category:id,title,uri')
             ->orderByDesc('id')
             ->get()
             ->toArray();

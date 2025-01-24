@@ -51,7 +51,7 @@ const router = useRouter()
 const route = useRoute()
 const isColumns = computed(() => {
   const route = router.currentRoute.value?.name as string
-  return route && (route === 'index' || route.startsWith('topics-'))
+  return route && (route === 'index' || route.startsWith('topics'))
 })
 const isAdmin = computed(() => {
   const route = router.currentRoute.value?.name as string

@@ -32,4 +32,9 @@ class  Reaction extends Model
     {
         return $this->hasMany(CommentReaction::class);
     }
+
+    public function prepareOutput(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -114,6 +114,8 @@ const config: NuxtConfig = {
         'magnifying-glass',
         'arrow-up-wide-short',
         'arrow-down-short-wide',
+        'arrow-up',
+        'arrow-down',
         'download',
         'sun',
         'moon',

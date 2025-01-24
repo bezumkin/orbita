@@ -35,7 +35,11 @@ function showLink(comment: VespComment) {
 }
 
 function getCommentLink(comment: VespComment) {
-  return {name: 'topics-uuid', params: {uuid: comment.topic?.uuid}, hash: '#comment-' + comment.id}
+  return {
+    name: 'topics-uuid',
+    params: {topics: comment.topic?.category?.uri || 'topics', uuid: comment.topic?.uuid},
+    hash: '#comment-' + comment.id,
+  }
 }
 
 onMounted(() => {

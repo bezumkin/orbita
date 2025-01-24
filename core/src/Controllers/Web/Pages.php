@@ -29,24 +29,7 @@ class Pages extends ModelGetController
 
     public function prepareRow(Model $object): array
     {
-        $columns = ['id', 'rank', 'position', 'name', 'external'];
         /** @var Page $object */
-        if ($object->external) {
-            $columns[] = 'link';
-            $columns[] = 'blank';
-        } else {
-            $columns[] = 'alias';
-            $columns[] = 'title';
-            if ($this->getPrimaryKey()) {
-                $columns[] = 'content';
-            }
-        }
-
-        $array = $object->only($columns);
-        if (!empty($array['content']) && !empty($array['content']['blocks'])) {
-            $array['content']['blocks'] = array_values($array['content']['blocks']);
-        }
-
-        return $array;
+        return $object->prepareOutput(!$this->getPrimaryKey());
     }
 }

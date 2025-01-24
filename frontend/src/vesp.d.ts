@@ -147,6 +147,14 @@ declare global {
     metadata?: Record<string, any>
   }
 
+  type VespCategory = {
+    id: number
+    title?: string
+    uri?: string
+    active?: boolean
+    [key: string]: any
+  }
+
   type VespTag = {
     id: number
     title: string

@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 
 export const useTopicsStore = defineStore('topics', () => {
   const {$socket, $scope} = useNuxtApp()
+  const category = ref<VespCategory | undefined>()
   const total = ref(0)
   const topics: Ref<VespTopic[]> = ref([])
   const loading = ref(false)
@@ -16,6 +17,7 @@ export const useTopicsStore = defineStore('topics', () => {
         reverse: Number(query.value.reverse),
         page: query.value.page,
         limit: query.value.limit,
+        category_id: category.value?.id || undefined,
       })
       total.value = data.total
       if (query.value.page === 1) {
@@ -121,5 +123,5 @@ export const useTopicsStore = defineStore('topics', () => {
     })
   }
 
-  return {query, topics, total, loading, fetch, refresh}
+  return {category, query, topics, total, loading, fetch, refresh}
 })

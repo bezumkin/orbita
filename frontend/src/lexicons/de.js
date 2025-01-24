@@ -145,6 +145,18 @@ export default {
       active: 'Aktiv',
       per_month: 'pro Monat',
     },
+    category: {
+      title_one: 'Kategorie',
+      title_many: 'Kategorien',
+      title_none: 'Keine Kategorie',
+      id: 'Id',
+      title: 'Titel',
+      uri: 'URI',
+      description: 'Beschreibung',
+      active: 'Aktiv',
+      rank: 'Rang',
+      created_at: 'Erstellt am',
+    },
     topic: {
       title_one: 'Topic',
       title_many: 'Topics',
@@ -467,6 +479,14 @@ export default {
     topic: {
       title_exists: 'Ein Topic mit diesem Namen existiert bereits.',
       wrong_content: 'Der Inhalt des Themas konnte nicht verarbeitet werden',
+    },
+    category: {
+      no_title: 'Sie haben vergessen, den Namen der Kategorie anzugeben',
+      no_uri: 'Sie müssen die Adresse für die Kategorieseite angeben',
+      system_uri: 'Sie können diese Adresse nicht verwenden, da sie bereits vom System verwendet wird.',
+      wrong_uri: 'Sie haben die falsche Adresse für die Kategorie eingegeben',
+      title_exists: 'Kategorie mit diesem Namen existiert bereits',
+      uri_exists: 'Diese Adresse wird bereits für eine andere Kategorie verwendet',
     },
     comment: {
       no_content: 'Du hast vergessen einen Kommentar zu schreiben.',

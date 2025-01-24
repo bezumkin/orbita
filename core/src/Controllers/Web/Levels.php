@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Models\Level;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Vesp\Controllers\ModelGetController;
 
 class Levels extends ModelGetController
@@ -29,5 +30,11 @@ class Levels extends ModelGetController
         $c->orderBy('price');
 
         return $c;
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        /** @var Level $object */
+        return $object->prepareOutput();
     }
 }

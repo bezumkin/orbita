@@ -6,7 +6,6 @@ import {useVespStore} from '~/stores/vesp'
 export default defineNuxtPlugin((nuxtApp) => {
   const $i18n = nuxtApp.$i18n as Composer
   const $socket = nuxtApp.$socket as Socket
-  const currency = (nuxtApp.$config.public.CURRENCY || 'RUB') as string
   const store = useVespStore()
   const {sidebar, login, isMobile, payment, variables} = storeToRefs(store)
 
@@ -16,62 +15,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       store.settings[key] = value
     })
 
-    // Listen for Pages update
-    $socket.on('page-create', (page: VespPage) => {
-      if (page.active) {
-        store.pages.push(page)
-      }
-    })
-    $socket.on('page-update', (page: VespPage) => {
-      const idx = store.pages.findIndex((i: VespPage) => i.id === page.id)
-      if (idx > -1) {
-        if (!page.active) {
-          store.pages.splice(idx, 1)
-        } else {
-          store.pages[idx] = page
-        }
-      } else if (page.active) {
-        store.pages.push(page)
-      }
-    })
-
-    // Listen for Levels update
-    $socket.on('level-create', (level: VespLevel) => {
-      if (level.active) {
-        store.levels.push(level)
-      }
-    })
-    $socket.on('level-update', (level: VespLevel) => {
-      const idx = store.levels.findIndex((i: VespLevel) => i.id === level.id)
-      if (idx > -1) {
-        if (!level.active) {
-          store.levels.splice(idx, 1)
-        } else {
-          store.levels[idx] = level
-        }
-      } else if (level.active) {
-        store.levels.push(level)
-      }
-    })
-
-    // Listen for Reactions update
-    $socket.on('reaction-create', (reaction: VespReaction) => {
-      if (reaction.active) {
-        store.reactions.push(reaction)
-      }
-    })
-    $socket.on('reaction-update', (reaction: VespReaction) => {
-      const idx = store.reactions.findIndex((i: VespReaction) => i.id === reaction.id)
-      if (idx > -1) {
-        if (!reaction.active) {
-          store.reactions.splice(idx, 1)
-        } else {
-          store.reactions[idx] = reaction
-        }
-      } else if (reaction.active) {
-        store.reactions.push(reaction)
-      }
-    })
     $socket.on('reactions', () => {
       refreshNuxtData('web-reactions')
     })
@@ -82,6 +25,30 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (user.value?.id === id) {
         loadUser()
       }
+    })
+
+    // Listen for common objects update
+    const items = {category: 'categories', page: 'pages', level: 'levels', reaction: 'reactions'}
+    Object.keys(items).forEach((key: string) => {
+      // @ts-ignore
+      const storeData: Record<string, any>[] = store[items[key]]
+      $socket.on(key + '-create', (item: any) => {
+        if (item.active) {
+          storeData.push(item)
+        }
+      })
+      $socket.on(key + '-update', (item: any) => {
+        const idx = storeData.findIndex((i: any) => i.id === item.id)
+        if (idx > -1) {
+          if (!item.active) {
+            storeData.splice(idx, 1)
+          } else {
+            storeData[idx] = item
+          }
+        } else if (item.active) {
+          storeData.push(item)
+        }
+      })
     })
   }
 
@@ -94,23 +61,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       login,
       isMobile,
       payment,
+      price: formatPrice,
       variables,
-      price: (val: number, zero: boolean = false) => {
-        if (!val && !zero) {
-          return ''
-        }
-        const locale = $i18n.locales.value.find((i: any) => i.code === $i18n.locale.value)
-        if (locale && typeof locale !== 'string') {
-          const formatter = new Intl.NumberFormat(locale.iso || 'ru-RU', {
-            currency,
-            style: 'currency',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-          return formatter.format(val)
-        }
-        return val
-      },
       settings: computed(() => {
         const settings: Record<string, any> = {}
         Object.keys(store.settings).forEach((key: string) => {
@@ -122,11 +74,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         })
         return settings
       }),
-      // @ts-ignore
-      pages: computed(() => store.pages.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
-      levels: computed(() => store.levels.sort((a, b) => (a.price > b.price ? 1 : -1))),
-      // @ts-ignore
-      reactions: computed(() => store.reactions.sort((a, b) => (a.rank > b.rank ? 1 : -1))),
+      categories: computed(() => [...store.categories].sort((a, b) => (Number(a.rank) > Number(b.rank) ? 1 : -1))),
+      pages: computed(() => [...store.pages].sort((a, b) => (Number(a.rank) > Number(b.rank) ? 1 : -1))),
+      levels: computed(() => [...store.levels].sort((a, b) => (Number(a.price) > Number(b.price) ? 1 : -1))),
+      reactions: computed(() => [...store.reactions].sort((a, b) => (Number(a.rank) > Number(b.rank) ? 1 : -1))),
     },
   }
 })

@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Models\Reaction;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Vesp\Controllers\ModelGetController;
 
 class Reactions extends ModelGetController
@@ -28,5 +29,11 @@ class Reactions extends ModelGetController
     protected function addSorting(Builder $c): Builder
     {
         return $c->orderBy('rank');
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        /** @var Reaction $object */
+        return $object->prepareOutput();
     }
 }

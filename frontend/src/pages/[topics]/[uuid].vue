@@ -1,6 +1,8 @@
 <template>
   <div>
-    <BButton variant="link" class="d-block mb-2" @click="onBack">&larr; {{ $t('actions.back') }}</BButton>
+    <BButton variant="link" class="d-block mb-2 ps-0" @click="handleBackBtn(topic)">
+      &larr; {{ $t('actions.back') }}
+    </BButton>
     <template v-if="topic && topic.access">
       <TopicContent :topic="topic" class="column" />
       <CommentsTree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
@@ -60,14 +62,6 @@ function onCommentView(comment: VespComment) {
   timeout.value = setTimeout(() => saveView(true), 5000)
 }
 
-function onBack() {
-  if (window.history.length > 1) {
-    router.back()
-  } else {
-    router.push({name: 'index'})
-  }
-}
-
 watch(
   () => topic.value?.access,
   () => saveView(false),
@@ -95,7 +89,8 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: () => [topic.value?.title, t('pages.topics'), $settings.value.title].join(' / '),
+  title: () =>
+    [topic.value?.title, topic.value?.category?.title || t('pages.topics'), $settings.value.title].join(' / '),
 })
 
 if (topic.value) {
@@ -107,5 +102,21 @@ if (topic.value) {
     ogImage: topic.value.cover ? $image(topic.value.cover) : undefined,
     twitterCard: 'summary_large_image',
   })
+}
+
+// Check for redirect
+if (topic.value?.category) {
+  if (route.params.topics !== topic.value.category.uri) {
+    sendRedirect()
+  }
+} else if (route.params.topics !== 'topics') {
+  sendRedirect()
+}
+
+function sendRedirect() {
+  navigateTo(
+    {name: 'topics-uuid', params: {topics: topic.value?.category?.uri || 'topics', uuid: topic.value?.uuid}},
+    {redirectCode: 302, replace: true},
+  )
 }
 </script>

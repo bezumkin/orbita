@@ -46,6 +46,7 @@ $group = $app->group(
             $group->any('/settings[/{key}]', App\Controllers\Admin\Settings::class);
             $group->any('/levels[/{id:\d+}]', App\Controllers\Admin\Levels::class);
             $group->any('/subscriptions/stat', App\Controllers\Admin\Subscriptions\Stat::class);
+            $group->any('/categories[/{id:\d+}]', App\Controllers\Admin\Categories::class);
             $group->any('/topics/upload[/{uuid}]', App\Controllers\Admin\Topics\Upload::class);
             $group->any('/topics[/{id:\d+}]', App\Controllers\Admin\Topics::class);
             $group->any('/notifications[/{id}]', App\Controllers\Admin\Notifications::class);
@@ -62,6 +63,7 @@ $group = $app->group(
             static function (RouteCollectorProxy $group) {
                 $group->any('/settings', App\Controllers\Web\Settings::class);
                 $group->any('/levels[/{id:\d+}]', App\Controllers\Web\Levels::class);
+                $group->any('/categories[/{uri:.+}]', App\Controllers\Web\Categories::class);
                 $group->any('/topics[/{uuid}]', App\Controllers\Web\Topics::class);
                 $group->any('/topics/{topic_uuid}/view', App\Controllers\Web\Topics\View::class);
                 $group->any('/topics/{topic_uuid}/comments[/{id:\d+}]', App\Controllers\Web\Comments::class);

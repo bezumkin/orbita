@@ -17,7 +17,7 @@ const route: Ref<RouteLocationRaw> = ref({name: 'user-payments'})
 // if (data.paid) {
 //   useAuth().loadUser()
 //   if (data.topic) {
-//     route.value = {name: 'topics-uuid', params: {uuid: data.topic.uuid}}
+//     route.value = {name: 'topics-uuid', params: {topics: data.topic.category?.uri || 'topics', uuid: data.topic.uuid}}
 //   }
 // }
 
