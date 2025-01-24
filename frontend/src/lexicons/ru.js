@@ -370,6 +370,7 @@ export default {
     index: 'Главная',
     about: 'Об авторе',
     topics: 'Заметки',
+    pages: 'Страницы',
     admin: {
       title: 'Админка',
       users: 'Пользователи',

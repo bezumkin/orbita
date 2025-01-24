@@ -370,6 +370,7 @@ export default {
     index: 'Main',
     about: 'About',
     topics: 'Topics',
+    pages: 'Pages',
     admin: {
       title: 'Admin',
       users: 'Users',
