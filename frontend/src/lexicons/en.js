@@ -417,6 +417,7 @@ export default {
     levels: 'Subscriptions',
     tags: 'Tags',
     search: 'Search',
+    categories: 'Categories',
   },
   success: {
     profile: 'Profile saved successfully',

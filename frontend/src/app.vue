@@ -18,13 +18,14 @@
               </slot>
             </BCol>
             <BCol v-if="!$isMobile" md="4" class="offset">
-              <div class="column">
+              <div v-if="!hideWidgets.includes('author')" class="column">
                 <WidgetsAuthor />
               </div>
-              <WidgetsSearch class="column" />
-              <WidgetsOnline v-if="showOnline" class="column" />
-              <WidgetsLevels class="column" />
-              <WidgetsTags class="column" />
+              <WidgetsSearch v-if="!hideWidgets.includes('search')" class="column" />
+              <WidgetsOnline v-if="!hideWidgets.includes('online')" class="column" />
+              <WidgetsLevels v-if="!hideWidgets.includes('levels')" class="column" />
+              <WidgetsCategories v-if="!hideWidgets.includes('categories')" class="column" />
+              <WidgetsTags v-if="!hideWidgets.includes('tags')" class="column" />
               <WidgetsScrollTop />
             </BCol>
           </BRow>
@@ -36,7 +37,16 @@
         </div>
       </BContainer>
 
-      <AppSidebar v-if="$isMobile" :show-online="showOnline" />
+      <AppSidebar
+        v-if="$isMobile"
+        :show-pages="!hideWidgets.includes('pages')"
+        :show-author="!hideWidgets.includes('author')"
+        :show-search="!hideWidgets.includes('search')"
+        :show-online="!hideWidgets.includes('online')"
+        :show-levels="!hideWidgets.includes('levels')"
+        :show-categories="!hideWidgets.includes('categories')"
+        :show-tags="!hideWidgets.includes('tags')"
+      />
       <AppFooter class="border-top" />
       <AppPayment />
     </div>
@@ -44,8 +54,6 @@
 </template>
 
 <script setup lang="ts">
-import {stripTags} from '~/utils/vesp'
-
 const {$settings, $variables, $image, $isMobile} = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
@@ -61,8 +69,13 @@ const background = computed(() => {
   const bg = $settings.value.background as VespFile
   return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
 })
-const {SITE_URL, COMMENTS_SHOW_ONLINE} = $variables.value
-const showOnline = COMMENTS_SHOW_ONLINE === '1'
+const hideWidgets = computed(() => {
+  const data = $variables.value?.HIDE_WIDGETS?.split(',').map((i) => i.trim().toLowerCase())
+  if ($variables.value?.COMMENTS_SHOW_ONLINE === '0') {
+    data.push('online')
+  }
+  return data
+})
 
 const mainClasses = computed(() => {
   const arr = ['d-flex', 'flex-column', 'min-vh-100']
@@ -90,7 +103,7 @@ onUnmounted(() => {
 })
 
 useHead(() => ({
-  link: [{rel: 'canonical', href: SITE_URL + route.path.slice(1)}],
+  link: [{rel: 'canonical', href: $variables.value.SITE_URL + route.path.slice(1)}],
 }))
 
 const description = stripTags(String($settings.value.description))

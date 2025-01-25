@@ -417,6 +417,7 @@ export default {
     levels: 'Abos',
     tags: 'Tags',
     search: 'Suche',
+    categories: 'Kategorien',
   },
   success: {
     profile: 'Profil erfolgreich gespeichert.',

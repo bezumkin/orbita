@@ -6,6 +6,7 @@
       <WidgetsSearch v-if="showSearch && route.name !== 'search'" />
       <WidgetsOnline v-if="showOnline" />
       <WidgetsLevels v-if="showLevels" />
+      <WidgetsCategories v-if="showCategories" />
       <WidgetsTags v-if="showTags" />
     </div>
   </BOffcanvas>
@@ -30,6 +31,10 @@ defineProps({
     default: true,
   },
   showLevels: {
+    type: Boolean,
+    default: true,
+  },
+  showCategories: {
     type: Boolean,
     default: true,
   },

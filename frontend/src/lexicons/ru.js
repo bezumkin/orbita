@@ -417,6 +417,7 @@ export default {
     levels: 'Уровни подписки',
     tags: 'Теги',
     search: 'Поиск',
+    categories: 'Категории',
   },
   success: {
     profile: 'Профиль успешно сохранён',
