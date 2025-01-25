@@ -69,7 +69,6 @@
 <script setup lang="ts">
 import slugify from 'slugify'
 import type {VespTableAction} from '@vesp/frontend'
-import {formatBigNumber} from '~/utils/vesp'
 
 const {$price, $socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_PAYMENTS_DISABLE !== '1'

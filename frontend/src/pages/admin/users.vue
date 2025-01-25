@@ -36,7 +36,6 @@
 
 <script setup lang="ts">
 import type {VespTableAction} from '@vesp/frontend'
-import {formatBigNumber} from '~/utils/vesp'
 
 const {$socket, $variables} = useNuxtApp()
 const chartEnabled = $variables.value.CHART_USERS_DISABLE !== '1'

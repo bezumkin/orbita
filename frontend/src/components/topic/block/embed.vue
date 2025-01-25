@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import type {OutputBlockData} from '@editorjs/editorjs'
-import {getEmbedLink} from '~/utils/vesp'
 
 const props = defineProps({
   block: {

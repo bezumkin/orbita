@@ -1,6 +1,5 @@
 import {Feed} from 'feed'
 import {ofetch} from 'ofetch'
-import {stripTags} from '~/utils/vesp'
 
 export async function getRssFeed() {
   const {public: config, locales} = useRuntimeConfig()
