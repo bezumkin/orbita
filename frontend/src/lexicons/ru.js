@@ -377,6 +377,14 @@ export default {
         view: 'Просмотреть',
       },
     },
+    topics: {
+      sort: {
+        date: 'Дата',
+        views: 'Просмотры',
+        comments: 'Комментарии',
+        reactions: 'Реакции',
+      },
+    },
   },
   pages: {
     index: 'Главная',

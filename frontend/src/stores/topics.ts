@@ -1,24 +1,34 @@
 import {defineStore} from 'pinia'
 
 export const useTopicsStore = defineStore('topics', () => {
+  const route = useRoute()
   const {$socket, $scope} = useNuxtApp()
   const category = ref<VespCategory | undefined>()
   const total = ref(0)
   const topics: Ref<VespTopic[]> = ref([])
   const loading = ref(false)
-  const query: Record<string, any> = ref({tags: '', reverse: false, page: 1, limit: 12})
+
+  const query: Record<string, any> = ref({
+    page: 1,
+    limit: 12,
+    sort: route.query.sort || 'date',
+    reverse: route.query.reverse,
+    tags: '',
+  })
   const {user} = useAuth()
 
   async function fetch() {
     loading.value = true
     try {
-      const data = await useGet('web/topics', {
+      const params = {
         tags: query.value.tags,
-        reverse: Number(query.value.reverse),
         page: query.value.page,
         limit: query.value.limit,
+        sort: query.value.sort || 'date',
+        reverse: query.value.reverse ? 'true' : undefined,
         category_id: category.value?.id || undefined,
-      })
+      }
+      const data = await useGet('web/topics', params)
       total.value = data.total
       if (query.value.page === 1) {
         topics.value = data.rows

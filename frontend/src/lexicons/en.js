@@ -377,6 +377,14 @@ export default {
         view: 'View',
       },
     },
+    topics: {
+      sort: {
+        date: 'Date',
+        views: 'Views',
+        comments: 'Comments',
+        reactions: 'Reactions',
+      },
+    },
   },
   pages: {
     index: 'Main',

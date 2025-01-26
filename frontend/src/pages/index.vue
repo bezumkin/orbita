@@ -1,28 +1,23 @@
 <template>
   <div>
-    <template v-if="category">
-      <BButton variant="link" class="d-block mb-2 ps-0" @click="handleBackBtn()">
-        &larr; {{ $t('actions.back') }}
+    <BButton v-if="category" variant="link" class="d-block mb-2 ps-0" @click="handleBackBtn()">
+      &larr; {{ $t('actions.back') }}
+    </BButton>
+
+    <div v-if="category" class="d-flex justify-content-between align-items-center mb-2">
+      <h1 class="m-0">{{ category.title }}</h1>
+      <TopicSort />
+    </div>
+    <div class="d-flex align-items-center justify-content-between pb-2">
+      <BButton
+        v-if="$scope('topics/put')"
+        :to="{name: 'topics-create', params: {topics: category?.uri || 'topics'}}"
+        variant="primary"
+      >
+        <VespFa icon="plus" fixed-width /> {{ $t('actions.create') }}
       </BButton>
-      <h1 v-if="category" class="mb-4">{{ category.title }}</h1>
-    </template>
-    <BRow class="align-items-center mb-3">
-      <BCol>
-        <BButton
-          v-if="$scope('topics/put')"
-          :to="{name: 'topics-create', params: {topics: category?.uri || 'topics'}}"
-          variant="primary"
-        >
-          <VespFa icon="plus" fixed-width /> {{ $t('actions.create') }}
-        </BButton>
-      </BCol>
-      <BCol cols="auto">
-        <BButton v-if="category || query.tags || query.reverse" @click="onReverse">
-          <VespFa :icon="query.reverse ? 'arrow-down-short-wide' : 'arrow-up-wide-short'" />
-          {{ $t('models.topic.published_at') }}
-        </BButton>
-      </BCol>
-    </BRow>
+      <TopicSort v-if="!category" class="ms-auto" />
+    </div>
 
     <BOverlay :show="loading" opacity="0.5" class="topics">
       <template v-if="topics.length">
@@ -43,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-const router = useRouter()
 const route = useRoute()
 const store = useTopicsStore()
 const {topics, total, loading, query, category} = storeToRefs(store)
@@ -69,15 +63,6 @@ function initObserver() {
     }
   })
   observer.observe(spinner.value)
-}
-
-function onReverse() {
-  query.value.reverse = !query.value.reverse
-  router.push({
-    name: route.name,
-    params: route.params,
-    query: {...route.query, reverse: query.value.reverse ? '1' : undefined},
-  })
 }
 
 async function onScroll() {
