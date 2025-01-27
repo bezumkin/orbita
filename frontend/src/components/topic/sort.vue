@@ -5,7 +5,7 @@
       {{ $t('components.topics.sort.' + sort) }}
     </template>
     <template v-for="key in sorting">
-      <BDropdownItem v-if="key !== sorting" :key="key" @click="onSort(key)">
+      <BDropdownItem v-if="key !== sort" :key="key" @click="onSort(key)">
         {{ $t('components.topics.sort.' + key) }}
       </BDropdownItem>
     </template>
