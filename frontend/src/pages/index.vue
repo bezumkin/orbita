@@ -105,13 +105,13 @@ if (route.params.topics) {
   if (category.value?.uri !== route.params.topics) {
     loadCategory()
     if (total.value) {
-      await fetch()
+      await refresh()
     }
   }
 } else if (category.value) {
   category.value = undefined
   if (total.value) {
-    await fetch()
+    await refresh()
   }
 }
 
