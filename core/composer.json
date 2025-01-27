@@ -39,7 +39,10 @@
   },
   "config": {
     "sort-packages": true,
-    "vendor-dir": "vendor"
+    "vendor-dir": "vendor",
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   },
   "scripts": {
     "db:create": "phinx create",

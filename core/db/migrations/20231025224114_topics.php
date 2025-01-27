@@ -23,7 +23,7 @@ final class Topics extends Migration
                     ->constrained('files')->nullOnDelete();
                 $table->foreignId('level_id')->nullable()
                     ->constrained('levels')->nullOnDelete();
-                $table->unsignedDecimal('price')->nullable();
+                $table->decimal('price')->nullable();
                 $table->boolean('active')->default(true);
                 $table->boolean('closed')->default(false);
                 $table->unsignedInteger('comments_count')->default(0);

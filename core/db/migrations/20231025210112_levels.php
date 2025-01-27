@@ -15,7 +15,7 @@ final class Levels extends Migration
                 $table->id();
                 $table->string('title');
                 $table->text('content')->nullable();
-                $table->unsignedDecimal('price');
+                $table->decimal('price');
                 $table->foreignId('cover_id')->nullable()
                     ->constrained('files')->nullOnDelete();
                 $table->boolean('active')->default(true);

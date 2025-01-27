@@ -20,7 +20,7 @@ final class Payments extends Migration
                 $table->foreignId('topic_id')->nullable()
                     ->constrained('topics')->nullOnDelete();
                 $table->string('service');
-                $table->unsignedDecimal('amount');
+                $table->decimal('amount');
                 $table->boolean('paid')->nullable();
                 $table->string('link')->nullable();
                 $table->string('remote_id')->nullable();

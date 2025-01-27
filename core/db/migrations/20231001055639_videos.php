@@ -23,7 +23,7 @@ final class Videos extends Migration
                 $table->boolean('active')->default(true);
                 $table->boolean('processed')->nullable();
                 $table->boolean('moved')->default(false);
-                $table->unsignedDecimal('progress', 5)->nullable();
+                $table->decimal('progress', 5)->nullable();
                 $table->text('manifest')->nullable();
                 $table->json('chapters')->nullable();
                 $table->text('error')->nullable();
@@ -41,7 +41,7 @@ final class Videos extends Migration
                     ->constrained('videos')->cascadeOnDelete();
                 $table->foreignId('file_id')
                     ->constrained('files')->cascadeOnDelete();
-                $table->unsignedDecimal('progress', 5)->nullable();
+                $table->decimal('progress', 5)->nullable();
                 $table->boolean('processed')->default(false);
                 $table->boolean('moved')->default(false);
                 $table->string('bandwidth', 10)->nullable();
@@ -63,8 +63,8 @@ final class Videos extends Migration
                     ->constrained('users')->cascadeOnDelete();
                 $table->unsignedSmallInteger('quality');
                 $table->unsignedSmallInteger('time')->default(0);
-                $table->unsignedDecimal('speed', 3)->default(1);
-                $table->unsignedDecimal('volume', 3)->default(1);
+                $table->decimal('speed', 3)->default(1);
+                $table->decimal('volume', 3)->default(1);
                 $table->timestamps();
 
                 $table->primary(['video_id', 'user_id']);
