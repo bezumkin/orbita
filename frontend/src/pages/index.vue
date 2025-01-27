@@ -123,14 +123,15 @@ if (!total.value && route.query.tags) {
   navigateTo({name: 'index'})
 }
 
+const pageTitle = computed(() => [category.value?.title || t('pages.index'), $settings.value.title].join(' / '))
 useHead({
-  title: () => [category.value?.title || t('pages.index'), $settings.value.title].join(' / '),
+  title: pageTitle,
 })
 
 if (category.value) {
   useSeoMeta({
-    title: category.value.title,
-    ogTitle: category.value.title,
+    title: pageTitle,
+    ogTitle: pageTitle,
     description: category.value.description || '',
     ogDescription: category.value.description || '',
   })
