@@ -53,6 +53,7 @@ const props = defineProps({
 })
 
 const {user} = useAuth()
+const store = useTopicsStore()
 const {$socket} = useNuxtApp()
 const route = useRoute()
 const isTopic = computed(() => route.params.uuid === props.topic.uuid)
@@ -128,11 +129,11 @@ function getTagParams(tag: VespTag) {
     const idx = values.findIndex((i: string) => i === id)
     values.splice(idx, 1)
   }
-  params.to = {
-    name: route.name,
-    params: route.params,
-    query: {...route.query, tags: values.length ? values.join(',') : undefined},
-  }
+  const query = {...route.query, tags: values.length ? values.join(',') : undefined}
+  params.to =
+    store.category && !isTopic.value
+      ? {name: 'topics', params: {topics: store.category.uri}, query}
+      : {name: 'index', query}
 
   return params
 }
