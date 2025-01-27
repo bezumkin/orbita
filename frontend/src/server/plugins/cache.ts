@@ -16,9 +16,8 @@ export function isEnabled(event: H3Event) {
   const path = event.path.substring(1)
   const cookie = getCookie(event, cookieName)
   const allCache = /^(sitemap|rss|turbo)/
-  const userCache = /^(pages|topics)/
 
-  return allCache.test(path) || (!cookie && (!path || userCache.test(path)))
+  return allCache.test(path) || (!cookie && !/^socket\.io/.test(path))
 }
 
 export default defineNitroPlugin(async (nitroApp) => {
