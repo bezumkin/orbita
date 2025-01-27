@@ -365,6 +365,10 @@ class Topic extends Model
         }
 
         $tags = [];
+        if ($this->category) {
+            $tags[] = $this->category->title;
+        }
+
         foreach ($this->tags as $tag) {
             $tags[] = $tag->title;
         }
