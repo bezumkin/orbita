@@ -132,7 +132,7 @@ class Comment extends Model
         return $this->topic->getLink() . '#comment-' . $this->id;
     }
 
-    public function prepareOutput(?User $user): array
+    public function prepareOutput(?User $user = null): array
     {
         $array = $this->toArray();
         if (!$this->active && (!$user || !$user->hasScope('comments'))) {

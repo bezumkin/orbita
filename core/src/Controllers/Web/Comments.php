@@ -138,7 +138,7 @@ class Comments extends ModelController
             if ($record->children()->count()) {
                 return $this->failure('errors.comment.children_exists');
             }
-            if ($record->created_at->toImmutable()->addSeconds(getenv('COMMENTS_EDIT_TIME'))->timestamp < time()) {
+            if ($record->created_at->toImmutable()->addSeconds((int)getenv('COMMENTS_EDIT_TIME'))->timestamp < time()) {
                 return $this->failure('errors.comment.edit_time');
             }
         }

@@ -20,7 +20,7 @@ class Activate extends Controller
         }
 
         $now = Carbon::now();
-        $linkTTL = getenv('REGISTER_LINK_TTL') ?: 60;
+        $linkTTL = (int)getenv('REGISTER_LINK_TTL') ?: 60;
         if ($user->reset_at && $user->reset_at->addMinutes($linkTTL) < $now) {
             return $this->failure('errors.activate.ttl');
         }
