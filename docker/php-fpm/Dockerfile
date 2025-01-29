@@ -6,8 +6,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN apt update
-RUN apt-get install -y zlib1g-dev libzip-dev libpng-dev libwebp-dev libjpeg62-turbo-dev zip unzip bash ffmpeg cron procps
-
+RUN apt-get install -y zlib1g-dev libzip-dev libpng-dev libwebp-dev libjpeg62-turbo-dev zip unzip bash ffmpeg cron
+RUN apt-get install -y libmagickwand-dev procps htop mc git
 RUN ln -sf /bin/bash /bin/sh
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp && docker-php-ext-install gd
@@ -15,6 +15,14 @@ RUN docker-php-ext-configure opcache --enable-opcache && docker-php-ext-install 
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
+RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick \
+    && cd /tmp/imagick \
+    && git fetch origin master \
+    && git switch master \
+    && phpize && ./configure \
+    && make && make install \
+    && docker-php-ext-enable imagick \
+    && rm -rf /tmp/*
 
 ARG TZ
 ENV TZ=${TZ}
