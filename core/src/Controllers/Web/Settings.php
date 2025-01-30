@@ -112,10 +112,11 @@ class Settings extends ModelController
         $c = Level::query()
             ->where('active', true)
             ->with('cover:id,uuid,updated_at')
-            ->orderBy('price');
+            ->orderBy('price')
+            ->get();
 
         $items = [];
-        foreach ($c->cursor() as $item) {
+        foreach ($c as $item) {
             /** @var Level $item */
             $items[] = $item->prepareOutput();
         }
