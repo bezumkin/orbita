@@ -66,7 +66,7 @@ class Subscription extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function createPayment(int $period = 1, string $service = null): Payment
+    public function createPayment(int $period = 1, ?string $service = null): Payment
     {
         $from = ($this->active_until && !$this->nextLevel ? $this->active_until : Carbon::now())->toImmutable();
 
@@ -131,7 +131,7 @@ class Subscription extends Model
             return 0;
         }
 
-        return $this->level->costPerDay() * $days;
+        return round($this->level->costPerDay() * $days, 2);
     }
 
     public function charge(): ?Payment

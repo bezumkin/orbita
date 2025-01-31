@@ -40,12 +40,12 @@ class Level extends Model
             $cost = round($cost);
         }
 
-        return $cost;
+        return round($cost, 2);
     }
 
     public function costForPeriod(int $period = 1): float
     {
-        return $this->price * $period;
+        return round($this->price * $period, 2);
     }
 
     public function users(): HasManyThrough
