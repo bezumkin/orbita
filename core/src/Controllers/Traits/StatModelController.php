@@ -24,8 +24,8 @@ trait StatModelController
         $previous = false;
 
         if ($date = $this->getProperty('date')) {
-            $start = Carbon::createFromTimestamp(strtotime($date[0]))->toImmutable();
-            $end = Carbon::createFromTimestamp(strtotime($date[1]))->toImmutable();
+            $start = Carbon::createFromTimestamp(strtotime($date[0]))->setTimezone(getenv('TZ'))->toImmutable();
+            $end = Carbon::createFromTimestamp(strtotime($date[1]))->setTimezone(getenv('TZ'))->toImmutable();
         } elseif ($filter = $this->getProperty('filter')) {
             $page = $this->getProperty('page', 1) - 1;
             $now = Carbon::now()->toImmutable();
@@ -63,7 +63,9 @@ trait StatModelController
         $rows = [];
         if ($days = $start->diffInDays($end)) {
             $dates = [];
-            $condition = $this->getCondition([$start->toDateString() . ' 00:00:00', $end->toDateString() . ' 23:59:59']
+            $condition = $this->getCondition([
+                $start->toDateString() . ' 00:00:00',
+                $end->toDateString() . ' 23:59:59']
             );
             foreach ($condition->cursor() as $record) {
                 $dates[$record->date] = $record->amount;
