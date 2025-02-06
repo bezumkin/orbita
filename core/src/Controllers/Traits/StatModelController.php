@@ -34,25 +34,25 @@ trait StatModelController
                     $end = $now->subYears($page);
                     $start = $end->subYear();
                     $previous = $start->subYear();
-                    $pages = $now->diffInYears($minDate);
+                    $pages = (int)$minDate->diffInYears($now);
                     break;
                 case 'quarter':
                     $end = $now->subQuarters($page);
                     $start = $end->subQuarter();
                     $previous = $start->subQuarter();
-                    $pages = $now->diffInQuarters($minDate);
+                    $pages = (int)$minDate->diffInQuarters($now);
                     break;
                 case 'month':
                     $end = $now->subMonths($page);
                     $start = $end->subMonth();
                     $previous = $start->subMonth();
-                    $pages = $now->diffInMonths($minDate);
+                    $pages = (int)$minDate->diffInMonths($now);
                     break;
                 default:
                     $end = $now->subWeeks($page);
                     $start = $end->subWeek();
                     $previous = $start->subWeek();
-                    $pages = $now->diffInWeeks($minDate);
+                    $pages = (int)$minDate->diffInWeeks($now);
             }
         } else {
             $start = $minDate;
@@ -65,8 +65,8 @@ trait StatModelController
             $dates = [];
             $condition = $this->getCondition([
                 $start->toDateString() . ' 00:00:00',
-                $end->toDateString() . ' 23:59:59']
-            );
+                $end->toDateString() . ' 23:59:59',
+            ]);
             foreach ($condition->cursor() as $record) {
                 $dates[$record->date] = $record->amount;
             }
