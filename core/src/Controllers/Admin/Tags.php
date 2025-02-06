@@ -3,6 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Models\Tag;
+use App\Services\Redis;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +14,13 @@ class Tags extends ModelController
 {
     protected string|array $scope = 'topics';
     protected string $model = Tag::class;
+    protected Redis $redis;
+
+    public function __construct(Manager $eloquent, Redis $redis)
+    {
+        parent::__construct($eloquent);
+        $this->redis = $redis;
+    }
 
     protected function beforeCount(Builder $c): Builder
     {
@@ -46,5 +55,21 @@ class Tags extends ModelController
         }
 
         return null;
+    }
+
+    protected function afterSave(Model $record): Model
+    {
+        $this->redis->send('tags');
+
+        return parent::afterSave($record);
+    }
+
+    public function delete(): ResponseInterface
+    {
+        $response = parent::delete();
+        $this->redis->del('tags');
+        $this->redis->send('tags');
+
+        return $response;
     }
 }

@@ -144,10 +144,7 @@ class Topics extends ModelController
             $updateTags += $record->topicTags()->whereNotIn('tag_id', $topicTags)->delete();
 
             if ($updateTags) {
-                $cache = \App\Controllers\Web\Tags::getCacheName();
-                if (file_exists($cache)) {
-                    unlink($cache);
-                }
+                $this->redis->del('tags');
                 $this->redis->send('tags');
             }
         }

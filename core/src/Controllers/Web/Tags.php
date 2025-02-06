@@ -4,6 +4,8 @@ namespace App\Controllers\Web;
 
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Services\Redis;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use KSamuel\FacetedSearch\Filter\ValueIntersectionFilter;
 use KSamuel\FacetedSearch\Index\Factory;
@@ -15,8 +17,13 @@ class Tags extends ModelGetController
 {
     protected string $model = Tag::class;
     protected string|array $primaryKey = ['topic_id', 'tag_id'];
-    protected const int CACHE_TIME = 600;
-    protected array $tags = [];
+    protected Redis $redis;
+
+    public function __construct(Manager $eloquent, Redis $redis)
+    {
+        parent::__construct($eloquent);
+        $this->redis = $redis;
+    }
 
     protected function beforeCount(Builder $c): Builder
     {
@@ -72,16 +79,10 @@ class Tags extends ModelGetController
         return $factory;
     }
 
-    public static function getCacheName(): string
-    {
-        return rtrim(getenv('CACHE_DIR'), '/') . '/tags.json';
-    }
-
     protected function getCache(): ?array
     {
-        $file = self::getCacheName();
-        if (self::CACHE_TIME && file_exists($file) && filemtime($file) + self::CACHE_TIME > time()) {
-            return json_decode(file_get_contents($file), true);
+        if ($this->redis->exists('tags')) {
+            return json_decode($this->redis->get('tags'), true, 512, JSON_THROW_ON_ERROR);
         }
 
         return null;
@@ -89,6 +90,7 @@ class Tags extends ModelGetController
 
     protected function setCache(array $data): void
     {
-        file_put_contents(self::getCacheName(), json_encode($data));
+        $cacheTTL = getenv('CACHE_PAGES_TIME') ?: 600;
+        $this->redis->set('tags', json_encode($data, JSON_THROW_ON_ERROR), 'EX', $cacheTTL);
     }
 }
