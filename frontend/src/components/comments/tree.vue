@@ -78,7 +78,7 @@ const commentForm: Ref<VespComment> = ref({id: 0, parent_id: 0, content: {}})
 const form = ref()
 const tree = ref()
 
-const {data, refresh, pending} = await useCustomFetch(url)
+const {data, pending} = await useCustomFetch(url)
 const comments = computed(() => data.value?.rows || [])
 const total = computed(() => comments.value.length)
 const commentsTree = computed(() => {
@@ -111,13 +111,15 @@ function buildTree(nodes: VespComment[], depth: number = maxLevel.value) {
   const ancestry = function* (id: number) {
     if (id) {
       yield id
-      yield* ancestry(index[id].parent_id)
+      if (index[id]) {
+        yield* ancestry(index[id].parent_id)
+      }
     }
   }
 
   nodes.forEach((node) => {
     const [ancestor] = [...ancestry(node.parent_id)].slice(-depth)
-    if (ancestor) {
+    if (ancestor && index[ancestor]) {
       index[ancestor].children = index[ancestor].children || []
       index[ancestor].children?.push(index[node.id])
     }
@@ -332,6 +334,13 @@ function onCommentUpdate(comment: VespComment) {
   }
 }
 
+function onCommentDelete(comment: VespComment) {
+  const idx = comments.value.findIndex((i: VespComment) => i.id === comment.id)
+  if (idx > -1) {
+    comments.value.splice(idx, 1)
+  }
+}
+
 onMounted(() => {
   initObserver()
   if (total.value) {
@@ -340,7 +349,7 @@ onMounted(() => {
 
   $socket.on('comment-create', onCommentCreate)
   $socket.on('comment-update', onCommentUpdate)
-  $socket.on('comment-delete', refresh)
+  $socket.on('comment-delete', onCommentDelete)
 })
 
 onUnmounted(() => {
@@ -350,6 +359,6 @@ onUnmounted(() => {
 
   $socket.off('comment-create', onCommentCreate)
   $socket.off('comment-update', onCommentUpdate)
-  $socket.off('comment-delete', refresh)
+  $socket.off('comment-delete', onCommentDelete)
 })
 </script>
