@@ -34,7 +34,7 @@ const imageProps = computed(() => {
 
   if (width > w * 1.25 || height > h * 1.25) {
     if (width >= w * 2 || height >= h * 2) {
-      data.srcset = $image(props.block.data, {w: w * 2, h: h * 2, fit}) + ' 2x'
+      data.srcset = $image(props.block.data, {w, h, fit, dpr: 2}) + ' 2x'
     }
     data.style = {cursor: 'pointer'}
 

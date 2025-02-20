@@ -33,8 +33,9 @@ const imgProps = computed(() => {
     class: `user-avatar d-inline-flex rounded-circle flex-shrink-0 bg-${props.variant}`,
   }
   if (props.user.avatar) {
-    data.src = $image(props.user.avatar, {w: props.size, h: props.size, fit: 'crop'})
-    data.srcset = $image(props.user.avatar, {w: Number(props.size) * 2, h: Number(props.size) * 2, fit: 'crop'}) + ' 2x'
+    const tmp = {w: props.size, h: props.size, fit: 'crop'}
+    data.src = $image(props.user.avatar, tmp)
+    data.srcset = $image(props.user.avatar, {...tmp, dpr: 2}) + ' 2x'
   }
   return data
 })

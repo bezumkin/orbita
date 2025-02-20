@@ -32,8 +32,9 @@ const posterProps = computed(() => {
     data.height = 150
     data.class.push('rounded-circle')
   }
-  data.src = $image($settings.value.poster, {w: data.width, h: data.height, fit: 'crop'})
-  data.srcset = $image($settings.value.poster, {w: data.width * 2, h: data.height * 2, fit: 'crop'}) + ' 2x'
+  const tmp = {w: data.width, h: data.height, fit: 'crop'}
+  data.src = $image($settings.value.poster, tmp)
+  data.srcset = $image($settings.value.poster, {...tmp, dpr: 2}) + ' 2x'
 
   return data
 })

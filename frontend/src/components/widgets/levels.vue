@@ -8,7 +8,7 @@
         <div v-if="level.cover" class="cover">
           <BImg
             :src="$image(level.cover, {h: 150, fit: 'crop'})"
-            :srcset="$image(level.cover, {h: 300, fit: 'crop'}) + ' 2x'"
+            :srcset="$image(level.cover, {h: 150, fit: 'crop', dpr: 2}) + ' 2x'"
             class="rounded"
             height="150"
           />
