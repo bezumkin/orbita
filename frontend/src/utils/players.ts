@@ -131,8 +131,8 @@ export async function initVideoPlayer(uuid: string, target: HTMLElement, props: 
     }
   })
 
-  // @ts-ignore
-  player.addEventListener('provider-change', ({provider}) => {
+  player.addEventListener('provider-change', (event) => {
+    const provider = event.detail
     if (provider?.type === 'hls') {
       provider.library = HLS
       provider.config = {
