@@ -305,17 +305,22 @@ class Topic extends Model
             $c->whereJsonContains('scope', 'vip');
         });
 
+        $notified = [];
         /** @var User $user */
         foreach ($vip->cursor() as $user) {
             $user->notifications()->create([
                 'topic_id' => $this->id,
                 'type' => 'topic-new',
             ]);
+            $notified[] = $user->id;
         }
 
         // Subscribers
         $level = $this->level;
         $users = clone $common;
+        if (!empty($notified)) {
+            $users->whereNotIn('id', $notified);
+        }
         if ($level && $this->price) {
             $users->where(function (Builder $c) use ($level) {
                 $c->whereHas('currentSubscription', static function (Builder $c) use ($level) {
