@@ -11,8 +11,12 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   if ($socket) {
     // Listen for Settings update
-    $socket.on('setting', ({key, value}: {key: string; value: string | string[]}) => {
-      store.settings[key] = value
+    $socket.on('setting', ({key, value}: {key: string; value: string}) => {
+      try {
+        store.settings[key] = JSON.parse(value)
+      } catch (e) {
+        store.settings[key] = value
+      }
     })
 
     $socket.on('reactions', () => {
@@ -72,6 +76,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           }
           settings[key] = value
         })
+        console.log(settings.description)
         return settings
       }),
       categories: computed(() => [...store.categories].sort((a, b) => (Number(a.rank) > Number(b.rank) ? 1 : -1))),
