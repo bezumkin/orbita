@@ -79,7 +79,7 @@ class Subscription extends Model
             'level' => $this->nextLevel->id ?? $this->level->id,
             'title' => $this->nextLevel->title ?? $this->level->title,
             'period' => $period,
-            'until' => (string)$from->addMonths($period),
+            'until' => (string)$from->addDays($period * 30),
         ];
 
         return $payment;
@@ -96,12 +96,12 @@ class Subscription extends Model
 
         $period = $this->next_period ?? $this->period;
         if (!$this->active_until || $this->active_until < $now || $this->next_level_id) {
-            $this->active_until = $now->addMonths($period);
+            $this->active_until = $now->addDays($period * 30);
             if ($this->next_level_id) {
                 $this->level_id = $this->next_level_id;
             }
         } else {
-            $this->active_until = $payment->paid_at->addMonths($period);
+            $this->active_until = $payment->paid_at->addDays($period * 30);
         }
         $this->period = $period;
         $this->active = true;
@@ -111,7 +111,7 @@ class Subscription extends Model
         $this->save();
 
         $this->sendEmail('paid');
-        if (!Carbon::now()->diffInDays($this->created_at)) {
+        if (!(int)Carbon::now()->diffInDays($this->created_at)) {
             Socket::send('subscription', [], 'levels');
         }
     }
