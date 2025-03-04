@@ -130,8 +130,16 @@ class Video extends Model
             if (!$this->image && $image = $media->getPreview($this->id)) {
                 $this->image_id = $image->id;
             }
+        } catch (Throwable $e) {
+            $this->processed = false;
+            $this->error = $e->getMessage();
+            $this->save();
 
-            if (!$this->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
+            return;
+        }
+
+        if (!$this->audio && getenv('EXTRACT_VIDEO_AUDIO_ENABLED')) {
+            try {
                 if (PHP_SAPI === 'cli') {
                     $time = microtime(true);
                     echo 'Extracting audio... ';
@@ -141,26 +149,11 @@ class Video extends Model
                 if (PHP_SAPI === 'cli') {
                     echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
                 }
+                $this->save();
+                $this->refresh()->updateContentBlocks();
+            } catch (Throwable $e) {
+                Log::error($e);
             }
-            if (!$this->thumbnail && getenv('EXTRACT_VIDEO_THUMBNAILS_ENABLED')) {
-                if (PHP_SAPI === 'cli') {
-                    $time = microtime(true);
-                    echo 'Extracting thumbnails... ';
-                }
-                $thumbnail = $media->getThumbnail($this->id);
-                $this->thumbnail_id = $thumbnail->id;
-                if (PHP_SAPI === 'cli') {
-                    echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
-                }
-            }
-            $this->save();
-            $this->refresh()->updateContentBlocks();
-        } catch (Throwable $e) {
-            $this->processed = false;
-            $this->error = $e->getMessage();
-            $this->save();
-
-            return;
         }
 
         $steps = count($qualities);
@@ -228,6 +221,23 @@ class Video extends Model
                 return;
             }
         }
+
+        if (!$this->thumbnail && getenv('EXTRACT_VIDEO_THUMBNAILS_ENABLED')) {
+            try {
+                if (PHP_SAPI === 'cli') {
+                    $time = microtime(true);
+                    echo 'Extracting thumbnails... ';
+                }
+                $thumbnail = $media->getThumbnail($this->id);
+                $this->thumbnail_id = $thumbnail->id;
+                if (PHP_SAPI === 'cli') {
+                    echo 'Done in ' . microtime(true) - $time . ' s.' . PHP_EOL;
+                }
+            } catch (Throwable $e) {
+                Log::error($e);
+            }
+        }
+
         $this->finishProcessing();
     }
 
