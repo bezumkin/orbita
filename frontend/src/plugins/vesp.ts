@@ -76,7 +76,6 @@ export default defineNuxtPlugin((nuxtApp) => {
           }
           settings[key] = value
         })
-        console.log(settings.description)
         return settings
       }),
       categories: computed(() => [...store.categories].sort((a, b) => (Number(a.rank) > Number(b.rank) ? 1 : -1))),
