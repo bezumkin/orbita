@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+import { useGlobalHotkeys } from '~/utils/use-global-hotkeys'
+
 const props = defineProps({
   uuid: {
     type: String,
@@ -26,6 +28,8 @@ const props = defineProps({
 
 const video = ref()
 const player = ref()
+
+useGlobalHotkeys(player)
 
 async function initPlayer() {
   if (!props.uuid) {
