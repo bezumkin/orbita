@@ -88,15 +88,18 @@ onUnmounted(() => {
   }
 })
 
+const pageTitle = computed(() => {
+  return [topic.value?.title, topic.value?.category?.title || t('pages.topics'), $settings.value.title].join(' / ')
+})
+
 useHead({
-  title: () =>
-    [topic.value?.title, topic.value?.category?.title || t('pages.topics'), $settings.value.title].join(' / '),
+  title: () => pageTitle.value,
 })
 
 if (topic.value) {
   useSeoMeta({
-    title: topic.value.title,
-    ogTitle: topic.value.title,
+    title: pageTitle.value,
+    ogTitle: pageTitle.value,
     description: topic.value.teaser,
     ogDescription: topic.value.teaser,
     ogImage: topic.value.cover ? $image(topic.value.cover) : undefined,
