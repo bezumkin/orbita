@@ -1,6 +1,6 @@
 <template>
   <div class="content-editor">
-    <div v-if="!readOnly" class="actions">
+    <div v-if="!readOnly" class="actions sticky-top">
       <template v-for="action in enabledBlocks" :key="action.type">
         <BButton v-if="action.config?.click" :variant="btnVariant" :size="btnSize" @click="action.config.click">
           <VespFa :icon="action.icon || action.type" class="fa-fw" />
