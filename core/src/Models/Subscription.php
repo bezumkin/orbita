@@ -74,7 +74,7 @@ class Subscription extends Model
         $payment->user_id = $this->user->id;
         $payment->subscription_id = $this->id;
         $payment->service = $service ?? $this->service;
-        $payment->amount = $this->amountForPeriod($period);
+        $payment->amount = $this->amountForPeriod($period, $this->nextLevel);
         $payment->metadata = [
             'level' => $this->nextLevel->id ?? $this->level->id,
             'title' => $this->nextLevel->title ?? $this->level->title,
@@ -85,9 +85,9 @@ class Subscription extends Model
         return $payment;
     }
 
-    public function amountForPeriod($period): float
+    public function amountForPeriod($period, ?Level $level = null): float
     {
-        return $this->level->price * $period;
+        return ($level?->price ?? $this->level->price) * $period;
     }
 
     public function activate(Payment $payment): void
