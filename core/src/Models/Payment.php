@@ -122,4 +122,22 @@ class Payment extends Model
 
         return null;
     }
+
+    public function refund(): bool
+    {
+        $service = $this->getService();
+        if (!$this->paid) {
+            return false;
+        }
+
+        if ($response = $service->cancelPayment($this)) {
+            if ($this->subscription?->active) {
+                $this->subscription->disable();
+            }
+            $this->paid = false;
+            $this->save();
+        }
+
+        return $response;
+    }
 }

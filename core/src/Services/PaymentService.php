@@ -33,4 +33,9 @@ abstract class PaymentService
     {
         return false;
     }
+
+    public function cancelPayment(Payment $payment): bool
+    {
+        return false;
+    }
 }
