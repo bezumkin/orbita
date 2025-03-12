@@ -5,6 +5,7 @@ namespace App\Services\Payments;
 use App\Models\Payment;
 use App\Services\Log;
 use App\Services\PaymentService;
+use App\Services\Utils;
 use GuzzleHttp\Client;
 use Throwable;
 
@@ -28,7 +29,7 @@ class Tbank extends PaymentService
     {
         $url = $this->getSuccessUrl($payment);
         $data = [
-            'Amount' => $payment->amount * 100,
+            'Amount' => round($payment->amount) * 100,
             'OrderId' => $payment->id,
             'Description' => '',
             'CustomerKey' => $payment->user_id,
@@ -36,6 +37,7 @@ class Tbank extends PaymentService
             'Language' => $payment->user->lang ?: 'ru',
             'SuccessURL' => $url,
             'FailURL' => $url,
+            'NotificationURL' => Utils::getApiUrl() . 'web/payment/tbank',
             'DATA' => [],
             'Receipt' => [
                 'Email' => $payment->user->email,
@@ -107,7 +109,7 @@ class Tbank extends PaymentService
 
     public function getSuccessUrl(Payment $payment): string
     {
-        return rtrim(getenv('SITE_URL'), '/') . '/user/payments/' . $payment->id;
+        return Utils::getSiteUrl() . 'user/payments/' . $payment->id;
     }
 
     public function chargeSubscription(Payment $payment): ?bool
@@ -158,21 +160,32 @@ class Tbank extends PaymentService
         return false;
     }
 
-    public function cancelPayment(Payment $payment): ?bool
+    public function cancelPayment(Payment $payment): bool
     {
         $response = $this->sendRequest('Cancel', ['PaymentId' => $payment->remote_id]);
 
-        return in_array($response['Status'], ['REVERSED', 'REFUNDED', 'CANCELED'], true);
+        return in_array(@$response['Status'], ['REVERSED', 'REFUNDED', 'CANCELED'], true);
     }
 
-    protected function sendRequest(string $method, array $data)
+    protected function sendRequest(string $method, array $data): array
     {
         $data['TerminalKey'] = getenv('PAYMENT_TBANK_TERMINAL');
         $data['Token'] = $this->getToken($data);
 
-        $response = $this->client->post($method, ['json' => $data]);
+        try {
+            $response = $this->client->post($method, ['json' => $data]);
+            $body = (string)$response->getBody();
+            $output = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            if (empty($output['Success'])) {
+                Log::error('Tbank error: ' . $body, ['method' => $method, ...$data]);
+            }
 
-        return json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            return $output;
+        } catch (\Throwable  $e) {
+            Log::error($e);
+        }
+
+        return [];
     }
 
     protected function getToken(array $data): string
@@ -189,5 +202,24 @@ class Tbank extends PaymentService
         }
 
         return hash('sha256', $values);
+    }
+
+    public function receiveNotification(array $data): array
+    {
+        /** @var Payment $payment */
+        $payment = Payment::query()
+            ->where('service', 'Tbank')
+            ->where('remote_id', $data['PaymentId'])
+            ->first();
+        if ($payment) {
+            $status = $payment->checkStatus();
+            if ($status && $payment->subscription && !empty($data['RebillId'])) {
+                $payment = $payment->refresh();
+                $payment->subscription->remote_id = $data['RebillId'];
+                $payment->subscription->save();
+            }
+        }
+
+        exit('OK');
     }
 }
