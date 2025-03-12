@@ -80,6 +80,23 @@ class Audio extends Video
     public function get(): ResponseInterface
     {
         $file = $this->file;
+        $fs = $file->getFilesystem();
+
+        $useRemote = method_exists($fs, 'getStreamLink') && $stream = getenv('STREAM_MEDIA_FROM_S3');
+        if ($useRemote) {
+            if ($stream === '2' && !$this->isFree) {
+                $useRemote = false;
+            }
+        }
+        if ($useRemote) {
+            return $this->response
+                ->withStatus(302)
+                ->withHeader('Location', $fs->getStreamLink($file->getFilePathAttribute()))
+                ->withHeader(
+                    'Access-Control-Allow-Origin',
+                    getenv('CORS') ? $this->request->getHeaderLine('HTTP_ORIGIN') : ''
+                );
+        }
 
         if ($range = $this->request->getHeaderLine('Range')) {
             return $this->getRange($file, $range);
