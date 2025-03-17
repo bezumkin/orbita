@@ -52,7 +52,7 @@ const props = defineProps({
   },
 })
 
-const locale = useDateLocale()
+const locale = useDateLocale().value
 const {$i18n, $isMobile, $socket} = useNuxtApp()
 
 let chart: Chart<'line', string[], string>
@@ -140,8 +140,12 @@ async function init() {
           displayColors: false,
           callbacks: {
             title(item) {
-              const date = new Date(item[0].label)
-              return [formatDateShort(date), format(date, 'EEEE', {locale: locale.value})]
+              try {
+                const date = new Date(item[0].label)
+                return [formatDateShort(date), format(date, 'EEEE', {locale})]
+              } catch (e) {
+                return ''
+              }
             },
             label: function (item: Record<string, any>) {
               return props.formatter(item.raw, 'label')
@@ -187,9 +191,11 @@ async function init() {
 
 async function update() {
   await fetch()
-  chart.data.labels = values.value.map((i: Record<string, string>) => i.date)
-  chart.data.datasets[0].data = values.value.map((i: Record<string, string>) => i.amount)
-  addChartAnnotations()
+  if (chart) {
+    chart.data.labels = values.value.map((i: Record<string, string>) => i.date)
+    chart.data.datasets[0].data = values.value.map((i: Record<string, string>) => i.amount)
+    addChartAnnotations()
+  }
 }
 
 function addChartAnnotations() {
