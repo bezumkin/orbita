@@ -42,6 +42,10 @@ class Tags extends ModelGetController
     public function prepareList(array $array): array
     {
         $filters = [];
+        $categoryId = $this->getProperty('category_id');
+        if ($categoryId !== null) {
+            $filters[] = new ValueIntersectionFilter('category', (int)$categoryId);
+        }
         $selected = $this->getProperty('selected');
         if ($selected && $selected = array_map('trim', explode(',', $selected))) {
             $filters[] = new ValueIntersectionFilter('tag', $selected);
@@ -52,6 +56,14 @@ class Tags extends ModelGetController
 
         foreach ($array['rows'] as &$row) {
             $row['topics'] = $data['tag'][$row['id']] ?? 0;
+        }
+        unset($row);
+
+        if ($this->getProperty('no_empty')) {
+            $array['rows'] = array_values(array_filter($array['rows'], static function ($row) {
+                return $row['topics'] > 0;
+            }));
+            $array['total'] = count($array['rows']);
         }
 
         return $array;
@@ -69,7 +81,10 @@ class Tags extends ModelGetController
             foreach ($topics as $topic) {
                 /** @var Topic $topic */
                 foreach ($topic->topicTags as $topicTag) {
-                    $storage->addRecord($topic->id, ['tag' => $topicTag->tag_id]);
+                    $storage->addRecord($topic->id, [
+                        'tag' => $topicTag->tag_id,
+                        'category' => $topic->category_id ?? 0,
+                    ]);
                 }
             }
             $storage->optimize();
