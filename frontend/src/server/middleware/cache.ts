@@ -12,9 +12,10 @@ export default defineEventHandler(async (event: H3Event) => {
 
   const key = getKey(event)
   const storage = useStorage('cache')
-  const cache = await storage.getItem<{time: number; body: string; headers: Record<string, any>}>(key)
+  const cache = await storage.getItem<{time: number; body: string; headers: Record<string, any>; status: number}>(key)
   const time = new Date().getTime()
   if (cache && time - cache.time < cacheTime * 1000) {
+    setResponseStatus(event, cache.status)
     setResponseHeaders(event, {
       ...cache.headers,
       'Cache-Control': `s-maxage=${cacheTime}, stale-while-revalidate`,
