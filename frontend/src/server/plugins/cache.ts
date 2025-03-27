@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto'
 import {defineNitroPlugin} from 'nitropack/runtime'
 import {type H3Event} from 'h3'
 
@@ -5,17 +6,26 @@ export const cacheTime = Number(useRuntimeConfig().CACHE_PAGES_TIME) || 0
 export const cookieName = 'auth:token'
 
 export function getKey(event: H3Event): string {
-  let path = event.path.substring(1)
-
-  // Handle Nuxt error page
-  if (/^__nuxt_error/.test(path)) {
-    const url = URL.parse(path, 'https://localhost/')?.searchParams?.get('url')
-    if (url) {
-      path = url.substring(1)
-    }
+  const url = URL.parse(event.path, 'https://localhost')
+  if (!url) {
+    return ''
   }
 
-  return 'routes:' + (!path ? 'index' : path.split('/').join(':'))
+  let path = url.pathname.substring(1) || 'index'
+  if (/^__nuxt_error/.test(path)) {
+    // Handle Nuxt error page
+    const tmp = url.searchParams.get('url')
+    if (tmp) {
+      path = tmp.split('?')[0].substring(1)
+    }
+  } else if (url.searchParams.size) {
+    // Handle url params
+    url.searchParams.sort()
+    const tmp = JSON.stringify(Object.fromEntries(url.searchParams.entries()))
+    path += '-' + createHash('sha1').update(tmp).digest('hex')
+  }
+
+  return 'routes:' + path.split('/').join(':')
 }
 
 export function getStatusCode(event: H3Event): number {
