@@ -14,6 +14,7 @@ use Slim\Psr7\UploadedFile;
  * @method failure(string $message, int $code = 422)
  * @property array $attachments
  * @property array $allowedTypes
+ * @property array $maximumSize
  */
 trait FileModelController
 {
@@ -55,7 +56,14 @@ trait FileModelController
                     }
                 }
 
-                if (!empty($tmp['file']) && $file->uploadFile($uploadedFile)) {
+                if (isset($this->maximumSize[$attachment])) {
+                    $size = $uploadedFile->getSize();
+                    if ($size > $this->maximumSize[$attachment]) {
+                        return $this->failure('errors.upload.limit_size');
+                    }
+                }
+
+                if ($file->uploadFile($uploadedFile)) {
                     $record->{"{$attachment}_id"} = $file->id;
                 }
             }

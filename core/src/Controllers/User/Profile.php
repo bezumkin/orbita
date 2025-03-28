@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\Traits\FileModelController;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -13,7 +14,29 @@ class Profile extends \Vesp\Controllers\User\Profile
 
     protected string|array $scope = 'profile';
     public array $attachments = ['avatar'];
-    public array $allowedTypes = ['avatar' => 'image/'];
+    public array $allowedTypes = ['avatar' => ['image/png', 'image/jpeg']];
+    public array $maximumSize = ['avatar' => 5242880];
+
+    public function __construct(Manager $eloquent)
+    {
+        parent::__construct($eloquent);
+
+        if ($avatarExtensions = getenv('AVATAR_UPLOAD_EXTENSIONS')) {
+            $this->allowedTypes = ['avatar' => []];
+            $extensions = array_map('trim', explode(',', $avatarExtensions));
+            foreach ($extensions as $extension) {
+                $extension = strtolower($extension);
+                if ($extension === 'jpg') {
+                    $this->allowedTypes['avatar'][] = 'image/jpeg';
+                } else {
+                    $this->allowedTypes['avatar'][] = 'image/' . $extension;
+                }
+            }
+        }
+        if ($avatarLimit = (int)getenv('AVATAR_UPLOAD_LIMIT')) {
+            $this->maximumSize['avatar'] = $avatarLimit * 1024 * 1024;
+        }
+    }
 
     public function get(): ResponseInterface
     {
