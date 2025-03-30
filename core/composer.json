@@ -22,6 +22,7 @@
     "doctrine/dbal": "^3.7",
     "fenom/fenom": "^2.12",
     "guzzlehttp/guzzle": "^7.8",
+    "intervention/image-driver-vips": "^1.0",
     "k-samuel/faceted-search": "^3.2",
     "league/flysystem-aws-s3-v3": "^3.16",
     "manticoresoftware/manticoresearch-php": "^3.1",

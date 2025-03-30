@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\File;
+use Intervention\Image\Drivers\Vips\Driver;
 use Psr\Http\Message\ResponseInterface;
 
 class Image extends \Vesp\Controllers\Data\Image
@@ -12,6 +13,10 @@ class Image extends \Vesp\Controllers\Data\Image
 
     protected function handleFile($file): ?ResponseInterface
     {
+        if (getenv('IMAGE_DRIVER') === 'vips') {
+            putenv('IMAGE_DRIVER=' . Driver::class);
+        }
+
         /** @var File $file */
         if ($crop = @$file->metadata['crop']) {
             $data = implode(',', [$crop['width'], $crop['height'], $crop['x'], $crop['y']]);
