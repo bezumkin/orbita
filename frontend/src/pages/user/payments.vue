@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VespTable v-bind="{url, sort, dir, fields, rowClass}">
+    <VespTable v-if="!paymentId" v-bind="{url, sort, dir, fields, rowClass}">
       <template #cell(type)="{item}: any">
         <div v-if="item.topic">
           <BLink
@@ -31,13 +31,14 @@
         <VespFa v-else icon="hourglass-half" />
       </template>
     </VespTable>
-    <NuxtPage />
+    <NuxtPage v-else />
   </div>
 </template>
 
 <script setup lang="ts">
 import slugify from 'slugify'
 
+const paymentId = computed(() => useRoute().params.id)
 const {$price, $settings} = useNuxtApp()
 const {t} = useI18n()
 const url = 'user/payments'
