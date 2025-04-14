@@ -49,7 +49,7 @@
       </BCol>
       <BCol md="6">
         <BFormGroup :label="$t('models.topic.teaser')">
-          <BFormTextarea v-model="record.teaser" no-resize style="height: 200px" />
+          <textarea v-model="record.teaser" class="form-control" style="height: 200px; resize: none" />
         </BFormGroup>
       </BCol>
     </BRow>

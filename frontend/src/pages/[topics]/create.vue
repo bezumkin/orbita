@@ -31,6 +31,7 @@ const loading = ref(false)
 const record = ref({
   id: 0,
   title: '',
+  teaser: '',
   price: 0,
   content: {},
   user_id: user.value?.id,
