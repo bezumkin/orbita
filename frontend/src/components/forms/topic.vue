@@ -69,7 +69,7 @@
       />
     </BFormGroup>
 
-    <BRow>
+    <BRow class="align-items-center">
       <BCol md="6">
         <BFormGroup>
           <BFormCheckbox v-model="record.active">
@@ -78,15 +78,17 @@
         </BFormGroup>
       </BCol>
       <BCol md="6">
-        <BFormGroup>
-          <BFormCheckbox v-model="record.closed">
-            {{ $t('models.topic.closed') }}
-          </BFormCheckbox>
+        <BFormGroup v-if="changePubdate && published">
+          <VespInputDatePicker
+            v-model="record.published_at"
+            type="datetime"
+            :placeholder="$t('models.topic.published_at')"
+          />
         </BFormGroup>
       </BCol>
     </BRow>
 
-    <BRow v-if="!record.published_at" class="align-items-center">
+    <BRow v-if="!published" class="align-items-center">
       <BCol md="6">
         <BFormGroup class="py-md-2">
           <BFormCheckbox v-model="delayed" :disabled="record.active">
@@ -97,13 +99,17 @@
       <BCol md="6">
         <Transition name="fade">
           <BFormGroup v-if="delayed">
-            <VespInputDatePicker v-model="record.publish_at" type="datetime" required>
-              {{ $t('models.topic.publish_at') }}
-            </VespInputDatePicker>
+            <VespInputDatePicker v-model="record.publish_at" type="datetime" required />
           </BFormGroup>
         </Transition>
       </BCol>
     </BRow>
+
+    <BFormGroup>
+      <BFormCheckbox v-model="record.closed">
+        {{ $t('models.topic.closed') }}
+      </BFormCheckbox>
+    </BFormGroup>
   </div>
 </template>
 
@@ -143,9 +149,11 @@ const accessOptions = computed(() => {
 })
 const categoryOptions = ref([{value: null, text: t('models.category.title_none')}])
 const delayed = ref(props.modelValue.publish_at !== null)
+const published = ref(props.modelValue.published_at !== null)
 
 const editorBlocks = $variables.value.EDITOR_TOPIC_BLOCKS || false
 const changeAuthor = $scope('users/get') && $variables.value.TOPICS_CHANGE_AUTHOR === '1'
+const changePubdate = $variables.value.TOPICS_CHANGE_PUBDATE === '1'
 
 const accessLevel = ref('free')
 if (record.value.id) {

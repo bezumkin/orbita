@@ -8,6 +8,7 @@ use App\Models\Topic;
 use App\Models\TopicTag;
 use App\Services\Manticore;
 use App\Services\Redis;
+use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -100,6 +101,9 @@ class Topics extends ModelController
         if ($record->active && !$record->published_at) {
             $record->published_at = date('Y-m-d H:i:s');
             $this->notifyUsers = true;
+        }
+        if (getenv('TOPICS_CHANGE_PUBDATE') && $pubdate = $this->getProperty('published_at')) {
+            $record->published_at = Carbon::createFromTimestamp(strtotime($pubdate))->setTimezone(getenv('TZ'));
         }
         if (!$record->price) {
             $record->price = null;
@@ -201,6 +205,9 @@ class Topics extends ModelController
         $array = $object->toArray();
         if ($object->publish_at) {
             $array['publish_at'] = $object->publish_at->toDateTimeString();
+        }
+        if ($object->published_at) {
+            $array['published_at'] = $object->published_at->toDateTimeString();
         }
         if (isset($array['content'])) {
             $array['content']['blocks'] = !empty($array['content']['blocks'])
