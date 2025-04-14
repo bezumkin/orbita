@@ -179,6 +179,13 @@ export default {
         sub_payments: 'Für Abonennten und Einmalzahlungen',
         payments: 'Einmalzahlung',
       },
+      type: {
+        title: 'Art der Veröffentlichung',
+        none: 'Spezifiziert',
+        video: 'Video',
+        image: 'Bild',
+        text: 'Text',
+      },
       delayed: 'Verzögerte Veröffentlichung',
     },
     topic_view: {

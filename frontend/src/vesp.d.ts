@@ -84,6 +84,7 @@ declare global {
     user_id?: number
     level_id?: number
     teaser?: string
+    type?: string
     price?: number | string
     active: boolean
     closed: boolean

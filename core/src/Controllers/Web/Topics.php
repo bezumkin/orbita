@@ -57,6 +57,9 @@ class Topics extends ModelGetController
                     ->havingRaw('COUNT(tag_id) = ?', [count($tags)]);
             });
         }
+        if ($type = $this->getProperty('type')) {
+            $c->where('type', $type);
+        }
 
         return $c;
     }

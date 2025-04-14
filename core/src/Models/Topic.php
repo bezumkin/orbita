@@ -19,6 +19,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $title
  * @property array $content
  * @property ?string $teaser
+ * @property ?string $type
  * @property int $user_id
  * @property ?int $cover_id
  * @property ?int $level_id
@@ -218,6 +219,7 @@ class Topic extends Model
             'uuid',
             'title',
             'teaser',
+            'type',
             'level_id',
             'price',
             'closed',

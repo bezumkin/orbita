@@ -1,19 +1,19 @@
 <template>
   <div>
-    <BRow v-if="categoryOptions.length > 1">
+    <BRow>
       <BCol md="8">
         <BFormGroup :label="$t('models.topic.title')">
           <BFormInput v-model="record.title" required autofocus />
         </BFormGroup>
       </BCol>
       <BCol md="4">
-        <BFormGroup :label="$t('models.category.title_one')">
-          <BFormSelect v-model="record.category_id" :options="categoryOptions" />
+        <BFormGroup v-if="typeOptions.length > 1" :label="$t('models.topic.type.title')">
+          <BFormSelect v-model="record.type" :options="typeOptions" />
         </BFormGroup>
       </BCol>
     </BRow>
-    <BFormGroup v-else :label="$t('models.topic.title')">
-      <BFormInput v-model="record.title" required autofocus />
+    <BFormGroup v-if="categoryOptions.length > 1" :label="$t('models.category.title_one')">
+      <BFormSelect v-model="record.category_id" :options="categoryOptions" />
     </BFormGroup>
 
     <BFormGroup :label="$t('models.topic.content')">
@@ -147,7 +147,15 @@ const accessOptions = computed(() => {
     {value: 'payments', text: t('models.topic.access.payments')},
   ]
 })
-const categoryOptions = ref([{value: null, text: t('models.category.title_none')}])
+const categoryOptions = ref<Record<string, any>[]>([{value: null, text: t('models.category.title_none')}])
+const typeOptions = computed(() => {
+  const types = [{value: null, text: t('models.topic.type.none')}]
+  getTopicTypes().forEach((type) => {
+    types.push({value: type, text: t('models.topic.type.' + type)})
+  })
+  return types
+})
+
 const delayed = ref(props.modelValue.publish_at !== null)
 const published = ref(props.modelValue.published_at !== null)
 

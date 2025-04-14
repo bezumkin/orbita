@@ -179,6 +179,13 @@ export default {
         sub_payments: 'Subscribers and one time payment',
         payments: 'One time payment',
       },
+      type: {
+        title: 'Type of publication',
+        none: 'Unspecified',
+        video: 'Video',
+        image: 'Image',
+        text: 'Text',
+      },
       delayed: 'Delayed publishing',
     },
     topic_view: {

@@ -46,13 +46,18 @@ class Topics extends ModelController
     protected function beforeCount(Builder $c): Builder
     {
         if ($query = trim($this->getProperty('query', ''))) {
-            $c->where('title', 'LIKE', "%$query%");
-            $c->orWhereHas('category', function ($c) use ($query) {
+            $c->where(static function ($c) use ($query) {
                 $c->where('title', 'LIKE', "%$query%");
+                $c->orWhereHas('category', static function ($c) use ($query) {
+                    $c->where('title', 'LIKE', "%$query%");
+                });
+                $c->orWhereHas('tags', static function ($c) use ($query) {
+                    $c->where('title', 'LIKE', "%$query%");
+                });
             });
-            $c->orWhereHas('tags', function ($c) use ($query) {
-                $c->where('title', 'LIKE', "%$query%");
-            });
+        }
+        if ($type = $this->getProperty('type')) {
+            $c->where('type', $type);
         }
 
         return $c;
@@ -214,6 +219,17 @@ class Topics extends ModelController
                 ? array_values($array['content']['blocks'])
                 : [];
         }
+
+        return $array;
+    }
+
+    public function prepareList(array $array): array
+    {
+        $array['types'] = Topic::query()
+            ->whereNotNull('type')
+            ->groupBy('type')
+            ->pluck('type')
+            ->toArray();
 
         return $array;
     }

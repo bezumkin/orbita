@@ -228,3 +228,7 @@ export function formatDate(date: string | Date) {
 export function formatDateShort(date: string | Date) {
   return date ? format(date, 'dd.MM.yyyy') : ''
 }
+
+export function getTopicTypes() {
+  return ['video', 'image', 'text']
+}

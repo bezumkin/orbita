@@ -1,20 +1,45 @@
 <template>
   <div>
-    <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass}">
+    <VespTable ref="table" v-bind="{url, filters, sort, dir, fields, headerActions, tableActions, rowClass, onLoad}">
       <template #header-middle>
         <div class="d-grid d-md-flex justify-content-md-center gap-2 mt-2 mt-md-0">
           <BButton :to="{name: 'admin-topics-categories'}">
-            <VespFa icon="list" fixed-width /> {{ $t('models.category.title_many') }}
+            <VespFa icon="list" fixed-width /> {{ t('models.category.title_many') }}
           </BButton>
 
           <BButton :to="{name: 'admin-topics-tags'}">
-            <VespFa icon="tags" fixed-width /> {{ $t('models.tag.title_many') }}
+            <VespFa icon="tags" fixed-width /> {{ t('models.tag.title_many') }}
           </BButton>
+        </div>
+      </template>
+
+      <template #header-end>
+        <BInputGroup>
+          <template #append>
+            <BButton :disabled="!filters.query" @click="filters.query = ''">
+              <VespFa icon="times" fixed-width />
+            </BButton>
+          </template>
+          <BFormInput v-model="filters.query" :placeholder="t('components.table.query')" />
+        </BInputGroup>
+        <div v-if="typeOptions.length" class="d-flex gap-1 mt-1 small">
+          <BBadge
+            v-for="(type, idx) in typeOptions"
+            :key="idx"
+            :variant="type === filters.type ? 'primary' : 'secondary'"
+            style="cursor: pointer"
+            @click="onType(type)"
+          >
+            {{ t('models.topic.type.' + type) }}
+          </BBadge>
         </div>
       </template>
 
       <template #cell(title)="{item}">
         <div v-if="item.category" class="small">{{ item.category.title }} /</div>
+        <span v-if="item.type" class="me-1" :title="t('models.topic.type.' + item.type)">
+          <VespFa :icon="item.type === 'text' ? 'file' : item.type" fixed-width />
+        </span>
         <BLink
           :to="{name: 'topics-uuid', params: {topics: item.category?.uri || 'topics', uuid: item.uuid}}"
           class="fw-bold"
@@ -23,7 +48,7 @@
           {{ item.title }}
         </BLink>
         <div v-if="item.tags.length" class="mt-2 small">
-          <VespFa icon="tags" fixed-width /> {{ item.tags.map((i) => i.title).join(', ') }}
+          <VespFa icon="tags" fixed-width /> {{ item.tags.map((i: VespTag) => i.title).join(', ') }}
         </div>
         <!--<div v-if="item.tags.length" class="mt-2 d-flex gap-1">
           <BBadge v-for="tag in item.tags" :key="tag.id">{{ tag.title }}</BBadge>
@@ -39,17 +64,6 @@
           class="rounded"
         />
       </template>
-
-      <!--      <template #cell(actions)="{item}">
-        &lt;!&ndash;<BButton></BButton>&ndash;&gt;
-        &lt;!&ndash;{route: {name: 'topics-uuid'}, map: {topics: 'category.uri', uuid: 'uuid'}, icon: 'eye', title: }, , icon: target="_blank"&ndash;&gt;
-        <BButton size="sm" :to="{name: 'admin-topics-id-edit', params: {id: item.id}}" :title="t('actions.edit')">
-          <VespFa icon="edit" />
-        </BButton>
-        <BButton size="sm" variant="danger" :title="t('actions.delete')" @click="table.delete(item)">
-          <VespFa icon="times" />
-        </BButton>
-      </template>-->
     </VespTable>
     <NuxtPage />
   </div>
@@ -61,7 +75,7 @@ import type {VespTableAction} from '@vesp/frontend'
 const {t} = useI18n()
 const table = ref()
 const url = 'admin/topics'
-const filters = ref({query: ''})
+const filters = ref<Record<string, string | null>>({query: '', type: null})
 const sort = 'created_at'
 const dir = 'desc'
 const fields = computed(() => [
@@ -87,4 +101,35 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
 function rowClass(item: any) {
   return item && !item.active ? 'inactive' : ''
 }
+
+const types = getTopicTypes()
+const typeOptions = ref<string[]>([])
+function onLoad(items: any) {
+  typeOptions.value = items.types?.sort((a: string, b: string) => types.indexOf(a) - types.indexOf(b)) || []
+  if (table.value) {
+    if (items.types) {
+      table.value.$el.classList.add('with-types')
+    } else {
+      table.value.$el.classList.remove('with-types')
+    }
+  }
+  if (filters.value.type && !typeOptions.value.includes(filters.value.type)) {
+    filters.value.type = null
+  }
+  return items
+}
+
+function onType(type: string) {
+  filters.value.type = filters.value.type === type ? null : type
+}
 </script>
+
+<style scoped lang="scss">
+:deep(.vesp-table) {
+  &.with-types {
+    .align-items-center:first-child {
+      align-items: flex-start !important;
+    }
+  }
+}
+</style>
