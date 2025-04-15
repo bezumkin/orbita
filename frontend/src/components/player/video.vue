@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalHotkeys } from '~/utils/use-global-hotkeys'
+import {useGlobalHotkeys} from '~/utils/use-global-hotkeys'
 
 const props = defineProps({
   uuid: {
