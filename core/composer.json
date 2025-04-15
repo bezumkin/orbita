@@ -15,6 +15,7 @@
     }
   },
   "require": {
+    "ext-ffi": "*",
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
     "bacon/bacon-qr-code": "^2.0",
