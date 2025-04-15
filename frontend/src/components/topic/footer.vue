@@ -11,13 +11,13 @@
     </div>
     <div class="topic-footer">
       <div class="d-flex flex-wrap gap-3 order-0 me-auto">
-        <UserReactions :item="topic">
+        <UserReactions v-if="!topic.hide_reactions" :item="topic">
           <template #default="{selected, total}">
             <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ formatBigNumber(total) }}
           </template>
         </UserReactions>
-        <div><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}</div>
-        <div v-if="!isTopic">
+        <div v-if="!topic.hide_views"><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}</div>
+        <div v-if="!topic.hide_comments && !isTopic">
           <BLink v-if="topic.access && commentsCount" :to="link">
             <VespFa icon="comment" class="fa-fw" />
             {{ formatBigNumber(commentsCount) }}

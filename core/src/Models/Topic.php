@@ -26,6 +26,9 @@ use Ramsey\Uuid\Uuid;
  * @property ?float $price
  * @property bool $active
  * @property bool $closed
+ * @property bool $hide_comments
+ * @property bool $hide_views
+ * @property bool $hide_reactions
  * @property int $comments_count
  * @property int $views_count
  * @property int $reactions_count
@@ -58,6 +61,9 @@ class Topic extends Model
         'price' => 'float',
         'active' => 'bool',
         'closed' => 'bool',
+        'hide_comments' => 'bool',
+        'hide_views' => 'bool',
+        'hide_reactions' => 'bool',
         'published_at' => 'datetime',
         'publish_at' => 'datetime',
     ];
@@ -222,7 +228,9 @@ class Topic extends Model
             'type',
             'level_id',
             'price',
-            'closed',
+            'hide_comments',
+            'hide_views',
+            'hide_reactions',
             'views_count',
             'reactions_count',
             'comments_count',
@@ -239,11 +247,13 @@ class Topic extends Model
         if ($array['access']) {
             if ($user && $this->relationLoaded('views') && count($this->views)) {
                 $array['viewed_at'] = $this->views[0]->timestamp;
-                $array['unseen_comments_count'] = $this->comments()
-                    ->where('created_at', '>', $array['viewed_at'])
-                    ->where('active', true)
-                    ->where('user_id', '!=', $user->id)
-                    ->count();
+                if (!$array['hide_comments']) {
+                    $array['unseen_comments_count'] = $this->comments()
+                        ->where('created_at', '>', $array['viewed_at'])
+                        ->where('active', true)
+                        ->where('user_id', '!=', $user->id)
+                        ->count();
+                }
             }
             if (!$listView) {
                 $array['content'] = $this->content;
@@ -259,6 +269,18 @@ class Topic extends Model
 
         if (getenv('TOPICS_SHOW_AUTHOR')) {
             $array['user'] = $this->user->only('id', 'fullname');
+        }
+
+        if ($array['hide_comments']) {
+            $array['comments_count'] = 0;
+        }
+        if ($array['hide_views']) {
+            $array['views_count'] = 0;
+            unset($array['viewed_at']);
+        }
+        if ($array['hide_reactions']) {
+            $array['reactions_count'] = 0;
+            unset($array['reaction']);
         }
 
         return $array;

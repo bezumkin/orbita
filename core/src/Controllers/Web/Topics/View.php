@@ -28,16 +28,17 @@ class View extends Controller
             'user_id' => 0,
         ];
 
-        if ($view = $topic->saveView($this->user)) {
+        $view = $topic->saveView($this->user);
+        if (!$topic->hide_views && $view) {
             $data['user_id'] = $view->user_id;
             $data['unseen_comments_count'] = $topic->comments()
                 ->where('created_at', '>', $view->timestamp)
                 ->where('active', true)
                 ->where('user_id', '!=', $this->user->id)
                 ->count();
+            $data['views_count'] = $topic->views_count;
+            Socket::send('topic-views', $data);
         }
-        $data['views_count'] = $topic->views_count;
-        Socket::send('topic-views', $data);
 
         return $this->success($data);
     }

@@ -2,35 +2,35 @@
   <div>
     <BRow>
       <BCol md="8">
-        <BFormGroup :label="$t('models.topic.title')">
+        <BFormGroup :label="t('models.topic.title')">
           <BFormInput v-model="record.title" required autofocus />
         </BFormGroup>
       </BCol>
       <BCol md="4">
-        <BFormGroup v-if="typeOptions.length > 1" :label="$t('models.topic.type.title')">
+        <BFormGroup v-if="typeOptions.length > 1" :label="t('models.topic.type.title')">
           <BFormSelect v-model="record.type" :options="typeOptions" />
         </BFormGroup>
       </BCol>
     </BRow>
-    <BFormGroup v-if="categoryOptions.length > 1" :label="$t('models.category.title_one')">
+    <BFormGroup v-if="categoryOptions.length > 1" :label="t('models.category.title_one')">
       <BFormSelect v-model="record.category_id" :options="categoryOptions" />
     </BFormGroup>
 
-    <BFormGroup :label="$t('models.topic.content')">
+    <BFormGroup :label="t('models.topic.content')">
       <EditorJs v-model="record.content" :blocks="editorBlocks" />
     </BFormGroup>
 
     <BRow>
       <BCol md="6">
-        <BFormGroup :label="$t('models.topic.access.title')">
+        <BFormGroup :label="t('models.topic.access.title')">
           <BFormRadioGroup v-model="accessLevel" :options="accessOptions" stacked />
         </BFormGroup>
       </BCol>
       <BCol md="6">
-        <BFormGroup v-if="['subscribers', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.level')">
+        <BFormGroup v-if="['subscribers', 'sub_payments'].includes(accessLevel)" :label="t('models.topic.level')">
           <BFormSelect v-model="record.level_id" :options="levelOptions" required />
         </BFormGroup>
-        <BFormGroup v-if="['payments', 'sub_payments'].includes(accessLevel)" :label="$t('models.topic.price')">
+        <BFormGroup v-if="['payments', 'sub_payments'].includes(accessLevel)" :label="t('models.topic.price')">
           <BInputGroup>
             <template #prepend>
               <BInputGroupText>{{ $price(1).replace('1', '').trim() }}</BInputGroupText>
@@ -43,22 +43,22 @@
 
     <BRow>
       <BCol md="6">
-        <BFormGroup :label="$t('models.topic.cover')">
+        <BFormGroup :label="t('models.topic.cover')">
           <FileUpload v-model="record.new_cover" :placeholder="record.cover" :height="200" />
         </BFormGroup>
       </BCol>
       <BCol md="6">
-        <BFormGroup :label="$t('models.topic.teaser')">
+        <BFormGroup :label="t('models.topic.teaser')">
           <textarea v-model="record.teaser" class="form-control" style="height: 200px; resize: none" />
         </BFormGroup>
       </BCol>
     </BRow>
 
-    <BFormGroup :label="$t('models.tag.title_many')">
+    <BFormGroup :label="t('models.tag.title_many')">
       <TopicTags v-model="record.tags" />
     </BFormGroup>
 
-    <BFormGroup v-if="changeAuthor" :label="$t('models.topic.author')" :description="$t('models.topic.author_desc')">
+    <BFormGroup v-if="changeAuthor" :label="t('models.topic.author')" :description="t('models.topic.author_desc')">
       <VespInputComboBox
         v-model="record.user_id"
         url="admin/users"
@@ -73,7 +73,7 @@
       <BCol md="6">
         <BFormGroup>
           <BFormCheckbox v-model="record.active">
-            {{ $t('models.topic.active') }}
+            {{ t('models.topic.active') }}
           </BFormCheckbox>
         </BFormGroup>
       </BCol>
@@ -82,7 +82,7 @@
           <VespInputDatePicker
             v-model="record.published_at"
             type="datetime"
-            :placeholder="$t('models.topic.published_at')"
+            :placeholder="t('models.topic.published_at')"
           />
         </BFormGroup>
       </BCol>
@@ -92,7 +92,7 @@
       <BCol md="6">
         <BFormGroup class="py-md-2">
           <BFormCheckbox v-model="delayed" :disabled="record.active">
-            {{ $t('models.topic.delayed') }}
+            {{ t('models.topic.delayed') }}
           </BFormCheckbox>
         </BFormGroup>
       </BCol>
@@ -105,11 +105,36 @@
       </BCol>
     </BRow>
 
-    <BFormGroup>
-      <BFormCheckbox v-model="record.closed">
-        {{ $t('models.topic.closed') }}
-      </BFormCheckbox>
-    </BFormGroup>
+    <BRow>
+      <BCol md="6" lg="3">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.closed">
+            {{ t('models.topic.closed') }}
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+      <BCol md="6" lg="3">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.hide_comments">
+            {{ t('models.topic.hide_comments') }}
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+      <BCol md="6" lg="3">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.hide_views">
+            {{ t('models.topic.hide_views') }}
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+      <BCol md="6" lg="3">
+        <BFormGroup>
+          <BFormCheckbox v-model="record.hide_reactions">
+            {{ t('models.topic.hide_reactions') }}
+          </BFormCheckbox>
+        </BFormGroup>
+      </BCol>
+    </BRow>
   </div>
 </template>
 
@@ -149,7 +174,7 @@ const accessOptions = computed(() => {
 })
 const categoryOptions = ref<Record<string, any>[]>([{value: null, text: t('models.category.title_none')}])
 const typeOptions = computed(() => {
-  const types = [{value: null, text: t('models.topic.type.none')}]
+  const types: Record<string, string | null>[] = [{value: null, text: t('models.topic.type.none')}]
   getTopicTypes().forEach((type) => {
     types.push({value: type, text: t('models.topic.type.' + type)})
   })

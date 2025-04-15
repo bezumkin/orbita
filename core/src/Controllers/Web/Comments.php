@@ -61,7 +61,7 @@ class Comments extends ModelController
 
     protected function beforeCount(Builder $c): Builder
     {
-        $c->where('topic_id', $this->topic->id);
+        $c->where('topic_id', !$this->topic->hide_comments ? $this->topic->id : -1);
 
         return $c;
     }
@@ -93,9 +93,14 @@ class Comments extends ModelController
         if (!$this->user || !$this->hasAccess || !$this->user->hasScope('comments/put')) {
             return $this->failure('components.comments.info.no_scope');
         }
-        if (!$this->isAdmin && !$this->isVip && !$this->user?->currentSubscription) {
-            if ($this->topic->isFree() && getenv('COMMENTS_REQUIRE_SUBSCRIPTION')) {
-                return $this->failure('components.comments.info.no_subscription');
+        if (!$this->isAdmin) {
+            if ($this->topic->closed || $this->topic->hide_comments) {
+                return $this->failure('components.comments.info.closed');
+            }
+            if (!$this->isVip && !$this->user?->currentSubscription) {
+                if ($this->topic->isFree() && getenv('COMMENTS_REQUIRE_SUBSCRIPTION')) {
+                    return $this->failure('components.comments.info.no_subscription');
+                }
             }
         }
 

@@ -19,7 +19,7 @@ class Reactions extends Controller
 
         /** @var Comment $comment */
         $comment = Comment::query()->find($this->getProperty('id'));
-        if (!$comment || !$comment->active) {
+        if (!$comment || !$comment->active || $comment->topic->hide_reactions) {
             return $this->failure('Not Found', 404);
         }
         $this->model = $comment;

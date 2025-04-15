@@ -28,7 +28,7 @@
 
         <div v-if="user && record.id !== comment.id" class="comment-footer">
           <div v-if="comment.active">
-            <UserReactions :item="comment" small>
+            <UserReactions v-if="!topic.hide_reactions" :item="comment" small>
               <template #default="{selected, total}">
                 <BButton :variant="btnVariant">
                   <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" fixed /> {{ total }}

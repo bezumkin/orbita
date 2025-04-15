@@ -19,7 +19,7 @@ class Reactions extends Controller
 
         /** @var Topic $topic */
         $topic = Topic::query()->where('uuid', $this->getProperty('topic_uuid'))->first();
-        if (!$topic || !$topic->active) {
+        if (!$topic || !$topic->active || $topic->hide_reactions) {
             return $this->failure('Not Found', 404);
         }
         $this->model = $topic;

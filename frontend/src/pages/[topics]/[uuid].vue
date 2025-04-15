@@ -5,7 +5,7 @@
     </BButton>
     <template v-if="topic && topic.access">
       <TopicContent :topic="topic" class="column" />
-      <CommentsTree :topic="topic" class="column mt-4" @comment-view="onCommentView" />
+      <CommentsTree v-if="!topic.hide_comments" :topic="topic" class="column mt-4" @comment-view="onCommentView" />
     </template>
     <TopicIntro v-else-if="topic" :topic="topic" />
   </div>

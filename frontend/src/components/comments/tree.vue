@@ -204,7 +204,7 @@ function onEdit(comment: VespComment) {
 }
 
 function canReply() {
-  return !props.topic.closed && $scope('comments/put') && (!subRequired.value || isAdmin.value)
+  return !props.topic.hide_comments && $scope('comments/put') && (!subRequired.value || isAdmin.value)
 }
 
 function onReply(comment: VespComment) {

@@ -88,6 +88,9 @@ declare global {
     price?: number | string
     active: boolean
     closed: boolean
+    hide_comments?: boolean
+    hide_views?: boolean
+    hide_reactions?: boolean
     new_cover?: {file: string; metadata: {[key: string]: any}} | boolean
     cover_id?: number
     cover?: VespFile
