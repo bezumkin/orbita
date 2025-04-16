@@ -58,7 +58,11 @@ class Topics extends ModelGetController
             });
         }
         if ($type = $this->getProperty('type')) {
-            $c->where('type', $type);
+            if (str_contains($type, ',')) {
+                $c->whereIn('type', explode(',', $type));
+            } else {
+                $c->where('type', $type);
+            }
         }
 
         return $c;

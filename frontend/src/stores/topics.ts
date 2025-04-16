@@ -5,7 +5,7 @@ export const useTopicsStore = defineStore('topics', () => {
   const {$socket, $scope} = useNuxtApp()
   const category = ref<VespCategory | undefined>()
   const total = ref(0)
-  const topics: Ref<VespTopic[]> = ref([])
+  const topics = ref<VespTopic[]>([])
   const loading = ref(false)
 
   const query: Record<string, any> = ref({
@@ -14,6 +14,7 @@ export const useTopicsStore = defineStore('topics', () => {
     sort: route.query.sort || 'date',
     reverse: route.query.reverse,
     tags: '',
+    type: '',
   })
   const {user} = useAuth()
 
@@ -27,6 +28,7 @@ export const useTopicsStore = defineStore('topics', () => {
         sort: query.value.sort || 'date',
         reverse: query.value.reverse ? 'true' : undefined,
         category_id: category.value?.id || undefined,
+        type: query.value.type || undefined,
       }
       const data = await useGet('web/topics', params)
       total.value = data.total
