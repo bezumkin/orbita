@@ -4,10 +4,8 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\Traits\FileModelController;
 use App\Models\Video;
-use App\Models\VideoUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
 
@@ -110,5 +108,15 @@ class Videos extends ModelController
         }
 
         return $array;
+    }
+
+    protected function beforeDelete(Model $record): ?ResponseInterface
+    {
+        /** @var Video $record */
+        if ($record->topicFiles()->count() || $record->pageFiles()->count()) {
+            return $this->failure('errors.video.delete_used');
+        }
+
+        return null;
     }
 }

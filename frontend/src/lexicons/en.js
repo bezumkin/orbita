@@ -473,6 +473,7 @@ export default {
       no_image: 'You forgot to upload an image for the video',
       pick_none: 'There are no uploaded videos yet',
       pick_not_found: 'Nothing found',
+      delete_used: `You can't delete a published video!`,
     },
     setting: {
       required: 'This setting is required',

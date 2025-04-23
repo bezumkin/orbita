@@ -473,6 +473,7 @@ export default {
       no_image: 'Du hast vergessen ein Bild zum Video hochzuladen',
       pick_none: 'Keine Videos vorhanden',
       pick_not_found: 'Nichts gefunden',
+      delete_used: 'Sie können ein veröffentlichtes Video nicht löschen.',
     },
     setting: {
       required: 'Diese Einstellung ist erfordlich',
