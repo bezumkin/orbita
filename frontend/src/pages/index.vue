@@ -52,7 +52,6 @@ const spinner = ref()
 const scroll = ref(false)
 
 query.value.reverse = Boolean(route.query.reverse)
-query.value.tags = route.query.tags as string
 
 function initObserver() {
   const observer = new IntersectionObserver((entries) => {
@@ -116,6 +115,7 @@ if (route.params.topics) {
 }
 
 if (!total.value || query.value.tags !== route.query.tags) {
+  query.value.tags = route.query.tags as string
   await fetch()
 }
 

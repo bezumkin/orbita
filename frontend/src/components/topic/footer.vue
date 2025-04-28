@@ -129,7 +129,7 @@ function getTagParams(tag: VespTag) {
     const idx = values.findIndex((i: string) => i === id)
     values.splice(idx, 1)
   }
-  const query = {...route.query, tags: values.length ? values.join(',') : undefined}
+  const query = {...route.query, query: undefined, tags: values.length ? values.join(',') : undefined}
   params.to =
     store.category && !isTopic.value
       ? {name: 'topics', params: {topics: store.category.uri}, query}
