@@ -228,6 +228,7 @@ class Topic extends Model
             'type',
             'level_id',
             'price',
+            'closed',
             'hide_comments',
             'hide_views',
             'hide_reactions',

@@ -176,7 +176,7 @@ function canEdit(comment: VespComment) {
     return true
   }
   // Authorized user is owner of the comment
-  if (user.value && user.value.id === comment.user_id && $scope('comments/patch')) {
+  if (!props.topic.closed && user.value && user.value.id === comment.user_id && $scope('comments/patch')) {
     // This comment has no replies
     if (!comments.value.filter((i: VespComment) => i.parent_id === comment.id).length) {
       // User still has time to edit
@@ -204,7 +204,7 @@ function onEdit(comment: VespComment) {
 }
 
 function canReply() {
-  return !props.topic.hide_comments && $scope('comments/put') && (!subRequired.value || isAdmin.value)
+  return !props.topic.closed && $scope('comments/put') && (!subRequired.value || isAdmin.value)
 }
 
 function onReply(comment: VespComment) {
