@@ -167,7 +167,7 @@ trait UploadController
 
         $meta['filetype'] = mime_content_type($resource);
         $meta['size'] = $stream->getSize();
-        $meta['filename'] = preg_replace('#[^\w\s.-_]#u', '', $meta['filename']);
+        $meta['filename'] = preg_replace('#[^\w\s._-]#u', '', $meta['filename']);
         $this->storage->setMeta($uuid, $meta);
 
         $uploadedFile = new UploadedFile($stream, $meta['filename'], $meta['filetype'], $meta['size']);
