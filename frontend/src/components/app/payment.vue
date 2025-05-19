@@ -190,7 +190,7 @@ watch($payment, (newValue) => {
 })
 
 watch(user, async (newValue) => {
-  if (newValue && $payment.value) {
+  if (newValue && $payment.value && !hasScope('topics/get')) {
     if ('uuid' in $payment.value) {
       try {
         const topic = await useGet('web/topics/' + $payment.value.uuid)
