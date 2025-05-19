@@ -37,7 +37,7 @@
         </BRow>
 
         <BRow class="mt-4 row-gap-4">
-          <BCol v-for="topic in topics" :key="topic.id" md="6">
+          <BCol v-for="topic in topics" :key="topic.id + topic.access" md="6">
             <TopicIntro :topic="topic" />
           </BCol>
         </BRow>
@@ -53,6 +53,7 @@ const router = useRouter()
 const route = useRoute()
 const {$settings} = useNuxtApp()
 const {t} = useI18n()
+const {loggedIn} = useAuth()
 
 const input = ref()
 const loading = ref(false)
@@ -100,6 +101,8 @@ function onReset() {
     router.replace({name: route.name as RouteRecordName})
   }
 }
+
+watch(loggedIn, onSearch)
 
 onMounted(() => {
   if (query.value) {
