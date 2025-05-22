@@ -85,6 +85,7 @@ class Payment extends Model
         $payment = $this->refresh();
 
         // Check the payment
+        $ttl = (int)getenv('PAYMENT_TIMEOUT_HOURS') ?: 6;
         if ($payment->paid === null) {
             $service = $payment->getService();
             $status = $service->getPaymentStatus($payment);
@@ -99,12 +100,15 @@ class Payment extends Model
                 }
                 Socket::send('profile', ['id' => $payment->user_id]);
                 Socket::send('payment', [], 'payments');
-            } elseif ($status === false || $payment->created_at->addHours(6) < Carbon::now()) {
+            } elseif ($status === false || $payment->created_at->addHours($ttl) < Carbon::now()) {
                 $payment->paid = false;
-                if ($payment->subscription && !$payment->subscription->next_level_id) {
-                    $payment->subscription->next_period = null;
-                }
                 $payment->save();
+
+                if ($payment->subscription) {
+                    $payment->subscription->next_level_id = null;
+                    $payment->subscription->next_period = null;
+                    $payment->subscription->save();
+                }
                 Socket::send('profile', ['id' => $payment->user_id]);
             }
         }
