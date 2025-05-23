@@ -115,7 +115,7 @@ function formatService(value: any) {
 }
 
 function formatPrice(value: any) {
-  return value ? $price(value) : ''
+  return $price(value, true)
 }
 
 function rowClass(item: any) {

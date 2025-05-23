@@ -35,21 +35,8 @@ class Subscription extends Controller
                 $subscription->next_period = $period;
                 $subscription->save();
             } else {
-                $left = $subscription->paidAmountLeft();
-                $cost = $level->costForPeriod($period);
-                if ($left >= $cost) {
-                    $perDay = $level->costPerDay();
-                    $days = ceil($left / $perDay);
-                    $activeUntil = Carbon::now()->addDays($days);
-                    // Free Upgrade
-                    $subscription->level_id = $level->id;
-                    $subscription->period = $period;
-                    $subscription->active_until = $activeUntil;
-                    $subscription->cancelled = false;
-                    $subscription->next_level_id = null;
-                    $subscription->next_period = null;
-                    $subscription->save();
-                }
+                // Free Upgrade
+                $subscription->freeUpgrade($level, $period);
             }
         } elseif ($action === 'cancel-next') {
             $subscription->next_level_id = null;

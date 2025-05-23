@@ -116,6 +116,35 @@ class Subscription extends Model
         }
     }
 
+    public function freeUpgrade(Level $level, int $period): ?bool
+    {
+        $left = $this->paidAmountLeft();
+        $cost = $level->costForPeriod($period);
+        if ($left >= $cost) {
+            $perDay = $level->costPerDay();
+            $days = ceil($left / $perDay);
+            $activeUntil = Carbon::now()->addDays($days);
+
+            $this->level_id = $level->id;
+            $this->period = $period;
+            $this->active_until = $activeUntil;
+            $this->next_level_id = null;
+            $this->next_period = null;
+            $this->save();
+
+            $payment = $this->refresh()->createPayment($period, 'Internal');
+            $payment->amount = 0;
+            $payment->paid = true;
+            $payment->paid_at = $payment->created_at;
+            $payment->metadata['until'] = $activeUntil;
+            $payment->save();
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function disable(): void
     {
         $this->active = false;
