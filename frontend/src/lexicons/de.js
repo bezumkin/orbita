@@ -377,7 +377,7 @@ export default {
       },
       level: {
         subscribe: 'Abonnieren',
-        subscribed: 'Abonniert',
+        subscribed: 'Abonnement aktiviert, kündigen?',
         active_until: 'Aktiv bis {date}',
         active_from: 'Aktiv seit {date}',
       },

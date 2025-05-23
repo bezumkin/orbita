@@ -377,7 +377,7 @@ export default {
       },
       level: {
         subscribe: 'Подписаться',
-        subscribed: 'Подписка оформлена',
+        subscribed: 'Подписка оформлена, отменить?',
         active_until: 'Активна до {date}',
         active_from: 'Активируется {date}',
       },

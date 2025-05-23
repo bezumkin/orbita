@@ -377,7 +377,7 @@ export default {
       },
       level: {
         subscribe: 'Subscribe',
-        subscribed: 'Subscribed',
+        subscribed: 'Subscription enabled, cancel?',
         active_until: 'Active until {date}',
         active_from: 'Active from {date}',
       },
