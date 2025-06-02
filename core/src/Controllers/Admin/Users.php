@@ -32,7 +32,6 @@ class Users extends ModelController
                     $c->where('username', 'LIKE', "%$query%");
                     $c->orWhere('fullname', 'LIKE', "%$query%");
                     $c->orWhere('email', 'LIKE', "%$query%");
-                    $c->orWhere('phone', 'LIKE', "%$query%");
                     $c->orWhereHas('tokens', static function (Builder $c) use ($query) {
                         $c->where('ip', 'LIKE', "$query%");
                     });

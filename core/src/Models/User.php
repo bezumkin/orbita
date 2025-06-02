@@ -19,7 +19,6 @@ use Vesp\Helpers\Jwt;
  * @property string $password
  * @property ?string $fullname
  * @property ?string $email
- * @property ?string $phone
  * @property bool $active
  * @property bool $blocked
  * @property bool $notify
@@ -48,7 +47,6 @@ class User extends \Vesp\Models\User
         'password',
         'fullname',
         'email',
-        'phone',
         'active',
         'blocked',
         'notify',

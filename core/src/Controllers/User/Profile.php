@@ -42,7 +42,7 @@ class Profile extends \Vesp\Controllers\User\Profile
     {
         /** @var User $user */
         if ($user = $this->user) {
-            $data = $user->only('id', 'username', 'fullname', 'email', 'phone', 'notify');
+            $data = $user->only('id', 'username', 'fullname', 'email', 'notify');
             $data['role'] = $user->role->only('id', 'title', 'scope');
             $data['avatar'] = $user->avatar?->only('uuid', 'updated_at');
             $data['subscription'] = $user->currentSubscription?->only(
@@ -61,7 +61,7 @@ class Profile extends \Vesp\Controllers\User\Profile
     public function patch(): ResponseInterface
     {
         $data = array_filter($this->getProperties(), static function ($key) {
-            return in_array($key, ['username', 'fullname', 'email', 'phone', 'notify', 'password']);
+            return in_array($key, ['username', 'fullname', 'email', 'notify', 'password']);
         }, ARRAY_FILTER_USE_KEY);
 
         try {

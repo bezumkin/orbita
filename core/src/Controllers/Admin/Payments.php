@@ -23,7 +23,6 @@ class Payments extends ModelController
                     $c->where('username', 'LIKE', "%$query%");
                     $c->orWhere('fullname', 'LIKE', "%$query%");
                     $c->orWhere('email', 'LIKE', "%$query%");
-                    $c->orWhere('phone', 'LIKE', "%$query%");
                 });
                 $c->orWhereHas('topic', static function (Builder $c) use ($query) {
                     $c->where('title', 'LIKE', "%$query%");

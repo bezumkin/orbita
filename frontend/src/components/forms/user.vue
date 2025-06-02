@@ -26,18 +26,9 @@
       <BFormInput v-model="record.fullname" required />
     </BFormGroup>
 
-    <BRow>
-      <BCol md="6">
-        <BFormGroup :label="$t('models.user.email')">
-          <BFormInput v-model="record.email" type="email" />
-        </BFormGroup>
-      </BCol>
-      <BCol md="6">
-        <BFormGroup :label="$t('models.user.phone')">
-          <BFormInput v-model="record.phone" />
-        </BFormGroup>
-      </BCol>
-    </BRow>
+    <BFormGroup :label="$t('models.user.email')">
+      <BFormInput v-model="record.email" type="email" />
+    </BFormGroup>
 
     <BFormGroup v-if="showGroup" :label="$t('models.user.role')">
       <VespInputComboBox v-model="record.role_id" url="admin/user-roles" required />

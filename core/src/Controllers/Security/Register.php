@@ -12,7 +12,7 @@ class Register extends Controller
     public function post(): ResponseInterface
     {
         $data = array_filter($this->getProperties(), static function($key) {
-            return in_array($key, ['username', 'fullname', 'password', 'email', 'phone']);
+            return in_array($key, ['username', 'fullname', 'password', 'email']);
         }, ARRAY_FILTER_USE_KEY);
 
         try {

@@ -12,7 +12,6 @@ declare global {
     fullname?: string
     password?: string
     email?: string
-    phone?: string
     active?: boolean
     blocked?: boolean
     notify?: boolean
