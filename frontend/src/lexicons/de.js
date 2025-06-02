@@ -37,6 +37,7 @@ export default {
     register: 'Registrieren',
     reset: 'Zurücksetzen',
     reset_desc: `Du kannst einen Einmal-Link fürs Login anfordern. Nach dem Login kannst du dein altes Passwort ändern.`,
+    register_agree: `Ich akzeptiere die <a href="{link}" target="_blank">Bedingungen der Benutzervereinbarung</a>.`,
   },
   filter: {
     week: 'Woche',
@@ -459,6 +460,9 @@ export default {
     },
     user_role: {
       delete_own: 'Du kannst Deine eigene Gruppe nicht löschen',
+    },
+    register: {
+      no_agreement: 'You must accept the user agreement.',
     },
     login: {
       wrong: 'Falscher Login oder Passwort',

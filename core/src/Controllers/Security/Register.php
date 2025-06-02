@@ -11,6 +11,10 @@ class Register extends Controller
 {
     public function post(): ResponseInterface
     {
+        if (getenv('REGISTER_USER_AGREEMENT') && !$this->getProperty('agree')) {
+            return $this->failure('errors.register.no_agreement');
+        }
+
         $data = array_filter($this->getProperties(), static function($key) {
             return in_array($key, ['username', 'fullname', 'password', 'email']);
         }, ARRAY_FILTER_USE_KEY);

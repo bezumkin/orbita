@@ -48,6 +48,11 @@
             <BTab v-if="registerEnabled" :title="$t('security.register')">
               <BForm @submit.prevent="onRegister">
                 <FormsRegister v-model="formRegister" />
+                <div v-if="userAgreement">
+                  <BFormCheckbox v-model="formRegister.agree" class="mb-2">
+                    <div v-html="$t('security.register_agree', {link: userAgreement})"></div>
+                  </BFormCheckbox>
+                </div>
                 <div class="text-center">
                   <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
                 </div>
@@ -94,9 +99,10 @@ const loading = ref(false)
 const form = ref()
 const tabs = ref()
 const registerEnabled = $variables.value.REGISTER_ENABLED === '1'
+const userAgreement = $variables.value.REGISTER_USER_AGREEMENT
 
 const formLogin = ref({username: '', password: ''})
-const formRegister = ref({username: '', password: '', fullname: '', email: ''})
+const formRegister = ref({username: '', password: '', fullname: '', email: '', agree: false})
 const formReset = ref({username: ''})
 
 async function onLogin() {

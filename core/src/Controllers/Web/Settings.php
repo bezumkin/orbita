@@ -35,6 +35,7 @@ class Settings extends ModelController
             'JWT_EXPIRE' => getenv('JWT_EXPIRE') ?: '2592000',
             'CURRENCY' => getenv('CURRENCY') ?: 'RUB',
             'REGISTER_ENABLED' => getenv('REGISTER_ENABLED') !== false ? getenv('REGISTER_ENABLED') : '1',
+            'REGISTER_USER_AGREEMENT' => getenv('REGISTER_USER_AGREEMENT'),
             'HIDE_WIDGETS' => getenv('HIDE_WIDGETS') ?: '',
             // Deprecated, better use HIDE_WIDGETS
             'COMMENTS_SHOW_ONLINE' => getenv('COMMENTS_SHOW_ONLINE') !== false ? getenv('COMMENTS_SHOW_ONLINE') : '1',

@@ -37,6 +37,7 @@ export default {
     register: 'Register',
     reset: 'Reset',
     reset_desc: `You can request a one-time link to log in to your account. After logging in, you will be able to change your old password.`,
+    register_agree: `I accept <a href="{link}" target="_blank">the terms of the user agreement</a>.`,
   },
   filter: {
     week: 'Week',
@@ -459,6 +460,9 @@ export default {
     },
     user_role: {
       delete_own: 'You cannot delete your own group',
+    },
+    register: {
+      no_agreement: 'You must accept the user agreement.',
     },
     login: {
       wrong: 'Wrong login or password',
