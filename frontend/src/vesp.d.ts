@@ -15,6 +15,9 @@ declare global {
     active?: boolean
     blocked?: boolean
     notify?: boolean
+    readonly?: boolean
+    readonly_until?: string
+    readonly_reason?: string
     role_id?: number
     role?: VespUserRole
     avatar_id?: number

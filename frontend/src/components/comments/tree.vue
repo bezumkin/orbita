@@ -25,7 +25,10 @@
         {{ t('components.comments.info.closed') }}
       </div>
       <template v-else-if="$scope('comments/put')">
-        <div v-if="subRequired" class="alert alert-info mt-5">
+        <div v-if="isReadonly" class="alert alert-danger mt-5">
+          {{ readonlyMessage }}
+        </div>
+        <div v-else-if="subRequired" class="alert alert-info mt-5">
           {{ t('components.comments.info.no_subscription') }}
         </div>
         <CommentsForm
@@ -87,6 +90,25 @@ const commentsTree = computed(() => {
 
 const isAdmin = computed(() => $scope('comments/delete'))
 const isVip = computed(() => $scope('vip'))
+const isReadonly = computed(() => user.value?.readonly && !isAdmin.value)
+const readonlyMessage = computed(() => {
+  if (!isReadonly.value) {
+    return ''
+  }
+  if (user.value?.readonly_until && user.value?.readonly_reason) {
+    return t('components.comments.info.readonly_until_reason', {
+      until: formatDate(user.value.readonly_until),
+      reason: user.value.readonly_reason,
+    })
+  }
+  if (user.value?.readonly_until) {
+    return t('components.comments.info.readonly_until', {until: formatDate(user.value.readonly_until)})
+  }
+  if (user.value?.readonly_reason) {
+    return t('components.comments.info.readonly_reason', {reason: user.value.readonly_reason})
+  }
+  return t('components.comments.info.readonly')
+})
 // Sub is required for free topics
 const subRequired = computed(() => {
   return (
@@ -176,7 +198,7 @@ function canEdit(comment: VespComment) {
     return true
   }
   // Authorized user is owner of the comment
-  if (!props.topic.closed && user.value && user.value.id === comment.user_id && $scope('comments/patch')) {
+  if (!props.topic.closed && user.value?.id === comment.user_id && $scope('comments/patch') && !isReadonly.value) {
     // This comment has no replies
     if (!comments.value.filter((i: VespComment) => i.parent_id === comment.id).length) {
       // User still has time to edit
@@ -195,7 +217,7 @@ function onEdit(comment: VespComment) {
 
   if (!isAdmin.value && editTime && comment.created_at) {
     timer.value = setInterval(() => {
-      editingTime.value = editTime - getTimeDiff(comment.created_at)
+      editingTime.value = editTime - getTimeDiff(comment.created_at as string)
       if (editingTime.value <= 0) {
         onCancel()
       }
@@ -204,7 +226,7 @@ function onEdit(comment: VespComment) {
 }
 
 function canReply() {
-  return !props.topic.closed && $scope('comments/put') && (!subRequired.value || isAdmin.value)
+  return isAdmin.value || (!props.topic.closed && $scope('comments/put') && !subRequired.value && !isReadonly.value)
 }
 
 function onReply(comment: VespComment) {

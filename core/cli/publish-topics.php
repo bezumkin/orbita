@@ -11,11 +11,10 @@ new Eloquent();
 $topics = Topic::query()
     ->where('publish_at', '<=', Carbon::now()->toDateTimeString())
     ->where('active', false)
-    ->orderBy('publish_at')
-    ->get();
+    ->orderBy('publish_at');
 
 /** @var Topic $topic */
-foreach ($topics as $topic) {
+foreach ($topics->cursor() as $topic) {
     $topic->active = true;
     $topic->published_at = date('Y-m-d H:i:s');
     $topic->publish_at = null;

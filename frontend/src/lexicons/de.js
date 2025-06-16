@@ -60,6 +60,9 @@ export default {
       role: 'Rolle',
       created_at: 'erstellt am',
       active_at: 'Zuletzt online',
+      readonly: 'Kommentare deaktivieren',
+      readonly_until: 'Deaktivieren bis',
+      readonly_reason: 'Grund für die Deaktivierung von Kommentaren',
     },
     user_role: {
       title_one: 'Benutzerrolle',
@@ -328,6 +331,10 @@ export default {
         closed: 'Das Kommentieren dieses Themas wurde deaktiviert.',
         no_scope: 'Du hast keine Berechtigung zum Kommentieren.',
         no_subscription: 'Nur Abonnenten können kommentieren.',
+        readonly: 'Sie dürfen keine Kommentare schreiben.',
+        readonly_until: 'Sie dürfen bis {until} keine Kommentare schreiben.',
+        readonly_reason: 'Sie dürfen aus "{reason}" keine Kommentare schreiben.',
+        readonly_until_reason: 'Sie dürfen bis zum {until} keine Kommentare schreiben, weil "{reason}".',
       },
       destroy: {
         title: 'Bestätigung erforderlich',

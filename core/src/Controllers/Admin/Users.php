@@ -62,6 +62,13 @@ class Users extends ModelController
             $record->tokens()->update(['active' => false]);
         }
 
+        if ($record->readonly_until?->timestamp <= time()) {
+            $record->readonly_until = null;
+        }
+        if (!$record->readonly_reason) {
+            $record->readonly_reason = null;
+        }
+
         return null;
     }
 
@@ -82,5 +89,16 @@ class Users extends ModelController
         }
 
         return null;
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        /** @var User $object */
+        $array = $object->toArray();
+        if ($object->readonly_until) {
+            $array['readonly_until'] = $object->readonly_until->toDateTimeString();
+        }
+
+        return $array;
     }
 }

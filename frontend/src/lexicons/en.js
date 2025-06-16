@@ -60,6 +60,9 @@ export default {
       role: 'Role',
       created_at: 'Was created',
       active_at: 'Last online',
+      readonly: 'Disable comments',
+      readonly_until: 'Disable until',
+      readonly_reason: 'Reason for disabling comments',
     },
     user_role: {
       title_one: 'User Role',
@@ -328,6 +331,10 @@ export default {
         closed: 'Commenting on this topic has been disabled.',
         no_scope: "You don't have permission to comment.",
         no_subscription: 'Only subscribers can comment.',
+        readonly: 'You are not allowed to write comments.',
+        readonly_until: 'You are not allowed to write comments until {until}.',
+        readonly_reason: 'You are not allowed to write comments because "{reason}".',
+        readonly_until_reason: 'You are not allowed to write comments until {until} because "{reason}".',
       },
       destroy: {
         title: 'Confirmation required',

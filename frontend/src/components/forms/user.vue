@@ -51,6 +51,31 @@
         </BFormCheckbox>
       </BFormGroup>
     </BRow>
+    <template v-if="showReadonly">
+      <BRow class="align-items-center">
+        <BCol md="6">
+          <BFormGroup>
+            <BFormCheckbox v-model="record.readonly">
+              {{ $t('models.user.readonly') }}
+            </BFormCheckbox>
+          </BFormGroup>
+        </BCol>
+        <BCol v-if="record.readonly" md="6">
+          <BFormGroup>
+            <VespInputDatePicker
+              v-model="record.readonly_until"
+              type="datetime"
+              :placeholder="$t('models.user.readonly_until')"
+            >
+              {{ $t('models.user.readonly') }}
+            </VespInputDatePicker>
+          </BFormGroup>
+        </BCol>
+      </BRow>
+      <BFormGroup v-if="record.readonly" :label="$t('models.user.readonly_reason')">
+        <BFormInput v-model="record.readonly_reason" />
+      </BFormGroup>
+    </template>
   </div>
 </template>
 
@@ -69,6 +94,10 @@ const props = defineProps({
     default: true,
   },
   showNotify: {
+    type: Boolean,
+    default: true,
+  },
+  showReadonly: {
     type: Boolean,
     default: true,
   },

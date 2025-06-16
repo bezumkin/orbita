@@ -31,6 +31,11 @@ $scheduler->php(__DIR__ . '/publish-topics.php', null, [], 'publish_topics')
     ->inForeground()
     ->onlyOne();
 
+$scheduler->php(__DIR__ . '/readonly-users.php', null, [], 'readonly_users')
+    ->everyMinute(5)
+    ->inForeground()
+    ->onlyOne();
+
 $scheduler->php(__DIR__ . '/subscriptions.php', null, [], 'subscriptions')
     ->hourly()
     ->inForeground()

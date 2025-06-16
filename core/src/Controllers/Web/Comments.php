@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelController;
 
-/** @var User $user */
+/**
+ * @property User $user
+ */
 class Comments extends ModelController
 {
     protected string|array $scope = 'comments';
@@ -97,7 +99,10 @@ class Comments extends ModelController
             if ($this->topic->closed || $this->topic->hide_comments) {
                 return $this->failure('components.comments.info.closed');
             }
-            if (!$this->isVip && !$this->user?->currentSubscription) {
+            if ($this->user->isReadonly()) {
+                return $this->failure('components.comments.info.readonly');
+            }
+            if (!$this->isVip && !$this->user->currentSubscription) {
                 if ($this->topic->isFree() && getenv('COMMENTS_REQUIRE_SUBSCRIPTION')) {
                     return $this->failure('components.comments.info.no_subscription');
                 }

@@ -23,6 +23,9 @@ use Vesp\Helpers\Jwt;
  * @property bool $blocked
  * @property bool $notify
  * @property ?string $lang
+ * @property bool $readonly
+ * @property ?Carbon $readonly_until
+ * @property ?string $readonly_reason
  * @property ?string $reset_password
  * @property ?Carbon $reset_at
  * @property Carbon $created_at
@@ -51,12 +54,17 @@ class User extends \Vesp\Models\User
         'blocked',
         'notify',
         'lang',
+        'readonly',
+        'readonly_until',
+        'readonly_reason',
     ];
     protected $hidden = ['password', 'reset_password', 'reset_at'];
     protected $casts = [
         'active' => 'bool',
         'blocked' => 'bool',
         'notify' => 'bool',
+        'readonly' => 'bool',
+        'readonly_until' => 'datetime',
         'reset_at' => 'datetime',
         'active_at' => 'datetime',
     ];
@@ -225,5 +233,10 @@ class User extends \Vesp\Models\User
     public function sendEmail(string $subject, string $tpl, ?array $data = []): ?string
     {
         return (new Mail())->send($this->email, $subject, $tpl, $data);
+    }
+
+    public function isReadonly(): bool
+    {
+        return $this->readonly && (!$this->readonly_until || $this->readonly_until->timestamp > time());
     }
 }

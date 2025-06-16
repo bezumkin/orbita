@@ -2,7 +2,7 @@
   <BCol xl="10" class="m-auto">
     <BOverlay :show="loading" opacity="0.5">
       <BForm @submit.prevent="onSubmit">
-        <FormsUser v-model="form" :show-status="false" :show-group="false">
+        <FormsUser v-model="form" :show-status="false" :show-group="false" :show-readonly="false">
           <template #avatar>
             <div style="cursor: pointer" @click="showAvatar">
               <UserAvatar :user="user" :size="$isMobile ? 150 : 120" />
