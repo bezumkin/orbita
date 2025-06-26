@@ -277,6 +277,11 @@ export default {
         error: 'Error',
       },
       records: 'No payments | 1 payment, in the amount of {sum} | {total} payments, in the amount of {sum}',
+      refund: {
+        title: 'Refund of payment',
+        confirm: 'Are you sure you want to refund this payment and cancel the user subscription?',
+        action: 'Refund',
+      },
     },
     reaction: {
       title_one: 'Reaction',

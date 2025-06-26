@@ -174,10 +174,10 @@ class Tbank extends PaymentService
 
         try {
             $response = $this->client->post($method, ['json' => $data]);
-            $body = (string)$response->getBody();
-            $output = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            Log::info('Tbank', $output);
             if (empty($output['Success'])) {
-                Log::error('Tbank error: ' . $body, ['method' => $method, ...$data]);
+                Log::error('Tbank', $output);
             }
 
             return $output;

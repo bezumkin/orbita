@@ -53,6 +53,7 @@ $group = $app->group(
             $group->any('/pages[/{id:\d+}]', App\Controllers\Admin\Pages::class);
             $group->any('/payments/stat', App\Controllers\Admin\Payments\Stat::class);
             $group->any('/payments[/{id}]', App\Controllers\Admin\Payments::class);
+            $group->map(['OPTIONS', 'POST'], '/payments/{id}/{action}', App\Controllers\Admin\Payments::class);
             $group->any('/tags[/{id}]', App\Controllers\Admin\Tags::class);
             $group->any('/reactions', App\Controllers\Admin\Reactions::class);
             $group->any('/redirects[/{id:\d+}]', App\Controllers\Admin\Redirects::class);

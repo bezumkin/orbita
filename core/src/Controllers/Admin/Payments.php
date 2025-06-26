@@ -72,6 +72,20 @@ class Payments extends ModelController
         return null;
     }
 
+    public function post(): ResponseInterface
+    {
+        if (!$payment = Payment::query()->find($this->getProperty('id'))) {
+            return $this->failure('Not Found', 404);
+        }
+
+        $action = $this->getProperty('action');
+        if ($action === 'refund' && $payment->refund()) {
+            return $this->success();
+        }
+
+        return $this->failure();
+    }
+
     public function prepareList(array $array): array
     {
         $array['sum'] = $this->query->sum('amount');

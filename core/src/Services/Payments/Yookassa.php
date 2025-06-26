@@ -56,7 +56,9 @@ class Yookassa extends PaymentService
             'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
             'json' => $data,
         ]);
-        $output = json_decode((string)$response->getBody(), true);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('Yookassa', $output);
+
         if (!empty($output['id'])) {
             $payment->remote_id = $output['id'];
             $payment->link = $output['confirmation']['confirmation_url'];
@@ -68,14 +70,34 @@ class Yookassa extends PaymentService
         return null;
     }
 
+    public function cancelPayment(Payment $payment): bool
+    {
+        $url = $this->getSuccessUrl($payment) . '/refund';
+        $response = $this->client->post('refunds', [
+            'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
+            'json' => [
+                'payment_id' => $payment->remote_id,
+                'amount' => [
+                    'value' => $payment->amount,
+                    'currency' => getenv('CURRENCY') ?: 'RUB',
+                ],
+            ]
+        ]);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('Yookassa', $output);
+
+        return @$output['status'] === 'succeeded';
+    }
+
     public function getPaymentStatus(Payment $payment): ?bool
     {
         try {
-            $url = $this->getSuccessUrl($payment);
+            $url = $this->getSuccessUrl($payment) . '/status';
             $response = $this->client->get('payments/' . $payment->remote_id, [
                 'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
             ]);
             $output = json_decode((string)$response->getBody(), true);
+            Log::info('Yookassa', $output);
 
             if ($output['status'] === 'succeeded') {
                 if ($payment->subscription && !empty($output['payment_method']['saved'])) {
@@ -123,6 +145,8 @@ class Yookassa extends PaymentService
                 'json' => $data,
             ]);
             $output = json_decode((string)$response->getBody(), true);
+            Log::info('Yookassa', $output);
+
             if (!empty($output['id'])) {
                 $payment->remote_id = $output['id'];
                 $payment->save();

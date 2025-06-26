@@ -63,6 +63,16 @@
         {{ t('models.payment.records', {total: formatBigNumber(total), sum: formatPrice(sum)}, total) }}
       </template>
     </VespTable>
+
+    <VespConfirm
+      v-if="confirmVisible"
+      :title="t('models.payment.refund.title')"
+      :on-ok="cancelPayment"
+      ok-title="models.payment.refund.action"
+      @hidden="onCancelRefund"
+    >
+      <div v-html="t('models.payment.refund.confirm')" />
+    </VespConfirm>
   </div>
 </template>
 
@@ -95,6 +105,13 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
     variant: 'danger',
     isActive: (item: any) => item && item.paid !== true,
   },
+  {
+    function: onRefundPayment,
+    icon: 'undo',
+    title: t('models.payment.refund.action'),
+    variant: 'warning',
+    isActive: (item: any) => item && item.paid,
+  },
 ])
 const statuses = ref([
   {value: null, text: t('models.payment.filter.all')},
@@ -126,6 +143,30 @@ function onLoad(items: any) {
   sum.value = items.sum || 0
 
   return items
+}
+
+const refundItem = ref<VespPayment | undefined>()
+const confirmVisible = computed(() => refundItem.value !== undefined)
+
+function onRefundPayment(payment: VespPayment) {
+  refundItem.value = payment
+}
+
+function onCancelRefund() {
+  refundItem.value = undefined
+}
+
+async function cancelPayment() {
+  if (!refundItem.value) {
+    return
+  }
+  table.value.loading = true
+  try {
+    await usePost(url + '/' + refundItem.value.id + '/refund')
+    table.value.refresh()
+  } catch (e) {
+    table.value.loading = false
+  }
 }
 
 onMounted(() => {

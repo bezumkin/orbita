@@ -277,6 +277,11 @@ export default {
         error: 'Fehler',
       },
       records: 'Keine Zahlungen | 1 zahlung, in Höhe von {sum} | {total} zahlungen, in Höhe von {sum}',
+      refund: {
+        title: 'Rückerstattung der Zahlung',
+        confirm: 'Sind Sie sicher, dass Sie diese Zahlung zurückerstatten und das Benutzerabonnement kündigen möchten?',
+        action: 'Rückerstattung',
+      },
     },
     reaction: {
       title_one: 'Reaktion',

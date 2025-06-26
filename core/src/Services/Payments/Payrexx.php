@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Services\Log;
 use App\Services\PaymentService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Throwable;
 
 class Payrexx extends PaymentService
@@ -17,6 +18,7 @@ class Payrexx extends PaymentService
     {
         $this->client = new Client([
             'base_uri' => getenv('PAYMENT_PAYREXX_ENDPOINT') ?: 'https://api.payrexx.com/v1.0/',
+            'headers' => ['Content-type' => 'application/x-www-form-urlencoded'],
         ]);
     }
 
@@ -25,7 +27,7 @@ class Payrexx extends PaymentService
         $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
         $url = $this->getSuccessUrl($payment);
         $data = [
-            'amount' => (string)$payment->amount,
+            'amount' => (string)$payment->amount * 100,
             'vatRate' => getenv('PAYMENT_PAYREXX_VAT') ?: '0',
             'currency' => getenv('CURRENCY') ?: 'EUR',
             'referenceId' => $payment->id,
@@ -47,11 +49,15 @@ class Payrexx extends PaymentService
         $data['ApiSignature'] = $this->getSignature($data);
 
         try {
-            $response = $this->client->post('Gateway?instance=' . $instance, [
-                'headers' => ['Content-type: application/x-www-form-urlencoded'],
-                'form_params' => $data,
-            ]);
-            $output = json_decode((string)$response->getBody(), true);
+            $response = $this->client->post('Gateway?instance=' . $instance, ['form_params' => $data]);
+            $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            Log::info('Payrexx', $output);
+
+            if ($output['status'] === 'error') {
+                Log::error('Payrexx', $output);
+                throw new \RuntimeException($output['message']);
+            }
+
             if ($output['status'] === 'success' && !empty($output['data'])) {
                 $data = array_shift($output['data']);
                 if (!empty($data['link'])) {
@@ -62,24 +68,51 @@ class Payrexx extends PaymentService
                     return $payment->link;
                 }
             }
-        } catch (Throwable $e) {
+        } catch (RequestException $e) {
             Log::error($e);
         }
 
         return null;
     }
 
+    public function cancelPayment(Payment $payment): bool
+    {
+        $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
+        $url = 'Gateway/' . $payment->remote_id . '/?instance=' . $instance;
+
+        $signature = $this->getSignature();
+        $response = $this->client->get($url, ['form_params' => ['ApiSignature' => $signature]]);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('Payrexx', $output);
+
+        if (@$gateway = $output['data'][0]) {
+            foreach ($gateway['invoices'] as $invoice) {
+                foreach ($invoice['transactions'] as $transaction) {
+                    if ($transaction['status'] === 'confirmed') {
+                        $url = 'Transaction/' . $transaction['id'] . '/refund/?instance=' . $instance;
+                        $response = $this->client->post($url, ['form_params' => ['ApiSignature' => $signature]]);
+                        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+                        Log::info('Payrexx', $output);
+
+                        return @$output['status'] === 'success';
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function getPaymentStatus(Payment $payment): ?bool
     {
         $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
         $response = $this->client->get('Gateway/' . $payment->remote_id . '/?instance=' . $instance, [
-            'headers' => ['Content-type: application/x-www-form-urlencoded'],
             'form_params' => [
                 'ApiSignature' => $this->getSignature(),
             ],
         ]);
         try {
-            $output = json_decode((string)$response->getBody(), true);
+            $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
             if ($output['status'] === 'success' && !empty($output['data'])) {
                 $data = array_shift($output['data']);
                 if ($data['status'] === 'confirmed') {
@@ -113,7 +146,7 @@ class Payrexx extends PaymentService
 
         $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
         $data = [
-            'amount' => (string)$payment->amount,
+            'amount' => (string)$payment->amount * 100,
             'purpose' => $payment->subscription->level->title,
             'referenceId' => $payment->id,
         ];
@@ -122,10 +155,7 @@ class Payrexx extends PaymentService
         try {
             $response = $this->client->post(
                 'Transaction/' . $payment->subscription->remote_id . '/?instance=' . $instance,
-                [
-                    'headers' => ['Content-type: application/x-www-form-urlencoded'],
-                    'form_params' => $data,
-                ]
+                ['form_params' => $data]
             );
             $output = json_decode((string)$response->getBody(), true);
             if ($output['status'] === 'success' && !empty($output['data'])) {
