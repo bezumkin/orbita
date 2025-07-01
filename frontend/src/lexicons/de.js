@@ -282,6 +282,11 @@ export default {
         confirm: 'Sind Sie sicher, dass Sie diese Zahlung zurückerstatten und das Benutzerabonnement kündigen möchten?',
         action: 'Rückerstattung',
       },
+      approve: {
+        title: 'Zahlung genehmigen',
+        confirm: `Sind Sie sicher, dass Sie diese Zahlung zwangsweise annehmen möchten? Dadurch wird das Abonnement des Benutzers aktiviert.`,
+        action: 'Genehmigen',
+      },
     },
     reaction: {
       title_one: 'Reaktion',

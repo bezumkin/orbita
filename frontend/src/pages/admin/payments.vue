@@ -66,12 +66,12 @@
 
     <VespConfirm
       v-if="confirmVisible"
-      :title="t('models.payment.refund.title')"
-      :on-ok="cancelPayment"
-      ok-title="models.payment.refund.action"
-      @hidden="onCancelRefund"
+      :title="confirmTitle"
+      :on-ok="confirmFunction"
+      :ok-title="confirmAction"
+      @hidden="onCancelConfirm"
     >
-      <div v-html="t('models.payment.refund.confirm')" />
+      <div v-html="confirmText" />
     </VespConfirm>
   </div>
 </template>
@@ -99,18 +99,25 @@ const fields = computed(() => [
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {
-    function: (i: any) => table.value.delete(i),
-    icon: 'times',
-    title: t('actions.delete'),
-    variant: 'danger',
-    isActive: (item: any) => item && item.paid !== true,
-  },
-  {
     function: onRefundPayment,
     icon: 'undo',
     title: t('models.payment.refund.action'),
     variant: 'warning',
-    isActive: (item: any) => item && item.paid,
+    isActive: (item: any) => item?.paid && !item?.metadata?.approved,
+  },
+  {
+    function: onApprovePayment,
+    icon: 'check',
+    title: t('models.payment.approve.action'),
+    variant: 'warning',
+    isActive: (item: any) => !item?.paid && !item?.metadata?.refunded,
+  },
+  {
+    function: (i: any) => table.value.delete(i),
+    icon: 'times',
+    title: t('actions.delete'),
+    variant: 'danger',
+    isActive: (item: any) => item?.paid !== true || item?.metadata?.approved,
   },
 ])
 const statuses = ref([
@@ -146,14 +153,25 @@ function onLoad(items: any) {
 }
 
 const refundItem = ref<VespPayment | undefined>()
-const confirmVisible = computed(() => refundItem.value !== undefined)
+const approveItem = ref<VespPayment | undefined>()
+
+const confirmVisible = computed(() => refundItem.value || approveItem.value)
+const confirmTitle = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.title'))
+const confirmText = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.confirm'))
+const confirmAction = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.action'))
+const confirmFunction = computed(() => (refundItem.value ? cancelPayment : approvePayment))
 
 function onRefundPayment(payment: VespPayment) {
   refundItem.value = payment
 }
 
-function onCancelRefund() {
+function onApprovePayment(payment: VespPayment) {
+  approveItem.value = payment
+}
+
+function onCancelConfirm() {
   refundItem.value = undefined
+  approveItem.value = undefined
 }
 
 async function cancelPayment() {
@@ -163,6 +181,19 @@ async function cancelPayment() {
   table.value.loading = true
   try {
     await usePost(url + '/' + refundItem.value.id + '/refund')
+    table.value.refresh()
+  } catch (e) {
+    table.value.loading = false
+  }
+}
+
+async function approvePayment() {
+  if (!approveItem.value) {
+    return
+  }
+  table.value.loading = true
+  try {
+    await usePost(url + '/' + approveItem.value.id + '/approve')
     table.value.refresh()
   } catch (e) {
     table.value.loading = false

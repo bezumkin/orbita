@@ -129,19 +129,36 @@ class Payment extends Model
 
     public function refund(): bool
     {
-        $service = $this->getService();
         if (!$this->paid) {
             return false;
         }
 
+        $service = $this->getService();
         if ($response = $service->cancelPayment($this)) {
             if ($this->subscription?->active) {
                 $this->subscription->disable();
             }
             $this->paid = false;
+            $this->metadata = [...$this->metadata, 'refunded' => true];
             $this->save();
         }
 
         return $response;
+    }
+
+    public function approve(): bool
+    {
+        $this->paid = true;
+        $this->paid_at = time();
+        $this->metadata = [...$this->metadata, 'approved' => true];
+        $this->save();
+
+        if ($this->subscription) {
+            $this->subscription->service = $this->service;
+            $this->subscription->activate($this);
+            $this->save();
+        }
+
+        return true;
     }
 }

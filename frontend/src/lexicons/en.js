@@ -282,6 +282,11 @@ export default {
         confirm: 'Are you sure you want to refund this payment and cancel the user subscription?',
         action: 'Refund',
       },
+      approve: {
+        title: 'Approve Payment',
+        confirm: `Are you sure you want to forcibly accept this payment? This activates the user's subscription.`,
+        action: 'Approve',
+      },
     },
     reaction: {
       title_one: 'Reaction',

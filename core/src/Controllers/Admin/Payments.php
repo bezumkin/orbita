@@ -59,13 +59,16 @@ class Payments extends ModelController
     protected function beforeDelete(Model $record): ?ResponseInterface
     {
         /** @var Payment $record */
-        if ($record->paid) {
+        if ($record->paid && empty($record->metadata['approved'])) {
             return $this->failure('errors.payment.delete_paid');
         }
         if ($subscription = $record->subscription) {
             // Remove unneeded subscription along with bad payment
             if (!$subscription->active && $subscription->active_until === null) {
                 $subscription->delete();
+            } else {
+                $subscription->active = false;
+                $subscription->save();
             }
         }
 
@@ -79,8 +82,17 @@ class Payments extends ModelController
         }
 
         $action = $this->getProperty('action');
-        if ($action === 'refund' && $payment->refund()) {
-            return $this->success();
+        if ($action === 'refund' && empty($payment->metadata['approved'])) {
+            if ($payment->refund()) {
+                return $this->success();
+            }
+
+        }
+        if ($action === 'approve' && empty($payment->metadata['refunded'])) {
+            if ($payment->approve()) {
+                return $this->success();
+            }
+
         }
 
         return $this->failure();
