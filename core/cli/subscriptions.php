@@ -18,7 +18,7 @@ $subscriptions = Subscription::query()
         $c->whereNull('warned_at');
         $c->orWhereDate('warned_at', '!=', $now->toDateString());
     })
-    ->whereDate('active_until', $now->addDays(getenv('SUBSCRIPTION_WARN_BEFORE_DAYS') ?: 3)->toDateString());
+    ->whereDate('active_until', $now->addDays((int)getenv('SUBSCRIPTION_WARN_BEFORE_DAYS') ?: 3)->toDateString());
 foreach ($subscriptions->cursor() as $subscription) {
     /** @var Subscription $subscription */
     $subscription->warn();
