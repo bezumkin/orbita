@@ -168,9 +168,9 @@ const refundItem = ref<VespPayment | undefined>()
 const approveItem = ref<VespPayment | undefined>()
 
 const confirmVisible = computed(() => refundItem.value || approveItem.value)
-const confirmTitle = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.title'))
+const confirmTitle = computed(() => 'models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.title')
+const confirmAction = computed(() => 'models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.action')
 const confirmText = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.confirm'))
-const confirmAction = computed(() => t('models.payment.' + (refundItem.value ? 'refund' : 'approve') + '.action'))
 const confirmFunction = computed(() => (refundItem.value ? cancelPayment : approvePayment))
 
 function onRefundPayment(payment: VespPayment) {
