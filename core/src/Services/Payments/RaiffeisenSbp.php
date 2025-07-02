@@ -86,8 +86,7 @@ class RaiffeisenSbp extends PaymentService
     public function getPaymentStatus(Payment $payment): ?bool
     {
         try {
-            $response = $this->client->get('sbp/v2/qrs/' . $payment->remote_id);
-            $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $output = $this->getPayment($payment);
             if ($output['qrStatus'] === 'PAID') {
                 return true;
             }
@@ -115,5 +114,14 @@ class RaiffeisenSbp extends PaymentService
         $svg = (new Writer($renderer))->writeString($payment->link);
 
         return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
+
+    public function getPayment(Payment $payment): ?array
+    {
+        $response = $this->client->get('sbp/v2/qrs/' . $payment->remote_id);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('RaiffeisenSbp', $output);
+
+        return $output;
     }
 }

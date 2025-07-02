@@ -14,6 +14,14 @@ class Payments extends ModelController
     protected string $model = Payment::class;
     protected ?Builder $query = null;
 
+    protected function beforeGet(Builder $c): Builder
+    {
+        $c->with('subscription');
+        $c->with('topic');
+
+        return $c;
+    }
+
     protected function beforeCount(Builder $c): Builder
     {
         if ($query = trim($this->getProperty('query', ''))) {
@@ -86,16 +94,25 @@ class Payments extends ModelController
             if ($payment->refund()) {
                 return $this->success();
             }
-
         }
         if ($action === 'approve' && empty($payment->metadata['refunded'])) {
             if ($payment->approve()) {
                 return $this->success();
             }
-
         }
 
         return $this->failure();
+    }
+
+    public function prepareRow(Model $object): array
+    {
+        /** @var Payment $object */
+        $array = $object->toArray();
+        if ($this->getPrimaryKey()) {
+            $array['data'] = $object->getRemoteData();
+        }
+
+        return $array;
     }
 
     public function prepareList(array $array): array

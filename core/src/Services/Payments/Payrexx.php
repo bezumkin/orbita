@@ -7,6 +7,7 @@ use App\Services\Log;
 use App\Services\PaymentService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use RuntimeException;
 use Throwable;
 
 class Payrexx extends PaymentService
@@ -55,7 +56,7 @@ class Payrexx extends PaymentService
 
             if ($output['status'] === 'error') {
                 Log::error('Payrexx', $output);
-                throw new \RuntimeException($output['message']);
+                throw new RuntimeException($output['message']);
             }
 
             if ($output['status'] === 'success' && !empty($output['data'])) {
@@ -105,14 +106,8 @@ class Payrexx extends PaymentService
 
     public function getPaymentStatus(Payment $payment): ?bool
     {
-        $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
-        $response = $this->client->get('Gateway/' . $payment->remote_id . '/?instance=' . $instance, [
-            'form_params' => [
-                'ApiSignature' => $this->getSignature(),
-            ],
-        ]);
         try {
-            $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $output = $this->getPayment($payment);
             if ($output['status'] === 'success' && !empty($output['data'])) {
                 $data = array_shift($output['data']);
                 if ($data['status'] === 'confirmed') {
@@ -177,5 +172,19 @@ class Payrexx extends PaymentService
         return base64_encode(
             hash_hmac('sha256', http_build_query($params, null, '&'), getenv('PAYMENT_PAYREXX_KEY'), true)
         );
+    }
+
+    public function getPayment(Payment $payment): ?array
+    {
+        $instance = getenv('PAYMENT_PAYREXX_INSTANCE');
+        $response = $this->client->get('Gateway/' . $payment->remote_id . '/?instance=' . $instance, [
+            'form_params' => [
+                'ApiSignature' => $this->getSignature(),
+            ],
+        ]);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('Payrexx', $output);
+
+        return $output;
     }
 }

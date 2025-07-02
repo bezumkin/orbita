@@ -7,6 +7,7 @@ use App\Services\Log;
 use App\Services\PaymentService;
 use App\Services\Utils;
 use GuzzleHttp\Client;
+use RuntimeException;
 use Throwable;
 
 class Tbank extends PaymentService
@@ -71,7 +72,7 @@ class Tbank extends PaymentService
 
         $response = $this->sendRequest('Init', $data);
         if (!$response['Success']) {
-            throw new \RuntimeException($response['Details']);
+            throw new RuntimeException($response['Details']);
         }
         if (!empty($response['PaymentId'])) {
             $payment->remote_id = $response['PaymentId'];
@@ -87,7 +88,7 @@ class Tbank extends PaymentService
     public function getPaymentStatus(Payment $payment): ?bool
     {
         try {
-            $response = $this->sendRequest('GetState', ['PaymentId' => $payment->remote_id]);
+            $response = $this->getPayment($payment);
             if ($response['Status'] === 'CONFIRMED') {
                 if ($payment->subscription && !empty($response['RebillId'])) {
                     $payment->subscription->remote_id = $response['RebillId'];
@@ -181,7 +182,7 @@ class Tbank extends PaymentService
             }
 
             return $output;
-        } catch (\Throwable  $e) {
+        } catch (Throwable  $e) {
             Log::error($e);
         }
 
@@ -221,5 +222,10 @@ class Tbank extends PaymentService
         }
 
         exit('OK');
+    }
+
+    public function getPayment(Payment $payment): ?array
+    {
+        return $this->sendRequest('GetState', ['PaymentId' => $payment->remote_id]);
     }
 }

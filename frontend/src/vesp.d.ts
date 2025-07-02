@@ -146,11 +146,12 @@ declare global {
   }
 
   type VespPayment = {
-    id: number
+    id: string
     amount: number
     topic?: VespTopic
     subscription?: VespSubscription
     metadata?: Record<string, any>
+    [key: string]: any
   }
 
   type VespCategory = {

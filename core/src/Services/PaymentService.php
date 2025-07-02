@@ -38,4 +38,9 @@ abstract class PaymentService
     {
         return false;
     }
+
+    public function getPayment(Payment $payment): ?array
+    {
+        return null;
+    }
 }

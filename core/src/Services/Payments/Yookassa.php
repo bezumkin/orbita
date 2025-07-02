@@ -81,7 +81,7 @@ class Yookassa extends PaymentService
                     'value' => $payment->amount,
                     'currency' => getenv('CURRENCY') ?: 'RUB',
                 ],
-            ]
+            ],
         ]);
         $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
         Log::info('Yookassa', $output);
@@ -92,13 +92,7 @@ class Yookassa extends PaymentService
     public function getPaymentStatus(Payment $payment): ?bool
     {
         try {
-            $url = $this->getSuccessUrl($payment) . '/status';
-            $response = $this->client->get('payments/' . $payment->remote_id, [
-                'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
-            ]);
-            $output = json_decode((string)$response->getBody(), true);
-            Log::info('Yookassa', $output);
-
+            $output = $this->getPayment($payment);
             if ($output['status'] === 'succeeded') {
                 if ($payment->subscription && !empty($output['payment_method']['saved'])) {
                     $payment->subscription->remote_id = $output['payment_method']['id'];
@@ -158,5 +152,17 @@ class Yookassa extends PaymentService
         }
 
         return false;
+    }
+
+    public function getPayment(Payment $payment): ?array
+    {
+        $url = $this->getSuccessUrl($payment) . '/status';
+        $response = $this->client->get('payments/' . $payment->remote_id, [
+            'headers' => ['Idempotence-Key' => (string)Uuid::uuid5(Uuid::NAMESPACE_URL, $url)],
+        ]);
+        $output = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        Log::info('Yookassa', $output);
+
+        return $output;
     }
 }

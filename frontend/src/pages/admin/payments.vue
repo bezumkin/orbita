@@ -60,8 +60,15 @@
           <BSpinner v-if="loading" :small="true" />
           <VespFa v-else icon="repeat" fixed-width />
         </BButton>
-        {{ t('models.payment.records', {total: formatBigNumber(total), sum: formatPrice(sum)}, total) }}
+        <template v-if="sum">
+          {{ t('models.payment.records', {total: formatBigNumber(total), sum: formatPrice(sum)}, total) }}
+        </template>
+        <template v-else>
+          {{ t('components.table.records', {total}, total) }}
+        </template>
       </template>
+
+      <NuxtPage />
     </VespTable>
 
     <VespConfirm
@@ -95,7 +102,7 @@ const fields = computed(() => [
   {key: 'type', label: t('models.payment.type')},
   {key: 'amount', label: t('models.payment.amount'), formatter: formatPrice, sortable: true},
   {key: 'service', label: t('models.payment.service')},
-  {key: 'paid', label: t('models.payment.paid'), class: 'text-center', sortable: true},
+  {key: 'paid', label: t('models.payment.status'), class: 'text-center', sortable: true},
 ])
 const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
   {
@@ -111,6 +118,11 @@ const tableActions: ComputedRef<VespTableAction[]> = computed(() => [
     title: t('models.payment.approve.action'),
     variant: 'warning',
     isActive: (item: any) => !item?.paid && !item?.metadata?.refunded,
+  },
+  {
+    route: {name: 'admin-payments-id'},
+    icon: 'eye',
+    title: t('actions.view'),
   },
   {
     function: (i: any) => table.value.delete(i),

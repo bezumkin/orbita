@@ -161,4 +161,9 @@ class Payment extends Model
 
         return true;
     }
+
+    public function getRemoteData(): ?array
+    {
+        return $this->getService()->getPayment($this);
+    }
 }
