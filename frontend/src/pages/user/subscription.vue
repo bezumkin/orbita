@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BRow v-if="user.subscription" class="d-flex mb-5 row-gap-4">
+    <BRow v-if="user?.subscription" class="d-flex mb-5 row-gap-4">
       <BCol md="4">
         <div class="fw-bold">{{ t('components.payment.subscription.level.current') }}</div>
         <div class="">{{ currentLevel?.title }}</div>
@@ -16,8 +16,8 @@
     </BRow>
 
     <div v-if="$levels.length">
-      <h4 v-if="user.subscription" class="pt-4 border-bottom">
-        {{ $t('widgets.levels') }}
+      <h4 v-if="user?.subscription" class="pt-4 border-bottom">
+        {{ t('widgets.levels') }}
       </h4>
       <WidgetsLevels user-page />
     </div>
@@ -25,13 +25,9 @@
 </template>
 
 <script setup lang="ts">
-const {t, d} = useI18n()
+const {t} = useI18n()
 const {user} = useAuth()
 const {$levels} = useNuxtApp()
-
-if (!user.value || !$levels.value.length) {
-  showError({statusCode: 404, statusMessage: 'Not Found'})
-}
 
 const currentLevel = computed(() => {
   return $levels.value.find((i: VespLevel) => i.id === user.value?.subscription?.level_id)
