@@ -183,6 +183,14 @@ class TempStorage extends Filesystem
             }
         }
 
+        if (empty($result)) {
+            $quality = new VideoQuality();
+            $quality->quality = $srcHeight;
+            $quality->resolution = $srcWidth . 'x' . $srcHeight;
+            $quality->bandwidth = $maxBitrate;
+            $result[] = $quality;
+        }
+
         return $result;
     }
 
