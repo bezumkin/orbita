@@ -167,7 +167,8 @@ class Video extends Model
         /** @var \App\Models\VideoQuality $quality */
         foreach ($qualities as $quality) {
             try {
-                if ($oldQuality = $this->qualities()->where('quality', $quality->quality)) {
+                /** @var VideoQuality $oldQuality */
+                if ($oldQuality = $this->qualities()->where('quality', $quality->quality)->first()) {
                     $oldQuality->delete();
                 }
 
