@@ -21,6 +21,7 @@ class UserToken extends Model
 {
     public $incrementing = false;
     protected $primaryKey = 'token';
+    protected $keyType = 'string';
     protected $guarded = ['created_at', 'updated_at'];
     protected $casts = [
         'active' => 'boolean',
