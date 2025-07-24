@@ -73,6 +73,9 @@ async function onScroll() {
 
 function loadCategory() {
   if (route.params.topics) {
+    if (route.params.topics === 'topics') {
+      navigateTo({name: 'index'}, {redirectCode: 301})
+    }
     category.value = $categories?.value.find((i: VespCategory) => i.uri === route.params.topics)
     if (!category.value) {
       showError({statusCode: 404, statusMessage: 'Not Found'})
