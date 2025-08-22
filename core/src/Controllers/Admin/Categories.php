@@ -78,7 +78,7 @@ class Categories extends ModelController
         if (!$this->isNew) {
             $c->where('id', '!=', $record->id);
         } elseif (!$record->rank) {
-            $record->rank = (clone $c)->count();
+            $record->rank = (clone $c)->count() + 1;
         }
 
         if ((clone $c)->where('title', $record->title)->count()) {
