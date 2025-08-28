@@ -62,7 +62,7 @@ const myValue = computed<Record<string, any>>({
 
 const description = computed(() => {
   const parts = []
-  let date = addMonths(new Date(), myValue.value.period)
+  let date = addDays(new Date(), myValue.value.period * 30)
   if (user.value?.subscription?.active_until) {
     if (downgrading.value) {
       date = new Date(user.value?.subscription?.active_until)
