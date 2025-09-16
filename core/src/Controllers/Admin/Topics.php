@@ -154,6 +154,7 @@ class Topics extends ModelController
 
             if ($updateTags) {
                 $this->redis->del('tags');
+                $this->redis->del('tags-admin');
                 $this->redis->send('tags');
             }
         }

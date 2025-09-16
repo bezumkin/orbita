@@ -11,6 +11,7 @@ use KSamuel\FacetedSearch\Filter\ValueIntersectionFilter;
 use KSamuel\FacetedSearch\Index\Factory;
 use KSamuel\FacetedSearch\Index\IndexInterface;
 use KSamuel\FacetedSearch\Query\AggregationQuery;
+use Psr\Http\Message\ResponseInterface;
 use Vesp\Controllers\ModelGetController;
 
 class Tags extends ModelGetController
@@ -18,6 +19,7 @@ class Tags extends ModelGetController
     protected string $model = Tag::class;
     protected string|array $primaryKey = ['topic_id', 'tag_id'];
     protected Redis $redis;
+    protected bool $isAdmin = false;
 
     public function __construct(Manager $eloquent, Redis $redis)
     {
@@ -25,10 +27,27 @@ class Tags extends ModelGetController
         $this->redis = $redis;
     }
 
+    public function checkScope(string $method): ?ResponseInterface
+    {
+        $this->isAdmin = (bool)$this->user?->hasScope('topics/get');
+
+        return parent::checkScope($method);
+    }
+
     protected function beforeCount(Builder $c): Builder
     {
-        $c->whereHas('topics', static function (Builder $c) {
-            $c->where('active', true);
+        $c->whereHas('topics', function (Builder $c) {
+            if (!$this->isAdmin) {
+                $c->where('active', true);
+            }
+            $categoryId = $this->getProperty('category_id');
+            if ($categoryId !== null) {
+                if (!$categoryId) {
+                    $c->whereNull('category_id');
+                } else {
+                    $c->where('category_id', (int)$categoryId);
+                }
+            }
         });
 
         return $c;
@@ -96,8 +115,12 @@ class Tags extends ModelGetController
 
     protected function getCache(): ?array
     {
-        if ($this->redis->exists('tags')) {
-            return json_decode($this->redis->get('tags'), true, 512, JSON_THROW_ON_ERROR);
+        $key = 'tags';
+        if ($this->isAdmin) {
+            $key .= '-admin';
+        }
+        if ($this->redis->exists($key)) {
+            return json_decode($this->redis->get($key), true, 512, JSON_THROW_ON_ERROR);
         }
 
         return null;
@@ -105,7 +128,11 @@ class Tags extends ModelGetController
 
     protected function setCache(array $data): void
     {
+        $key = 'tags';
+        if ($this->isAdmin) {
+            $key .= '-admin';
+        }
         $cacheTTL = getenv('CACHE_PAGES_TIME') ?: 600;
-        $this->redis->set('tags', json_encode($data, JSON_THROW_ON_ERROR), 'EX', $cacheTTL);
+        $this->redis->set($key, json_encode($data, JSON_THROW_ON_ERROR), 'EX', $cacheTTL);
     }
 }

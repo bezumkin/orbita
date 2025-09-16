@@ -68,6 +68,7 @@ class Tags extends ModelController
     {
         $response = parent::delete();
         $this->redis->del('tags');
+        $this->redis->del('tags-admin');
         $this->redis->send('tags');
 
         return $response;
