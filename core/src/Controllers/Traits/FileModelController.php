@@ -63,7 +63,7 @@ trait FileModelController
                     }
                 }
 
-                if ($file->uploadFile($uploadedFile)) {
+                if ($file->uploadFile($uploadedFile, @$tmp['metadata'])) {
                     $record->{"{$attachment}_id"} = $file->id;
                 }
             }

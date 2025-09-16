@@ -46,7 +46,10 @@ class Avatar extends Controller
         $this->allowedTypes = $controller->allowedTypes;
         $this->maximumSize = $controller->maximumSize;
 
-        $this->setProperty('new_avatar', ['file' => $this->getProperty('file')]);
+        $this->setProperty('new_avatar', [
+            'file' => $this->getProperty('file'),
+            'metadata' => $this->getProperty('metadata'),
+        ]);
         $this->unsetProperty('file');
         if ($error = $this->processFiles($this->user)) {
             return $error;
