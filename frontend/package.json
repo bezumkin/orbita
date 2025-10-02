@@ -19,7 +19,7 @@
     "@editorjs/list": "^1.9.0",
     "@editorjs/paragraph": "^2.11.5",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
-    "@vesp/frontend": "^4.0.0",
+    "@vesp/frontend": "^4.2.0",
     "@vueuse/core": "^12.4.0",
     "chart.js": "^4.4.6",
     "chartjs-plugin-annotation": "^3.1.0",
