@@ -47,7 +47,7 @@ const {$isMobile, $settings, $variables} = useNuxtApp()
 const {user, loadUser} = useAuth()
 const loading = ref(false)
 const form = ref<VespUser>({id: 0, username: '', ...useAuth().user.value})
-const hasServices = $variables.value.CONNECTION_SERVICES !== ''
+const hasServices = computed(() => $variables.value?.CONNECTION_SERVICES?.length > 0)
 
 async function onSubmit() {
   try {
