@@ -1,8 +1,12 @@
 <template>
   <div>
     <div v-if="!isTopic && topic.category" class="topic-category">
-      <div v-if="route.params.topics === topic.category.uri" class="fw-bold">{{ topic.category.title }} /</div>
-      <BLink v-else :to="{name: 'topics', params: {topics: topic.category.uri}}">{{ topic.category.title }} /</BLink>
+      <div v-if="route.params.topics === topic.category.uri" class="fw-bold">
+        {{ topic.category.title }} /
+      </div>
+      <BLink v-else :to="{name: 'topics', params: {topics: topic.category.uri}}">
+        {{ topic.category.title }} /
+      </BLink>
     </div>
     <div v-if="topic.tags?.length" class="topic-tags">
       <BBadge v-for="(tag, idx) in topic.tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1">
@@ -16,14 +20,18 @@
             <VespFa :icon="[selected ? 'fas' : 'far', 'face-smile']" class="fa-fw" /> {{ formatBigNumber(total) }}
           </template>
         </UserReactions>
-        <div v-if="!topic.hide_views"><VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}</div>
+        <div v-if="!topic.hide_views">
+          <VespFa icon="eye" class="fa-fw" /> {{ formatBigNumber(viewsCount) }}
+        </div>
         <div v-if="!topic.hide_comments && !isTopic">
           <BLink v-if="topic.access && commentsCount" :to="link">
             <VespFa icon="comment" class="fa-fw" />
             {{ formatBigNumber(commentsCount) }}
             <span v-if="unseenCount" class="text-success">+{{ formatBigNumber(unseenCount) }}</span>
           </BLink>
-          <template v-else> <VespFa icon="comment" class="fa-fw" /> {{ formatBigNumber(commentsCount) }} </template>
+          <template v-else>
+            <VespFa icon="comment" class="fa-fw" /> {{ formatBigNumber(commentsCount) }}
+          </template>
         </div>
       </div>
       <div class="col-12 col-md-auto order-3 order-md-1">
@@ -130,8 +138,8 @@ function getTagParams(tag: VespTag) {
     values.splice(idx, 1)
   }
   const query = {...route.query, query: undefined, tags: values.length ? values.join(',') : undefined}
-  params.to =
-    store.category && !isTopic.value
+  params.to
+    = store.category && !isTopic.value
       ? {name: 'topics', params: {topics: store.category.uri}, query}
       : {name: 'index', query}
 

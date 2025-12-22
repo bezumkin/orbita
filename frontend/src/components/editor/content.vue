@@ -13,7 +13,9 @@
       <div v-else-if="block.type === 'images'" class="images-group d-flex flex-wrap gap-2">
         <TopicBlockImage v-for="image in block.data" :key="image.id" :block="image" :max-width="maxWidth" />
       </div>
-      <div v-else>{{ block }}</div>
+      <div v-else>
+        {{ block }}
+      </div>
     </template>
   </div>
 </template>

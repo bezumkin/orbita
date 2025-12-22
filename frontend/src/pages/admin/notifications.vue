@@ -1,11 +1,17 @@
 <template>
   <VespTable ref="table" v-bind="{url, fields, tableActions, rowClass, sort, dir}">
     <template #cell(user)="{value}: any">
-      <BLink v-if="$scope('users/get')" :to="getUserLink(value)">{{ value.fullname }}</BLink>
-      <template v-else>{{ value.fullname }}</template>
+      <BLink v-if="$scope('users/get')" :to="getUserLink(value)">
+        {{ value.fullname }}
+      </BLink>
+      <template v-else>
+        {{ value.fullname }}
+      </template>
     </template>
     <template #cell(topic)="{value}: any">
-      <BLink :to="getTopicLink(value)" target="_blank">{{ value.title }}</BLink>
+      <BLink :to="getTopicLink(value)" target="_blank">
+        {{ value.title }}
+      </BLink>
     </template>
     <template #cell(preview)="{item}: any">
       <BLink v-if="item.comment" :to="getCommentLink(item.topic, item.comment)" class="small" target="_blank">
@@ -15,7 +21,9 @@
         <BLink :to="getTopicLink(item.topic)" target="_blank">
           {{ item.topic.title }}
         </BLink>
-        <div class="small">{{ $contentPreview(item.topic.content, 30) }}</div>
+        <div class="small">
+          {{ $contentPreview(item.topic.content, 30) }}
+        </div>
       </div>
     </template>
   </VespTable>

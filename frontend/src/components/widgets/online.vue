@@ -1,22 +1,32 @@
 <template>
   <div v-if="comments.length" class="widget">
-    <h5 class="widget-title">{{ $t('widgets.comments') }}</h5>
+    <h5 class="widget-title">
+      {{ $t('widgets.comments') }}
+    </h5>
     <BOverlay class="widget-body comments" :show="status === 'pending'" opacity="0.5">
       <div v-for="comment in comments" :key="comment.id" class="comment">
         <div v-if="comment.user" class="comment-header">
           <UserAvatar :user="comment.user" class="me-1" />
           <div class="d-flex flex-grow-1 flex-wrap align-items-center justify-content-between">
             <div>{{ comment.user.fullname }}</div>
-            <div v-if="comment.created_at" class="small" data-allow-mismatch>{{ formatDate(comment.created_at) }}</div>
+            <div v-if="comment.created_at" class="small" data-allow-mismatch>
+              {{ formatDate(comment.created_at) }}
+            </div>
           </div>
         </div>
-        <div class="comment-text">{{ $contentPreview(comment?.content, 100) }}</div>
+        <div class="comment-text">
+          {{ $contentPreview(comment?.content, 100) }}
+        </div>
         <div v-if="comment.topic" class="comment-footer">
           <BLink v-if="showLink(comment)" :to="getCommentLink(comment)" class="me-2">
             <VespFa icon="file" class="fa-fw" /> {{ comment.topic.title }}
           </BLink>
-          <div v-else><VespFa icon="file" class="fa-fw" /> {{ comment.topic.title }}</div>
-          <div class="ms-auto text-nowrap"><VespFa icon="comments" /> {{ comment.topic.comments_count }}</div>
+          <div v-else>
+            <VespFa icon="file" class="fa-fw" /> {{ comment.topic.title }}
+          </div>
+          <div class="ms-auto text-nowrap">
+            <VespFa icon="comments" /> {{ comment.topic.comments_count }}
+          </div>
         </div>
       </div>
     </BOverlay>

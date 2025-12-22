@@ -16,14 +16,20 @@
       </template>
       <template #cell(title)="{item, value}">
         <div>{{ value }}</div>
-        <div class="small text-muted">{{ item.id }}</div>
+        <div class="small text-muted">
+          {{ item.id }}
+        </div>
       </template>
       <template #cell(progress)="{item, value}">
         <div>{{ value !== null ? value + '%' : '' }}</div>
-        <div class="small text-muted">{{ formatDate(item.processed_at) }}</div>
+        <div class="small text-muted">
+          {{ formatDate(item.processed_at) }}
+        </div>
       </template>
       <template #cell(dimension)="{item}">
-        <div v-if="item.width && item.height">{{ item.width }}x{{ item.height }}</div>
+        <div v-if="item.width && item.height">
+          {{ item.width }}x{{ item.height }}
+        </div>
       </template>
     </VespTable>
 

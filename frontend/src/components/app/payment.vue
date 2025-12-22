@@ -10,12 +10,16 @@
 
     <Transition name="fade" mode="out-in">
       <div v-if="qr" class="qr">
-        <div class="text-center">{{ t('components.payment.service.scan_qr') }}</div>
+        <div class="text-center">
+          {{ t('components.payment.service.scan_qr') }}
+        </div>
         <BImg :src="qr.image" alt="QR" width="250" height="250" class="d-block m-auto" fluid />
       </div>
       <div v-else-if="canPay">
         <div v-if="services.length" class="mt-4">
-          <div class="fw-bold">{{ t('components.payment.service.title') }}</div>
+          <div class="fw-bold">
+            {{ t('components.payment.service.title') }}
+          </div>
           <div class="services mt-1">
             <div v-for="i in services" :key="i" :class="serviceClass(i)" @click="onService(i)">
               <BImg :src="'/payments/' + i + '.svg'" height="50" class="logo" />
@@ -33,20 +37,26 @@
             <div class="fw-bold">
               {{ t('components.payment.subscription.upgrade') }}
             </div>
-            <div class="price">{{ $price(paymentProperties.price - paymentProperties.discount) }}</div>
+            <div class="price">
+              {{ $price(paymentProperties.price - paymentProperties.discount) }}
+            </div>
           </template>
           <template v-else>
             <div class="fw-bold">
               {{ isTopic ? t('components.payment.topic.price') : t('components.payment.subscription.price') }}
             </div>
-            <div class="price">{{ $price(paymentProperties.price) }}</div>
+            <div class="price">
+              {{ $price(paymentProperties.price) }}
+            </div>
           </template>
         </div>
       </div>
     </Transition>
 
     <template #footer>
-      <BButton variant="light" @click="onCancel">{{ t('actions.cancel') }}</BButton>
+      <BButton variant="light" @click="onCancel">
+        {{ t('actions.cancel') }}
+      </BButton>
       <BButton v-if="!qr" variant="primary" :disabled="loading" @click="onSubmit">
         <BSpinner v-if="loading" small />
         <template v-if="canPay">
@@ -81,8 +91,8 @@ const services = computed(() => {
 const showModal = ref(false)
 const canPay = computed(() => {
   return (
-    paymentProperties.value.price > 0 &&
-    (!paymentProperties.value.discount || paymentProperties.value.discount < paymentProperties.value.price)
+    paymentProperties.value.price > 0
+    && (!paymentProperties.value.discount || paymentProperties.value.discount < paymentProperties.value.price)
   )
 })
 
@@ -96,10 +106,10 @@ const isVariants = computed(() => {
 const subscriptionWarning = computed(() => {
   const subscriptions = $variables.value?.PAYMENT_SUBSCRIPTIONS?.split(',').map(formatServiceKey) || []
   return Boolean(
-    !isTopic.value &&
-      subscriptions.length > 0 &&
-      paymentProperties.value.service &&
-      !subscriptions.includes(paymentProperties.value.service),
+    !isTopic.value
+    && subscriptions.length > 0
+    && paymentProperties.value.service
+    && !subscriptions.includes(paymentProperties.value.service),
   )
 })
 const title = ref('')

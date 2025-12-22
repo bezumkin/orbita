@@ -3,7 +3,9 @@
     <div v-if="level" class="variants">
       <div class="item">
         {{ t('components.payment.actions.subscribe') }}
-        <div class="fw-bold py-1">{{ level.title }}</div>
+        <div class="fw-bold py-1">
+          {{ level.title }}
+        </div>
         {{ $price(level.price) }} {{ t('models.level.per_month') }}
 
         <BButton variant="primary" class="mt-5" @click="onSubscribe">

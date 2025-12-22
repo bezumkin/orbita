@@ -7,8 +7,12 @@
             <BCard footer-class="p-1">
               <template #default>
                 <div :class="{'text-center': true, 'opacity-25': !element.active}">
-                  <div :style="{'font-size': emojiSize, 'min-width': colSize}">{{ element.emoji }}</div>
-                  <div class="small">{{ element.title }}</div>
+                  <div :style="{'font-size': emojiSize, 'min-width': colSize}">
+                    {{ element.emoji }}
+                  </div>
+                  <div class="small">
+                    {{ element.title }}
+                  </div>
                 </div>
               </template>
               <template #footer>
@@ -63,9 +67,9 @@
           <BFormInput v-model="form.emoji" required maxlength="2" />
         </BFormGroup>
 
-        <!--<b-form-checkbox v-model="form.active">
+        <!-- <b-form-checkbox v-model="form.active">
           {{ $t('models.reaction.active') }}
-        </b-form-checkbox>-->
+        </b-form-checkbox> -->
       </template>
     </VespModal>
 

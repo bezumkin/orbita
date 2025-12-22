@@ -2,14 +2,14 @@
   <div>
     <div class="ratio ratio-1x1">
       <div
-        :class="{'avatar-crop-wrapper': true, active: dragCount > 0}"
+        :class="{'avatar-crop-wrapper': true, 'active': dragCount > 0}"
         @click="onClick"
         @drop.prevent="onAddFile"
         @dragenter.prevent="onDragEnter"
         @dragleave.prevent="onDragLeave"
         @dragover.prevent
       >
-        <img ref="image" :src="record.file" alt="" class="d-block img-fluid" />
+        <img ref="image" :src="record.file" alt="" class="d-block img-fluid">
       </div>
     </div>
     <slot name="actions" v-bind="{select: onSelect}" />

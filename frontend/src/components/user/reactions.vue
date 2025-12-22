@@ -13,8 +13,12 @@
         :class="reactionClass(reaction)"
         @click="onSelect(reaction.id)"
       >
-        <div class="emoji">{{ reaction.emoji }}</div>
-        <div v-if="reactions && reactions[reaction.id]" class="counter">{{ reactions[reaction.id] }}</div>
+        <div class="emoji">
+          {{ reaction.emoji }}
+        </div>
+        <div v-if="reactions && reactions[reaction.id]" class="counter">
+          {{ reactions[reaction.id] }}
+        </div>
       </div>
     </div>
   </div>

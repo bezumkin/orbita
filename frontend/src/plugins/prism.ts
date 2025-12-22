@@ -47,16 +47,14 @@ if (import.meta.server) {
 }
 
 export default defineNuxtPlugin(() => {
-  // eslint-disable-next-line import/no-named-as-default-member
   Prism.manual = true
 
   return {
     provide: {
       prism(code: string, language: string = 'text') {
-        // eslint-disable-next-line import/no-named-as-default-member
         return language in Prism.languages ? Prism.highlight(code, Prism.languages[language], language) : code
       },
-      // eslint-disable-next-line import/no-named-as-default-member
+
       prismLanguages: Prism.languages,
     },
   }

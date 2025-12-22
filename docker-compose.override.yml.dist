@@ -9,16 +9,15 @@ services:
     restart: no
     volumes:
       - ./docker/nginx/development:/etc/nginx/templates
-    ports:
-      - ${NODE_PORT_WS:-3001}:3001
 
   php-fpm:
     restart: no
+    image: bezumkin/orbita-php-debug
     build:
       context: ./docker/php-fpm
       args:
         - PHP_VERSION=${PHP_VERSION}
-        - PHP_XDEBUG=${PHP_XDEBUG:-0}
+        - PHP_XDEBUG=${PHP_XDEBUG:-1}
         - TZ=${TZ}
     environment:
         - PHP_IDE_CONFIG=serverName=VespDocker
@@ -27,7 +26,7 @@ services:
   node:
     restart: no
     # command: sh -c 'rm -rf /tmp/* && npm i && npm run analyze'
-    command: sh -c 'rm -rf /tmp/* && npm i && npm run dev'
+    command: sh -c 'rm -rf /tmp/* && npm i --loglevel verbose && npm run dev'
 
   redis:
     restart: no

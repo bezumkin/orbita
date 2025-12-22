@@ -5,26 +5,44 @@
         <template #cell(progress)="{item, value}">
           <div class="d-flex flex-column gap-2 gap-md-1">
             <BRow no-gutters>
-              <BCol md="3" class="fw-medium">{{ t('models.video_quality.progress') }}:</BCol>
-              <BCol md="8">{{ value !== null ? value + '%' : '' }}</BCol>
+              <BCol md="3" class="fw-medium">
+                {{ t('models.video_quality.progress') }}:
+              </BCol>
+              <BCol md="8">
+                {{ value !== null ? value + '%' : '' }}
+              </BCol>
             </BRow>
             <BRow no-gutters>
-              <BCol md="3" class="fw-medium">{{ t('models.video_quality.created_at') }}:</BCol>
-              <BCol md="8">{{ formatDate(item.created_at) }}</BCol>
+              <BCol md="3" class="fw-medium">
+                {{ t('models.video_quality.created_at') }}:
+              </BCol>
+              <BCol md="8">
+                {{ formatDate(item.created_at) }}
+              </BCol>
             </BRow>
             <BRow v-if="item.processed_at" no-gutters>
-              <BCol md="3" class="fw-medium">{{ t('models.video_quality.processed_at') }}:</BCol>
+              <BCol md="3" class="fw-medium">
+                {{ t('models.video_quality.processed_at') }}:
+              </BCol>
               <BCol md="8">
                 {{ formatDate(item.processed_at) }}{{ getDateDiff(item.created_at, item.processed_at) }}
               </BCol>
             </BRow>
             <BRow v-if="item.moved_at" no-gutters>
-              <BCol md="3" class="fw-medium">{{ t('models.video_quality.moved_at') }}:</BCol>
-              <BCol md="8">{{ formatDate(item.moved_at) }}{{ getDateDiff(item.processed_at, item.moved_at) }}</BCol>
+              <BCol md="3" class="fw-medium">
+                {{ t('models.video_quality.moved_at') }}:
+              </BCol>
+              <BCol md="8">
+                {{ formatDate(item.moved_at) }}{{ getDateDiff(item.processed_at, item.moved_at) }}
+              </BCol>
             </BRow>
             <BRow v-if="item.file && item.file.size" no-gutters>
-              <BCol md="3" class="fw-medium">{{ t('models.video_quality.size') }}:</BCol>
-              <BCol md="8">{{ prettyBytes(item.file.size) }}</BCol>
+              <BCol md="3" class="fw-medium">
+                {{ t('models.video_quality.size') }}:
+              </BCol>
+              <BCol md="8">
+                {{ prettyBytes(item.file.size) }}
+              </BCol>
             </BRow>
           </div>
         </template>

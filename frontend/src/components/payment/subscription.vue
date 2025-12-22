@@ -3,22 +3,30 @@
     <div v-if="currentLevel" class="levels">
       <div class="item">
         <div>{{ t('components.payment.subscription.level.current') }}</div>
-        <div class="fw-bold py-1">{{ currentLevel.title }}</div>
+        <div class="fw-bold py-1">
+          {{ currentLevel.title }}
+        </div>
         <div>{{ $price(currentLevel.price) }} {{ t('models.level.per_month') }}</div>
       </div>
       <div class="item active">
         <div>{{ t('components.payment.subscription.level.new') }}</div>
-        <div class="fw-bold py-1">{{ level.title }}</div>
+        <div class="fw-bold py-1">
+          {{ level.title }}
+        </div>
         <div>{{ $price(level.price) }} {{ t('models.level.per_month') }}</div>
       </div>
     </div>
     <div v-else class="subscription">
-      <div class="fw-bold">{{ level.title }}</div>
+      <div class="fw-bold">
+        {{ level.title }}
+      </div>
       <div>{{ $price(level.price) }} {{ t('models.level.per_month') }}</div>
     </div>
 
     <div v-if="periods.length > 1" class="mt-4">
-      <div class="fw-bold">{{ t('components.payment.subscription.period') }}</div>
+      <div class="fw-bold">
+        {{ t('components.payment.subscription.period') }}
+      </div>
       <div class="periods mt-1">
         <div v-for="i in periods" :key="i" :class="periodClass(i)" @click="onPeriod(i)">
           {{ t('components.payment.subscription.months', {amount: i}, i) }}

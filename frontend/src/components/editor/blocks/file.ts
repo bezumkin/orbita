@@ -1,6 +1,6 @@
 import type {API, BlockAPI, BlockTool, BlockToolConstructorOptions, BlockToolData, ToolConfig} from '@editorjs/editorjs'
-import type {HttpRequest, UploadOptions} from 'tus-js-client'
-import {DetailedError, Upload} from 'tus-js-client'
+import type {HttpRequest, UploadOptions, DetailedError} from 'tus-js-client'
+import {Upload} from 'tus-js-client'
 import {icon} from '@fortawesome/fontawesome-svg-core'
 import {faTimes, faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
 import prettyBytes from 'pretty-bytes'

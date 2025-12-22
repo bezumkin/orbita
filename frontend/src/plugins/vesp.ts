@@ -1,5 +1,5 @@
 import type {Composer} from 'vue-i18n'
-import {Socket} from 'socket.io-client'
+import type {Socket} from 'socket.io-client'
 import {storeToRefs} from 'pinia'
 import {useVespStore} from '~/stores/vesp'
 
@@ -11,7 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   if ($socket) {
     // Listen for Settings update
-    $socket.on('setting', ({key, value}: {key: string; value: string}) => {
+    $socket.on('setting', ({key, value}: {key: string, value: string}) => {
       try {
         store.settings[key] = JSON.parse(value)
       } catch (e) {

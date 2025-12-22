@@ -1,14 +1,20 @@
 <template>
-  <div :class="{'topic teaser': true, inactive: !topic.active}">
+  <div :class="{'topic teaser': true, 'inactive': !topic.active}">
     <div class="topic-cover">
       <BImg v-if="imageProps" v-bind="imageProps" class="background" lazy />
       <div class="wrapper">
         <div class="text">
           <h2>
-            <template v-if="isTopic || !myValue.access">{{ myValue.title }}</template>
-            <BLink v-else :to="link">{{ myValue.title }}</BLink>
+            <template v-if="isTopic || !myValue.access">
+              {{ myValue.title }}
+            </template>
+            <BLink v-else :to="link">
+              {{ myValue.title }}
+            </BLink>
           </h2>
-          <div v-if="topic.teaser">{{ topic.teaser }}</div>
+          <div v-if="topic.teaser">
+            {{ topic.teaser }}
+          </div>
         </div>
 
         <div v-if="!myValue.access" class="action">

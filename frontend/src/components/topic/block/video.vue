@@ -42,6 +42,7 @@
 <script setup lang="ts">
 import type {OutputBlockData} from '@editorjs/editorjs'
 import prettyBytes from 'pretty-bytes'
+
 const {t} = useI18n()
 
 const props = defineProps({

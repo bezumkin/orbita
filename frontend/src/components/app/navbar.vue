@@ -16,11 +16,15 @@
             <BDropdownItem v-if="hasAdmin" :to="{name: 'admin'}" link-class="border-bottom">
               {{ $t('pages.admin.title') }}
             </BDropdownItem>
-            <BDropdownItem :to="{name: 'user-profile'}">{{ $t('pages.user.profile') }}</BDropdownItem>
+            <BDropdownItem :to="{name: 'user-profile'}">
+              {{ $t('pages.user.profile') }}
+            </BDropdownItem>
             <BDropdownItem v-if="$levels.length" :to="{name: 'user-subscription'}">
               {{ $t('pages.user.subscription') }}
             </BDropdownItem>
-            <BDropdownItem :to="{name: 'user-payments'}">{{ $t('pages.user.payments') }}</BDropdownItem>
+            <BDropdownItem :to="{name: 'user-payments'}">
+              {{ $t('pages.user.payments') }}
+            </BDropdownItem>
           </template>
         </AppLogin>
         <BButton v-if="sidebar" :variant="btnVariant" class="d-md-none ms-1" @click.stop="toggleSidebar">
@@ -37,7 +41,7 @@
 <script setup lang="ts">
 import type {BaseButtonVariant} from 'bootstrap-vue-next'
 import {type BasicColorSchema, useColorMode} from '@vueuse/core'
-import logo from '~/public/project/logo.svg'
+import logo from '../../../public/project/logo.svg'
 
 defineProps({
   sidebar: {

@@ -65,10 +65,10 @@ export function contentPreview(content: OutputData, length: number = 100) {
   let text = stripTags(blocks.join('\n\n'))
   const entities = [
     ['amp', '&'],
-    ['apos', "'"],
-    ['#x27', "'"],
+    ['apos', '\''],
+    ['#x27', '\''],
     ['#x2F', '/'],
-    ['#39', "'"],
+    ['#39', '\''],
     ['#47', '/'],
     ['lt', '<'],
     ['gt', '>'],

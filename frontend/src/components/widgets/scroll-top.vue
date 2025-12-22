@@ -1,6 +1,8 @@
 <template>
   <div class="widget scroll-top">
-    <BButton variant="light" :style="{opacity}" @click="scrollToTop">&uarr; {{ $t('actions.scrollTop') }}</BButton>
+    <BButton variant="light" :style="{opacity}" @click="scrollToTop">
+      &uarr; {{ $t('actions.scrollTop') }}
+    </BButton>
   </div>
 </template>
 

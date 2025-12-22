@@ -7,7 +7,9 @@
             {{ value }}&nbsp;<sup><VespFa icon="external-link" size="sm" /></sup>
           </a>
         </template>
-        <BLink v-else :to="{name: 'pages-alias', params: {alias: item.alias}}">{{ value }}</BLink>
+        <BLink v-else :to="{name: 'pages-alias', params: {alias: item.alias}}">
+          {{ value }}
+        </BLink>
       </template>
       <template #cell(content)="{item, value}">
         <template v-if="item.external">
@@ -15,7 +17,9 @@
         </template>
         <template v-else>
           <div>{{ item.title }}</div>
-          <div class="small">{{ $contentPreview(value, 150) }}</div>
+          <div class="small">
+            {{ $contentPreview(value, 150) }}
+          </div>
         </template>
       </template>
     </VespTable>

@@ -36,7 +36,9 @@
       </template>
 
       <template #cell(title)="{item}">
-        <div v-if="item.category" class="small">{{ item.category.title }} /</div>
+        <div v-if="item.category" class="small">
+          {{ item.category.title }} /
+        </div>
         <span v-if="item.type" class="me-1" :title="t('models.topic.type.' + item.type)">
           <VespFa :icon="item.type === 'text' ? 'file' : item.type" fixed-width />
         </span>
@@ -50,9 +52,9 @@
         <div v-if="item.tags.length" class="mt-2 small">
           <VespFa icon="tags" fixed-width /> {{ item.tags.map((i: VespTag) => i.title).join(', ') }}
         </div>
-        <!--<div v-if="item.tags.length" class="mt-2 d-flex gap-1">
+        <!-- <div v-if="item.tags.length" class="mt-2 d-flex gap-1">
           <BBadge v-for="tag in item.tags" :key="tag.id">{{ tag.title }}</BBadge>
-        </div>-->
+        </div> -->
       </template>
       <template #cell(cover)="{value}: any">
         <BImg

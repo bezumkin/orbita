@@ -17,7 +17,7 @@ export default {
       },
     },
     popover: {
-      Filter: 'Поиск',
+      'Filter': 'Поиск',
       'Nothing found': 'Не найдено',
       'Convert to': 'Конвертировать',
     },
@@ -62,7 +62,7 @@ export default {
   },
   blockTunes: {
     delete: {
-      Delete: 'Удалить',
+      'Delete': 'Удалить',
       'Click to delete': 'Вы уверены?',
     },
     moveUp: {

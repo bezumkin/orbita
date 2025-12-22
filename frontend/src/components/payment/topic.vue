@@ -5,7 +5,9 @@
         {{ t('components.payment.topic.desc') }}
         <span class="fw-bold py-1">{{ $price($payment.price) }}</span>
 
-        <div class="mt-2 fw-bold">{{ $payment.title }}</div>
+        <div class="mt-2 fw-bold">
+          {{ $payment.title }}
+        </div>
       </div>
     </div>
   </div>

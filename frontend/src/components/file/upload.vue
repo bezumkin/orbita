@@ -9,8 +9,8 @@
       @dragover.prevent
       @click="onSelect"
     >
-      <img v-if="placeholder && record !== false" :src="placeholderUrl" alt="" />
-      <img v-if="record && record.file" :src="record.file" alt="" />
+      <img v-if="placeholder && record !== false" :src="placeholderUrl" alt="">
+      <img v-if="record && record.file" :src="record.file" alt="">
     </div>
     <slot name="actions" v-bind="{select: onSelect, remove: onRemove, cancel: onCancel, value: record, placeholder}">
       <div class="text-center">

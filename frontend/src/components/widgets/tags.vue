@@ -1,6 +1,8 @@
 <template>
   <div v-if="tags.length" class="widget">
-    <h5 class="widget-title">{{ $t('widgets.tags') }}</h5>
+    <h5 class="widget-title">
+      {{ $t('widgets.tags') }}
+    </h5>
     <div class="d-flex flex-wrap gap-1">
       <BBadge v-for="(tag, idx) in tags" :key="idx" v-bind="getTagParams(tag)" class="px-2 py-1 d-flex">
         {{ tag.title }}

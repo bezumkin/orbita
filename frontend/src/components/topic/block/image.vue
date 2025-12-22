@@ -26,9 +26,9 @@ const fit = crop && crop.fit ? crop.fit : 'crop'
 const imageProps = computed(() => {
   const fm = props.block.data.type === 'image/gif' ? 'gif' : 'webp'
   const data: Record<string, any> = {
-    src: $image(props.block.data, {w, h, fit}),
-    width: w,
-    height: h,
+    'src': $image(props.block.data, {w, h, fit}),
+    'width': w,
+    'height': h,
     'data-url': $image(props.block.data, {fm}),
   }
 

@@ -15,7 +15,7 @@
       @blur="onBlur"
       @keydown="onKeydown"
     />
-    <ul :class="{'dropdown-menu vesp-combo-list': true, show: filteredTags.length > 0}">
+    <ul :class="{'dropdown-menu vesp-combo-list': true, 'show': filteredTags.length > 0}">
       <BDropdownItem
         v-for="(item, idx) in filteredTags"
         :key="item.id"

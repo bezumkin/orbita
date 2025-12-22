@@ -6,13 +6,13 @@ import {
   MediaVideoLayoutElement,
 } from 'vidstack/elements'
 import {VidstackPlayer, VidstackPlayerLayout} from 'vidstack/global/player'
-import {
-  type DefaultLayoutProps,
-  type MediaErrorEvent,
-  type MediaPlayerProps,
-  type MediaStorage,
-  type SerializedVideoQuality,
+import type {
   TextTrack,
+  DefaultLayoutProps,
+  MediaErrorEvent,
+  MediaPlayerProps,
+  MediaStorage,
+  SerializedVideoQuality,
 } from 'vidstack'
 import HLS from 'hls.js'
 import ruLexicon from '~/components/player/lexicons/ru'
@@ -28,7 +28,7 @@ type storageKey = 'quality' | 'time' | 'speed' | 'volume'
 let oldBrowser = false
 if (import.meta.client && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
   const version = navigator.userAgent.match(/OS (\d+)/)
-  if (version) {
+  if (version && version[1]) {
     oldBrowser = version[1] < '17'
   }
 }
@@ -210,8 +210,8 @@ class MediaDatabaseStorage implements MediaStorage {
   uuid: string
   type: string
   user: VespUser | undefined
-  status: Record<string, {quality: number | null; time: number; speed: number; volume: number}> = {}
-  forcedStatus: Record<string, {quality: number | null; time: number; speed: number; volume: number}> = {}
+  status: Record<string, {quality: number | null, time: number, speed: number, volume: number}> = {}
+  forcedStatus: Record<string, {quality: number | null, time: number, speed: number, volume: number}> = {}
 
   constructor({uuid, type, status}: Record<string, any>) {
     this.uuid = uuid

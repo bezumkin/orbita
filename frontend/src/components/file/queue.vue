@@ -10,7 +10,9 @@
     <div class="upload-items">
       <TransitionGroup name="fade">
         <div v-for="item in uploading" :key="item.id" class="p-3 bg-body border rounded">
-          <div class="fw-bold">{{ item.filename }}</div>
+          <div class="fw-bold">
+            {{ item.filename }}
+          </div>
           <div class="d-flex align-items-center gap-2">
             <BProgress class="w-100">
               <BProgressBar :value="item.progress" v-bind="getProgressParams(item)">
@@ -276,7 +278,7 @@ function getStatus(item: UploadItem) {
   return ''
 }
 
-function getProgressParams(item: UploadItem): {variant: keyof BaseColorVariant; striped: boolean; animated: boolean} {
+function getProgressParams(item: UploadItem): {variant: keyof BaseColorVariant, striped: boolean, animated: boolean} {
   if (item.error || item.finished) {
     return {variant: item.error ? 'danger' : 'success', striped: false, animated: false}
   }

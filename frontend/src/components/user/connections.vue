@@ -3,13 +3,13 @@
     <div v-for="(service, idx) in allServices" :key="idx" class="d-flex flex-wrap gap-3">
       <BButton v-if="isConnected(service)" variant="warning" @click="() => onDisconnect(service)">
         <span class="d-flex align-items-center gap-3">
-          <img :src="'/connections/' + service + '.svg'" height="50" alt="" />
+          <img :src="'/connections/' + service + '.svg'" height="50" alt="">
           <span v-html="$t('models.user_connection.disconnect_from', {service: formatServiceName(service)})" />
         </span>
       </BButton>
       <BButton v-else variant="light" @click="() => onConnect(service)">
         <span class="d-flex align-items-center gap-3">
-          <img :src="'/connections/' + service + '.svg'" height="50" alt="" />
+          <img :src="'/connections/' + service + '.svg'" height="50" alt="">
           <span v-html="$t('models.user_connection.connect_to', {service: formatServiceName(service)})" />
         </span>
       </BButton>

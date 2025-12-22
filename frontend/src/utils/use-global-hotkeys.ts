@@ -6,10 +6,10 @@ export function useGlobalHotkeys(player: any) {
     const activeElement = document.activeElement
     const inputElements = ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON']
     return (
-      activeElement &&
-      (inputElements.includes(activeElement.tagName) ||
-        activeElement.getAttribute('contenteditable') === 'true' ||
-        activeElement.closest('.editorjs') !== null)
+      activeElement
+      && (inputElements.includes(activeElement.tagName)
+        || activeElement.getAttribute('contenteditable') === 'true'
+        || activeElement.closest('.editorjs') !== null)
     )
   }
 

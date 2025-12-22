@@ -159,12 +159,12 @@ function getCommentClass(comment: VespComment) {
     admin: (comment.active || isAdmin.value) && comment.user?.role_id === 1,
     // paid: Boolean(comment.user?.paid),
     unseen:
-      (comment.active || isAdmin.value) &&
-      user.value &&
-      user.value.id !== comment.user_id &&
-      comment.created_at &&
-      props.topic.viewed_at &&
-      props.topic.viewed_at < comment.created_at,
+      (comment.active || isAdmin.value)
+      && user.value
+      && user.value.id !== comment.user_id
+      && comment.created_at
+      && props.topic.viewed_at
+      && props.topic.viewed_at < comment.created_at,
   }
 }
 

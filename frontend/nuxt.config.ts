@@ -16,7 +16,7 @@ const config: NuxtConfig = {
   devtools: {enabled: false},
   vite: {
     server: {
-      hmr: {port: 3001},
+      allowedHosts: ['orbita.test'],
     },
     css: {
       preprocessorOptions: {
@@ -29,6 +29,7 @@ const config: NuxtConfig = {
   },
   experimental: {
     appManifest: false,
+    normalizeComponentNames: false,
   },
   nitro: {
     experimental: {websocket: true},
@@ -36,8 +37,11 @@ const config: NuxtConfig = {
     devStorage: {cache: {driver: 'redis', host: 'redis'}},
   },
   routeRules: {
+    //@ts-ignore
     '/admin/**': {ssr: false},
+    //@ts-ignore
     '/user/**': {ssr: false},
+    //@ts-ignore
     '/search': {ssr: false},
   },
   runtimeConfig: {
@@ -78,68 +82,43 @@ const config: NuxtConfig = {
   vesp: {
     icons: {
       solid: [
-        'user',
-        'power-off',
-        'globe',
-        'filter',
-        'pause',
-        'play',
-        'upload',
-        'question',
-        'image',
-        'video',
-        'file',
-        'music',
-        'code',
-        'calendar',
-        'cloud-arrow-down',
-        'comment',
-        'comments',
-        'bars',
-        'right-to-bracket',
-        'hashtag',
-        'reply',
-        'trash',
-        'undo',
-        'paper-plane',
-        'wallet',
-        'hourglass-half',
-        'lock',
-        'lock-open',
-        'heading',
-        'list',
-        'face-smile',
-        'tags',
-        'external-link',
-        'magnifying-glass',
-        'arrow-up-wide-short',
-        'arrow-down-short-wide',
-        'arrow-up',
-        'arrow-down',
-        'download',
-        'sun',
-        'moon',
+        'user', 'power-off', 'globe', 'filter', 'pause', 'play', 'upload', 'question', 'image', 'video', 'file',
+        'music', 'code', 'calendar', 'cloud-arrow-down', 'comment', 'comments', 'bars', 'right-to-bracket', 'hashtag',
+        'reply', 'trash', 'undo', 'paper-plane', 'wallet', 'hourglass-half', 'lock', 'lock-open', 'heading', 'list',
+        'face-smile', 'tags', 'external-link', 'magnifying-glass', 'arrow-up-wide-short', 'arrow-down-short-wide',
+        'arrow-up', 'arrow-down', 'download', 'sun', 'moon',
       ],
       regular: ['face-smile'],
     },
   },
   i18n: {
-    langDir: 'src/lexicons',
-    restructureDir: '.',
+    langDir: 'lexicons',
+    // @ts-ignore
     defaultLocale: locales[0].code,
     detectBrowserLanguage: {
+      // @ts-ignore
       fallbackLocale: locales[0].code,
     },
     locales,
   },
-  compatibilityDate: '2025-01-07',
+  compatibilityDate: '2025-07-24',
 }
 
 if (process.env.NODE_ENV === 'development') {
-  config.modules?.push('@nuxtjs/eslint-module', '@nuxtjs/stylelint-module')
+  config.modules?.push('@nuxt/eslint', '@nuxtjs/stylelint-module')
   // @ts-ignore
   config.eslint = {
-    lintOnStart: false,
+    checker: true,
+    config: {
+      stylistic: {
+        semi: false,
+        arrowParens: true,
+        quotes: 'single',
+        commaDangle: 'always-multiline',
+        braceStyle: '1tbs',
+        blockSpacing: false,
+      },
+    },
   }
   // @ts-ignore
   config.stylelint = {
@@ -157,4 +136,4 @@ if (process.env.YANDEX_METRIKA_ID && Number(process.env.YANDEX_METRIKA_ID) > 0) 
   config.modules?.push(['yandex-metrika-module-nuxt3', {...options, id: process.env.YANDEX_METRIKA_ID}])
 }
 
-export default defineNuxtConfig(config)
+export default config

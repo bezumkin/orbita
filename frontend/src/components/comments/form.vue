@@ -15,7 +15,9 @@
       <BButton v-if="onCancel && (record.id || record.parent_id)" @click="onCancel">
         {{ $t('actions.cancel') }}
       </BButton>
-      <div class="timer">{{ editingTime }}</div>
+      <div class="timer">
+        {{ editingTime }}
+      </div>
       <BButton variant="primary" type="submit" :disabled="!canSubmit || !canSubmit(record)">
         {{ $t('actions.submit') }}
         <BSpinner v-if="loading" small />

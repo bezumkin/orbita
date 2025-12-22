@@ -17,9 +17,13 @@
           <BImg v-if="video.image" :src="$image(video.image, {w: 1024})" class="border-bottom" />
         </template>
         <template #default>
-          <div class="fw-medium">{{ video.title }}</div>
+          <div class="fw-medium">
+            {{ video.title }}
+          </div>
           <BCardText class="small mt-auto pt-2 d-flex flex-column gap-1">
-            <div v-if="video.created_at">{{ formatDate(video.created_at) }}</div>
+            <div v-if="video.created_at">
+              {{ formatDate(video.created_at) }}
+            </div>
             <div v-if="video.processed_qualities">
               {{ video.processed_qualities.map((i: number) => i + 'p').join(', ') }}
             </div>
@@ -42,8 +46,12 @@
     </div>
 
     <template #footer="{hide}">
-      <BButton variant="secondary" @click="hide">{{ $t('actions.close') }}</BButton>
-      <BButton variant="primary" :disabled="!picked" @click="useVideo">{{ $t('actions.pick') }}</BButton>
+      <BButton variant="secondary" @click="hide">
+        {{ $t('actions.close') }}
+      </BButton>
+      <BButton variant="primary" :disabled="!picked" @click="useVideo">
+        {{ $t('actions.pick') }}
+      </BButton>
     </template>
   </VespModal>
 </template>
@@ -108,11 +116,11 @@ function pick(video: VespVideo) {
 function getProps(video: VespVideo) {
   const isActive = picked.value && picked.value.id === video.id
   return {
-    class: 'g-col-12 g-col-md-6 g-col-lg-4 overflow-hidden',
+    'class': 'g-col-12 g-col-md-6 g-col-lg-4 overflow-hidden',
     'body-class': 'd-flex flex-column',
-    style: {
-      cursor: 'pointer',
-      background: isActive ? 'var(--bs-secondary-bg)' : 'var(--bs-tertiary-bg)',
+    'style': {
+      'cursor': 'pointer',
+      'background': isActive ? 'var(--bs-secondary-bg)' : 'var(--bs-tertiary-bg)',
       'border-color': isActive ? 'var(--bs-primary)' : '',
     },
   }

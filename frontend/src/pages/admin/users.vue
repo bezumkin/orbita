@@ -17,13 +17,19 @@
         <div class="d-flex align-items-center">
           <UserAvatar :user="item" size="40" />
           <div class="ms-2">
-            <div class="text-nowrap">{{ item.fullname }}</div>
-            <div class="small text-muted">{{ item.username }}</div>
+            <div class="text-nowrap">
+              {{ item.fullname }}
+            </div>
+            <div class="small text-muted">
+              {{ item.username }}
+            </div>
           </div>
         </div>
       </template>
       <template #cell(role)="{value, item}: any">
-        <div :style="{color: value.color}">{{ value.title }}</div>
+        <div :style="{color: value.color}">
+          {{ value.title }}
+        </div>
         <div v-if="item.current_subscription" class="small" :style="{color: item.current_subscription.level?.color}">
           {{ item.current_subscription.level?.title }}
         </div>

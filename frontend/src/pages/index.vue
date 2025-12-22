@@ -5,7 +5,9 @@
     </BButton>
 
     <div v-if="category" class="d-flex justify-content-between align-items-center mb-2">
-      <h1 class="m-0">{{ category.title }}</h1>
+      <h1 class="m-0">
+        {{ category.title }}
+      </h1>
       <TopicSort />
     </div>
     <div class="d-flex align-items-center justify-content-between pb-2">
@@ -29,7 +31,9 @@
     </BOverlay>
 
     <div v-show="canFetch" class="text-center mt-5">
-      <BButton v-if="!scroll" @click="onScroll">{{ $t('actions.load_more') }}</BButton>
+      <BButton v-if="!scroll" @click="onScroll">
+        {{ $t('actions.load_more') }}
+      </BButton>
       <div v-show="scroll" ref="spinner" class="mt-5 text-center">
         <BSpinner />
       </div>

@@ -47,13 +47,17 @@
           </BFormGroup>
         </BCol>
         <BCol md="5" class="mt-md-3 pt-md-4">
-          <BFormCheckbox v-model="record.blank">{{ $t('models.page.blank') }}</BFormCheckbox>
+          <BFormCheckbox v-model="record.blank">
+            {{ $t('models.page.blank') }}
+          </BFormCheckbox>
         </BCol>
       </BRow>
     </template>
 
     <BFormGroup>
-      <BFormCheckbox v-model="record.active">{{ $t('models.page.active') }}</BFormCheckbox>
+      <BFormCheckbox v-model="record.active">
+        {{ $t('models.page.active') }}
+      </BFormCheckbox>
     </BFormGroup>
   </div>
 </template>

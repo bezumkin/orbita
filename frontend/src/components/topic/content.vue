@@ -2,7 +2,9 @@
   <BOverlay :show="loading" opacity="0.5" class="topic">
     <div v-if="!record">
       <div v-if="topic.category" class="topic-category">
-        <BLink :to="{name: 'topics', params: {topics: topic.category.uri}}"> {{ topic.category.title }} / </BLink>
+        <BLink :to="{name: 'topics', params: {topics: topic.category.uri}}">
+          {{ topic.category.title }} /
+        </BLink>
       </div>
       <div class="topic-header">
         <h1 class="mt-2">
@@ -18,7 +20,9 @@
     <BForm v-else-if="$scope('topics/patch')" class="topic-form" @submit.prevent="onSubmit" @keydown="onKeydown">
       <FormsTopic v-model="record" />
       <div class="topic-buttons mb-0 mt-2">
-        <BButton :disabled="loading" @click.prevent="onCancel">{{ $t('actions.cancel') }}</BButton>
+        <BButton :disabled="loading" @click.prevent="onCancel">
+          {{ $t('actions.cancel') }}
+        </BButton>
         <BButton variant="primary" type="submit" :disabled="loading">
           <BSpinner v-if="loading" small />
           {{ $t('actions.save') }}

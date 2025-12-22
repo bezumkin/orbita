@@ -8,14 +8,18 @@
       </BCol>
       <BCol md="6">
         <div class="d-flex gap-3 justify-content-center justify-content-md-end order-0 order-md-1">
-          <BButton :disabled="filterDisabled || nextDisabled" @click="onNext">&langle;</BButton>
+          <BButton :disabled="filterDisabled || nextDisabled" @click="onNext">
+            &langle;
+          </BButton>
           <BFormSelect v-model="filter" :disabled="filterDisabled" class="w-auto" :options="options" />
-          <BButton :disabled="filterDisabled || prevDisabled" @click="onPrev">&rangle;</BButton>
+          <BButton :disabled="filterDisabled || prevDisabled" @click="onPrev">
+            &rangle;
+          </BButton>
         </div>
       </BCol>
     </BRow>
     <div :style="{position: 'relative', height: $isMobile ? '200px' : '300px'}">
-      <canvas ref="image"></canvas>
+      <canvas ref="image" />
     </div>
   </div>
 </template>

@@ -5,7 +5,9 @@
         <BInputGroup>
           <BFormInput ref="input" v-model="query" autofocus :placeholder="t('pages.search.placeholder')" />
           <template #append>
-            <BButton v-if="query !== ''" @click="onReset"><VespFa icon="times" /></BButton>
+            <BButton v-if="query !== ''" @click="onReset">
+              <VespFa icon="times" />
+            </BButton>
           </template>
         </BInputGroup>
       </BFormGroup>

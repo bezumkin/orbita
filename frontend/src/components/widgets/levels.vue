@@ -1,10 +1,16 @@
 <template>
   <div v-if="$levels.length" class="widget">
-    <h5 v-if="!userPage" class="widget-title">{{ $t('widgets.levels') }}</h5>
-    <BOverlay opacity="0.5" :show="loading" :class="{'widget-body subscriptions': true, user: userPage}">
+    <h5 v-if="!userPage" class="widget-title">
+      {{ $t('widgets.levels') }}
+    </h5>
+    <BOverlay opacity="0.5" :show="loading" :class="{'widget-body subscriptions': true, 'user': userPage}">
       <div v-for="level in $levels" :key="level.id" class="level">
-        <div class="title">{{ level.title }}</div>
-        <div class="price">{{ $price(level.price) }} {{ $t('models.level.per_month') }}</div>
+        <div class="title">
+          {{ level.title }}
+        </div>
+        <div class="price">
+          {{ $price(level.price) }} {{ $t('models.level.per_month') }}
+        </div>
         <div v-if="level.cover" class="cover">
           <BImg
             :src="$image(level.cover, {h: 150, fit: 'crop'})"
@@ -13,8 +19,12 @@
             height="150"
           />
         </div>
-        <div v-if="level.content" class="content">{{ level.content }}</div>
-        <BButton v-bind="getBtnParams(level)">{{ getBtnLabel(level) }}</BButton>
+        <div v-if="level.content" class="content">
+          {{ level.content }}
+        </div>
+        <BButton v-bind="getBtnParams(level)">
+          {{ getBtnLabel(level) }}
+        </BButton>
       </div>
     </BOverlay>
 
@@ -50,9 +60,8 @@ function getBtnParams(level: VespLevel) {
     if (level.id === user.value.subscription.next_level_id) {
       params.variant = 'outline-secondary'
       params.onClick = confirmCancelChange
-    }
-    // Unsubscribe or renew
-    else if (level.id === user.value.subscription.level_id) {
+    } else if (level.id === user.value.subscription.level_id) {
+      // Unsubscribe or renew
       params.variant = 'outline-secondary'
       // params.disabled = true
       params.onClick = user.value.subscription.cancelled ? onRenew : confirmUnsubscribe

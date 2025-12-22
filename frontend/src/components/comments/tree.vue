@@ -50,8 +50,12 @@
         </template>
         <div v-html="t('components.comments.destroy.text')" />
         <template #footer="{hide}">
-          <BButton @click="() => hide()">{{ t('actions.cancel') }}</BButton>
-          <BButton variant="danger" @click="destroy">{{ t('actions.delete') }}</BButton>
+          <BButton @click="() => hide()">
+            {{ t('actions.cancel') }}
+          </BButton>
+          <BButton variant="danger" @click="destroy">
+            {{ t('actions.delete') }}
+          </BButton>
         </template>
       </BModal>
     </ClientOnly>
@@ -112,11 +116,11 @@ const readonlyMessage = computed(() => {
 // Sub is required for free topics
 const subRequired = computed(() => {
   return (
-    $variables.value.COMMENTS_REQUIRE_SUBSCRIPTION === '1' &&
-    !isAdmin.value &&
-    !isVip.value &&
-    !props.topic.paid &&
-    !user.value?.subscription?.level_id
+    $variables.value.COMMENTS_REQUIRE_SUBSCRIPTION === '1'
+    && !isAdmin.value
+    && !isVip.value
+    && !props.topic.paid
+    && !user.value?.subscription?.level_id
   )
 })
 const submitting = ref(false)

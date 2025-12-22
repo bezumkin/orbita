@@ -4,7 +4,9 @@
       <template #cell(title)="{item}">
         <BForm @submit.prevent="onSave">
           <BFormInput v-if="editingTag && editingTag?.id === item.id" v-model="editingTag.title" size="sm" autofocus />
-          <template v-else>{{ item.title }}</template>
+          <template v-else>
+            {{ item.title }}
+          </template>
         </BForm>
       </template>
       <template #header-start>
@@ -13,7 +15,9 @@
             <BInputGroup>
               <BFormInput v-model="newTag" :placeholder="$t('actions.add')" />
               <template #append>
-                <BButton :disabled="!canAdd" @click="onAdd"><VespFa icon="check" class="fa-fw" /></BButton>
+                <BButton :disabled="!canAdd" @click="onAdd">
+                  <VespFa icon="check" class="fa-fw" />
+                </BButton>
               </template>
             </BInputGroup>
           </BForm>

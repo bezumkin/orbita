@@ -30,7 +30,7 @@ services:
       - mariadb
 
   php-fpm:
-    image: bezumkin/orbita-php
+    image: bezumkin/orbita-php:${PHP_VERSION}
     volumes:
       - ./.env:/vesp/.env
       - ./core:/vesp/core

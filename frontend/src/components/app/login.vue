@@ -41,7 +41,9 @@
               <BForm @submit.prevent="onLogin">
                 <FormsLogin v-model="formLogin" />
                 <div class="text-center">
-                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                  <BButton variant="primary" type="submit">
+                    {{ $t('actions.submit') }}
+                  </BButton>
                 </div>
               </BForm>
             </BTab>
@@ -50,20 +52,26 @@
                 <FormsRegister v-model="formRegister" />
                 <div v-if="userAgreement">
                   <BFormCheckbox v-model="formRegister.agree" class="mb-2">
-                    <div v-html="$t('security.register_agree', {link: userAgreement})"></div>
+                    <div v-html="$t('security.register_agree', {link: userAgreement})" />
                   </BFormCheckbox>
                 </div>
                 <div class="text-center">
-                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                  <BButton variant="primary" type="submit">
+                    {{ $t('actions.submit') }}
+                  </BButton>
                 </div>
               </BForm>
             </BTab>
             <BTab :title="$t('security.reset')">
               <BForm @submit.prevent="onReset">
                 <FormsReset v-model="formReset" />
-                <div class="alert alert-light">{{ $t('security.reset_desc') }}</div>
+                <div class="alert alert-light">
+                  {{ $t('security.reset_desc') }}
+                </div>
                 <div class="text-center">
-                  <BButton variant="primary" type="submit">{{ $t('actions.submit') }}</BButton>
+                  <BButton variant="primary" type="submit">
+                    {{ $t('actions.submit') }}
+                  </BButton>
                 </div>
               </BForm>
             </BTab>

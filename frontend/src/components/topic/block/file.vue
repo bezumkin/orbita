@@ -1,15 +1,19 @@
 <template>
   <div>
     <video v-if="isVideo" ref="video" v-bind="videoProps">
-      <source :src="$file(block.data)" :type="block.data.type" @error="onError" />
+      <source :src="$file(block.data)" :type="block.data.type" @error="onError">
     </video>
     <div v-else class="d-flex align-items-center rounded border p-3">
       <BButton variant="light" size="lg" class="fa-2x me-3" @click="startDownload">
         <VespFa icon="cloud-arrow-down" class="fa-fw" />
       </BButton>
       <div class="d-flex flex-column">
-        <div class="fw-medium text-break">{{ block.data.title }}</div>
-        <div class="small text-muted">{{ description }}</div>
+        <div class="fw-medium text-break">
+          {{ block.data.title }}
+        </div>
+        <div class="small text-muted">
+          {{ description }}
+        </div>
       </div>
     </div>
   </div>

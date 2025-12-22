@@ -41,7 +41,7 @@
       &-text {
         padding: 0.25rem 0;
         border-radius: var(--bs-border-radius);
-        word-break: break-word;
+        overflow-wrap: anywhere;
 
         .comment-content {
           @extend %editor-content;

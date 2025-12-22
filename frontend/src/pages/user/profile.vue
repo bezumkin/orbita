@@ -8,12 +8,16 @@
               <UserAvatar :user="user" :size="$isMobile ? 150 : 120" />
             </div>
             <div class="text-center">
-              <BButton variant="link" size="sm" @click="showAvatar">{{ t('actions.edit') }}</BButton>
+              <BButton variant="link" size="sm" @click="showAvatar">
+                {{ t('actions.edit') }}
+              </BButton>
             </div>
           </template>
         </FormsUser>
         <div class="text-center mt-3">
-          <BButton variant="primary" type="submit">{{ t('actions.save') }}</BButton>
+          <BButton variant="primary" type="submit">
+            {{ t('actions.save') }}
+          </BButton>
         </div>
       </BForm>
     </BOverlay>

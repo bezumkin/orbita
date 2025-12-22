@@ -8,7 +8,7 @@
         </BButton>
       </template>
     </div>
-    <div ref="holder" :class="{editorjs: true, 'form-control': !readOnly}"></div>
+    <div ref="holder" :class="{'editorjs': true, 'form-control': !readOnly}" />
 
     <EditorPickVideo v-if="showVideos" @hidden="showVideos = false" />
   </div>

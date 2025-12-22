@@ -2,16 +2,28 @@
   <div>
     <BRow v-if="user?.subscription" class="d-flex mb-5 row-gap-4">
       <BCol md="4">
-        <div class="fw-bold">{{ t('components.payment.subscription.level.current') }}</div>
-        <div class="">{{ currentLevel?.title }}</div>
+        <div class="fw-bold">
+          {{ t('components.payment.subscription.level.current') }}
+        </div>
+        <div class="">
+          {{ currentLevel?.title }}
+        </div>
       </BCol>
       <BCol md="4">
-        <div class="fw-bold">{{ t('components.payment.subscription.paid_until') }}</div>
-        <div class="">{{ paid }}</div>
+        <div class="fw-bold">
+          {{ t('components.payment.subscription.paid_until') }}
+        </div>
+        <div class="">
+          {{ paid }}
+        </div>
       </BCol>
       <BCol v-if="nextLevel" md="4">
-        <div class="fw-bold">{{ t('components.payment.subscription.level.new') }}</div>
-        <div class="">{{ nextLevel.title }}</div>
+        <div class="fw-bold">
+          {{ t('components.payment.subscription.level.new') }}
+        </div>
+        <div class="">
+          {{ nextLevel.title }}
+        </div>
       </BCol>
     </BRow>
 

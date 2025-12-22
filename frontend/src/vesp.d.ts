@@ -23,7 +23,7 @@ declare global {
     avatar_id?: number
     avatar?: VespFile
     subscription?: VespSubscription
-    new_avatar?: {file: string; metadata: {[key: string]: any}} | boolean
+    new_avatar?: {file: string, metadata: {[key: string]: any}} | boolean
   }
 
   type VespFile = {
@@ -73,7 +73,7 @@ declare global {
     price: number
     color?: string
     active: boolean
-    new_cover?: {file: string; metadata: {[key: string]: any}} | boolean
+    new_cover?: {file: string, metadata: {[key: string]: any}} | boolean
     cover_id?: number
     cover?: VespFile
   }
@@ -93,7 +93,7 @@ declare global {
     hide_comments?: boolean
     hide_views?: boolean
     hide_reactions?: boolean
-    new_cover?: {file: string; metadata: {[key: string]: any}} | boolean
+    new_cover?: {file: string, metadata: {[key: string]: any}} | boolean
     cover_id?: number
     cover?: VespFile
     level?: VespLevel

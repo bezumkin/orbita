@@ -21,8 +21,12 @@
         <BLink :to="{name: 'admin-users-id-edit', params: {id: value.id}}" class="d-flex align-items-center">
           <UserAvatar :user="value" size="40" />
           <div class="ms-2">
-            <div class="text-nowrap">{{ value.fullname }}</div>
-            <div class="small text-muted">{{ value.username }}</div>
+            <div class="text-nowrap">
+              {{ value.fullname }}
+            </div>
+            <div class="small text-muted">
+              {{ value.username }}
+            </div>
           </div>
         </BLink>
       </template>

@@ -7,7 +7,9 @@
         </h5>
       </template>
       <template #description>
-        <div class="mt-2">{{ $t('models.setting.' + setting.key + '_desc') }}</div>
+        <div class="mt-2">
+          {{ $t('models.setting.' + setting.key + '_desc') }}
+        </div>
       </template>
       <BRow class="align-items-center justify-content-end">
         <BCol class="flex-grow-1">
@@ -20,9 +22,13 @@
             <BButton size="sm" :disabled="!canSave(setting)" variant="success" @click="saveSetting(setting)">
               <VespFa icon="check" />
             </BButton>
-            <BButton size="sm" @click="cancelEdit(setting)"><VespFa icon="times" /></BButton>
+            <BButton size="sm" @click="cancelEdit(setting)">
+              <VespFa icon="times" />
+            </BButton>
           </template>
-          <BButton v-else size="sm" @click="startEdit(setting)"><VespFa icon="edit" /></BButton>
+          <BButton v-else size="sm" @click="startEdit(setting)">
+            <VespFa icon="edit" />
+          </BButton>
         </BCol>
       </BRow>
     </BFormGroup>
@@ -34,7 +40,9 @@
         </h5>
       </template>
       <template #description>
-        <div class="mt-2">{{ $t('models.setting.reactions_desc') }}</div>
+        <div class="mt-2">
+          {{ $t('models.setting.reactions_desc') }}
+        </div>
       </template>
       <FormsReactions />
     </BFormGroup>
