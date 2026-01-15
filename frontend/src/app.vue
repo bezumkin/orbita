@@ -70,7 +70,7 @@ const background = computed(() => {
   return bg ? $image(bg, {h: 480, fit: 'crop-center'}) : ''
 })
 const hideWidgets = computed(() => {
-  const data = $variables.value?.HIDE_WIDGETS?.split(',').map((i) => i.trim().toLowerCase())
+  const data = $variables.value?.HIDE_WIDGETS?.split(',').map((i) => i.trim().toLowerCase()) || []
   if ($variables.value?.COMMENTS_SHOW_ONLINE === '0') {
     data.push('online')
   }
