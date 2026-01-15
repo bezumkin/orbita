@@ -16,7 +16,7 @@ const config: NuxtConfig = {
   devtools: {enabled: false},
   vite: {
     server: {
-      allowedHosts: ['orbita.test'],
+      allowedHosts: true,
     },
     css: {
       preprocessorOptions: {
@@ -37,11 +37,11 @@ const config: NuxtConfig = {
     devStorage: {cache: {driver: 'redis', host: 'redis'}},
   },
   routeRules: {
-    //@ts-ignore
+    // @ts-ignore
     '/admin/**': {ssr: false},
-    //@ts-ignore
+    // @ts-ignore
     '/user/**': {ssr: false},
-    //@ts-ignore
+    // @ts-ignore
     '/search': {ssr: false},
   },
   runtimeConfig: {
