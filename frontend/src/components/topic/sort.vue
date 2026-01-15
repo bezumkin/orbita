@@ -1,8 +1,10 @@
 <template>
-  <BDropdown split v-bind="btnParams" @click="onSort()">
+  <BDropdown :toggle-class="!$isMobile ? 'p-0' : ''" :variant="$isMobile ? 'light' : 'link'" split>
     <template #button-content>
-      <VespFa :icon="reverse ? 'arrow-down-short-wide' : 'arrow-up-wide-short'" fixed-width />
-      {{ $t('components.topics.sort.' + sort) }}
+      <span @click="onSort()">
+        <VespFa :icon="reverse ? 'arrow-down-short-wide' : 'arrow-up-wide-short'" fixed-width />
+        {{ $t('components.topics.sort.' + sort) }}
+      </span>
     </template>
     <template v-for="key in sorting">
       <BDropdownItem v-if="key !== sort" :key="key" @click="onSort(key)">
@@ -24,12 +26,6 @@ if ($reactions.value.length) {
 const query = ref(useTopicsStore().query)
 const sort = ref(route.query.sort || 'date')
 const reverse = ref(Boolean(route.query.reverse))
-const btnParams = computed(() => {
-  return {
-    toggleClass: !$isMobile.value ? 'p-0' : '',
-    variant: $isMobile.value ? 'light' : 'link',
-  }
-})
 
 function onSort(key: string | undefined = undefined) {
   if (!key) {
@@ -49,7 +45,7 @@ function onSort(key: string | undefined = undefined) {
   })
 }
 
-if (!sorting.includes(sort.value)) {
+if (!sorting.includes(String(sort.value))) {
   navigateTo({name: route.name, params: route.params})
 } else if (route.query.reverse && !route.query.sort) {
   navigateTo({
