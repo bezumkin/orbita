@@ -52,21 +52,25 @@ export default class implements BlockTool {
         this.showPreview()
       }
     } else {
-      const input = document.createElement('input')
-      input.type = 'file'
-      input.multiple = false
-      if (this.type === 'image') {
-        input.accept = 'image/*'
-      } else if (this.type === 'audio') {
-        input.accept = 'audio/*'
-      }
-      input.onchange = ({target}: Event) => {
-        const files: FileList | null = (target as HTMLInputElement).files
-        if (files) {
-          this.api.blocks.insert(this.type, {file: files[0]})
+      setTimeout(() => {
+        if (!this.upload) {
+          const input = document.createElement('input')
+          input.type = 'file'
+          input.multiple = false
+          if (this.type === 'image') {
+            input.accept = 'image/*'
+          } else if (this.type === 'audio') {
+            input.accept = 'audio/*'
+          }
+          input.onchange = ({target}: Event) => {
+            const files: FileList | null = (target as HTMLInputElement).files
+            if (files) {
+              this.api.blocks.insert(this.type, {file: files[0]})
+            }
+          }
+          input.click()
         }
-      }
-      input.click()
+      }, 100)
     }
 
     return this.html
