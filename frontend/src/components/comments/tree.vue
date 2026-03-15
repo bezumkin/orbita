@@ -78,19 +78,17 @@ const {user} = useAuth()
 
 const url = 'web/topics/' + props.topic.uuid + '/comments'
 const editTime = Number($variables.value.COMMENTS_EDIT_TIME) || 600
-const maxLevel: Ref<number> = computed(() => {
+const maxLevel = computed<number>(() => {
   return $isMobile.value ? 1 : Number($variables.value.COMMENTS_MAX_LEVEL) || 5
 })
-const commentForm: Ref<VespComment> = ref({id: 0, parent_id: 0, content: {}})
+const commentForm = ref<VespComment>({id: 0, parent_id: 0, content: {}})
 const form = ref()
 const tree = ref()
 
 const {data, pending} = await useCustomFetch(url)
-const comments = computed(() => data.value?.rows || [])
+const comments = ref(data.value?.rows || [])
 const total = computed(() => comments.value.length)
-const commentsTree = computed(() => {
-  return comments.value.length ? buildTree(comments.value) : []
-})
+const commentsTree = computed(() => buildTree(comments.value))
 
 const isAdmin = computed(() => $scope('comments/delete'))
 const isVip = computed(() => $scope('vip'))
@@ -147,7 +145,7 @@ function buildTree(nodes: VespComment[], depth: number = maxLevel.value) {
     const [ancestor] = [...ancestry(node.parent_id)].slice(-depth)
     if (ancestor && index[ancestor]) {
       index[ancestor].children = index[ancestor].children || []
-      index[ancestor].children?.push(index[node.id])
+      index[ancestor].children.push(index[node.id] as VespComment)
     }
   })
 
