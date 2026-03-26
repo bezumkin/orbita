@@ -28,4 +28,15 @@ class Redis extends Client
             }
         }
     }
+
+    public function clearUserCache(int $userId): void
+    {
+        foreach ($this->keys("api:web:*:$userId") as $key) {
+            $this->del($key);
+        }
+        foreach ($this->keys("api:web:*:$userId-*") as $key) {
+            $this->del($key);
+        }
+
+    }
 }

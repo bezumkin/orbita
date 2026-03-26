@@ -8,7 +8,7 @@ use App\Models\Reaction;
 use App\Models\Topic;
 use App\Models\TopicReaction;
 use App\Models\User;
-use App\Services\Socket;
+use App\Services\Redis;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -74,24 +74,28 @@ trait ReactionModelController
     {
         if ($this->user && $reaction = $this->model->userReactions()->where('user_id', $this->user->id)->first()) {
             $reaction->delete();
+            $this->sendInfoToSocket();
         }
-        $this->sendInfoToSocket();
 
         return $this->get();
     }
 
     protected function sendInfoToSocket(): void
     {
+        $redis = new Redis();
+
         if ($this->model instanceof Topic) {
-            Socket::send('topic-reactions', [
+            $redis->send('topic-reactions', [
                 'id' => $this->model->id,
                 'reactions_count' => $this->model->refresh()->reactions_count,
             ]);
         } elseif ($this->model instanceof Comment) {
-            Socket::send('comment-reactions', [
+            $redis->send('comment-reactions', [
                 'id' => $this->model->id,
                 'reactions_count' => $this->model->refresh()->reactions_count,
             ]);
         }
+
+        $redis->clearUserCache($this->user->id);
     }
 }
