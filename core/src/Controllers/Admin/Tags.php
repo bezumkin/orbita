@@ -53,6 +53,7 @@ class Tags extends ModelController
         if ($c->count()) {
             return $this->failure('errors.tag.title_exists');
         }
+        $record->title = $title;
 
         return null;
     }

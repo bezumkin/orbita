@@ -135,11 +135,11 @@ class Topics extends ModelController
         if (is_array($tags)) {
             $topicTags = [];
             foreach ($tags as $topicTag) {
-                if (!$topicTag['title']) {
+                if (!$title = trim($topicTag['title'])) {
                     continue;
                 }
-                if (!$tag = Tag::query()->where('title', $topicTag['title'])->first()) {
-                    $tag = new Tag(['title' => $topicTag['title']]);
+                if (!$tag = Tag::query()->where('title', $title)->first()) {
+                    $tag = new Tag(['title' => $title]);
                     $tag->save();
                     $updateTags++;
                 }
