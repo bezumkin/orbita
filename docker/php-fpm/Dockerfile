@@ -17,6 +17,7 @@ RUN docker-php-ext-install exif
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install ffi
+RUN pecl install apcu && docker-php-ext-enable apcu
 
 RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick \
     && cd /tmp/imagick \
