@@ -17,6 +17,18 @@ class Image extends \Vesp\Controllers\Data\Image
             putenv('IMAGE_DRIVER=' . Driver::class);
         }
 
+        // Replace any SVG to black square for security reasons
+        if (str_starts_with($file->type, 'image/svg')) {
+            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="black"/></svg>';
+            $body = $this->response->getBody();
+            $body->write($svg);
+
+            return $this->response
+                ->withBody($body)
+                ->withHeader('Content-Type', 'image/svg+xml')
+                ->withHeader('Content-Length', strlen($svg));
+        }
+
         /** @var File $file */
         if ($crop = @$file->metadata['crop']) {
             $data = implode(',', [$crop['width'], $crop['height'], $crop['x'], $crop['y']]);
