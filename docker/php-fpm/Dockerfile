@@ -1,6 +1,6 @@
-ARG PHP_VERSION=8.3
+ARG PHP_VERSION=8.4
 
-FROM php:${PHP_VERSION}-fpm
+FROM php:${PHP_VERSION}-fpm AS production
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -55,12 +55,11 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
       ln -sf /usr/lib/x86_64-linux-gnu/libvips.so.42 /usr/lib/libvips.so.42; \
     fi
 
-ARG PHP_XDEBUG
-RUN if [ "$PHP_XDEBUG" = "1" ]; then \
-      yes | pecl install xdebug \
-          && echo "zend_extension=xdebug" > /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    fi
+
+FROM production AS debug
+RUN yes | pecl install xdebug \
+      && echo "zend_extension=xdebug" > /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/xdebug.ini; \
