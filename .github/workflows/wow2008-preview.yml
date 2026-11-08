@@ -1,0 +1,87 @@
+name: WoW 2008 homepage preview
+
+on:
+  push:
+    branches:
+      - feature/wow-2008-theme
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Prepare environment
+        run: |
+          cp .env.dist .env
+          mkdir -p docker/mariadb docker/redis docker/manticore www upload tmp log
+          sed -i 's/^SITE_NAME=.*/SITE_NAME=World of Warcraft 2008 Preview/' .env
+          sed -i 's|^SITE_URL=.*|SITE_URL=http://127.0.0.1:8080/|' .env
+          sed -i 's/^NGINX_HOST=.*/NGINX_HOST=127.0.0.1/' .env
+
+      - name: Start Orbita
+        run: docker compose up -d --build
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Wait for homepage
+        run: |
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent http://127.0.0.1:8080/ > /dev/null; then
+              echo "Homepage responded"
+              exit 0
+            fi
+            sleep 10
+          done
+          docker compose ps
+          docker compose logs --no-color --tail=200
+          exit 1
+
+      - name: Capture desktop and mobile screenshots
+        run: |
+          mkdir -p artifacts
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({
+            viewport: { width: 1440, height: 1000 },
+            deviceScaleFactor: 1,
+          });
+
+          page.on('pageerror', error => console.error('PAGE ERROR:', error.message));
+          await page.goto('http://127.0.0.1:8080/', {
+            waitUntil: 'networkidle',
+            timeout: 120000,
+          });
+          console.log('Page title:', await page.title());
+          await page.screenshot({ path: 'artifacts/wow2008-home-desktop.png', fullPage: true });
+          await page.setViewportSize({ width: 390, height: 844 });
+          await page.screenshot({ path: 'artifacts/wow2008-home-mobile.png', fullPage: true });
+          await browser.close();
+          NODE
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: wow2008-homepage-preview
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Show service logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=200
