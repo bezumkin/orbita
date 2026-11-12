@@ -19,7 +19,7 @@ class File extends \Vesp\Controllers\Data\Image
 
         $isAdmin = $this->user && $this->user->hasScope('topics/patch');
 
-        $allow = $isAdmin || $file->pageFiles()->where('type', 'file')->count();
+        $allow = $isAdmin || $file->pageFiles()->where('type', 'file')->exists();
         if (!$allow) {
             $topicFiles = $file->topicFiles()->where('type', 'file');
             /** @var TopicFile $topicFile */

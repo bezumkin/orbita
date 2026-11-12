@@ -32,7 +32,7 @@ class Sitemap extends Controller
 
         $topics = Topic::query()
             ->where('active', true)
-            ->select('id', 'uuid', 'cover_id', 'published_at')
+            ->select('id', 'uuid', 'cover_id', 'level_id', 'price', 'published_at')
             ->orderByDesc('published_at')
             ->with('cover:id,uuid,updated_at')
             ->with('contentFiles.file:id,uuid,updated_at', 'contentFiles.file.video:file_id,id')
@@ -42,7 +42,7 @@ class Sitemap extends Controller
             $row = [
                 'loc' => $topic->getLink(),
                 'lastmod' => $topic->published_at->toIso8601String(),
-                'image:image' => $this->addImages($topic->contentFiles),
+                'image:image' => $topic->isFree() ? $this->addImages($topic->contentFiles) : [],
             ];
             if ($topic->cover) {
                 array_unshift(

@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\CommentFile;
 use App\Models\File;
+use App\Models\TopicFile;
 use Intervention\Image\Drivers\Vips\Driver;
 use Psr\Http\Message\ResponseInterface;
 
@@ -10,6 +12,49 @@ class Image extends \Vesp\Controllers\Data\Image
 {
     protected string $model = File::class;
     protected string|array $primaryKey = ['uuid'];
+
+    public function get(): ResponseInterface
+    {
+        $uuid = $this->getProperty('uuid');
+        /** @var File $file */
+        if (!$uuid || !$file = File::query()->where('uuid', $uuid)->first()) {
+            return $this->response->withStatus(404);
+        }
+
+        $isAdmin = $this->user && $this->user->hasScope('topics/patch');
+
+        $allow = $isAdmin || $file->pageFiles()->where('type', 'image')->exists();
+        if (!$allow) {
+            $topicFiles = $file->topicFiles()->where('type', 'image');
+            $commentFiles = $file->commentFiles()->where('type', 'image');
+            $allow = !$topicFiles->exists() && !$commentFiles->exists();
+
+            if (!$allow) {
+                /** @var TopicFile $topicFile */
+                foreach ($topicFiles->cursor() as $topicFile) {
+                    if ($topicFile->topic->hasAccess($this->user)) {
+                        $allow = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$allow) {
+                /** @var CommentFile $commentFile */
+                foreach ($commentFiles->cursor() as $commentFile) {
+                    if ($commentFile->comment->topic->hasAccess($this->user)) {
+                        $allow = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!$allow) {
+            return $this->failure('Access Denied', 403);
+        }
+
+        return parent::get();
+    }
 
     protected function handleFile($file): ?ResponseInterface
     {
