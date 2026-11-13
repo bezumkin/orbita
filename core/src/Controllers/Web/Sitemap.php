@@ -42,7 +42,7 @@ class Sitemap extends Controller
             $row = [
                 'loc' => $topic->getLink(),
                 'lastmod' => $topic->published_at->toIso8601String(),
-                'image:image' => $this->addImages($topic->contentFiles),
+                'image:image' => $topic->hasAccess() ? $this->addImages($topic->contentFiles) : [],
             ];
             if ($topic->cover) {
                 array_unshift(
